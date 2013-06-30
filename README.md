@@ -1,4 +1,4 @@
-# uMidi
+# uMIDI
 The swiss army knife for cost-effective developement of MIDI applications.
 
 # Applications
