@@ -23,7 +23,8 @@
   + GPIO Pin headers for all unused MCU ports
   + SPI
   + I2C
+  + ADC inputs
 
 + On-Board peripherals
   + 1 Toggle switch
-  + 8 LEDs connected to a single port (which is also connected to pin headers)
+  + 2 LEDs (MIDI in and MIDI out)
