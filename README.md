@@ -1,4 +1,6 @@
-# uMIDI
+![uMIDI](https://github.com/theFork/uMIDI/raw/master/doc/logo/logo.png)
+
+
 The swiss army knife for cost-effective developement of MIDI applications.
 
 # Applications
