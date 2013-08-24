@@ -1,3 +1,8 @@
 # target
 BackupFiles
 *.T3000OPEN
+
+# files generated during build
+*.hex
+*.o
+*.s
