@@ -1,4 +1,4 @@
-# Specification
+# Summary
 + Power supply
   + Input voltage: 6 .. 10 V
   + Battery supply possible
@@ -28,3 +28,16 @@
 + On-Board peripherals
   + 1 Toggle switch
   + 2 LEDs (MIDI in and MIDI out)
+
+# In System Programming
++ 2x3 pin pin header, 2.54mm pitch
++ Pinout AVRISP mkII compatible:
+
+| Pin   | Signal    |
+|:-----:|:---------:|
+| 1     | MISO      |
+| 2     | VCC       |
+| 3     | SCK       |
+| 4     | MOSI      |
+| 5     | RESET     |
+| 6     | GND       |
