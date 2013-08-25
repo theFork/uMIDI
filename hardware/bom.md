@@ -20,3 +20,4 @@
 | 1 | Toggle switch         | SMD       | TASTER 9315               | 0.19              | Many actuator lengths available                       |
 | 1 | Optocoupler 6N138     | DIL8      | 6N 138                    | 0.59              |                                                       |
 | 1 | Diode 1N4148          | Mini Melf | 1N 4148 SMD               | 0.02              |                                                       |
+| 2 | MLCC, 10uF            | 1210      | X7R-G1210 10              | 0.48              |                                                       |
