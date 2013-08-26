@@ -17,35 +17,47 @@
  * along with the muMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* some useful vim commands
-*:let @x='0xyyu@"j'
-*j4@x
-*:map <F9> :wa<CR>:!clear; make backup<CR>
-*:map <F10> :wa<CR>:!clear; make eep<CR>
-*:map <F12> :wa<CR>:!clear; make clean compile<CR>
-*:map <F11> :wa<CR>:!clear; make all<CR>
+/*
+ * Implementation of the GPIO module.
+ * @author Sebastian Neuser
 */
 
-/*
- * Program entry point and main loop of the muMIDI firmware.
- *
- * @author haggl
- */
-
-#include "main.h"
 #include "gpio.h"
 
-#include <avr/wdt.h>
+#include <avr/io.h>
 
 
 ////////////////////////////////////////////////////////////////
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-// main state variable struct
-exec_state_t    state = {
-    IDLE,
-    true
+gpio_t gpio = {
+    { // portA
+        { &PORTB, &PINB, PB4 },
+        { &PORTB, &PINB, PB3 },
+        { &PORTB, &PINB, PB2 },
+        { &PORTB, &PINB, PB1 },
+        { &PORTB, &PINB, PB0 },
+        { &PORTD, &PIND, PD7 },
+        { &PORTD, &PIND, PD6 },
+        { &PORTD, &PIND, PD5 }
+    },
+    { // portB
+        { &PORTC, &PINC, PC2 },
+        { &PORTC, &PINC, PC3 },
+        { &PORTC, &PINC, PC1 },
+        { &PORTC, &PINC, PC0 },
+        { &PORTB, &PINB, PB5 }
+    },
+    { // portC
+        { &PORTB, &PINB, PB7 },
+        { &PORTB, &PINB, PB6 },
+        { &PORTD, &PIND, PD4 },
+        { &PORTD, &PIND, PD3 },
+        { &PORTD, &PIND, PD2 },
+        { &PORTC, &PINC, PC5 },
+        { &PORTC, &PINC, PC4 }
+    }
 };
 
 
@@ -54,28 +66,12 @@ exec_state_t    state = {
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-// initialization and endless loop
-int main( void )
-{
-    // configure GPIO ports
-    configureGPIO();
+void configureGPIO() {
+    // configure all GPIO pins as outputs
+    DDRB = _BV(PB7) | _BV(PB6) | _BV(PB5) | _BV(PB4)
+         | _BV(PB3) | _BV(PB2) | _BV(PB1) | _BV(PB0);
 
-    // configure USART for MIDI operation
-    configureUSART();
+    DDRC = _BV(PC5) | _BV(PC4) | _BV(PC3) | _BV(PC2) | _BV(PC1) | _BV(PC0);
 
-    // set watchdog for 30ms
-    wdt_enable(WDTO_30MS);
-
-    // enable interrupts
-    sei();
-
-    // main program
-    while (true) {
-        // handle watchdog
-        if (MCUSR & _BV(WDRF)) {
-        }
-        wdt_reset();
-    }
-
-    return 0;
+    DDRD = _BV(PD7) | _BV(PB6) | _BV(PB5) | _BV(PB4) | _BV(PB3) | _BV(PB2);
 }
