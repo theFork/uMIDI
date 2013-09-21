@@ -1,4 +1,13 @@
-![uMIDI](https://github.com/theFork/uMIDI/raw/master/doc/logo/logo.png)
+```
+       __  __ _____ _____ _____ 
+      |  \/  |_   _|  __ \_   _|
+ _   _| \  / | | | | |  | || |  
+| | | | |\/| | | | | |  | || |  
+| |_| | |  | |_| |_| |__| || |_ 
+|  _,_|_|  |_|_____|_____/_____|
+| |                             
+|_|                             
+```
 
 
 The swiss army knife for cost-effective developement of MIDI applications.
