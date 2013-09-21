@@ -32,4 +32,4 @@
 | 1 | Toggle switch         | SMD       | TASTER 9315               | 0.19              | Many actuator lengths available                       |
 | 1 | Header 2x3, 2.54mm    | 2.54mm    | MPE 087-2-006             | 0.15              |                                                       |
 | 6 | Header 1x2, 2.54mm    | 2.54mm    | MPE 087-1-003             | 0.05              | optional                                              |
-| 1 | Header 1x36, 2.54mm   | 2.54mm    | SL 1X36G 2,54             | 0.16              | 3x 1x8 header required, optional                      |
+| 1 | Header 1x36, 2.54mm   | 2.54mm    | SL 1X36G 2,54             | 0.16              | Break or cut 2x 8-, 1x 6- and 1x 4-pin rows, optional |
