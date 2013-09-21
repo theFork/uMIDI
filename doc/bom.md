@@ -33,14 +33,3 @@
 | 1 | Header 2x3, 2.54mm    | 2.54mm    | MPE 087-2-006             | 0.15              |                                                       |
 | 6 | Header 1x2, 2.54mm    | 2.54mm    | MPE 087-1-003             | 0.05              | optional                                              |
 | 1 | Header 1x36, 2.54mm   | 2.54mm    | SL 1X36G 2,54             | 0.16              | 3x 1x8 header required, optional                      |
-
-## Generic
-**TODO**
-
-|Descriptor| Value          | Package   | Remark                                                                                                |
-|:--------:|:--------------:|:---------:|:------------------------------------------------------------------------------------------------------|
-| IC 1     | ATmega88PA-AU  | TQFP32    |                                                                                                       |
-| IC 2     | 74LVX14D       | SO-14     | Hex inverted Schmitt trigger, 3.3 V with 5 V tolerant inputs                                          |
-| OC 1     | 6N138          | DIL8      | 6N139 and many more may also work                                                                     |
-| D 1      | 1N4148         | Mini Melf | Wired version may also be assembled                                                                   |
-
