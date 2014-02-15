@@ -68,7 +68,9 @@ ISR(USART_RX_vect)
         // MIDI status byte
         ////
         case IDLE:
-            if ( (data & MIDI_COMMAND_MASK) == MIDI_NOTE_ON )
+            if ( (data & MIDI_COMMAND_MASK) == MIDI_NOTE_OFF )
+                state.midi = NOTE_OFF;
+            else if ( (data & MIDI_COMMAND_MASK) == MIDI_NOTE_ON )
                 state.midi = NOTE_ON;
             else if ( (data & MIDI_COMMAND_MASK) == MIDI_CONTROL_CHANGE )
                 state.midi = CONTROL_CHANGE;
@@ -80,6 +82,13 @@ ISR(USART_RX_vect)
         ////
         // MIDI data byte 0
         ////
+        case NOTE_OFF:
+            switch(data) {
+            }
+            state.midi = IDLE;
+            break;
+
+
         case NOTE_ON:
             switch(data) {
             }
