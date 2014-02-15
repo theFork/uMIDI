@@ -1,5 +1,5 @@
 /*
- * Copyright 2012, 2013 Sebastian Neuser
+ * Copyright 2012-2014 Sebastian Neuser
  *
  * This file is part of the muMIDI firmware.
  *
@@ -19,8 +19,6 @@
 
 /*
  * Main header for the muMIDI firmware.
- *
- * @author Sebastian Neuser
  */
 
 #ifndef _MIDIWAH_H

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Sebastian Neuser
+ * Copyright 2012-2014 Sebastian Neuser
  *
  * This file is part of the muMIDI firmware.
  *
@@ -19,7 +19,6 @@
 
 /*
  * Register bit definitions and prototypes for the GPIO handling module.
- * @author Sebastian Neuser
 */
 
 #ifndef _GPIO_H

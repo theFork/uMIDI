@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Sebastian Neuser
+ * Copyright 2012-2014 Sebastian Neuser
  *
  * This file is part of the muMIDI firmware.
  *
@@ -19,7 +19,6 @@
 
 /*
  * Implementation of the GPIO module.
- * @author Sebastian Neuser
 */
 
 #include "gpio.h"
