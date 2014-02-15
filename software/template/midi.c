@@ -57,6 +57,9 @@ void configureUSART( void )
 
 ISR(USART_RX_vect)
 {
+    // disable interrupts
+    cli();
+
     // fetch data
     uint8_t data = UDR0;
 
@@ -109,4 +112,7 @@ ISR(USART_RX_vect)
             state.midi = IDLE;
             break;
     }
+
+    // enable interrupts
+    sei();
 }
