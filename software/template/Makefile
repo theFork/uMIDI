@@ -18,7 +18,7 @@
 #
 
 # MCU name
-MCU = atmega88
+MCU = atmega88p
 
 # main oscillator and cpu frequencies
 F_OSC = 1000000
