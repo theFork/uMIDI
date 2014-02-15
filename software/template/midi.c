@@ -21,9 +21,11 @@
  * MIDI I/O implementation and ISR.
  */
 
-#include "midi.h"
 #include "main.h"
+#include "midi.h"
 
+#include <avr/interrupt.h>
+#include <avr/io.h>
 #include <util/setbaud.h>
 
 

@@ -22,8 +22,10 @@
  */
 
 #include "main.h"
+#include "midi.h"
 #include "gpio.h"
 
+#include <avr/interrupt.h>
 #include <avr/wdt.h>
 
 

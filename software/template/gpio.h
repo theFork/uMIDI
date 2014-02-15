@@ -91,7 +91,7 @@ static inline bool gpio_get(gpio_pin_t pin) {
     return *pin.read_addr & _BV(pin.bit);
 }
 
-static inline void gpio_set(gpio_pin_t pin, uint8_t value) {
+static inline void gpio_set(gpio_pin_t pin, bool value) {
     value ? gpio_drive_high(pin) : gpio_drive_low(pin);
 }
 

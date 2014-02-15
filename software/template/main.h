@@ -26,10 +26,10 @@
 
 
 //---------------- includes ----------------//
-#include <stdint.h>
-
 #include "bool.h"
 #include "midi.h"
+
+#include <stdint.h>
 
 
 //---------------- constants ----------------//
