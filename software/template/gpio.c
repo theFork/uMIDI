@@ -32,30 +32,30 @@
 
 gpio_t gpio = {
     { // portA
-        { &PORTB, &PINB, PB4 },
-        { &PORTB, &PINB, PB3 },
-        { &PORTB, &PINB, PB2 },
-        { &PORTB, &PINB, PB1 },
-        { &PORTB, &PINB, PB0 },
-        { &PORTD, &PIND, PD7 },
-        { &PORTD, &PIND, PD6 },
-        { &PORTD, &PIND, PD5 }
+        { &PINB, &PORTB, PB4 },
+        { &PINB, &PORTB, PB3 },
+        { &PINB, &PORTB, PB2 },
+        { &PINB, &PORTB, PB1 },
+        { &PINB, &PORTB, PB0 },
+        { &PIND, &PORTD, PD7 },
+        { &PIND, &PORTD, PD6 },
+        { &PIND, &PORTD, PD5 }
     },
     { // portB
-        { &PORTC, &PINC, PC2 },
-        { &PORTC, &PINC, PC3 },
-        { &PORTC, &PINC, PC1 },
-        { &PORTC, &PINC, PC0 },
-        { &PORTB, &PINB, PB5 }
+        { &PINC, &PORTC, PC2 },
+        { &PINC, &PORTC, PC3 },
+        { &PINC, &PORTC, PC1 },
+        { &PINC, &PORTC, PC0 },
+        { &PINB, &PORTB, PB5 }
     },
     { // portC
-        { &PORTB, &PINB, PB7 },
-        { &PORTB, &PINB, PB6 },
-        { &PORTD, &PIND, PD4 },
-        { &PORTD, &PIND, PD3 },
-        { &PORTD, &PIND, PD2 },
-        { &PORTC, &PINC, PC5 },
-        { &PORTC, &PINC, PC4 }
+        { &PINB, &PORTB, PB7 },
+        { &PINB, &PORTB, PB6 },
+        { &PIND, &PORTD, PD4 },
+        { &PIND, &PORTD, PD3 },
+        { &PIND, &PORTD, PD2 },
+        { &PINC, &PORTC, PC5 },
+        { &PINC, &PORTC, PC4 }
     }
 };
 
