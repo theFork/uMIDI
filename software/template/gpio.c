@@ -72,5 +72,5 @@ void configureGPIO() {
 
     DDRC = _BV(PC5) | _BV(PC4) | _BV(PC3) | _BV(PC2) | _BV(PC1) | _BV(PC0);
 
-    DDRD = _BV(PD7) | _BV(PB6) | _BV(PB5) | _BV(PB4) | _BV(PB3) | _BV(PB2);
+    DDRD = _BV(PD7) | _BV(PD6) | _BV(PD5) | _BV(PD4) | _BV(PD3) | _BV(PD2);
 }
