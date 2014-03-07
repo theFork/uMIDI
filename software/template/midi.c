@@ -44,7 +44,7 @@ extern exec_state_t state;
 void configureUSART( void )
 {
     // enable RXEN and RXC interrupt
-    UCSR0B = _BV(RXCIE0) | _BV(RXEN0);
+    UCSR0B = _BV(RXCIE0) | _BV(RXEN0) | _BV(TXEN0);
 
     // apply UBRR value computed by setbaud.h
     UBRR0H = UBRRH_VALUE;
@@ -54,6 +54,16 @@ void configureUSART( void )
 #else
     UCSR0A &= ~(1 << U2X0);
 #endif
+}
+
+void sendPC(uint8_t pnum) {
+    // send program change status byte
+    while ( !(UCSR0A & _BV(UDRE0)) );
+    UDR0 = (uint8_t) MIDI_PROGRAM_CHANGE | MIDI_TX_CHANNEL;
+
+    // send program number
+    while ( !(UCSR0A & _BV(UDRE0)) );
+    UDR0 = pnum;
 }
 
 

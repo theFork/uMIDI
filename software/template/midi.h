@@ -35,6 +35,9 @@
 // maximum MIDI value
 #define     MIDI_MAX_VALUE              127
 
+// MIDI transmit channel
+#define     MIDI_TX_CHANNEL             0x01
+
 // MIDI status byte
 #define     MIDI_COMMAND_MASK           0xf0
 #define     MIDI_CONTROL_CHANGE         0xb0
@@ -61,7 +64,8 @@ typedef enum {
 
 
 //---------------- functions and procedures ----------------//
-void configureUSART( void );
+void configureUSART(void);
+void sendPC(uint8_t);
 
 
 //---------------- EOF ----------------//
