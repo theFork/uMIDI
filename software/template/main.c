@@ -54,8 +54,8 @@ int main( void )
     // configure USART for MIDI operation
     configureUSART();
 
-    // set watchdog for 30ms
-    wdt_enable(WDTO_30MS);
+    // set watchdog for 120ms
+    wdt_enable(WDTO_120MS);
 
     // enable interrupts
     sei();
