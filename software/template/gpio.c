@@ -66,11 +66,13 @@ gpio_t gpio = {
 ////////////////////////////////////////////////////////////////
 
 void configureGPIO() {
-    // configure all GPIO pins as outputs
+    // configure all GPIO pins on AVR port B as outputs
     DDRB = _BV(PB7) | _BV(PB6) | _BV(PB5) | _BV(PB4)
          | _BV(PB3) | _BV(PB2) | _BV(PB1) | _BV(PB0);
 
-    DDRC = _BV(PC5) | _BV(PC4) | _BV(PC3) | _BV(PC2) | _BV(PC1) | _BV(PC0);
+    // leave PC0 and PC1 (-> ADC0, ADC1) configured as input pins
+    DDRC = _BV(PC5) | _BV(PC4) | _BV(PC3) | _BV(PC2);
 
+    // configure GPIO pins on AVR port D as outputs
     DDRD = _BV(PD7) | _BV(PD6) | _BV(PD5) | _BV(PD4) | _BV(PD3) | _BV(PD2);
 }

@@ -49,7 +49,7 @@
 #define     CMD_PEDAL_MODE              0x00
 
 // MIDI data byte 0 for CONTROL CHANGE commands
-#define     CTRL_WAH                    0x01
+#define     CTRL_CUTOFF                 0x45
 
 
 //---------------- data types ----------------//

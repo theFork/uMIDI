@@ -21,6 +21,7 @@
  * Program entry point and main loop of the muMIDI firmware.
  */
 
+#include "adc.h"
 #include "main.h"
 #include "midi.h"
 #include "gpio.h"
@@ -53,6 +54,9 @@ int main( void )
 
     // configure USART for MIDI operation
     configureUSART();
+
+    // configure the ADC
+    configureADC();
 
     // set watchdog for 120ms
     wdt_enable(WDTO_120MS);
