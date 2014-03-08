@@ -25,10 +25,6 @@
   + I2C
   + ADC inputs
 
-+ On-Board peripherals
-  + 1 Toggle switch
-  + 2 LEDs (MIDI in and MIDI out)
-
 # In System Programming
 + 2x3 pin pin header, 2.54mm pitch
 + Pinout AVRISP mkII compatible:
