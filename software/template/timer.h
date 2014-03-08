@@ -1,7 +1,7 @@
 /*
  * Copyright 2014 Sebastian Neuser
  *
- * This file is part of the muMIDI firmware.
+ * This file is part of the uMIDI firmware.
  *
  * The MIDI volume controller firmware is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,11 +14,11 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with the muMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
+ * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /*
- * Header for the timer module of the muMIDI firmware
+ * Header for the timer module of the uMIDI firmware
 */
 
 #ifndef _TIMER_H

@@ -1,24 +1,24 @@
 /*
  * Copyright 2014 Sebastian Neuser
  *
- * This file is part of the muMIDI firmware.
+ * This file is part of the uMIDI firmware.
  *
- * the muMIDI firmware is free software: you can redistribute it and/or modify
+ * the uMIDI firmware is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * the muMIDI firmware is distributed in the hope that it will be useful,
+ * the uMIDI firmware is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with the muMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
+ * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /*
- * ADC module of the muMIDI firmware
+ * ADC module of the uMIDI firmware
 */
 
 #include "adc.h"
