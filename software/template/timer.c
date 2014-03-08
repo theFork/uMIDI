@@ -1,14 +1,14 @@
 /*
- * Copyright 2012-2014 Sebastian Neuser
+ * Copyright 2014 Sebastian Neuser
  *
  * This file is part of the muMIDI firmware.
  *
- * The muMIDI firmware is free software: you can redistribute it and/or modify
+ * the muMIDI firmware is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The muMIDI firmware is distributed in the hope that it will be useful,
+ * the muMIDI firmware is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
@@ -18,28 +18,19 @@
  */
 
 /*
- * Program entry point and main loop of the muMIDI firmware.
- */
+ * timer module implementation of the muMIDI firmware
+*/
 
 #include "adc.h"
-#include "main.h"
-#include "midi.h"
-#include "gpio.h"
 #include "timer.h"
 
+#include <avr/io.h>
 #include <avr/interrupt.h>
-#include <avr/wdt.h>
 
 
 ////////////////////////////////////////////////////////////////
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
-
-// main state variable struct
-exec_state_t    state = {
-    IDLE,
-    true
-};
 
 
 
@@ -47,34 +38,40 @@ exec_state_t    state = {
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-// initialization and endless loop
-int main( void )
-{
-    // configure GPIO ports
-    configureGPIO();
+void configureTimer0(void) {
+    // select CTC wave generation
+    TCCR0A = _BV(WGM01);
 
-    // configure USART for MIDI operation
-    configureUSART();
+    // configure prescaler /8
+    TCCR0B = _BV(CS01);
 
-    // configure the ADC
-    configureADC();
+    // set counter compare value to achieve 1ms clock
+    OCR0A = 125;
 
-    // configure timers
-    configureTimer0();
+    // enable the overflow interrupt
+    TIMSK0 = _BV(OCIE0A);
+}
 
-    // set watchdog for 120ms
-    wdt_enable(WDTO_120MS);
 
+
+////////////////////////////////////////////////////////////////
+//                    I N T E R R U P T S                     //
+////////////////////////////////////////////////////////////////
+
+ISR(TIMER0_COMPA_vect) {
+    // disable interrupts
+    cli();
+
+    static uint16_t prescaler = 0;
+    ++prescaler;
+    if (prescaler < 50) {
+        goto leave;
+    }
+    prescaler = 0;
+
+    triggerADC();
+
+leave:
     // enable interrupts
     sei();
-
-    // main program
-    while (true) {
-        // handle watchdog
-        if (MCUSR & _BV(WDRF)) {
-        }
-        wdt_reset();
-    }
-
-    return 0;
 }
