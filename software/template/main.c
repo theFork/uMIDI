@@ -72,6 +72,9 @@ int main( void )
     // run the test suite
     runTestSuite();
 
+    // send initial program change
+    sendProgramChange(INITIAL_PROGRAM);
+
     // main program
     while (true) {
         // handle watchdog
