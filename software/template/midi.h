@@ -66,6 +66,8 @@ typedef enum {
 //---------------- functions and procedures ----------------//
 void configureUSART(void);
 void sendControlChange(uint8_t, uint8_t);
+void sendNoteOff(uint8_t);
+void sendNoteOn(uint8_t);
 void sendProgramChange(uint8_t);
 
 

@@ -70,6 +70,34 @@ void sendControlChange(uint8_t controller, uint8_t value) {
     UDR0 = value;
 }
 
+void sendNoteOff(uint8_t note) {
+    // send note off status byte
+    while ( !(UCSR0A & _BV(UDRE0)) );
+    UDR0 = (uint8_t) MIDI_NOTE_OFF | MIDI_TX_CHANNEL;
+
+    // send note number
+    while ( !(UCSR0A & _BV(UDRE0)) );
+    UDR0 = note;
+
+    // send maximum velocity
+    while ( !(UCSR0A & _BV(UDRE0)) );
+    UDR0 = MIDI_MAX_VALUE;
+}
+
+void sendNoteOn(uint8_t note) {
+    // send note on status byte
+    while ( !(UCSR0A & _BV(UDRE0)) );
+    UDR0 = (uint8_t) MIDI_NOTE_ON | MIDI_TX_CHANNEL;
+
+    // send note number
+    while ( !(UCSR0A & _BV(UDRE0)) );
+    UDR0 = note;
+
+    // send maximum velocity
+    while ( !(UCSR0A & _BV(UDRE0)) );
+    UDR0 = MIDI_MAX_VALUE;
+}
+
 void sendProgramChange(uint8_t pnum) {
     // send program change status byte
     while ( !(UCSR0A & _BV(UDRE0)) );
