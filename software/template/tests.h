@@ -43,6 +43,12 @@ void clearGPIOsTest(void);
 void setGPIOsTest(void);
 void toggleGPIOsTest(void);
 
+// MIDI TX tests
+void sendControlChangeTest(void);
+void sendNoteOffTest(void);
+void sendNoteOnTest(void);
+void sendProgramChangeTest(void);
+
 
 //---------------- EOF ----------------//
 #endif // _TESTS_H

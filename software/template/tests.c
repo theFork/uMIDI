@@ -21,6 +21,7 @@
  * Test suite for the uMIDI firmware.
  */
 
+#include "midi.h"
 #include "gpio.h"
 #include "tests.h"
 
@@ -54,6 +55,12 @@ void runTestSuite(void)
     runTest(&clearGPIOsTest);
     runTest(&toggleGPIOsTest);
     runTest(&toggleGPIOsTest);
+
+    // MIDI test cases
+    runTest(&sendProgramChangeTest);
+    runTest(&sendControlChangeTest);
+    runTest(&sendNoteOnTest);
+    runTest(&sendNoteOffTest);
 }
 
 void clearGPIOsTest(void)
@@ -72,4 +79,24 @@ void toggleGPIOsTest(void)
 {
     gpio_toggle(gpio.portC.pin4);
     gpio_toggle(gpio.portC.pin6);
+}
+
+void sendControlChangeTest(void)
+{
+    sendControlChange(69, 23);
+}
+
+void sendNoteOffTest(void)
+{
+    sendNoteOff(41);
+}
+
+void sendNoteOnTest(void)
+{
+    sendNoteOn(41);
+}
+
+void sendProgramChangeTest(void)
+{
+    sendProgramChange(3);
 }
