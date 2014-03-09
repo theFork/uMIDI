@@ -21,8 +21,8 @@
  * Main header for the uMIDI firmware.
  */
 
-#ifndef _MIDIWAH_H
-#define _MIDIWAH_H
+#ifndef _MAIN_H
+#define _MAIN_H
 
 
 //---------------- includes ----------------//
@@ -45,4 +45,4 @@ typedef struct {
 
 
 //---------------- EOF ----------------//
-#endif // _MIDIWAH_H
+#endif // _MAIN_H
