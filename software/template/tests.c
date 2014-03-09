@@ -18,29 +18,21 @@
  */
 
 /*
- * Program entry point and main loop of the uMIDI firmware.
+ * Test suite for the uMIDI firmware.
  */
 
-#include "adc.h"
-#include "main.h"
-#include "midi.h"
 #include "gpio.h"
 #include "tests.h"
-#include "timer.h"
 
-#include <avr/interrupt.h>
 #include <avr/wdt.h>
+#include <util/delay.h>
 
 
 ////////////////////////////////////////////////////////////////
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-// main state variable struct
-exec_state_t    state = {
-    IDLE,
-    true
-};
+extern gpio_t gpio;
 
 
 
@@ -48,37 +40,36 @@ exec_state_t    state = {
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-// initialization and endless loop
-int main( void )
+void runTest(void (*function_p)(void))
 {
-    // configure GPIO ports
-    configureGPIO();
+    (*function_p)();
+    _delay_ms(100);
+    wdt_reset();
+}
 
-    // configure USART for MIDI operation
-    configureUSART();
+void runTestSuite(void)
+{
+    // GPIO test cases
+    runTest(&setGPIOsTest);
+    runTest(&clearGPIOsTest);
+    runTest(&toggleGPIOsTest);
+    runTest(&toggleGPIOsTest);
+}
 
-    // configure the ADC
-    configureADC();
+void clearGPIOsTest(void)
+{
+    gpio_set(gpio.portC.pin4, false);
+    gpio_set(gpio.portC.pin6, false);
+}
 
-    // configure timers
-    configureTimer0();
+void setGPIOsTest(void)
+{
+    gpio_set(gpio.portC.pin4, true);
+    gpio_set(gpio.portC.pin6, true);
+}
 
-    // set watchdog for 120ms
-    wdt_enable(WDTO_120MS);
-
-    // enable interrupts
-    sei();
-
-    // run the test suite
-    runTestSuite();
-
-    // main program
-    while (true) {
-        // handle watchdog
-        if (MCUSR & _BV(WDRF)) {
-        }
-        wdt_reset();
-    }
-
-    return 0;
+void toggleGPIOsTest(void)
+{
+    gpio_toggle(gpio.portC.pin4);
+    gpio_toggle(gpio.portC.pin6);
 }
