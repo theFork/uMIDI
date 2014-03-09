@@ -26,9 +26,9 @@
 
 
 //---------------- includes ----------------//
-#include "bool.h"
 #include "midi.h"
 
+#include <stdbool.h>
 #include <stdint.h>
 
 
