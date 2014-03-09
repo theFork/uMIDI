@@ -56,7 +56,7 @@ void configureUSART( void )
 #endif
 }
 
-void sendCC(uint8_t controller, uint8_t value) {
+void sendControlChange(uint8_t controller, uint8_t value) {
     // send program change status byte
     while ( !(UCSR0A & _BV(UDRE0)) );
     UDR0 = (uint8_t) MIDI_CONTROL_CHANGE | MIDI_TX_CHANNEL;
@@ -70,7 +70,7 @@ void sendCC(uint8_t controller, uint8_t value) {
     UDR0 = value;
 }
 
-void sendPC(uint8_t pnum) {
+void sendProgramChange(uint8_t pnum) {
     // send program change status byte
     while ( !(UCSR0A & _BV(UDRE0)) );
     UDR0 = (uint8_t) MIDI_PROGRAM_CHANGE | MIDI_TX_CHANNEL;

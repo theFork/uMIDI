@@ -93,7 +93,7 @@ ISR(ADC_vect)
     // send MIDI command if the value has changed
     if (midiValue != last_midi_value) {
         last_midi_value = midiValue;
-        sendCC(CTRL_CUTOFF, midiValue);
+        sendControlChange(CTRL_CUTOFF, midiValue);
     }
 
     // enable interrupts
