@@ -49,6 +49,9 @@ void sendNoteOffTest(void);
 void sendNoteOnTest(void);
 void sendProgramChangeTest(void);
 
+// PWM tests
+void applyDutyCycleTest(void);
+
 
 //---------------- EOF ----------------//
 #endif // _TESTS_H

@@ -23,6 +23,7 @@
 
 #include "midi.h"
 #include "gpio.h"
+#include "pwm.h"
 #include "tests.h"
 
 #include <avr/wdt.h>
@@ -61,8 +62,12 @@ void runTestSuite(void)
     runTest(&sendControlChangeTest);
     runTest(&sendNoteOnTest);
     runTest(&sendNoteOffTest);
+
+    // PWM test cases
+    runTest(&applyDutyCycleTest);
 }
 
+//---------------- GPIO tests ----------------//
 void clearGPIOsTest(void)
 {
     gpio_set(gpio.portC.pin4, false);
@@ -81,6 +86,7 @@ void toggleGPIOsTest(void)
     gpio_toggle(gpio.portC.pin6);
 }
 
+//---------------- MIDI tests ----------------//
 void sendControlChangeTest(void)
 {
     sendControlChange(69, 23);
@@ -99,4 +105,10 @@ void sendNoteOnTest(void)
 void sendProgramChangeTest(void)
 {
     sendProgramChange(3);
+}
+
+//---------------- PWM tests ----------------//
+void applyDutyCycleTest(void)
+{
+    applyDutyCycle(63);
 }
