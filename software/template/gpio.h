@@ -26,8 +26,7 @@
 
 
 //---------------- includes ----------------//
-#include "bool.h"
-
+#include <stdbool.h>
 #include <stdint.h>
 #include <avr/io.h>
 

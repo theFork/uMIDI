@@ -18,31 +18,32 @@
  */
 
 /*
- * Main header for the uMIDI firmware.
- */
+ * Header of the PWM module.
+*/
 
-#ifndef _MAIN_H
-#define _MAIN_H
+#ifndef _PWM_H
+#define _PWM_H
 
 
 //---------------- includes ----------------//
-#include "midi.h"
-
-#include <stdbool.h>
 #include <stdint.h>
 
 
-//---------------- constants ----------------//
-#define	INITIAL_PROGRAM		0
+//---------------- AVR PORT mapping ----------------//
+#define     PWM_LED         gpio.portC.pin4
+
+
+//---------------- code macros ----------------//
+#define     PWM_LED_SCALER  20
 
 
 //---------------- data types ----------------//
-// execution state
-typedef struct {
-    midi_state_t    midi;
-    bool            receive;
-} exec_state_t;
+
+
+//---------------- functions and procedures ----------------//
+void applyDutyCycle(uint8_t duty);
+void configurePWM(void);
 
 
 //---------------- EOF ----------------//
-#endif // _MAIN_H
+#endif // _PWM_H

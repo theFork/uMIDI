@@ -18,25 +18,40 @@
  */
 
 /*
- * Boolean type definition and macros.
-*/
+ * Header for the uMIDI firmware test suite.
+ */
 
-#ifndef _BOOL_H
-#define _BOOL_H
+#ifndef _TESTS_H
+#define _TESTS_H
 
 
 //---------------- includes ----------------//
-#include <stdint.h>
 
 
-//---------------- code macros ----------------//
-#define		false	0
-#define		true	1
+//---------------- constants ----------------//
 
 
 //---------------- data types ----------------//
-typedef uint8_t bool;
+
+
+//---------------- functions and procedures ----------------//
+void runTest(void (*)(void));
+void runTestSuite(void);
+
+// GPIO tests
+void clearGPIOsTest(void);
+void setGPIOsTest(void);
+void toggleGPIOsTest(void);
+
+// MIDI TX tests
+void sendControlChangeTest(void);
+void sendNoteOffTest(void);
+void sendNoteOnTest(void);
+void sendProgramChangeTest(void);
+
+// PWM tests
+void applyDutyCycleTest(void);
 
 
 //---------------- EOF ----------------//
-#endif // _BOOL_H
+#endif // _TESTS_H

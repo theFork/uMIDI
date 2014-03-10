@@ -18,30 +18,24 @@
  */
 
 /*
- * Program entry point and main loop of the uMIDI firmware.
- */
+ * Implementation of the PWM module.
+*/
 
-#include "adc.h"
-#include "main.h"
-#include "midi.h"
 #include "gpio.h"
+#include "midi.h"
 #include "pwm.h"
-#include "tests.h"
-#include "timer.h"
 
+#include <stdbool.h>
+#include <stdint.h>
+#include <avr/io.h>
 #include <avr/interrupt.h>
-#include <avr/wdt.h>
 
 
 ////////////////////////////////////////////////////////////////
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-// main state variable struct
-exec_state_t    state = {
-    IDLE,
-    true
-};
+extern gpio_t gpio;
 
 
 
@@ -49,43 +43,36 @@ exec_state_t    state = {
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-// initialization and endless loop
-int main( void )
+void applyDutyCycle(uint8_t duty)
 {
-    // configure GPIO ports
-    configureGPIO();
+    // apply value
+    OCR1A = PWM_LED_SCALER * (MIDI_MAX_VALUE - duty);
+}
 
-    // configure USART for MIDI operation
-    configureUSART();
+void configurePWM(void)
+{
+    // configure timer 1: fast PWM mode, 125 kHz
+    TCCR1A = _BV(WGM11);
+    TCCR1B = _BV(WGM13) | _BV(WGM12) | _BV(CS11);
 
-    // configure the ADC
-    configureADC();
-
-    // configure timers
-    configureTimer0();
-
-    // configure the PWM
-    configurePWM();
-
-    // set watchdog for 120ms
-    wdt_enable(WDTO_120MS);
+    // set TOP
+    ICR1 = PWM_LED_SCALER * MIDI_MAX_VALUE;
+    OCR1A = PWM_LED_SCALER * MIDI_MAX_VALUE;
 
     // enable interrupts
-    sei();
+    TIMSK1 = _BV(OCIE1A) | _BV(TOIE1);
+}
 
-    // run the test suite
-    runTestSuite();
 
-    // send initial program change
-    sendProgramChange(INITIAL_PROGRAM);
 
-    // main program
-    while (true) {
-        // handle watchdog
-        if (MCUSR & _BV(WDRF)) {
-        }
-        wdt_reset();
-    }
+////////////////////////////////////////////////////////////////
+//                    I N T E R R U P T S                     //
+////////////////////////////////////////////////////////////////
 
-    return 0;
+ISR(TIMER1_COMPA_vect) {
+    gpio_set(PWM_LED, true);
+}
+
+ISR(TIMER1_OVF_vect) {
+    gpio_set(PWM_LED, false);
 }

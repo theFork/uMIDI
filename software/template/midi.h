@@ -26,6 +26,7 @@
 
 
 //---------------- includes ----------------//
+#include <stdint.h>
 
 
 //---------------- constants ----------------//
@@ -65,8 +66,10 @@ typedef enum {
 
 //---------------- functions and procedures ----------------//
 void configureUSART(void);
-void sendCC(uint8_t, uint8_t);
-void sendPC(uint8_t);
+void sendControlChange(uint8_t, uint8_t);
+void sendNoteOff(uint8_t);
+void sendNoteOn(uint8_t);
+void sendProgramChange(uint8_t);
 
 
 //---------------- EOF ----------------//

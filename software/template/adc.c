@@ -24,6 +24,7 @@
 #include "adc.h"
 #include "gpio.h"
 #include "midi.h"
+#include "pwm.h"
 
 #include <avr/interrupt.h>
 
@@ -93,8 +94,11 @@ ISR(ADC_vect)
     // send MIDI command if the value has changed
     if (midiValue != last_midi_value) {
         last_midi_value = midiValue;
-        sendCC(CTRL_CUTOFF, midiValue);
+        sendControlChange(CTRL_CUTOFF, midiValue);
     }
+
+    // set PWM duty cycle
+    applyDutyCycle(midiValue);
 
     // enable interrupts
     sei();
