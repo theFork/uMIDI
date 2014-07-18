@@ -35,9 +35,9 @@ EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
-Title ""
-Date ""
-Rev ""
+Title "uMIDI 0.2"
+Date "18 Jul 2014"
+Rev "A"
 Comp ""
 Comment1 ""
 Comment2 ""
