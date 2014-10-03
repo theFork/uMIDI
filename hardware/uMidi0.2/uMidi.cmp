@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (2014-09-08 BZR 5122)-product   date = Fri 03 Oct 2014 10:02:15 PM CEST
+Cmp-Mod V01 Created by Cvpcb (2014-09-08 BZR 5122)-product   date = Fri 03 Oct 2014 10:25:41 PM CEST
 
 BeginCmp
 TimeStamp = /53CAA38D;
@@ -144,7 +144,7 @@ BeginCmp
 TimeStamp = /53C945F1;
 Reference = JP1;
 ValeurCmp = JUMPER3;
-IdModule  = ;
+IdModule  = Solderjumper:SJ3;
 EndCmp
 
 BeginCmp
@@ -207,21 +207,21 @@ BeginCmp
 TimeStamp = /53CAB25D;
 Reference = P7;
 ValeurCmp = GPIO1;
-IdModule  = Connect:SIL-10;
+IdModule  = Connect:VASCH5x2;
 EndCmp
 
 BeginCmp
 TimeStamp = /53CAB9DB;
 Reference = P8;
 ValeurCmp = GPIO2;
-IdModule  = Connect:SIL-10;
+IdModule  = Connect:VASCH5x2;
 EndCmp
 
 BeginCmp
 TimeStamp = /53CAC3EE;
 Reference = P9;
 ValeurCmp = GPIO2;
-IdModule  = Connect:SIL-10;
+IdModule  = Connect:VASCH5x2;
 EndCmp
 
 BeginCmp
