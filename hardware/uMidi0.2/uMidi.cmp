@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (2014-09-08 BZR 5122)-product   date = Fri 03 Oct 2014 10:25:41 PM CEST
+Cmp-Mod V01 Created by Cvpcb (2014-09-08 BZR 5122)-product   date = Wed 08 Oct 2014 07:55:57 PM CEST
 
 BeginCmp
 TimeStamp = /53CAA38D;
@@ -165,35 +165,35 @@ BeginCmp
 TimeStamp = /53C94EC8;
 Reference = P1;
 ValeurCmp = MIDI In;
-IdModule  = Wire_Pads:SolderWirePad_2x_0-8mmDrill;
+IdModule  = Connect:PINHEAD1-2;
 EndCmp
 
 BeginCmp
 TimeStamp = /53C94B31;
 Reference = P2;
 ValeurCmp = MIDI Thru;
-IdModule  = Wire_Pads:SolderWirePad_2x_0-8mmDrill;
+IdModule  = Connect:PINHEAD1-2;
 EndCmp
 
 BeginCmp
 TimeStamp = /53C94B3C;
 Reference = P3;
 ValeurCmp = MIDI T/O;
-IdModule  = Wire_Pads:SolderWirePad_2x_0-8mmDrill;
+IdModule  = Connect:PINHEAD1-2;
 EndCmp
 
 BeginCmp
 TimeStamp = /53C94B1F;
 Reference = P4;
 ValeurCmp = MIDI Out;
-IdModule  = Wire_Pads:SolderWirePad_2x_0-8mmDrill;
+IdModule  = Connect:PINHEAD1-2;
 EndCmp
 
 BeginCmp
 TimeStamp = /53CAA6B4;
 Reference = P5;
 ValeurCmp = 5..12 V;
-IdModule  = Wire_Pads:SolderWirePad_2x_0-8mmDrill;
+IdModule  = Connect:PINHEAD1-2;
 EndCmp
 
 BeginCmp
