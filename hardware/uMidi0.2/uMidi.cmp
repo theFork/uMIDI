@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (2014-09-08 BZR 5122)-product   date = Sun 16 Nov 2014 07:12:06 PM CET
+Cmp-Mod V01 Created by Cvpcb (2014-09-08 BZR 5122)-product   date = Sun 16 Nov 2014 08:00:00 PM CET
 
 BeginCmp
 TimeStamp = /53CAA38D;
@@ -130,7 +130,7 @@ BeginCmp
 TimeStamp = /53C94FAA;
 Reference = IC1;
 ValeurCmp = 6N138;
-IdModule  = Opto-Devices:Optocoupler_6pin_wide_Stile-I;
+IdModule  = Sockets_DIP:DIP-8__300;
 EndCmp
 
 BeginCmp
