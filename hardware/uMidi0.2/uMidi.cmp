@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (2014-09-08 BZR 5122)-product   date = Thu 20 Nov 2014 12:14:14 PM CET
+Cmp-Mod V01 Created by Cvpcb (2014-09-08 BZR 5122)-product   date = Thu 20 Nov 2014 06:04:32 PM CET
 
 BeginCmp
 TimeStamp = /53CAA38D;
@@ -85,6 +85,34 @@ IdModule  = SMD_Packages:SMD-0603;
 EndCmp
 
 BeginCmp
+TimeStamp = /546E3C38;
+Reference = C13;
+ValeurCmp = 10u;
+IdModule  = SMD_Packages:SMD-0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /546E3D7F;
+Reference = C14;
+ValeurCmp = 100n;
+IdModule  = SMD_Packages:SMD-0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /546E3D1F;
+Reference = C15;
+ValeurCmp = 100n;
+IdModule  = SMD_Packages:SMD-0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /546E3CB6;
+Reference = C16;
+ValeurCmp = 100n;
+IdModule  = SMD_Packages:SMD-0603;
+EndCmp
+
+BeginCmp
 TimeStamp = /53C6D9DB;
 Reference = CON1;
 ValeurCmp = USB-MINI-B;
@@ -164,6 +192,13 @@ EndCmp
 BeginCmp
 TimeStamp = /53CA9FF7;
 Reference = L2;
+ValeurCmp = 10u;
+IdModule  = SMD_Packages:SMD-0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /546E3812;
+Reference = L3;
 ValeurCmp = 10u;
 IdModule  = SMD_Packages:SMD-0603;
 EndCmp
