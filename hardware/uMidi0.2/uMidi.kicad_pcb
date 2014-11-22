@@ -1,9 +1,9 @@
 (kicad_pcb (version 4) (host pcbnew "(2014-09-08 BZR 5122)-product")
 
   (general
-    (links 118)
-    (no_connects 118)
-    (area 68.529999 116.789999 152.450001 170.230001)
+    (links 119)
+    (no_connects 119)
+    (area 67.259999 121.869999 143.560001 165.150001)
     (thickness 1.6)
     (drawings 4)
     (tracks 0)
@@ -1553,7 +1553,8 @@
       (net 2 GND))
     (pad 3 smd rect (at 2.3 3.1) (size 1.2 2.2) (layers F.Cu F.Paste F.Mask)
       (net 62 +3.3V))
-    (pad 4 smd rect (at 0 -3.1) (size 3.5 2.2) (layers F.Cu F.Paste F.Mask))
+    (pad 4 smd rect (at 0 -3.1) (size 3.5 2.2) (layers F.Cu F.Paste F.Mask)
+      (net 2 GND))
   )
 
   (module Sockets_DIP:DIP-8__300 (layer F.Cu) (tedit 5468F44D) (tstamp 5468F741)

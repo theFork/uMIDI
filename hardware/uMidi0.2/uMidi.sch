@@ -4,7 +4,6 @@ LIBS:device
 LIBS:transistors
 LIBS:conn
 LIBS:linear
-LIBS:regul
 LIBS:74xx
 LIBS:cmos4000
 LIBS:adc-dac
@@ -29,6 +28,7 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
+LIBS:regul
 LIBS:uMidi-cache
 EELAYER 24 0
 EELAYER END
