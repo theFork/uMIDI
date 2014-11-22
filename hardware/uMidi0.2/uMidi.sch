@@ -25,10 +25,10 @@ LIBS:display
 LIBS:cypress
 LIBS:siliconi
 LIBS:opto
-LIBS:atmel
 LIBS:contrib
 LIBS:valves
 LIBS:regul
+LIBS:atmel
 LIBS:uMidi-cache
 EELAYER 24 0
 EELAYER END

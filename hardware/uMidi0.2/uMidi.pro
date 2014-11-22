@@ -1,4 +1,4 @@
-update=Tue 18 Nov 2014 02:56:10 PM CET
+update=Tue 18 Nov 2014 03:11:52 PM CET
 version=1
 last_client=kicad
 [cvpcb]
@@ -75,7 +75,7 @@ LibName23=display
 LibName24=cypress
 LibName25=siliconi
 LibName26=opto
-LibName27=atmel
-LibName28=contrib
-LibName29=valves
-LibName30=symbols/regul
+LibName27=contrib
+LibName28=valves
+LibName29=symbols/regul
+LibName30=symbols/atmel
