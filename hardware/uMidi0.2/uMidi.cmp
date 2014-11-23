@@ -177,14 +177,14 @@ EndCmp
 
 BeginCmp
 TimeStamp = /53C94FAA;
-Reference = IC1;
+Reference = IC4;
 ValeurCmp = 6N138;
 IdModule  = Opto:Optocoupler_DIP8_SMD;
 EndCmp
 
 BeginCmp
 TimeStamp = /53C6C32C;
-Reference = IC2;
+Reference = IC1;
 ValeurCmp = ATXMEGA128A4U-M;
 IdModule  = Atmel:QFN-44-1EP;
 EndCmp
@@ -373,14 +373,14 @@ EndCmp
 
 BeginCmp
 TimeStamp = /53C6D4D0;
-Reference = U1;
+Reference = IC2;
 ValeurCmp = 74LS14;
 IdModule  = SMD_Packages:SOIC-14_N;
 EndCmp
 
 BeginCmp
 TimeStamp = /53CAB726;
-Reference = U2;
+Reference = IC3;
 ValeurCmp = LT1129CST-3.3;
 IdModule  = SOT223:SOT-223;
 EndCmp
