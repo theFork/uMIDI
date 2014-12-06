@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (2014-09-08 BZR 5122)-product   date = Sun 23 Nov 2014 12:56:52 PM CET
+Cmp-Mod V01 Created by Cvpcb (2014-09-08 BZR 5122)-product   date = Sat 06 Dec 2014 07:21:33 PM CET
 
 BeginCmp
 TimeStamp = /53CAA38D;
@@ -297,42 +297,42 @@ EndCmp
 BeginCmp
 TimeStamp = /53C9484F;
 Reference = R1;
-ValeurCmp = 220;
+ValeurCmp = 120;
 IdModule  = SMD-0603:SMD-0603;
 EndCmp
 
 BeginCmp
 TimeStamp = /53C9474B;
 Reference = R2;
-ValeurCmp = 220;
+ValeurCmp = 120;
 IdModule  = SMD-0603:SMD-0603;
 EndCmp
 
 BeginCmp
 TimeStamp = /53C9485A;
 Reference = R3;
-ValeurCmp = 220;
+ValeurCmp = 120;
 IdModule  = SMD-0603:SMD-0603;
 EndCmp
 
 BeginCmp
 TimeStamp = /53C94767;
 Reference = R4;
-ValeurCmp = 220;
+ValeurCmp = 120;
 IdModule  = SMD-0603:SMD-0603;
 EndCmp
 
 BeginCmp
 TimeStamp = /53C94865;
 Reference = R5;
-ValeurCmp = 220;
+ValeurCmp = 120;
 IdModule  = SMD-0603:SMD-0603;
 EndCmp
 
 BeginCmp
 TimeStamp = /53C94772;
 Reference = R6;
-ValeurCmp = 220;
+ValeurCmp = 120;
 IdModule  = SMD-0603:SMD-0603;
 EndCmp
 
@@ -367,14 +367,14 @@ EndCmp
 BeginCmp
 TimeStamp = /546F0CF2;
 Reference = R11;
-ValeurCmp = 150;
+ValeurCmp = 120;
 IdModule  = SMD-0603:SMD-0603;
 EndCmp
 
 BeginCmp
 TimeStamp = /546F0E74;
 Reference = R12;
-ValeurCmp = 150;
+ValeurCmp = 120;
 IdModule  = SMD-0603:SMD-0603;
 EndCmp
 
