@@ -2,3 +2,6 @@
 *.hex
 *.o
 *.s
+
+# pcb plots
+hardware/plots
