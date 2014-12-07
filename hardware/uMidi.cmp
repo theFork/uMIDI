@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (2014-09-08 BZR 5122)-product   date = Sat 06 Dec 2014 08:01:46 PM CET
+Cmp-Mod V01 Created by Cvpcb (2014-09-08 BZR 5122)-product   date = Sun 07 Dec 2014 01:34:15 PM CET
 
 BeginCmp
 TimeStamp = /53CAA38D;
@@ -186,7 +186,7 @@ BeginCmp
 TimeStamp = /53C6D4D0;
 Reference = IC2;
 ValeurCmp = 74LS14;
-IdModule  = SMD_Packages:SOIC-14_N;
+IdModule  = SMD:SOIC-14_N;
 EndCmp
 
 BeginCmp
