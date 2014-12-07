@@ -5,7 +5,7 @@
     (no_connects 1)
     (area 67.259999 123.139999 133.400001 163.880001)
     (thickness 1.6)
-    (drawings 22)
+    (drawings 24)
     (tracks 503)
     (zones 0)
     (modules 61)
@@ -422,10 +422,10 @@
     )
   )
 
-  (module Solderjumper:SJ3 placed (layer F.Cu) (tedit 5471B990) (tstamp 546B8051)
+  (module Solderjumper:SJ3 placed (layer F.Cu) (tedit 548471C7) (tstamp 546B8051)
     (at 93.98 151.13 270)
     (path /53C945F1)
-    (fp_text reference JP1 (at 0 -1.524 270) (layer F.SilkS)
+    (fp_text reference JP1 (at 0 1.905 360) (layer F.SilkS)
       (effects (font (size 0.8 0.8) (thickness 0.15)))
     )
     (fp_text value JUMPER3 (at 0 2.54 270) (layer F.SilkS) hide
@@ -439,7 +439,7 @@
       (net 34 TXD))
   )
 
-  (module Pin_Headers:Pin_Header_Straight_2x03 placed (layer F.Cu) (tedit 546CC7C0) (tstamp 548466E4)
+  (module Pin_Headers:Pin_Header_Straight_2x03 placed (layer F.Cu) (tedit 54847223) (tstamp 548466E4)
     (at 95.25 158.75)
     (descr "Through hole pin header")
     (tags "pin header")
@@ -449,8 +449,8 @@
     (fp_text reference P6 (at 0 6.35) (layer F.SilkS) hide
       (effects (font (size 1.27 1.27) (thickness 0.2032)))
     )
-    (fp_text value PDI (at 0 0) (layer F.SilkS) hide
-      (effects (font (size 1.27 1.27) (thickness 0.2032)))
+    (fp_text value PDI (at 0 -3.683) (layer F.SilkS)
+      (effects (font (size 1 1) (thickness 0.2)))
     )
     (fp_line (start -3.81 0) (end -1.27 0) (layer F.SilkS) (width 0.15))
     (fp_line (start -1.27 0) (end -1.27 2.54) (layer F.SilkS) (width 0.15))
@@ -1704,14 +1704,14 @@
       (net 2 GND))
   )
 
-  (module Atmel:QFN-44-1EP placed (layer F.Cu) (tedit 54847004) (tstamp 54835DBF)
+  (module Atmel:QFN-44-1EP placed (layer F.Cu) (tedit 548470EB) (tstamp 54835DBF)
     (at 114.3 143.51 180)
     (descr "7x7mm QFN 44+1 pads")
     (tags "QFN VQFN")
     (path /53C6C32C)
     (attr smd)
-    (fp_text reference IC1 (at -4.699 -5.588 180) (layer F.SilkS)
-      (effects (font (size 1.5 1.5) (thickness 0.15)))
+    (fp_text reference IC1 (at -3.683 -5.207 180) (layer F.SilkS)
+      (effects (font (size 0.8 0.8) (thickness 0.15)))
     )
     (fp_text value ATXMEGA128A4U-M (at 0 6 180) (layer F.SilkS) hide
       (effects (font (size 1.5 1.5) (thickness 0.15)))
@@ -1843,13 +1843,13 @@
       (net 2 GND) (zone_connect 2))
   )
 
-  (module SMD:SOIC-14_N placed (layer F.Cu) (tedit 54844A21) (tstamp 54844C28)
+  (module SMD:SOIC-14_N placed (layer F.Cu) (tedit 54847233) (tstamp 54844C28)
     (at 83.185 156.845 270)
     (descr "Module CMS SOJ 14 pins Large")
     (tags "CMS SOJ")
     (path /53C6D4D0)
     (attr smd)
-    (fp_text reference IC2 (at -5.461 -0.127 360) (layer F.SilkS)
+    (fp_text reference IC2 (at -5.715 -0.127 360) (layer F.SilkS)
       (effects (font (size 0.8 0.8) (thickness 0.15)))
     )
     (fp_text value 74LS14 (at 0 1.27 270) (layer F.SilkS) hide
@@ -1942,6 +1942,12 @@
     )
   )
 
+  (gr_text out (at 95.631 152.4) (layer F.SilkS)
+    (effects (font (size 0.8 0.8) (thickness 0.15)))
+  )
+  (gr_text thru (at 95.885 149.86) (layer F.SilkS)
+    (effects (font (size 0.8 0.8) (thickness 0.15)))
+  )
   (gr_line (start 68.072 152.4) (end 68.326 152.654) (angle 90) (layer F.SilkS) (width 0.2))
   (gr_line (start 68.072 152.4) (end 68.326 152.146) (angle 90) (layer F.SilkS) (width 0.2))
   (gr_line (start 68.072 147.32) (end 68.326 147.574) (angle 90) (layer F.SilkS) (width 0.2))
