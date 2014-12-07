@@ -1215,6 +1215,28 @@ F 3 "" H 3300 1750 60  0000 C CNN
 	1    3300 1750
 	1    0    0    -1  
 $EndComp
+$Comp
+L R R14
+U 1 1 5484813F
+P 9900 4200
+F 0 "R14" V 9980 4200 40  0000 C CNN
+F 1 "10k" V 9907 4201 40  0000 C CNN
+F 2 "" V 9830 4200 30  0000 C CNN
+F 3 "" H 9900 4200 30  0000 C CNN
+	1    9900 4200
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R15
+U 1 1 548484DC
+P 10100 4200
+F 0 "R15" V 10180 4200 40  0000 C CNN
+F 1 "10k" V 10107 4201 40  0000 C CNN
+F 2 "" V 10030 4200 30  0000 C CNN
+F 3 "" H 10100 4200 30  0000 C CNN
+	1    10100 4200
+	1    0    0    -1  
+$EndComp
 Wire Wire Line
 	7200 5150 7200 5250
 Wire Wire Line
@@ -1698,4 +1720,38 @@ Wire Wire Line
 	3050 1150 3300 1150
 Wire Wire Line
 	3300 1150 3300 1200
+Text GLabel 9900 4500 3    60   Input ~ 0
+SCL
+Text GLabel 8850 4300 1    60   Input ~ 0
+SDA
+Text GLabel 8700 4400 1    60   Input ~ 0
+SCL
+Text GLabel 10100 4500 3    60   Input ~ 0
+SDA
+Wire Wire Line
+	9900 4500 9900 4450
+Wire Wire Line
+	10100 4500 10100 4450
+Wire Wire Line
+	9900 3900 10100 3900
+Wire Wire Line
+	9900 3900 9900 3950
+Wire Wire Line
+	10100 3900 10100 3950
+Connection ~ 10000 3900
+Wire Wire Line
+	8850 4300 8850 4350
+Connection ~ 8850 4350
+Wire Wire Line
+	8700 4400 8700 4450
+Connection ~ 8700 4450
+Text GLabel 5650 1950 0    60   Input ~ 0
+PWR_MCU
+Wire Wire Line
+	5650 1950 5800 1950
+Connection ~ 5800 1950
+Text GLabel 10000 3750 1    60   Input ~ 0
+PWR_MCU
+Wire Wire Line
+	10000 3900 10000 3750
 $EndSCHEMATC
