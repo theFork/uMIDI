@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (2014-09-08 BZR 5122)-product   date = Sun 14 Dec 2014 10:56:35 AM CET
+Cmp-Mod V01 Created by Cvpcb (2014-09-08 BZR 5122)-product   date = Sun 14 Dec 2014 02:50:46 PM CET
 
 BeginCmp
 TimeStamp = /53CAA38D;
@@ -123,21 +123,21 @@ BeginCmp
 TimeStamp = /53CAA4CA;
 Reference = D1;
 ValeurCmp = DIODE;
-IdModule  = SMD_Packages:DO-214-AC_SMA;
+IdModule  = SMD:DO-214-AC_SMA;
 EndCmp
 
 BeginCmp
 TimeStamp = /53CAB822;
 Reference = D2;
 ValeurCmp = DIODE;
-IdModule  = SMD_Packages:DO-214-AC_SMA;
+IdModule  = SMD:DO-214-AC_SMA;
 EndCmp
 
 BeginCmp
 TimeStamp = /53C950D4;
 Reference = D3;
 ValeurCmp = DIODE;
-IdModule  = SMD_Packages:DO-214-AC_SMA;
+IdModule  = SMD:DO-214-AC_SMA;
 EndCmp
 
 BeginCmp
@@ -318,7 +318,7 @@ EndCmp
 BeginCmp
 TimeStamp = /53CAC3EE;
 Reference = P9;
-ValeurCmp = GPIO2;
+ValeurCmp = GPIO3;
 IdModule  = Connect:VASCH5x2;
 EndCmp
 
