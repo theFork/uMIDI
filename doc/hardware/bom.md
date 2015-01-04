@@ -1,7 +1,6 @@
 # Bill of Material
 
 ## Semiconductors
-
 | Name | Value              | Package       |
 |------|--------------------|---------------|
 | IC1  | ATXMEGA128A4U-M    | VQFN44        |
@@ -14,8 +13,8 @@
 | D4   | TVS                | 0603          |
 | D5   | TVS                | 0603          |
 | D6   | TVS                | 0603          |
-| D7   | LED                | 0603          |
-| D8   | LED                | 0603          |
+| D7   | LED, red           | 0603          |
+| D8   | LED, green         | 0603          |
 
 ## Connectors
 | Name | Type               |
