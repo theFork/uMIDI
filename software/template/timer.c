@@ -18,7 +18,7 @@
  */
 
 /*
- * timer module implementation of the uMIDI firmware
+ * Timer module implementation of the uMIDI firmware
 */
 
 #include "adc.h"
@@ -39,17 +39,14 @@
 ////////////////////////////////////////////////////////////////
 
 void configureTimer0(void) {
-    // select CTC wave generation
-    TCCR0A = _BV(WGM01);
+    // Prescale clock to 125 kHz
+    TCC0.CTRLA = TC_CLKSEL_DIV256_gc;
 
-    // configure prescaler /8
-    TCCR0B = _BV(CS01);
+    // Set TOP value to achieve 1ms clock
+    TCC0.PER = 124;
 
-    // set counter compare value to achieve 1ms clock
-    OCR0A = 125;
-
-    // enable the overflow interrupt
-    TIMSK0 = _BV(OCIE0A);
+    // Enable timer overflow interrupt
+    TCC0.INTCTRLA = TC_OVFINTLVL_LO_gc;
 }
 
 
@@ -58,20 +55,21 @@ void configureTimer0(void) {
 //                    I N T E R R U P T S                     //
 ////////////////////////////////////////////////////////////////
 
-ISR(TIMER0_COMPA_vect) {
+ISR(TCC0_OVF_vect)
+{
     // disable interrupts
     cli();
 
     static uint16_t prescaler = 0;
     ++prescaler;
     if (prescaler < 50) {
-        goto leave;
+        goto cleanup;
     }
     prescaler = 0;
 
     triggerADC();
 
-leave:
+cleanup:
     // enable interrupts
     sei();
 }
