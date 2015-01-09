@@ -46,21 +46,26 @@ extern struct gpio gpio;
 void applyDutyCycle(uint8_t duty)
 {
     // apply value
-    OCR1A = PWM_LED_SCALER * (MIDI_MAX_VALUE - duty);
+    TCC1.CCA = PWM_LED_SCALER * (MIDI_MAX_VALUE - duty);
 }
 
 void configurePWM(void)
 {
-    // configure timer 1: fast PWM mode, 125 kHz
-    TCCR1A = _BV(WGM11);
-    TCCR1B = _BV(WGM13) | _BV(WGM12) | _BV(CS11);
+    // Prescale clock to 125 kHz
+    TCC1.CTRLA = TC_CLKSEL_DIV256_gc;
 
-    // set TOP
-    ICR1 = PWM_LED_SCALER * MIDI_MAX_VALUE;
-    OCR1A = PWM_LED_SCALER * MIDI_MAX_VALUE;
+    // Select single slope PWM mode
+    TCC1.CTRLB = TC_WGMODE_SINGLESLOPE_gc;
+
+    // Set TOP value
+    TCC1.PER = PWM_LED_SCALER * MIDI_MAX_VALUE;
+
+    // Set initial compare value to TOP
+    TCC1.CCA = PWM_LED_SCALER * MIDI_MAX_VALUE;
 
     // enable interrupts
-    TIMSK1 = _BV(OCIE1A) | _BV(TOIE1);
+    TCC1.INTCTRLA = TC_OVFINTLVL_LO_gc;
+    TCC1.INTCTRLB = TC_CCAINTLVL_LO_gc;
 }
 
 
@@ -69,10 +74,12 @@ void configurePWM(void)
 //                    I N T E R R U P T S                     //
 ////////////////////////////////////////////////////////////////
 
-ISR(TIMER1_COMPA_vect) {
+ISR(TCC1_CCA_vect)
+{
     gpio_set(PWM_LED, true);
 }
 
-ISR(TIMER1_OVF_vect) {
+ISR(TCC1_OVF_vect)
+{
     gpio_set(PWM_LED, false);
 }
