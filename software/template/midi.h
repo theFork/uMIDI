@@ -26,8 +26,10 @@
 
 
 //---------------- includes ----------------//
+#include <stdbool.h>
 #include <stdint.h>
 
+#include <avr/io.h>
 
 //---------------- constants ----------------//
 // MIDI baudrate
@@ -66,6 +68,15 @@ enum midi_state
 
 
 //---------------- functions and procedures ----------------//
+static inline bool usart_is_ready(void) {
+    return USARTC0.STATUS & USART_DREIF_bm;
+}
+
+static inline void usart_write(uint8_t data) {
+    while (!usart_is_ready());
+    USARTC0.DATA = data;
+}
+
 void configureUSART(void);
 void sendControlChange(uint8_t, uint8_t);
 void sendNoteOff(uint8_t);

@@ -26,14 +26,13 @@
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
-#include <util/setbaud.h>
 
 
 ////////////////////////////////////////////////////////////////
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-extern struct exec_state state;
+extern struct exec_state    state;
 
 
 
@@ -41,71 +40,58 @@ extern struct exec_state state;
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void configureUSART( void )
+void configureUSART(void)
 {
-    // enable RXEN and RXC interrupt
-    UCSR0B = _BV(RXCIE0) | _BV(RXEN0) | _BV(TXEN0);
+    // Enable RXEN and RXC interrupt
+    USARTC0.CTRLA = USART_RXCINTLVL0_bm;
+    USARTC0.CTRLB = USART_RXEN_bm;
 
-    // apply UBRR value computed by setbaud.h
-    UBRR0H = UBRRH_VALUE;
-    UBRR0L = UBRRL_VALUE;
-#if USE_2X
-    UCSR0A |= (1 << U2X0);
-#else
-    UCSR0A &= ~(1 << U2X0);
-#endif
+    // Set baud rate
+    // 32e6 / (16 * 31250) - 1 = 63
+    // F_osc       baudrate     BSEL
+    USARTC0.BAUDCTRLA = 63;
+    USARTC0.BAUDCTRLB = 0;
 }
 
 void sendControlChange(uint8_t controller, uint8_t value) {
     // send control change status byte
-    while ( !(UCSR0A & _BV(UDRE0)) );
-    UDR0 = (uint8_t) MIDI_CONTROL_CHANGE | MIDI_TX_CHANNEL;
+    usart_write((uint8_t) MIDI_CONTROL_CHANGE | MIDI_TX_CHANNEL);
 
     // send controller number
-    while ( !(UCSR0A & _BV(UDRE0)) );
-    UDR0 = controller;
+    usart_write(controller);
 
     // send value
-    while ( !(UCSR0A & _BV(UDRE0)) );
-    UDR0 = value;
+    usart_write(value);
 }
 
 void sendNoteOff(uint8_t note) {
     // send note off status byte
-    while ( !(UCSR0A & _BV(UDRE0)) );
-    UDR0 = (uint8_t) MIDI_NOTE_OFF | MIDI_TX_CHANNEL;
+    usart_write((uint8_t) MIDI_NOTE_OFF | MIDI_TX_CHANNEL);
 
     // send note number
-    while ( !(UCSR0A & _BV(UDRE0)) );
-    UDR0 = note;
+    usart_write(note);
 
     // send maximum velocity
-    while ( !(UCSR0A & _BV(UDRE0)) );
-    UDR0 = MIDI_MAX_VALUE;
+    usart_write(MIDI_MAX_VALUE);
 }
 
 void sendNoteOn(uint8_t note) {
     // send note on status byte
-    while ( !(UCSR0A & _BV(UDRE0)) );
-    UDR0 = (uint8_t) MIDI_NOTE_ON | MIDI_TX_CHANNEL;
+    usart_write((uint8_t) MIDI_NOTE_ON | MIDI_TX_CHANNEL);
 
     // send note number
-    while ( !(UCSR0A & _BV(UDRE0)) );
-    UDR0 = note;
+    usart_write(note);
 
     // send maximum velocity
-    while ( !(UCSR0A & _BV(UDRE0)) );
-    UDR0 = MIDI_MAX_VALUE;
+    usart_write(MIDI_MAX_VALUE);
 }
 
 void sendProgramChange(uint8_t pnum) {
     // send program change status byte
-    while ( !(UCSR0A & _BV(UDRE0)) );
-    UDR0 = (uint8_t) MIDI_PROGRAM_CHANGE | MIDI_TX_CHANNEL;
+    usart_write((uint8_t) MIDI_PROGRAM_CHANGE | MIDI_TX_CHANNEL);
 
     // send program number
-    while ( !(UCSR0A & _BV(UDRE0)) );
-    UDR0 = pnum;
+    usart_write(pnum);
 }
 
 
@@ -114,13 +100,13 @@ void sendProgramChange(uint8_t pnum) {
 //                    I N T E R R U P T S                     //
 ////////////////////////////////////////////////////////////////
 
-ISR(USART_RX_vect)
+ISR(USARTC0_RXC_vect)
 {
-    // disable interrupts
+    // Disable interrupts
     cli();
 
-    // fetch data
-    uint8_t data = UDR0;
+    // Fetch data
+    uint8_t data = USARTC0.DATA;
 
     switch (state.midi) {
         ////
