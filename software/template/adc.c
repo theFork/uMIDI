@@ -22,7 +22,6 @@
 */
 
 #include "adc.h"
-#include "gpio.h"
 #include "midi.h"
 #include "pwm.h"
 
@@ -32,8 +31,6 @@
 ////////////////////////////////////////////////////////////////
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
-
-extern gpio_t gpio;
 
 uint16_t last_midi_value = 0;
 
