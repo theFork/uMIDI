@@ -55,13 +55,14 @@
 
 //---------------- data types ----------------//
 // codes for MIDI state machine
-typedef enum {
+enum midi_state
+{
     IDLE,
     NOTE_OFF,
     NOTE_ON,
     CONTROL_CHANGE,
     PROGRAM_CHANGE,
-} midi_state_t;
+};
 
 
 //---------------- functions and procedures ----------------//

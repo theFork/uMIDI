@@ -39,7 +39,7 @@
 //---------------- data types ----------------//
 // execution state
 typedef struct {
-    midi_state_t    midi;
+    enum midi_state midi;
     bool            receive;
 } exec_state_t;
 
