@@ -43,6 +43,7 @@ uint16_t last_midi_value = 0;
 // initialization and endless loop
 void configureADC(void)
 {
+/*
     // select voltage reference
     ADMUX = _BV(REFS0);
 
@@ -65,11 +66,12 @@ void configureADC(void)
 
     // enable the ADC interrupt
     ADCSRA |= _BV(ADIE);
+*/
 }
 
 void triggerADC(void)
 {
-    ADCSRA |= _BV(ADSC);
+//    ADCSRA |= _BV(ADSC);
 }
 
 
@@ -78,6 +80,7 @@ void triggerADC(void)
 //                    I N T E R R U P T S                     //
 ////////////////////////////////////////////////////////////////
 
+/*
 ISR(ADC_vect)
 {
     // disable interrupts
@@ -100,3 +103,4 @@ ISR(ADC_vect)
     // enable interrupts
     sei();
 }
+*/
