@@ -80,10 +80,10 @@ int main( void )
     // send initial program change
     sendProgramChange(INITIAL_PROGRAM);
 
-    // main program
+    // Main loop
     while (true) {
-        // handle watchdog
-        if (MCUSR & _BV(WDRF)) {
+        // Feed the watchdog
+        if (RST.STATUS & RST_WDRF_bm) {
         }
         wdt_reset();
     }
