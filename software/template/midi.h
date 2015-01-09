@@ -31,7 +31,7 @@
 
 //---------------- constants ----------------//
 // MIDI baudrate
-#define     BAUD                        31250
+#define     BAUD_RATE                   31250
 
 // maximum MIDI value
 #define     MIDI_MAX_VALUE              127
