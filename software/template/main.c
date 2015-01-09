@@ -38,9 +38,10 @@
 ////////////////////////////////////////////////////////////////
 
 // main state variable struct
-exec_state_t    state = {
-    IDLE,
-    true
+struct exec_state   state =
+{
+    .midi =     IDLE,
+    .receive =  true
 };
 
 

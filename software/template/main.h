@@ -37,11 +37,11 @@
 
 
 //---------------- data types ----------------//
-// execution state
-typedef struct {
+struct exec_state
+{
     enum midi_state midi;
     bool            receive;
-} exec_state_t;
+};
 
 
 //---------------- EOF ----------------//

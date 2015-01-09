@@ -33,7 +33,7 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-extern exec_state_t state;
+extern struct exec_state state;
 
 
 
