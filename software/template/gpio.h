@@ -35,66 +35,51 @@
 
 
 //---------------- data types ----------------//
-typedef struct {
+struct gpio_pin
+{
     volatile uint8_t*   read_addr;
     volatile uint8_t*   write_addr;
     uint8_t             bit;
-} gpio_pin_t;
+};
 
-typedef struct {
-    gpio_pin_t          pin1;
-    gpio_pin_t          pin2;
-    gpio_pin_t          pin3;
-    gpio_pin_t          pin4;
-    gpio_pin_t          pin5;
-    gpio_pin_t          pin6;
-    gpio_pin_t          pin7;
-    gpio_pin_t          pin8;
+struct gpio_header
+{
+    struct gpio_pin     pin2;
+    struct gpio_pin     pin3;
+    struct gpio_pin     pin4;
+    struct gpio_pin     pin5;
+    struct gpio_pin     pin6;
+    struct gpio_pin     pin7;
+    struct gpio_pin     pin8;
+    struct gpio_pin     pin9;
 } gpio_portA_t;
 
-typedef struct {
-    gpio_pin_t          pin2;
-    gpio_pin_t          pin3;
-    gpio_pin_t          pin4;
-    gpio_pin_t          pin5;
-    gpio_pin_t          pin8;
-} gpio_portB_t;
-
-typedef struct {
-    gpio_pin_t          pin2;
-    gpio_pin_t          pin3;
-    gpio_pin_t          pin4;
-    gpio_pin_t          pin5;
-    gpio_pin_t          pin6;
-    gpio_pin_t          pin7;
-    gpio_pin_t          pin8;
-} gpio_portC_t;
-
-typedef struct {
-    gpio_portA_t        portA;
-    gpio_portB_t        portB;
-    gpio_portC_t        portC;
-} gpio_t;
+struct gpio
+{
+    struct gpio_header  header1;
+    struct gpio_header  header2;
+    struct gpio_header  header3;
+};
 
 
 //---------------- functions and procedures ----------------//
-static inline void gpio_drive_high(gpio_pin_t pin) {
+static inline void gpio_drive_high(struct gpio_pin pin) {
     *pin.write_addr |= _BV(pin.bit);
 }
 
-static inline void gpio_drive_low(gpio_pin_t pin) {
+static inline void gpio_drive_low(struct gpio_pin pin) {
     *pin.write_addr &=~ _BV(pin.bit);
 }
 
-static inline bool gpio_get(gpio_pin_t pin) {
+static inline bool gpio_get(struct gpio_pin pin) {
     return *pin.read_addr & _BV(pin.bit);
 }
 
-static inline void gpio_set(gpio_pin_t pin, bool value) {
+static inline void gpio_set(struct gpio_pin pin, bool value) {
     value ? gpio_drive_high(pin) : gpio_drive_low(pin);
 }
 
-static inline void gpio_toggle(gpio_pin_t pin) {
+static inline void gpio_toggle(struct gpio_pin pin) {
     *pin.write_addr ^= _BV(pin.bit);
 }
 

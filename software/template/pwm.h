@@ -30,7 +30,7 @@
 
 
 //---------------- AVR PORT mapping ----------------//
-#define     PWM_LED         gpio.portC.pin4
+#define     PWM_LED         gpio.header3.pin4
 
 
 //---------------- code macros ----------------//

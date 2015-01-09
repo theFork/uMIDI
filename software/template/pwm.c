@@ -35,7 +35,7 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-extern gpio_t gpio;
+extern struct gpio gpio;
 
 
 

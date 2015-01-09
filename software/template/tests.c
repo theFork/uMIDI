@@ -34,7 +34,7 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-extern gpio_t gpio;
+extern struct gpio gpio;
 
 
 
@@ -70,20 +70,20 @@ void runTestSuite(void)
 //---------------- GPIO tests ----------------//
 void clearGPIOsTest(void)
 {
-    gpio_set(gpio.portC.pin4, false);
-    gpio_set(gpio.portC.pin6, false);
+    gpio_set(gpio.header3.pin4, false);
+    gpio_set(gpio.header3.pin6, false);
 }
 
 void setGPIOsTest(void)
 {
-    gpio_set(gpio.portC.pin4, true);
-    gpio_set(gpio.portC.pin6, true);
+    gpio_set(gpio.header3.pin4, true);
+    gpio_set(gpio.header3.pin6, true);
 }
 
 void toggleGPIOsTest(void)
 {
-    gpio_toggle(gpio.portC.pin4);
-    gpio_toggle(gpio.portC.pin6);
+    gpio_toggle(gpio.header3.pin4);
+    gpio_toggle(gpio.header3.pin6);
 }
 
 //---------------- MIDI tests ----------------//

@@ -30,32 +30,36 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-gpio_t gpio = {
-    { // portA
-        { &PINB, &PORTB, PB4 },
-        { &PINB, &PORTB, PB3 },
-        { &PINB, &PORTB, PB2 },
-        { &PINB, &PORTB, PB1 },
-        { &PINB, &PORTB, PB0 },
-        { &PIND, &PORTD, PD7 },
-        { &PIND, &PORTD, PD6 },
-        { &PIND, &PORTD, PD5 }
+struct gpio gpio = {
+    .header1 = {
+        { &PORTA.IN, &PORTA.OUT, 0 },
+        { &PORTA.IN, &PORTA.OUT, 1 },
+        { &PORTA.IN, &PORTA.OUT, 2 },
+        { &PORTA.IN, &PORTA.OUT, 3 },
+        { &PORTA.IN, &PORTA.OUT, 4 },
+        { &PORTA.IN, &PORTA.OUT, 5 },
+        { &PORTA.IN, &PORTA.OUT, 6 },
+        { &PORTA.IN, &PORTA.OUT, 7 }
     },
-    { // portB
-        { &PINC, &PORTC, PC2 },
-        { &PINC, &PORTC, PC3 },
-        { &PINC, &PORTC, PC1 },
-        { &PINC, &PORTC, PC0 },
-        { &PINB, &PORTB, PB5 }
+    .header2 = {
+        { &PORTB.IN, &PORTB.OUT, 0 },
+        { &PORTB.IN, &PORTB.OUT, 1 },
+        { &PORTB.IN, &PORTB.OUT, 2 },
+        { &PORTB.IN, &PORTB.OUT, 3 },
+        { &PORTC.IN, &PORTC.OUT, 0 },
+        { &PORTC.IN, &PORTC.OUT, 1 },
+        { &PORTC.IN, &PORTC.OUT, 2 },
+        { &PORTC.IN, &PORTC.OUT, 3 }
     },
-    { // portC
-        { &PINB, &PORTB, PB7 },
-        { &PINB, &PORTB, PB6 },
-        { &PIND, &PORTD, PD4 },
-        { &PIND, &PORTD, PD3 },
-        { &PIND, &PORTD, PD2 },
-        { &PINC, &PORTC, PC5 },
-        { &PINC, &PORTC, PC4 }
+    .header3 = {
+        { &PORTC.IN, &PORTC.OUT, 4 },
+        { &PORTC.IN, &PORTC.OUT, 5 },
+        { &PORTC.IN, &PORTC.OUT, 6 },
+        { &PORTC.IN, &PORTC.OUT, 7 },
+        { &PORTD.IN, &PORTD.OUT, 0 },
+        { &PORTD.IN, &PORTD.OUT, 1 },
+        { &PORTD.IN, &PORTD.OUT, 2 },
+        { &PORTD.IN, &PORTD.OUT, 3 }
     }
 };
 
@@ -66,13 +70,15 @@ gpio_t gpio = {
 ////////////////////////////////////////////////////////////////
 
 void configureGPIO() {
-    // configure all GPIO pins on AVR port B as outputs
-    DDRB = _BV(PB7) | _BV(PB6) | _BV(PB5) | _BV(PB4)
-         | _BV(PB3) | _BV(PB2) | _BV(PB1) | _BV(PB0);
+    // Configure all GPIO pins on AVR port A as outputs
+    PORTA.DIRSET = _BV(7) | _BV(6) | _BV(5) | _BV(4) | _BV(3) | _BV(2) | _BV(1) | _BV(0);
 
-    // leave PC0 and PC1 (-> ADC0, ADC1) configured as input pins
-    DDRC = _BV(PC5) | _BV(PC4) | _BV(PC3) | _BV(PC2);
+    // Configure GPIO pins 0..3 on AVR port B as outputs
+    PORTB.DIRSET = _BV(3) | _BV(2) | _BV(1) | _BV(0);
 
-    // configure GPIO pins on AVR port D as outputs
-    DDRD = _BV(PD7) | _BV(PD6) | _BV(PD5) | _BV(PD4) | _BV(PD3) | _BV(PD2);
+    // Configure all GPIO pins on AVR port C as outputs
+    PORTC.DIRSET = _BV(7) | _BV(6) | _BV(5) | _BV(4) | _BV(3) | _BV(2) | _BV(1) | _BV(0);
+
+    // Configure GPIO pins on AVR port D as outputs
+    PORTD.DIRSET = _BV(3) | _BV(2) | _BV(1) | _BV(0);
 }
