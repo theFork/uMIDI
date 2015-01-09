@@ -34,7 +34,7 @@
 ////////////////////////////////////////////////////////////////
 
 // current program
-program_t current_program;
+struct program current_program;
 
 // EEPROM program storage
 uint16_t programs[PROGRAM_COUNT] EEMEM;
@@ -45,7 +45,7 @@ uint16_t programs[PROGRAM_COUNT] EEMEM;
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void applyProgramData(program_data_t data)
+void applyProgramData(union program_data data)
 {
     // TODO
 }

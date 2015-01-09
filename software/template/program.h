@@ -34,24 +34,23 @@
 
 
 //---------------- data types ----------------//
-// program data
-typedef union {
+union program_data
+{
     uint16_t word;
     struct {
         // TODO
     } channels;
-} program_data_t;
+};
 
-// program
-typedef struct
+struct program
 {
-    uint8_t         number;
-    program_data_t  data;
-} program_t;
+    uint8_t             number;
+    union program_data  data;
+};
 
 
 //---------------- functions and procedures ----------------//
-void applyProgramData(program_data_t);
+void applyProgramData(union program_data);
 void copyCurrentBankTo(uint8_t);
 void copyCurrentProgramTo(uint8_t);
 void enterProgram(uint8_t);
