@@ -21,10 +21,11 @@
  * Program entry point and main loop of the uMIDI firmware.
  */
 
-#include "adc.h"
 #include "main.h"
-#include "midi.h"
+#include "adc.h"
 #include "gpio.h"
+#include "leds.h"
+#include "midi.h"
 #include "pwm.h"
 #include "tests.h"
 #include "timer.h"
@@ -65,19 +66,17 @@ static void configure_system_clock(void)
 int main( void )
 {
     configure_system_clock();
+    configureTaskTimer();
+    initializeLedsModule();
 
     // configure GPIO ports
     configureGPIO();
-
 
     // configure UART for MIDI operation
     configureUART();
 
     // configure the ADC
     configureADC();
-
-    // configure timers
-    configureTimer0();
 
     // configure the PWM
     configurePWM();

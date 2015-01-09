@@ -22,6 +22,7 @@
 */
 
 #include "adc.h"
+#include "leds.h"
 #include "timer.h"
 
 #include <avr/io.h>
@@ -38,7 +39,7 @@
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void configureTimer0(void) {
+void configureTaskTimer(void) {
     // Prescale clock to 125 kHz
     TCC0.CTRLA = TC_CLKSEL_DIV256_gc;
 
@@ -68,6 +69,7 @@ ISR(TCC0_OVF_vect)
     prescaler = 0;
 
     triggerADC();
+    updateLeds();
 
 cleanup:
     // enable interrupts
