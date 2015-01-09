@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Sebastian Neuser
+ * Copyright 2012-2015 Sebastian Neuser
  *
  * This file is part of the uMIDI firmware.
  *
