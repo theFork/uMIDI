@@ -39,8 +39,10 @@ SRC = $(wildcard *.c)
 DIR = ./
 
 # fuse bits
-HFUSE = 0xd1
-LFUSE = 0xe1
+FUSE1 = 0x00
+FUSE2 = 0xff
+FUSE4 = 0xfe
+FUSE5 = 0xff
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
@@ -57,17 +59,17 @@ CFLAGS += -DF_OSC=$(F_OSC)
 CFLAGS += -DF_CPU=$(F_CPU)
 
 # avrdude settings and variables.
-AVRDUDE_FLAGS = -p $(MCU)
-AVRDUDE_FLAGS += -c STK500
-AVRDUDE_FLAGS += -P /dev/ttyACM0
-AVRDUDE_FLAGS += -B 4
+AVRDUDE_FLAGS = -c atmelice_pdi
+AVRDUDE_FLAGS += -p x128a4u
 
 AVRDUDE_WRITE_FLASH = -U flash:w:$(DIR)$(TARGET).hex
 AVRDUDE_VERIFY_FLASH = -U flash:v:$(DIR)$(TARGET).hex
 AVRDUDE_READ_EEPROM = -U eeprom:r:$(DIR)eeprom.eep:i
 AVRDUDE_WRITE_EEPROM = -U eeprom:w:$(DIR)eeprom.eep:i
-AVRDUDE_WRITE_FUSES = -U hfuse:w:$(HFUSE):m
-AVRDUDE_WRITE_FUSES += -U lfuse:w:$(LFUSE):m
+AVRDUDE_WRITE_FUSES = -U fuse1:w:$(FUSE1):m
+AVRDUDE_WRITE_FUSES += -U fuse2:w:$(FUSE2):m
+AVRDUDE_WRITE_FUSES += -U fuse4:w:$(FUSE4):m
+AVRDUDE_WRITE_FUSES += -U fuse5:w:$(FUSE5):m
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
