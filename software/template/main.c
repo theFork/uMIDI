@@ -97,9 +97,6 @@ int main( void )
 
     // Main loop
     while (true) {
-        // Feed the watchdog
-        if (RST.STATUS & RST_WDRF_bm) {
-        }
         wdt_reset();
     }
 
