@@ -85,6 +85,7 @@ int main( void )
     wdt_enable(WDTO_120MS);
 
     // enable interrupts
+    PMIC.CTRL = PMIC_LOLVLEN_bm;
     sei();
 
     // run the test suite
