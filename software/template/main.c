@@ -69,8 +69,9 @@ int main( void )
     // configure GPIO ports
     configureGPIO();
 
-    // configure USART for MIDI operation
-    configureUSART();
+
+    // configure UART for MIDI operation
+    configureUART();
 
     // configure the ADC
     configureADC();

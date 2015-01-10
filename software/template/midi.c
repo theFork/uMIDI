@@ -40,58 +40,58 @@ extern struct exec_state    state;
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void configureUSART(void)
+void configureUART(void)
 {
-    // Enable RXEN and RXC interrupt
-    USARTC0.CTRLA = USART_RXCINTLVL0_bm;
-    USARTC0.CTRLB = USART_RXEN_bm;
-
     // Set baud rate
     // 32e6 / (16 * 31250) - 1 = 63
     // F_osc       baudrate     BSEL
-    USARTC0.BAUDCTRLA = 63;
-    USARTC0.BAUDCTRLB = 0;
+    MIDI_UART.BAUDCTRLA = 63;
+    MIDI_UART.BAUDCTRLB = 0;
+
+    // Enable RXEN and RXC interrupt
+    MIDI_UART.CTRLA = USART_RXCINTLVL_LO_gc;
+    MIDI_UART.CTRLB = USART_RXEN_bm;
 }
 
 void sendControlChange(uint8_t controller, uint8_t value) {
     // send control change status byte
-    usart_write((uint8_t) MIDI_CONTROL_CHANGE | MIDI_TX_CHANNEL);
+    uart_write((uint8_t) MIDI_CONTROL_CHANGE | MIDI_TX_CHANNEL);
 
     // send controller number
-    usart_write(controller);
+    uart_write(controller);
 
     // send value
-    usart_write(value);
+    uart_write(value);
 }
 
 void sendNoteOff(uint8_t note) {
     // send note off status byte
-    usart_write((uint8_t) MIDI_NOTE_OFF | MIDI_TX_CHANNEL);
+    uart_write((uint8_t) MIDI_NOTE_OFF | MIDI_TX_CHANNEL);
 
     // send note number
-    usart_write(note);
+    uart_write(note);
 
     // send maximum velocity
-    usart_write(MIDI_MAX_VALUE);
+    uart_write(MIDI_MAX_VALUE);
 }
 
 void sendNoteOn(uint8_t note) {
     // send note on status byte
-    usart_write((uint8_t) MIDI_NOTE_ON | MIDI_TX_CHANNEL);
+    uart_write((uint8_t) MIDI_NOTE_ON | MIDI_TX_CHANNEL);
 
     // send note number
-    usart_write(note);
+    uart_write(note);
 
     // send maximum velocity
-    usart_write(MIDI_MAX_VALUE);
+    uart_write(MIDI_MAX_VALUE);
 }
 
 void sendProgramChange(uint8_t pnum) {
     // send program change status byte
-    usart_write((uint8_t) MIDI_PROGRAM_CHANGE | MIDI_TX_CHANNEL);
+    uart_write((uint8_t) MIDI_PROGRAM_CHANGE | MIDI_TX_CHANNEL);
 
     // send program number
-    usart_write(pnum);
+    uart_write(pnum);
 }
 
 
@@ -100,13 +100,13 @@ void sendProgramChange(uint8_t pnum) {
 //                    I N T E R R U P T S                     //
 ////////////////////////////////////////////////////////////////
 
-ISR(USARTC0_RXC_vect)
+ISR(USARTE0_RXC_vect)
 {
     // Disable interrupts
     cli();
 
     // Fetch data
-    uint8_t data = USARTC0.DATA;
+    uint8_t data = MIDI_UART.DATA;
 
     switch (state.midi) {
         ////

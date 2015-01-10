@@ -32,6 +32,8 @@
 #include <avr/io.h>
 
 //---------------- constants ----------------//
+// UART used for MIDI I/O
+#define     MIDI_UART                   USARTE0
 // MIDI baudrate
 #define     BAUD_RATE                   31250
 
@@ -68,16 +70,16 @@ enum midi_state
 
 
 //---------------- functions and procedures ----------------//
-static inline bool usart_is_ready(void) {
-    return USARTC0.STATUS & USART_DREIF_bm;
+static inline bool uart_is_ready(void) {
+    return MIDI_UART.STATUS & USART_DREIF_bm;
 }
 
-static inline void usart_write(uint8_t data) {
-    while (!usart_is_ready());
-    USARTC0.DATA = data;
+static inline void uart_write(uint8_t data) {
+    while (!uart_is_ready());
+    MIDI_UART.DATA = data;
 }
 
-void configureUSART(void);
+void configureUART(void);
 void sendControlChange(uint8_t, uint8_t);
 void sendNoteOff(uint8_t);
 void sendNoteOn(uint8_t);
