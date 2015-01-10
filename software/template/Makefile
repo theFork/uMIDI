@@ -22,8 +22,8 @@ MCU = atmega88p
 MCU = atxmega128a4u
 
 # main oscillator and cpu frequencies
-F_OSC = 1000000
-F_CPU = 1000000
+F_OSC = 32000000
+F_CPU = 32000000
 
 # optimization level, can be [0, 1, 2, 3, s].
 # 0 = turn off optimization. s = optimize for size.
