@@ -50,9 +50,22 @@ struct exec_state   state =
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
+static void configure_system_clock(void)
+{
+    // Enable internal 32 MHz oscillator
+    OSC.CTRL |= OSC_RC32MEN_bm;
+    while(!(OSC.STATUS & OSC_RC32MRDY_bm));
+
+    // Select internal 32 MHz oscillator
+    CCP = CCP_IOREG_gc;
+    CLK.CTRL = CLK_SCLKSEL_RC32M_gc;
+}
+
 // initialization and endless loop
 int main( void )
 {
+    configure_system_clock();
+
     // configure GPIO ports
     configureGPIO();
 
