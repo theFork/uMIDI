@@ -42,6 +42,10 @@ extern struct exec_state    state;
 
 void configureUART(void)
 {
+    // Configure TXD0
+    PORTE.DIR |= PIN3_bm;
+    PORTE.OUT |= 1<<PIN3_bp;
+
     // Set baud rate
     // 32e6 / (16 * 31250) - 1 = 63
     // F_osc       baudrate     BSEL
@@ -50,7 +54,7 @@ void configureUART(void)
 
     // Enable RXEN and RXC interrupt
     MIDI_UART.CTRLA = USART_RXCINTLVL_LO_gc;
-    MIDI_UART.CTRLB = USART_RXEN_bm;
+    MIDI_UART.CTRLB = USART_RXEN_bm | USART_TXEN_bm;
 }
 
 void sendControlChange(uint8_t controller, uint8_t value) {
