@@ -21,8 +21,9 @@
  * Test suite for the uMIDI firmware.
  */
 
-#include "midi.h"
 #include "gpio.h"
+#include "leds.h"
+#include "midi.h"
 #include "pwm.h"
 #include "tests.h"
 
@@ -51,6 +52,12 @@ void runTest(void (*function_p)(void))
 
 void runTestSuite(void)
 {
+    // LED test cases
+    runTest(&setLEDsTest);
+    runTest(&toggleLEDsTest);
+    runTest(&flashLEDsTest);
+    runTest(&blinkLEDsTest);
+
     // GPIO test cases
     runTest(&setGPIOsTest);
     runTest(&clearGPIOsTest);
@@ -65,6 +72,29 @@ void runTestSuite(void)
 
     // PWM test cases
     runTest(&applyDutyCycleTest);
+}
+
+//---------------- LED tests ----------------//
+void blinkLEDsTest(void)
+{
+    blinkLed(LED_GREEN);
+}
+
+void flashLEDsTest(void)
+{
+    flashLed(LED_RED);
+}
+
+void setLEDsTest(void)
+{
+    setLed(LED_RED, true);
+    setLed(LED_GREEN, true);
+}
+
+void toggleLEDsTest(void)
+{
+    toggleLed(LED_RED);
+    toggleLed(LED_GREEN);
 }
 
 //---------------- GPIO tests ----------------//

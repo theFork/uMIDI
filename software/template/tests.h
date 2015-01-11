@@ -38,6 +38,12 @@
 void runTest(void (*)(void));
 void runTestSuite(void);
 
+// LED tests
+void blinkLEDsTest(void);
+void flashLEDsTest(void);
+void setLEDsTest(void);
+void toggleLEDsTest(void);
+
 // GPIO tests
 void clearGPIOsTest(void);
 void setGPIOsTest(void);
