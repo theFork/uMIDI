@@ -82,8 +82,8 @@ int main( void )
     // configure the PWM
     configurePWM();
 
-    // set watchdog for 120ms
-    wdt_enable(WDTO_120MS);
+    // set watchdog for 128ms
+    wdt_enable(WDT_PER_128CLK_gc);
 
     // enable interrupts
     PMIC.CTRL = PMIC_LOLVLEN_bm;
