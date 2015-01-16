@@ -18,7 +18,6 @@
 #
 
 # MCU name
-MCU = atmega88p
 MCU = atxmega128a4u
 
 # main oscillator and cpu frequencies
