@@ -39,7 +39,7 @@ DIR = ./
 
 # fuse bits
 FUSE1 = 0x00
-FUSE2 = 0xff
+FUSE2 = 0xbf
 FUSE4 = 0xfe
 FUSE5 = 0xff
 
