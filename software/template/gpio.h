@@ -31,15 +31,19 @@
 #include <avr/io.h>
 
 
-//---------------- constants ----------------//
-
-
 //---------------- data types ----------------//
+enum gpio_type
+{
+    GPIO_INPUT,
+    GPIO_OUTPUT,
+    GPIO_UNUSED
+};
+
 struct gpio_pin
 {
-    volatile uint8_t*   read_addr;
-    volatile uint8_t*   write_addr;
+    PORT_t*             port;
     uint8_t             bit;
+    enum gpio_type      type;
 };
 
 struct gpio_header
@@ -52,7 +56,7 @@ struct gpio_header
     struct gpio_pin     pin7;
     struct gpio_pin     pin8;
     struct gpio_pin     pin9;
-} gpio_portA_t;
+};
 
 struct gpio
 {
@@ -62,17 +66,22 @@ struct gpio
 };
 
 
+//---------------- variable declarations ----------------//
+
+extern struct gpio gpio;
+
+
 //---------------- functions and procedures ----------------//
 static inline void gpio_drive_high(struct gpio_pin pin) {
-    *pin.write_addr |= _BV(pin.bit);
+    pin.port->OUT |= _BV(pin.bit);
 }
 
 static inline void gpio_drive_low(struct gpio_pin pin) {
-    *pin.write_addr &=~ _BV(pin.bit);
+    pin.port->OUT &=~ _BV(pin.bit);
 }
 
 static inline bool gpio_get(struct gpio_pin pin) {
-    return *pin.read_addr & _BV(pin.bit);
+    return pin.port->IN & _BV(pin.bit);
 }
 
 static inline void gpio_set(struct gpio_pin pin, bool value) {
@@ -80,10 +89,10 @@ static inline void gpio_set(struct gpio_pin pin, bool value) {
 }
 
 static inline void gpio_toggle(struct gpio_pin pin) {
-    *pin.write_addr ^= _BV(pin.bit);
+    pin.port->OUT ^= _BV(pin.bit);
 }
 
-void configureGPIO(void);
+void initialize_gpio_module(void);
 
 
 //---------------- EOF ----------------//

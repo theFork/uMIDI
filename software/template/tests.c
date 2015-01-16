@@ -35,8 +35,6 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-extern struct gpio gpio;
-
 
 
 ////////////////////////////////////////////////////////////////
@@ -100,20 +98,17 @@ void toggleLEDsTest(void)
 //---------------- GPIO tests ----------------//
 void clearGPIOsTest(void)
 {
-    gpio_set(gpio.header3.pin4, false);
     gpio_set(gpio.header3.pin6, false);
 }
 
 void setGPIOsTest(void)
 {
-    gpio_set(gpio.header3.pin4, true);
     gpio_set(gpio.header3.pin6, true);
 }
 
 void toggleGPIOsTest(void)
 {
-    gpio_toggle(gpio.header3.pin4);
-    gpio_toggle(gpio.header3.pin6);
+    gpio_toggle(gpio.header3.pin8);
 }
 
 //---------------- MIDI tests ----------------//

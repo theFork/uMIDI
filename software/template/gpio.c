@@ -23,6 +23,8 @@
 
 #include "gpio.h"
 
+#include <stdbool.h>
+#include <stdint.h>
 #include <avr/io.h>
 
 
@@ -32,34 +34,34 @@
 
 struct gpio gpio = {
     .header1 = {
-        { &PORTA.IN, &PORTA.OUT, 0 },
-        { &PORTA.IN, &PORTA.OUT, 1 },
-        { &PORTA.IN, &PORTA.OUT, 2 },
-        { &PORTA.IN, &PORTA.OUT, 3 },
-        { &PORTA.IN, &PORTA.OUT, 4 },
-        { &PORTA.IN, &PORTA.OUT, 5 },
-        { &PORTA.IN, &PORTA.OUT, 6 },
-        { &PORTA.IN, &PORTA.OUT, 7 }
+        .pin2 = { &PORTA, 0, GPIO_UNUSED },
+        .pin3 = { &PORTA, 1, GPIO_UNUSED },
+        .pin4 = { &PORTA, 2, GPIO_UNUSED },
+        .pin5 = { &PORTA, 3, GPIO_UNUSED },
+        .pin6 = { &PORTA, 4, GPIO_UNUSED },
+        .pin7 = { &PORTA, 5, GPIO_UNUSED },
+        .pin8 = { &PORTA, 6, GPIO_UNUSED },
+        .pin9 = { &PORTA, 7, GPIO_UNUSED }
     },
     .header2 = {
-        { &PORTB.IN, &PORTB.OUT, 0 },
-        { &PORTB.IN, &PORTB.OUT, 1 },
-        { &PORTB.IN, &PORTB.OUT, 2 },
-        { &PORTB.IN, &PORTB.OUT, 3 },
-        { &PORTC.IN, &PORTC.OUT, 0 },
-        { &PORTC.IN, &PORTC.OUT, 1 },
-        { &PORTC.IN, &PORTC.OUT, 2 },
-        { &PORTC.IN, &PORTC.OUT, 3 }
+        .pin2 = { &PORTB, 0, GPIO_UNUSED },
+        .pin3 = { &PORTB, 1, GPIO_UNUSED },
+        .pin4 = { &PORTB, 2, GPIO_UNUSED },
+        .pin5 = { &PORTB, 3, GPIO_UNUSED },
+        .pin6 = { &PORTC, 0, GPIO_UNUSED },
+        .pin7 = { &PORTC, 1, GPIO_UNUSED },
+        .pin8 = { &PORTC, 2, GPIO_UNUSED },
+        .pin9 = { &PORTC, 3, GPIO_UNUSED }
     },
     .header3 = {
-        { &PORTC.IN, &PORTC.OUT, 4 },
-        { &PORTC.IN, &PORTC.OUT, 5 },
-        { &PORTC.IN, &PORTC.OUT, 6 },
-        { &PORTC.IN, &PORTC.OUT, 7 },
-        { &PORTD.IN, &PORTD.OUT, 0 },
-        { &PORTD.IN, &PORTD.OUT, 1 },
-        { &PORTD.IN, &PORTD.OUT, 2 },
-        { &PORTD.IN, &PORTD.OUT, 3 }
+        .pin2 = { &PORTC, 4, GPIO_UNUSED },
+        .pin3 = { &PORTC, 5, GPIO_UNUSED },
+        .pin4 = { &PORTC, 6, GPIO_OUTPUT },
+        .pin5 = { &PORTC, 7, GPIO_UNUSED },
+        .pin6 = { &PORTD, 0, GPIO_OUTPUT },
+        .pin7 = { &PORTD, 1, GPIO_UNUSED },
+        .pin8 = { &PORTD, 2, GPIO_OUTPUT },
+        .pin9 = { &PORTD, 3, GPIO_UNUSED }
     }
 };
 
@@ -69,16 +71,25 @@ struct gpio gpio = {
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void configureGPIO() {
-    // Configure all GPIO pins on AVR port A as outputs
-    PORTA.DIRSET = _BV(7) | _BV(6) | _BV(5) | _BV(4) | _BV(3) | _BV(2) | _BV(1) | _BV(0);
-
-    // Configure GPIO pins 0..3 on AVR port B as outputs
-    PORTB.DIRSET = _BV(3) | _BV(2) | _BV(1) | _BV(0);
-
-    // Configure all GPIO pins on AVR port C as outputs
-    PORTC.DIRSET = _BV(7) | _BV(6) | _BV(5) | _BV(4) | _BV(3) | _BV(2) | _BV(1) | _BV(0);
-
-    // Configure GPIO pins on AVR port D as outputs
-    PORTD.DIRSET = _BV(3) | _BV(2) | _BV(1) | _BV(0);
+void initialize_gpio_module() {
+    // Iterate pins in GPIO config
+    struct gpio_pin *pin_pointer = (struct gpio_pin *) &gpio.header1.pin2;
+    uint8_t i;
+    for (i=0; i<sizeof(struct gpio)/sizeof(struct gpio_pin); i++) {
+        // Configure pin
+        switch (pin_pointer->type) {
+        case GPIO_INPUT:
+            pin_pointer->port->DIRCLR = _BV(pin_pointer->bit);
+            break;
+        case GPIO_OUTPUT:
+            pin_pointer->port->DIRSET = _BV(pin_pointer->bit);
+            break;
+        case GPIO_UNUSED:
+        default:
+            pin_pointer->port->DIRSET = _BV(pin_pointer->bit);
+            pin_pointer->port->OUT = false;
+            break;
+        }
+        ++pin_pointer;
+    }
 }

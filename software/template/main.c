@@ -61,10 +61,7 @@ int main( void )
     configure_system_clock();
     configureTaskTimer();
     initializeLedsModule();
-
-    // configure GPIO ports
-    configureGPIO();
-
+    initialize_gpio_module();
     initialize_midi_module();
 
     // configure the ADC
