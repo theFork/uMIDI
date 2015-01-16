@@ -79,7 +79,7 @@ static inline void uart_write(uint8_t data) {
     MIDI_UART.DATA = data;
 }
 
-void configureUART(void);
+void initialize_midi_module(void);
 void sendControlChange(uint8_t, uint8_t);
 void sendNoteOff(uint8_t);
 void sendNoteOn(uint8_t);

@@ -26,8 +26,6 @@
 
 
 //---------------- includes ----------------//
-#include "midi.h"
-
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -37,11 +35,6 @@
 
 
 //---------------- data types ----------------//
-struct exec_state
-{
-    enum midi_state midi;
-    bool            receive;
-};
 
 
 //---------------- EOF ----------------//

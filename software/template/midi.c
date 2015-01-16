@@ -32,7 +32,7 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-extern struct exec_state    state;
+static enum midi_state midi_state = IDLE;
 
 
 
@@ -40,7 +40,7 @@ extern struct exec_state    state;
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void configureUART(void)
+void initialize_midi_module(void)
 {
     // Configure TXD0
     PORTE.DIR |= PIN3_bm;
@@ -112,19 +112,19 @@ ISR(USARTE0_RXC_vect)
     // Fetch data
     uint8_t data = MIDI_UART.DATA;
 
-    switch (state.midi) {
+    switch (midi_state) {
         ////
         // MIDI status byte
         ////
         case IDLE:
             if ( (data & MIDI_COMMAND_MASK) == MIDI_NOTE_OFF )
-                state.midi = NOTE_OFF;
+                midi_state = NOTE_OFF;
             else if ( (data & MIDI_COMMAND_MASK) == MIDI_NOTE_ON )
-                state.midi = NOTE_ON;
+                midi_state = NOTE_ON;
             else if ( (data & MIDI_COMMAND_MASK) == MIDI_CONTROL_CHANGE )
-                state.midi = CONTROL_CHANGE;
+                midi_state = CONTROL_CHANGE;
             else if ( (data & MIDI_COMMAND_MASK) == MIDI_PROGRAM_CHANGE )
-                state.midi = PROGRAM_CHANGE;
+                midi_state = PROGRAM_CHANGE;
             break;
 
 
@@ -134,26 +134,26 @@ ISR(USARTE0_RXC_vect)
         case NOTE_OFF:
             switch(data) {
             }
-            state.midi = IDLE;
+            midi_state = IDLE;
             break;
 
 
         case NOTE_ON:
             switch(data) {
             }
-            state.midi = IDLE;
+            midi_state = IDLE;
             break;
 
 
         case PROGRAM_CHANGE:
-            state.midi = IDLE;
+            midi_state = IDLE;
             break;
 
 
         case CONTROL_CHANGE:
             switch(data) {
                 default:
-                    state.midi = IDLE;
+                    midi_state = IDLE;
             }
             break;
 
@@ -167,7 +167,7 @@ ISR(USARTE0_RXC_vect)
         // unimplemented / illegal
         ////
         default:
-            state.midi = IDLE;
+            midi_state = IDLE;
             break;
     }
 

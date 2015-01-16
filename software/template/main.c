@@ -38,13 +38,6 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-// main state variable struct
-struct exec_state   state =
-{
-    .midi =     IDLE,
-    .receive =  true
-};
-
 
 
 ////////////////////////////////////////////////////////////////
@@ -72,8 +65,7 @@ int main( void )
     // configure GPIO ports
     configureGPIO();
 
-    // configure UART for MIDI operation
-    configureUART();
+    initialize_midi_module();
 
     // configure the ADC
     configureADC();
