@@ -98,7 +98,7 @@ ISR(ADC_vect)
     }
 
     // set PWM duty cycle
-    applyDutyCycle(midiValue);
+    apply_duty_cycle(midiValue);
 
     // enable interrupts
     sei();

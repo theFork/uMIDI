@@ -55,20 +55,21 @@ static void configure_system_clock(void)
     CLK.CTRL = CLK_SCLKSEL_RC32M_gc;
 }
 
-// initialization and endless loop
+// Initialization and endless loop
 int main( void )
 {
+    // Configure clock and timers
     configure_system_clock();
     configure_task_timer();
+
+    // Initialize modules
     initialize_leds_module();
     initialize_gpio_module();
     initialize_midi_module();
+    initialize_pwm_module();
 
     // configure the ADC
     configureADC();
-
-    // configure the PWM
-    configurePWM();
 
     // set watchdog for 128ms
     wdt_enable(WDT_PER_128CLK_gc);

@@ -135,5 +135,5 @@ void send_program_change_test(void)
 //---------------- PWM tests ----------------//
 void apply_duty_cycle_test(void)
 {
-    applyDutyCycle(63);
+    apply_duty_cycle(63);
 }

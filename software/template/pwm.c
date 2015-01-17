@@ -41,13 +41,13 @@
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void applyDutyCycle(uint8_t duty)
+void apply_duty_cycle(uint8_t duty)
 {
     // apply value
     TCC1.CCA = PWM_LED_SCALER * (MIDI_MAX_VALUE - duty);
 }
 
-void configurePWM(void)
+void initialize_pwm_module(void)
 {
     // Prescale clock to 125 kHz
     TCC1.CTRLA = TC_CLKSEL_DIV256_gc;

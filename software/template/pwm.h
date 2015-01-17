@@ -41,8 +41,8 @@
 
 
 //---------------- functions and procedures ----------------//
-void applyDutyCycle(uint8_t duty);
-void configurePWM(void);
+void apply_duty_cycle(uint8_t duty);
+void initialize_pwm_module(void);
 
 
 //---------------- EOF ----------------//
