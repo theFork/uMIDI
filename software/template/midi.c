@@ -21,8 +21,8 @@
  * MIDI I/O implementation and ISR.
  */
 
-#include "main.h"
 #include "midi.h"
+#include "leds.h"
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
@@ -104,71 +104,97 @@ void send_program_change(uint8_t pnum) {
 //                    I N T E R R U P T S                     //
 ////////////////////////////////////////////////////////////////
 
+static void handle_status_byte(uint8_t data) {
+    if ( (data & MIDI_COMMAND_MASK) == MIDI_NOTE_OFF ) {
+        midi_state = NOTE_OFF;
+    }
+    else if ( (data & MIDI_COMMAND_MASK) == MIDI_NOTE_ON ) {
+        midi_state = NOTE_ON;
+    }
+    else if ( (data & MIDI_COMMAND_MASK) == MIDI_CONTROL_CHANGE ) {
+        midi_state = CONTROL_CHANGE;
+    }
+    else if ( (data & MIDI_COMMAND_MASK) == MIDI_PROGRAM_CHANGE ) {
+        midi_state = PROGRAM_CHANGE;
+    }
+}
+
+static void handle_note_off(uint8_t note) {
+    switch(note) {
+    }
+    midi_state = IDLE;
+}
+
+static void handle_note_on(uint8_t note) {
+    switch(note) {
+    }
+    midi_state = IDLE;
+}
+
+static void handle_program_change(uint8_t program) {
+    midi_state = IDLE;
+}
+
+static void handle_control_change(uint8_t controller) {
+    switch(controller) {
+        default:
+            midi_state = IDLE;
+    }
+}
+
 ISR(USARTE0_RXC_vect)
 {
     // Disable interrupts
     cli();
 
+    flash_led(LED_RED);
+
     // Fetch data
     uint8_t data = MIDI_UART.DATA;
 
     switch (midi_state) {
-        ////
-        // MIDI status byte
-        ////
-        case IDLE:
-            if ( (data & MIDI_COMMAND_MASK) == MIDI_NOTE_OFF )
-                midi_state = NOTE_OFF;
-            else if ( (data & MIDI_COMMAND_MASK) == MIDI_NOTE_ON )
-                midi_state = NOTE_ON;
-            else if ( (data & MIDI_COMMAND_MASK) == MIDI_CONTROL_CHANGE )
-                midi_state = CONTROL_CHANGE;
-            else if ( (data & MIDI_COMMAND_MASK) == MIDI_PROGRAM_CHANGE )
-                midi_state = PROGRAM_CHANGE;
-            break;
+    ////
+    // MIDI status byte
+    ////
+    case IDLE:
+        handle_status_byte(data);
+        break;
 
 
-        ////
-        // MIDI data byte 0
-        ////
-        case NOTE_OFF:
-            switch(data) {
-            }
-            midi_state = IDLE;
-            break;
+    ////
+    // MIDI data byte 0
+    ////
+    case NOTE_OFF:
+        handle_note_off(data);
+        break;
 
 
-        case NOTE_ON:
-            switch(data) {
-            }
-            midi_state = IDLE;
-            break;
+    case NOTE_ON:
+        handle_note_on(data);
+        break;
 
 
-        case PROGRAM_CHANGE:
-            midi_state = IDLE;
-            break;
+    case PROGRAM_CHANGE:
+        handle_program_change(data);
+        break;
 
 
-        case CONTROL_CHANGE:
-            switch(data) {
-                default:
-                    midi_state = IDLE;
-            }
-            break;
+    case CONTROL_CHANGE:
+        handle_control_change(data);
+        break;
 
 
-        ////
-        // MIDI data byte 1
-        ////
+    ////
+    // MIDI data byte 1
+    ////
 
 
-        ////
-        // unimplemented / illegal
-        ////
-        default:
-            midi_state = IDLE;
-            break;
+    ////
+    // unimplemented / illegal
+    ////
+    default:
+        midi_state = IDLE;
+        break;
     }
 
     // enable interrupts
