@@ -59,7 +59,7 @@ static void configure_system_clock(void)
 int main( void )
 {
     configure_system_clock();
-    configureTaskTimer();
+    configure_task_timer();
     initializeLedsModule();
     initialize_gpio_module();
     initialize_midi_module();

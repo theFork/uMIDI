@@ -35,7 +35,7 @@
 
 
 //---------------- functions and procedures ----------------//
-void configureTaskTimer(void);
+void configure_task_timer(void);
 
 
 //---------------- EOF ----------------//

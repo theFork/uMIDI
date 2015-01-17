@@ -39,7 +39,7 @@
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void configureTaskTimer(void) {
+void configure_task_timer(void) {
     // Prescale clock to 125 kHz
     TCC0.CTRLA = TC_CLKSEL_DIV256_gc;
 
