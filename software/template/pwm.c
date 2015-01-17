@@ -43,7 +43,7 @@
 
 void apply_duty_cycle(uint8_t duty)
 {
-    // apply value
+    // Apply value
     TCC1.CCA = PWM_LED_SCALER * (MIDI_MAX_VALUE - duty);
 }
 
@@ -52,32 +52,12 @@ void initialize_pwm_module(void)
     // Prescale clock to 125 kHz
     TCC1.CTRLA = TC_CLKSEL_DIV256_gc;
 
-    // Select single slope PWM mode
-    TCC1.CTRLB = TC_WGMODE_SINGLESLOPE_gc;
+    // Select single slope PWM mode and enable OC1A output
+    TCC1.CTRLB = TC_WGMODE_SINGLESLOPE_gc | TC1_CCAEN_bm;
 
     // Set TOP value
     TCC1.PER = PWM_LED_SCALER * MIDI_MAX_VALUE;
 
     // Set initial compare value to TOP
     TCC1.CCA = PWM_LED_SCALER * MIDI_MAX_VALUE;
-
-    // enable interrupts
-    TCC1.INTCTRLA = TC_OVFINTLVL_LO_gc;
-    TCC1.INTCTRLB = TC_CCAINTLVL_LO_gc;
-}
-
-
-
-////////////////////////////////////////////////////////////////
-//                    I N T E R R U P T S                     //
-////////////////////////////////////////////////////////////////
-
-ISR(TCC1_CCA_vect)
-{
-    gpio_set(PWM_LED, true);
-}
-
-ISR(TCC1_OVF_vect)
-{
-    gpio_set(PWM_LED, false);
 }
