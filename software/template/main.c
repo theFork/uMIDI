@@ -60,7 +60,7 @@ int main( void )
 {
     configure_system_clock();
     configure_task_timer();
-    initializeLedsModule();
+    initialize_leds_module();
     initialize_gpio_module();
     initialize_midi_module();
 

@@ -50,7 +50,7 @@ static struct led_state *leds[LED_COUNT];
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void initializeLedsModule(void)
+void initialize_leds_module(void)
 {
     // Configure AVR ports
     LED_PORT.DIRSET = _BV(RED_LED_BIT) | _BV(GREEN_LED_BIT);
@@ -60,7 +60,7 @@ void initializeLedsModule(void)
     leds[GREEN_LED_BIT] = &green_led;
 }
 
-static inline void applyLed(enum led pin, bool value)
+static inline void apply_led(enum led pin, bool value)
 {
     leds[pin]->active = value;
     if (value) {
@@ -72,7 +72,7 @@ static inline void applyLed(enum led pin, bool value)
 }
 
 
-void blinkLed(enum led led)
+void blink_led(enum led led)
 {
     switch (led) {
     case LED_RED:
@@ -90,7 +90,7 @@ void blinkLed(enum led led)
     }
 }
 
-void flashLed(enum led led)
+void flash_led(enum led led)
 {
     switch (led) {
     case LED_RED:
@@ -108,35 +108,35 @@ void flashLed(enum led led)
     }
 }
 
-void setLed(enum led led, bool value)
+void set_led(enum led led, bool value)
 {
     if (led == LED_ALL) {
         green_led.mode = LED_STATIC;
-        applyLed(LED_GREEN, value);
+        apply_led(LED_GREEN, value);
         red_led.mode = LED_STATIC;
-        applyLed(LED_RED, value);
+        apply_led(LED_RED, value);
     }
     else {
         leds[led]->mode = LED_STATIC;
-        applyLed(led, value);
+        apply_led(led, value);
     }
 }
 
-void toggleLed(enum led led)
+void toggle_led(enum led led)
 {
     if (led == LED_ALL) {
         green_led.mode = LED_STATIC;
-        applyLed(LED_GREEN, !green_led.active);
+        apply_led(LED_GREEN, !green_led.active);
         red_led.mode = LED_STATIC;
-        applyLed(LED_RED, !red_led.active);
+        apply_led(LED_RED, !red_led.active);
     }
     else {
         leds[led]->mode = LED_STATIC;
-        applyLed(led, !leds[led]->active);
+        apply_led(led, !leds[led]->active);
     }
 }
 
-void updateLeds(void)
+void update_leds(void)
 {
     // Flashing
     uint8_t i;
@@ -144,10 +144,10 @@ void updateLeds(void)
         if (leds[i]->mode == LED_FLASH) {
             if (leds[i]->active) {
                 leds[i]->mode = LED_STATIC;
-                applyLed(i, false);
+                apply_led(i, false);
             }
             else {
-                applyLed(i, true);
+                apply_led(i, true);
             }
         }
     }
@@ -160,7 +160,7 @@ void updateLeds(void)
 
         for (i=0; i<LED_COUNT; i++) {
             if (leds[i]->mode == LED_BLINK) {
-                applyLed(i, !leds[i]->active);
+                apply_led(i, !leds[i]->active);
             }
         }
     }

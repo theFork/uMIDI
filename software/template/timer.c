@@ -69,7 +69,7 @@ ISR(TCC0_OVF_vect)
     prescaler = 0;
 
     triggerADC();
-    updateLeds();
+    update_leds();
 
 cleanup:
     // enable interrupts

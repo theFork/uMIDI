@@ -75,24 +75,24 @@ void runTestSuite(void)
 //---------------- LED tests ----------------//
 void blinkLEDsTest(void)
 {
-    blinkLed(LED_GREEN);
+    blink_led(LED_GREEN);
 }
 
 void flashLEDsTest(void)
 {
-    flashLed(LED_RED);
+    flash_led(LED_RED);
 }
 
 void setLEDsTest(void)
 {
-    setLed(LED_RED, true);
-    setLed(LED_GREEN, true);
+    set_led(LED_RED, true);
+    set_led(LED_GREEN, true);
 }
 
 void toggleLEDsTest(void)
 {
-    toggleLed(LED_RED);
-    toggleLed(LED_GREEN);
+    toggle_led(LED_RED);
+    toggle_led(LED_GREEN);
 }
 
 //---------------- GPIO tests ----------------//

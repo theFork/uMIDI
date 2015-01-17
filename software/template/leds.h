@@ -67,12 +67,12 @@ struct led_state
 
 
 //---------------- functions and procedures ----------------//
-void initializeLedsModule(void);
-void blinkLed(enum led);
-void flashLed(enum led);
-void setLed(enum led, bool);
-void toggleLed(enum led);
-void updateLeds(void);
+void initialize_leds_module(void);
+void blink_led(enum led);
+void flash_led(enum led);
+void set_led(enum led, bool);
+void toggle_led(enum led);
+void update_leds(void);
 
 
 //---------------- EOF ----------------//
