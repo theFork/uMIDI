@@ -80,10 +80,10 @@ static inline void uart_write(uint8_t data) {
 }
 
 void initialize_midi_module(void);
-void sendControlChange(uint8_t, uint8_t);
-void sendNoteOff(uint8_t);
-void sendNoteOn(uint8_t);
-void sendProgramChange(uint8_t);
+void send_control_change(uint8_t, uint8_t);
+void send_note_off(uint8_t);
+void send_note_on(uint8_t);
+void send_program_change(uint8_t);
 
 
 //---------------- EOF ----------------//

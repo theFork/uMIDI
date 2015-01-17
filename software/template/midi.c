@@ -57,7 +57,7 @@ void initialize_midi_module(void)
     MIDI_UART.CTRLB = USART_RXEN_bm | USART_TXEN_bm;
 }
 
-void sendControlChange(uint8_t controller, uint8_t value) {
+void send_control_change(uint8_t controller, uint8_t value) {
     // send control change status byte
     uart_write((uint8_t) MIDI_CONTROL_CHANGE | MIDI_TX_CHANNEL);
 
@@ -68,7 +68,7 @@ void sendControlChange(uint8_t controller, uint8_t value) {
     uart_write(value);
 }
 
-void sendNoteOff(uint8_t note) {
+void send_note_off(uint8_t note) {
     // send note off status byte
     uart_write((uint8_t) MIDI_NOTE_OFF | MIDI_TX_CHANNEL);
 
@@ -79,7 +79,7 @@ void sendNoteOff(uint8_t note) {
     uart_write(MIDI_MAX_VALUE);
 }
 
-void sendNoteOn(uint8_t note) {
+void send_note_on(uint8_t note) {
     // send note on status byte
     uart_write((uint8_t) MIDI_NOTE_ON | MIDI_TX_CHANNEL);
 
@@ -90,7 +90,7 @@ void sendNoteOn(uint8_t note) {
     uart_write(MIDI_MAX_VALUE);
 }
 
-void sendProgramChange(uint8_t pnum) {
+void send_program_change(uint8_t pnum) {
     // send program change status byte
     uart_write((uint8_t) MIDI_PROGRAM_CHANGE | MIDI_TX_CHANNEL);
 

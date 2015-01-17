@@ -114,22 +114,22 @@ void toggleGPIOsTest(void)
 //---------------- MIDI tests ----------------//
 void sendControlChangeTest(void)
 {
-    sendControlChange(69, 23);
+    send_control_change(69, 23);
 }
 
 void sendNoteOffTest(void)
 {
-    sendNoteOff(41);
+    send_note_off(41);
 }
 
 void sendNoteOnTest(void)
 {
-    sendNoteOn(41);
+    send_note_on(41);
 }
 
 void sendProgramChangeTest(void)
 {
-    sendProgramChange(3);
+    send_program_change(3);
 }
 
 //---------------- PWM tests ----------------//

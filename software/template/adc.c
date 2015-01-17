@@ -94,7 +94,7 @@ ISR(ADC_vect)
     // send MIDI command if the value has changed
     if (midiValue != last_midi_value) {
         last_midi_value = midiValue;
-        sendControlChange(CTRL_CUTOFF, midiValue);
+        send_control_change(CTRL_CUTOFF, midiValue);
     }
 
     // set PWM duty cycle

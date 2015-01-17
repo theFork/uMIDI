@@ -81,7 +81,7 @@ int main( void )
     runTestSuite();
 
     // send initial program change
-    sendProgramChange(INITIAL_PROGRAM);
+    send_program_change(INITIAL_PROGRAM);
 
     // Main loop
     while (true) {
