@@ -78,7 +78,7 @@ int main( void )
     sei();
 
     // run the test suite
-    runTestSuite();
+    run_test_suite();
 
     // send initial program change
     send_program_change(INITIAL_PROGRAM);

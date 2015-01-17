@@ -41,99 +41,99 @@
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void runTest(void (*function_p)(void))
+void run_test(void (*function_p)(void))
 {
     (*function_p)();
     _delay_ms(100);
     wdt_reset();
 }
 
-void runTestSuite(void)
+void run_test_suite(void)
 {
     // LED test cases
-    runTest(&setLEDsTest);
-    runTest(&toggleLEDsTest);
-    runTest(&flashLEDsTest);
-    runTest(&blinkLEDsTest);
+    run_test(&set_led_test);
+    run_test(&toggle_led_test);
+    run_test(&flash_led_test);
+    run_test(&blink_led_test);
 
     // GPIO test cases
-    runTest(&setGPIOsTest);
-    runTest(&clearGPIOsTest);
-    runTest(&toggleGPIOsTest);
-    runTest(&toggleGPIOsTest);
+    run_test(&set_gpio_test);
+    run_test(&clear_gpio_test);
+    run_test(&toggle_gpio_test);
+    run_test(&toggle_gpio_test);
 
     // MIDI test cases
-    runTest(&sendProgramChangeTest);
-    runTest(&sendControlChangeTest);
-    runTest(&sendNoteOnTest);
-    runTest(&sendNoteOffTest);
+    run_test(&send_program_change_test);
+    run_test(&send_control_change_test);
+    run_test(&send_note_on_test);
+    run_test(&send_note_off_test);
 
     // PWM test cases
-    runTest(&applyDutyCycleTest);
+    run_test(&apply_duty_cycle_test);
 }
 
 //---------------- LED tests ----------------//
-void blinkLEDsTest(void)
+void blink_led_test(void)
 {
     blink_led(LED_GREEN);
 }
 
-void flashLEDsTest(void)
+void flash_led_test(void)
 {
     flash_led(LED_RED);
 }
 
-void setLEDsTest(void)
+void set_led_test(void)
 {
     set_led(LED_RED, true);
     set_led(LED_GREEN, true);
 }
 
-void toggleLEDsTest(void)
+void toggle_led_test(void)
 {
     toggle_led(LED_RED);
     toggle_led(LED_GREEN);
 }
 
 //---------------- GPIO tests ----------------//
-void clearGPIOsTest(void)
+void clear_gpio_test(void)
 {
     gpio_set(gpio.header3.pin6, false);
 }
 
-void setGPIOsTest(void)
+void set_gpio_test(void)
 {
     gpio_set(gpio.header3.pin6, true);
 }
 
-void toggleGPIOsTest(void)
+void toggle_gpio_test(void)
 {
     gpio_toggle(gpio.header3.pin8);
 }
 
 //---------------- MIDI tests ----------------//
-void sendControlChangeTest(void)
+void send_control_change_test(void)
 {
     send_control_change(69, 23);
 }
 
-void sendNoteOffTest(void)
+void send_note_off_test(void)
 {
     send_note_off(41);
 }
 
-void sendNoteOnTest(void)
+void send_note_on_test(void)
 {
     send_note_on(41);
 }
 
-void sendProgramChangeTest(void)
+void send_program_change_test(void)
 {
     send_program_change(3);
 }
 
 //---------------- PWM tests ----------------//
-void applyDutyCycleTest(void)
+void apply_duty_cycle_test(void)
 {
     applyDutyCycle(63);
 }

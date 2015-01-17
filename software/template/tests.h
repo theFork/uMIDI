@@ -35,28 +35,28 @@
 
 
 //---------------- functions and procedures ----------------//
-void runTest(void (*)(void));
-void runTestSuite(void);
+void run_test(void (*)(void));
+void run_test_suite(void);
 
 // LED tests
-void blinkLEDsTest(void);
-void flashLEDsTest(void);
-void setLEDsTest(void);
-void toggleLEDsTest(void);
+void blink_led_test(void);
+void flash_led_test(void);
+void set_led_test(void);
+void toggle_led_test(void);
 
 // GPIO tests
-void clearGPIOsTest(void);
-void setGPIOsTest(void);
-void toggleGPIOsTest(void);
+void clear_gpio_test(void);
+void set_gpio_test(void);
+void toggle_gpio_test(void);
 
 // MIDI TX tests
-void sendControlChangeTest(void);
-void sendNoteOffTest(void);
-void sendNoteOnTest(void);
-void sendProgramChangeTest(void);
+void send_control_change_test(void);
+void send_note_off_test(void);
+void send_note_on_test(void);
+void send_program_change_test(void);
 
 // PWM tests
-void applyDutyCycleTest(void);
+void apply_duty_cycle_test(void);
 
 
 //---------------- EOF ----------------//
