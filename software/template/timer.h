@@ -29,6 +29,10 @@
 
 
 //---------------- constants ----------------//
+#define     F_TIMER             2000
+#define     F_TASK_FAST         F_TIMER
+#define     F_TASK_MID          (F_TASK_FAST / 10)
+#define     F_TASK_SLOW         (F_TASK_MID / 10)
 
 
 //---------------- data types ----------------//

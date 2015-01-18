@@ -23,6 +23,7 @@
 
 #include "adc.h"
 #include "leds.h"
+#include "pwm.h"
 #include "timer.h"
 
 #include <avr/io.h>
@@ -40,11 +41,11 @@
 ////////////////////////////////////////////////////////////////
 
 void configure_task_timer(void) {
-    // Prescale clock to 125 kHz
-    TCC0.CTRLA = TC_CLKSEL_DIV256_gc;
+    // Prescale clock to 500 kHz
+    TCC0.CTRLA = TC_CLKSEL_DIV64_gc;
 
-    // Set TOP value to achieve 1ms clock
-    TCC0.PER = 124;
+    // Set TOP value to achieve 2 kHz clock
+    TCC0.PER = 249;
 
     // Enable timer overflow interrupt
     TCC0.INTCTRLA = TC_OVFINTLVL_LO_gc;
@@ -58,20 +59,35 @@ void configure_task_timer(void) {
 
 ISR(TCC0_OVF_vect)
 {
-    // disable interrupts
+    // Disable interrupts
     cli();
 
-    static uint16_t prescaler = 0;
-    ++prescaler;
-    if (prescaler < 50) {
-        goto cleanup;
+    ////
+    // High frequency tasks
+    ////
+
+    ////
+    // Mid frequency tasks
+    ////
+    static uint16_t prescaler_fast = 0;
+    ++prescaler_fast;
+    if (prescaler_fast >= F_TIMER / F_TASK_MID) {
+        prescaler_fast = 0;
+
+        triggerADC();
     }
-    prescaler = 0;
 
-    triggerADC();
-    update_leds();
+    ////
+    // Low frequency tasks
+    ////
+    static uint16_t prescaler_slow = 0;
+    ++prescaler_slow;
+    if (prescaler_slow >= F_TIMER / F_TASK_SLOW) {
+        prescaler_slow = 0;
 
-cleanup:
-    // enable interrupts
+        update_leds();
+    }
+
+    // Enable interrupts
     sei();
 }
