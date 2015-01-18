@@ -26,6 +26,7 @@
 #include "midi.h"
 #include "pwm.h"
 #include "tests.h"
+#include "timer.h"
 
 #include <avr/wdt.h>
 #include <util/delay.h>
@@ -75,7 +76,7 @@ void run_test_suite(void)
 //---------------- LED tests ----------------//
 void blink_led_test(void)
 {
-    blink_led(LED_GREEN);
+    blink_led(LED_GREEN, F_TASK_SLOW);
 }
 
 void flash_led_test(void)

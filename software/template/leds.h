@@ -31,7 +31,6 @@
 
 
 //---------------- constants ----------------//
-#define     BLINK_SPEED             20
 #define     LED_COUNT               2
 
 
@@ -63,12 +62,14 @@ struct led_state
 {
     bool            active;
     enum led_mode   mode;
+    uint8_t         prescaler;
+    uint8_t         counter;
 };
 
 
 //---------------- functions and procedures ----------------//
 void initialize_leds_module(void);
-void blink_led(enum led);
+void blink_led(enum led, uint8_t);
 void flash_led(enum led);
 void set_led(enum led, bool);
 void toggle_led(enum led);

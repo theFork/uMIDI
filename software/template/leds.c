@@ -32,14 +32,18 @@
 
 static struct led_state green_led =
 {
-    .active = false,
-    .mode = LED_STATIC
+    .active     = false,
+    .mode       = LED_STATIC,
+    .prescaler  = 0,
+    .counter    = 0
 };
 
 static struct led_state red_led =
 {
-    .active = false,
-    .mode = LED_STATIC
+    .active     = false,
+    .mode       = LED_STATIC,
+    .prescaler  = 0,
+    .counter    = 0
 };
 
 static struct led_state *leds[LED_COUNT];
@@ -71,40 +75,37 @@ static inline void apply_led(enum led pin, bool value)
     }
 }
 
-
-void blink_led(enum led led)
+static void set_or_update_blinking_led_state(struct led_state *led, uint8_t prescaler)
 {
-    switch (led) {
-    case LED_RED:
-        red_led.mode = LED_BLINK;
-        break;
-    case LED_GREEN:
-        green_led.mode = LED_BLINK;
-        break;
-    case LED_ALL:
-        red_led.mode = LED_BLINK;
-        green_led.mode = LED_BLINK;
-        break;
-    default:
-        break;
+    // Abort if neither mode or prescaler have changed
+    if (led->mode == LED_BLINK && led->prescaler == prescaler) {
+        return;
+    }
+
+    led->mode = LED_BLINK;
+    led->prescaler = prescaler;
+    led->counter = 0;
+}
+
+void blink_led(enum led led, uint8_t prescaler)
+{
+    if (led == LED_ALL) {
+        set_or_update_blinking_led_state(&red_led, prescaler);
+        set_or_update_blinking_led_state(&green_led, prescaler);
+    }
+    else {
+        set_or_update_blinking_led_state(leds[led], prescaler);
     }
 }
 
 void flash_led(enum led led)
 {
-    switch (led) {
-    case LED_RED:
-        red_led.mode = LED_FLASH;
-        break;
-    case LED_GREEN:
-        green_led.mode = LED_FLASH;
-        break;
-    case LED_ALL:
+    if (led == LED_ALL) {
         red_led.mode = LED_FLASH;
         green_led.mode = LED_FLASH;
-        break;
-    default:
-        break;
+    }
+    else {
+        leds[led]->mode = LED_FLASH;
     }
 }
 
@@ -138,10 +139,11 @@ void toggle_led(enum led led)
 
 void update_leds(void)
 {
-    // Flashing
+    // Iterate LEDs
     uint8_t i;
     for (i=0; i<LED_COUNT; i++) {
-        if (leds[i]->mode == LED_FLASH) {
+        switch (leds[i]->mode) {
+        case LED_FLASH:
             if (leds[i]->active) {
                 leds[i]->mode = LED_STATIC;
                 apply_led(i, false);
@@ -149,19 +151,19 @@ void update_leds(void)
             else {
                 apply_led(i, true);
             }
-        }
-    }
+            break;
 
-    // Blinking
-    static uint8_t blink_prescaler = 0;
-    ++blink_prescaler;
-    if (blink_prescaler >= BLINK_SPEED) {
-        blink_prescaler = 0;
+        case LED_BLINK:
+            ++leds[i]->counter;
+            if (leds[i]->counter >= leds[i]->prescaler) {
+                leds[i]->counter = 0;
 
-        for (i=0; i<LED_COUNT; i++) {
-            if (leds[i]->mode == LED_BLINK) {
                 apply_led(i, !leds[i]->active);
             }
+            break;
+
+        default:
+            break;
         }
     }
 }
