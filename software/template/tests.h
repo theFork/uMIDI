@@ -36,7 +36,9 @@
 
 //---------------- functions and procedures ----------------//
 void run_test(void (*)(void));
+void run_test_with_parameter(void (*)(void*), void*);
 void run_test_suite(void);
+void dummy_test(void);
 
 // LED tests
 void blink_led_test(void);
@@ -56,7 +58,7 @@ void send_note_on_test(void);
 void send_program_change_test(void);
 
 // PWM tests
-void apply_duty_cycle_test(void);
+void apply_duty_cycle_test(void *duty);
 
 
 //---------------- EOF ----------------//

@@ -49,6 +49,13 @@ void run_test(void (*function_p)(void))
     wdt_reset();
 }
 
+void run_test_with_parameter(void (*function_p)(void*), void *parameter)
+{
+    (*function_p)(parameter);
+    _delay_ms(100);
+    wdt_reset();
+}
+
 void run_test_suite(void)
 {
     // LED test cases
@@ -70,7 +77,15 @@ void run_test_suite(void)
     run_test(&send_note_off_test);
 
     // PWM test cases
-    run_test(&apply_duty_cycle_test);
+    uint8_t duty;
+    for (duty=0; duty<MIDI_MAX_VALUE; duty+=5) {
+        run_test_with_parameter(&apply_duty_cycle_test, &duty);
+        run_test(&dummy_test);
+        run_test(&dummy_test);
+    }
+}
+
+void dummy_test(void) {
 }
 
 //---------------- LED tests ----------------//
@@ -134,7 +149,7 @@ void send_program_change_test(void)
 }
 
 //---------------- PWM tests ----------------//
-void apply_duty_cycle_test(void)
+void apply_duty_cycle_test(void *duty)
 {
-    apply_duty_cycle(63);
+    apply_duty_cycle(*((uint8_t *)duty));
 }
