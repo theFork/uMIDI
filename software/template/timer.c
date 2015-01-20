@@ -65,6 +65,7 @@ ISR(TCC0_OVF_vect)
     ////
     // High frequency tasks
     ////
+    update_pwm();
 
     ////
     // Mid frequency tasks

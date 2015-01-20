@@ -18,34 +18,68 @@
  */
 
 /*
- * Header of the PWM module.
+ * Header for wave computations.
 */
 
-#ifndef _PWM_H
-#define _PWM_H
+#ifndef _WAVE_H
+#define _WAVE_H
 
 
 //---------------- includes ----------------//
 #include <stdint.h>
 
 
-//---------------- AVR PORT mapping ----------------//
-#define     PWM_LED         gpio.header3.pin4
-
-
 //---------------- code macros ----------------//
-#define     PWM_LED_SCALER  100
-#define     MEAN_VALUES     20
+// the number of levels in the stair wave
+#define     STAIR_WAVE_STEPS                5
 
 
 //---------------- data types ----------------//
+enum direction
+{
+    DIRECTION_DOWN,
+    DIRECTION_UP,
+};
+
+enum waveform
+{
+    WAVE_OFF,
+    WAVE_SINE,
+    WAVE_TRIANGLE,
+    WAVE_SAW_UP,
+    WAVE_SAW_DOWN,
+    WAVE_SQUARE,
+    WAVE_STAIRS
+};
+
+struct wave_settings
+{
+    enum waveform   waveform;
+    uint8_t         speed;
+    uint8_t         max_value;
+};
+
+struct wave_state
+{
+    uint8_t         speed_prescaler;
+    uint8_t         speed_counter;
+    uint8_t         step_counter;
+    enum direction  step_direction;
+};
+
+struct wave
+{
+    struct wave_settings    settings;
+    struct wave_state       state;
+};
 
 
 //---------------- functions and procedures ----------------//
-void apply_duty_cycle(uint8_t duty);
-void initialize_pwm_module(void);
-void update_pwm(void);
+void initialize_wave(struct wave*, uint8_t, enum waveform, uint8_t);
+void set_speed(struct wave*, uint8_t);
+void set_waveform(struct wave*, enum waveform);
+uint8_t update_wave(struct wave*);
 
 
 //---------------- EOF ----------------//
-#endif // _PWM_H
+#endif // _WAVE_H
