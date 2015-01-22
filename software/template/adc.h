@@ -26,17 +26,27 @@
 
 
 //---------------- includes ----------------//
-
-
-//---------------- constants ----------------//
+#include <stdint.h>
 
 
 //---------------- data types ----------------//
+typedef uint16_t adc_accumulator;
+
+
+//---------------- constants ----------------//
+#define     ADC_INPUT_PIN                   4
+#define     ADC_VREF_PIN                    0
+
+#define     ADC_RESOLUTION                  12
+#define     ADC_SAMPLE_BUFFER_SIZE          (1 << (8*sizeof(adc_accumulator) - ADC_RESOLUTION))
 
 
 //---------------- functions and procedures ----------------//
-void configureADC(void);
-void triggerADC(void);
+void calibrate_adc_offset(void);
+void enable_adc_interrupt(void);
+void disable_adc_interrupt(void);
+void initialize_adc_module(void);
+void trigger_adc(void);
 
 
 //---------------- EOF ----------------//

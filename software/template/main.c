@@ -67,9 +67,7 @@ int main( void )
     initialize_gpio_module();
     initialize_midi_module();
     initialize_pwm_module();
-
-    // configure the ADC
-    configureADC();
+    initialize_adc_module();
 
     // set watchdog for 128ms
     wdt_enable(WDT_PER_128CLK_gc);
@@ -83,6 +81,9 @@ int main( void )
 
     // send initial program change
     send_program_change(INITIAL_PROGRAM);
+
+    // Enable the ADC interrupt on completion of a conversion
+    enable_adc_interrupt();
 
     // Main loop
     while (true) {

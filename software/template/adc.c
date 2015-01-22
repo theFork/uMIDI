@@ -24,15 +24,21 @@
 #include "adc.h"
 #include "midi.h"
 #include "pwm.h"
+#include "wave.h"
 
+#include <stddef.h>
 #include <avr/interrupt.h>
+#include <avr/pgmspace.h>
 
 
 ////////////////////////////////////////////////////////////////
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-uint16_t last_midi_value = 0;
+extern struct wave pwm_wave;
+
+static uint16_t offset;
+static uint16_t sample_buffer[ADC_SAMPLE_BUFFER_SIZE];
 
 
 
@@ -40,38 +46,71 @@ uint16_t last_midi_value = 0;
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-// initialization and endless loop
-void configureADC(void)
+void calibrate_adc_offset(void)
 {
-/*
-    // select voltage reference
-    ADMUX = _BV(REFS0);
-
-    // select input channel
-    ADMUX |= 0;
-
-    // prescale the ADC clock
-    ADCSRA = _BV(ADPS1) | _BV(ADPS0);
-
-    // enable the ADC
-    ADCSRA |= _BV(ADEN);
-
-    // disable unused ADC input channels
-    DIDR0 = _BV(ADC5D) | _BV(ADC4D) | _BV(ADC3D) | _BV(ADC2D);
-
-    // start a dummy conversion
-    ADCSRA |= _BV(ADSC);
-    while (ADCSRA & _BV(ADSC));
-    ADCSRA |= _BV(ADIF);
-
-    // enable the ADC interrupt
-    ADCSRA |= _BV(ADIE);
-*/
+    adc_accumulator accumulator = 0;
+    uint8_t i;
+    for (i=0; i<ADC_SAMPLE_BUFFER_SIZE; i++) {
+        trigger_adc();
+        while (!ADCA_CH0_INTFLAGS);
+        ADCA_CH0_INTFLAGS = true;
+        accumulator += ADCA.CH0RES;
+        sample_buffer[i] = ADCA.CH0RES;
+    }
+    offset = accumulator / ADC_SAMPLE_BUFFER_SIZE;
 }
 
-void triggerADC(void)
+inline void enable_adc_interrupt(void)
 {
-//    ADCSRA |= _BV(ADSC);
+    ADCA_CH0_INTCTRL |= ADC_CH_INTLVL_LO_gc;
+}
+
+inline void disable_adc_interrupt(void)
+{
+    ADCA_CH0_INTCTRL &=~ ADC_CH_INTLVL_LO_gc;
+}
+
+void initialize_adc_module(void)
+{
+    // Configure input pin
+    PORTA.DIRCLR = _BV(ADC_INPUT_PIN);
+    PORTA.DIRCLR = _BV(ADC_VREF_PIN);
+
+    // Select voltage reference
+    ADCA.REFCTRL = ADC_REFSEL_INTVCC2_gc;
+
+    // Prescale the ADC clock
+    ADCA.PRESCALER = ADC_PRESCALER_DIV512_gc;
+
+    // Copy calibration values
+    NVM.CMD = NVM_CMD_READ_CALIB_ROW_gc;
+    ADCA.CALL = pgm_read_byte(offsetof(NVM_PROD_SIGNATURES_t, ADCACAL0));
+    NVM.CMD = NVM_CMD_NO_OPERATION_gc;
+    NVM.CMD = NVM_CMD_READ_CALIB_ROW_gc;
+    ADCA.CALH = pgm_read_byte(offsetof(NVM_PROD_SIGNATURES_t, ADCACAL1));
+    NVM.CMD = NVM_CMD_NO_OPERATION_gc;
+
+    // Enable the ADC
+    ADCA.CTRLA |= ADC_ENABLE_bm;
+
+    // Select channel input mode
+    ADCA_CH0_CTRL = ADC_CH_INPUTMODE_SINGLEENDED_gc;
+
+    // Select input source
+    ADCA_CH0_MUXCTRL = ADC_CH_MUXPOS_PIN4_gc;
+
+    // Start a dummy conversion
+    trigger_adc();
+    while (!ADCA_CH0_INTFLAGS);
+    ADCA_CH0_INTFLAGS = true;
+
+    // Measure offset and initialize sample buffer
+    calibrate_adc_offset();
+}
+
+void trigger_adc(void)
+{
+    ADCA_CH0_CTRL |= ADC_CH_START_bm;
 }
 
 
@@ -80,27 +119,38 @@ void triggerADC(void)
 //                    I N T E R R U P T S                     //
 ////////////////////////////////////////////////////////////////
 
-/*
-ISR(ADC_vect)
+ISR(ADCA_CH0_vect)
 {
-    // disable interrupts
+    // Disable interrupts
     cli();
 
-    // compute MIDI value
-    uint32_t midiValue = ADCW;
-    midiValue *= MIDI_MAX_VALUE;
-    midiValue /= 1024;
+    // Copy sample value to buffer
+    static uint8_t sample_buffer_index = 0;
+    sample_buffer[sample_buffer_index++] = ADCA.CH0RES;
+    sample_buffer_index %= ADC_SAMPLE_BUFFER_SIZE;
 
-    // send MIDI command if the value has changed
-    if (midiValue != last_midi_value) {
-        last_midi_value = midiValue;
-        send_control_change(CTRL_CUTOFF, midiValue);
+    // Compute mean value
+    adc_accumulator accumulator = 0;
+    uint8_t i;
+    for (i=0; i < ADC_SAMPLE_BUFFER_SIZE; ++i) {
+        accumulator += sample_buffer[i];
+    }
+    accumulator /= ADC_SAMPLE_BUFFER_SIZE;
+
+    // Compensate offset and prevent integer overflow
+    accumulator -= offset;
+    if (accumulator >= 1<<ADC_RESOLUTION) {
+        accumulator = 0;
     }
 
-    // set PWM duty cycle
-    apply_duty_cycle(midiValue);
+    // Shift to MIDI value
+    uint8_t midiValue = accumulator >> 5;
 
-    // enable interrupts
+    // Set PWM duty cycle
+    if (pwm_wave.settings.waveform == WAVE_OFF) {
+        apply_duty_cycle(midiValue);
+    }
+
+    // Enable interrupts
     sei();
 }
-*/

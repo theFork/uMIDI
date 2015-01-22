@@ -75,7 +75,7 @@ ISR(TCC0_OVF_vect)
     if (prescaler_fast >= F_TIMER / F_TASK_MID) {
         prescaler_fast = 0;
 
-        triggerADC();
+        trigger_adc();
     }
 
     ////
