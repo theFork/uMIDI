@@ -22,6 +22,7 @@
 */
 
 #include "gpio.h"
+#include "lookup_tables.h"
 #include "midi.h"
 #include "pwm.h"
 #include "wave.h"
@@ -36,8 +37,6 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-uint16_t values[MEAN_VALUES] = { 0, };
-
 struct wave pwm_wave;
 
 
@@ -48,38 +47,22 @@ struct wave pwm_wave;
 
 void apply_duty_cycle(uint8_t duty)
 {
-    // Scale value
-    uint16_t compare_value = PWM_LED_SCALER;
-    compare_value *= duty;
-
-    // Compute mean value
-    static uint8_t index = 0;
-    values[index++] = compare_value;
-    index %= MEAN_VALUES;
-
-    uint32_t accumulator = 0;
-    uint8_t i;
-    for (i=0; i<MEAN_VALUES; i++) {
-        accumulator += values[i];
-    }
-    accumulator /= MEAN_VALUES;
-
-    TCC1.CCA = (uint16_t) accumulator;
+    TCC1.CCABUF = lookup_exp(duty);
 }
 
 void initialize_pwm_module(void)
 {
-    // Prescale clock to 500 kHz
-    TCC1.CTRLA = TC_CLKSEL_DIV64_gc;
+    // Do not prescale the system clock (=> 32 MHz)
+    TCC1.CTRLA = TC_CLKSEL_DIV1_gc;
 
     // Select single slope PWM mode and enable OC1A output
-    TCC1.CTRLB = TC_WGMODE_SINGLESLOPE_gc | TC1_CCAEN_bm;
+    TCC1.CTRLB = TC_WGMODE_DSBOTH_gc | TC1_CCAEN_bm;
 
     // Set TOP value
-    TCC1.PER = PWM_LED_SCALER * MIDI_MAX_VALUE;
+    TCC1.PER = (1<<PWM_RESOLUTION) - 1;
 
     // Set initial compare value to TOP
-    TCC1.CCA = PWM_LED_SCALER * MIDI_MAX_VALUE;
+    TCC1.CCA = TCC1.PER;
 
     initialize_wave(&pwm_wave, MIDI_MAX_VALUE, WAVE_OFF, 63);
 }

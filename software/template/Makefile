@@ -31,9 +31,6 @@ OPT = s
 # target file name (without extension)
 TARGET = main
 
-# C source files
-SRC = $(wildcard *.c)
-
 # output directory.
 DIR = ./
 
@@ -42,6 +39,11 @@ FUSE1 = 0x00
 FUSE2 = 0xbf
 FUSE4 = 0xfe
 FUSE5 = 0xff
+
+# C file for lookup tables
+LOOKUP_TABLES_FILE = lookup_tables.c
+LOOKUP_TABLES_XRES = 7
+LOOKUP_TABLES_YRES = 14
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
@@ -56,6 +58,7 @@ CFLAGS += -Wall -Wstrict-prototypes
 CFLAGS += -std=c99
 CFLAGS += -DF_OSC=$(F_OSC)
 CFLAGS += -DF_CPU=$(F_CPU)
+CFLAGS += -DPWM_RESOLUTION=$(LOOKUP_TABLES_YRES)
 
 # avrdude settings and variables.
 AVRDUDE_FLAGS = -c atmelice_pdi
@@ -93,10 +96,18 @@ MSG_DOWNLOADING = make: *** backing up EEPROM...
 MSG_DUMPING = make: *** writing EEPROM...
 MSG_EEPROM = make: *** creating load file for EEPROM...
 MSG_FLASH = make: *** creating load file for Flash...
+MSG_GENERATING = make: *** generating source files...
 MSG_LINKING = make: *** linking...
 MSG_HELLO = make: *** hiho!
 MSG_PROGRAMING = make: *** programing MC...
 MSG_FUSE = make: *** setting fuse bits...
+
+# determine the list of C source files
+ifeq ("$(wildcard $(LOOKUP_TABLES_FILE))","")
+SRC = $(wildcard *.c) $(LOOKUP_TABLES_FILE)
+else
+SRC = $(wildcard *.c)
+endif
 
 # default target.
 help:
@@ -132,6 +143,13 @@ bye:
 	$(info )
 	$(info $(MSG_BYE))
 	$(info )
+
+# lookup: generate lookup tables file.
+lookup:
+$(LOOKUP_TABLES_FILE):
+	$(info )
+	$(info $(MSG_GENERATING))
+	./compute_lookup_tables.pl -x $(LOOKUP_TABLES_XRES) -y $(LOOKUP_TABLES_YRES) $(LOOKUP_TABLES_FILE)
 
 # compile: create object files from C source files.
 $(DIR)%.o: %.c
@@ -169,9 +187,10 @@ makeclean:
 	$(REMOVE) $(DIR)$(TARGET).elf
 	$(REMOVE) $(DIR)$(TARGET).s
 	$(REMOVE) $(OBJ)
+	$(REMOVE) $(LOOKUP_TABLES_FILE)
 
 # target: compile project
-compile: hello hex asm bye
+compile: hello lookup hex asm bye
 
 # target: program the device.
 install: hello makeinstall bye
@@ -208,7 +227,7 @@ all: hello makeclean hex makeinstall bye
 allinc: hello makeclean hex makebackup makeinstall makeeep bye
 
 # phony targets.
-.PHONY: all allinc asm backup compile bye clean eep fuse hello hex makebackup makeclean makeeep makefuse makeinstall install
+.PHONY: all allinc asm backup compile bye clean eep fuse hello hex lookup makebackup makeclean makeeep makefuse makeinstall install
 
 
 .SECONDARY: $(OBJ)

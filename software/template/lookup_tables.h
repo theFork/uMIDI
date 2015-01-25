@@ -1,14 +1,14 @@
 /*
- * Copyright 2012-2015 Sebastian Neuser
+ * Copyright 2015 Sebastian Neuser
  *
  * This file is part of the uMIDI firmware.
  *
- * The uMIDI firmware is free software: you can redistribute it and/or modify
+ * The MIDI volume controller firmware is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The uMIDI firmware is distributed in the hope that it will be useful,
+ * The MIDI volume controller firmware is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
@@ -18,29 +18,27 @@
  */
 
 /*
- * Header of the PWM module.
+ * Lookup tables for the uMIDI firmware.
 */
 
-#ifndef _PWM_H
-#define _PWM_H
+#ifndef _LOOKUP_TABLES_H
+#define _LOOKUP_TABLES_H
 
 
 //---------------- includes ----------------//
 #include <stdint.h>
 
 
-//---------------- AVR PORT mapping ----------------//
-#define     PWM_LED         gpio.header3.pin4
+//---------------- Lookup table declarations ----------------//
+extern const uint16_t exp_table[];
 
 
-//---------------- data types ----------------//
-
-
-//---------------- functions and procedures ----------------//
-void apply_duty_cycle(uint8_t duty);
-void initialize_pwm_module(void);
-void update_pwm(void);
-
+//---------------- Inline functions to read out the tables ----------------//
+inline uint16_t lookup_exp(uint8_t x)
+{
+    return exp_table[x];
+}
 
 //---------------- EOF ----------------//
-#endif // _PWM_H
+#endif // LOOKUP_TABLES_H
+

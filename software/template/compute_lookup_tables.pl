@@ -44,8 +44,8 @@ if ($#ARGV < 0) {
 # ---------------------- V A R I A B L E S ---------------------- #
 
 my $PRECISION = 1e-6;
-my $xmax = $opts{"x"};
-my $ymax = $opts{"y"};
+my $xmax = 2**$opts{"x"} - 1;
+my $ymax = 2**$opts{"y"} - 1;
 my $output_file = shift;
 
 
