@@ -22,7 +22,6 @@ use strict;
 use warnings;
 use File::Basename;
 use Getopt::Std;
-use Math::Round;
 
 
 # --------- C O M M A N D   L I N E   A R G U M E N T S --------- #
@@ -71,7 +70,7 @@ for (my $i = 0; $i <= $xmax; $i += 1) {
         print("   ");
     }
 
-    printf(" %4d,", round($base ** $i));
+    printf(" %4d,", int($base ** $i));
 
     # Begin a new line every 16 values
     if ($i > 0 and $i % 16 == 15) {
