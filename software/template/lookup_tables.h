@@ -31,12 +31,18 @@
 
 //---------------- Lookup table declarations ----------------//
 extern const uint16_t exp_table[];
+extern const uint16_t sine_table[];
 
 
 //---------------- Inline functions to read out the tables ----------------//
 inline uint16_t lookup_exp(uint8_t x)
 {
     return exp_table[x];
+}
+
+inline uint16_t lookup_sine(uint8_t x)
+{
+    return sine_table[x];
 }
 
 //---------------- EOF ----------------//

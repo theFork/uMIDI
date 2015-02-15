@@ -22,6 +22,7 @@
 */
 
 #include "wave.h"
+#include "lookup_tables.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -81,6 +82,20 @@ static uint8_t compute_saw_down_wave(void)
 static uint8_t compute_saw_up_wave(void)
 {
     return compute_ramp();
+}
+
+static uint8_t compute_sine_wave(void)
+{
+    switch (state->step_direction) {
+        case DIRECTION_DOWN:
+            return settings->max_value - lookup_sine(state->step_counter);
+
+        case DIRECTION_UP:
+            return lookup_sine(state->step_counter);
+
+        default:
+            return 0;
+    }
 }
 
 static uint8_t compute_square_wave(void)
@@ -161,6 +176,9 @@ uint8_t update_wave(struct wave *wave)
 
         case WAVE_SAW_UP:
             return compute_saw_up_wave();
+
+        case WAVE_SINE:
+            return compute_sine_wave();
 
         case WAVE_SQUARE:
             return compute_square_wave();
