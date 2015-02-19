@@ -70,7 +70,7 @@ for (my $i = 0; $i <= $xmax; $i += 1) {
         print("   ");
     }
 
-    printf(" %4d,", int($base ** $i));
+    printf(" %5d,", int($base ** $i));
 
     # Begin a new line every 16 values
     if ($i > 0 and $i % 16 == 15) {
