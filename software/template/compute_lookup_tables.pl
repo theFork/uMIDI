@@ -88,7 +88,8 @@ for (my $i = 0; $i <= 127; $i += 1) {
         print("   ");
     }
 
-    printf(" %4d,", int($xmax/2 * sin(3.141592653589793*$i/$xmax) + $xmax/2));
+    my $ymax = $xmax + 1;
+    printf(" %4d,", int($xmax/2 * sin(3.141592653589793*$i/$ymax) + $xmax/2 + .5));
 
     # Begin a new line every 16 values
     if ($i > 0 and $i % 16 == 15) {
