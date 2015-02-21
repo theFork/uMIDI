@@ -29,10 +29,6 @@
 #include <stdint.h>
 
 
-//---------------- AVR PORT mapping ----------------//
-#define     PWM_LED         gpio.header3.pin4
-
-
 //---------------- data types ----------------//
 
 
