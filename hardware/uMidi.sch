@@ -202,8 +202,8 @@ $Comp
 L USB-MINI-B CON1
 U 1 1 53C6D9DB
 P 4950 4600
-F 0 "CON1" H 4700 5050 60  0000 C CNN
-F 1 "USB-MINI-B" H 4900 4100 60  0000 C CNN
+F 0 "CON1" H 5200 4950 60  0000 C CNN
+F 1 "USB-MINI-B" H 4950 4250 60  0000 C CNN
 F 2 "" H 4950 4600 60  0000 C CNN
 F 3 "" H 4950 4600 60  0000 C CNN
 	1    4950 4600
@@ -624,7 +624,7 @@ F 3 "" H 2400 6800 60  0000 C CNN
 	1    2400 6800
 	1    0    0    -1  
 $EndComp
-Text GLabel 6450 4250 1    60   Output ~ 0
+Text GLabel 6450 4350 1    60   Output ~ 0
 VBUS
 Text GLabel 1750 5950 1    60   Input ~ 0
 VBUS
@@ -925,7 +925,7 @@ F 3 "" H 5750 4600 60  0000 C CNN
 	1    5750 4600
 	1    0    0    -1  
 $EndComp
-NoConn ~ 5500 4750
+NoConn ~ 5450 4700
 $Comp
 L PWR_FLAG #FLG032
 U 1 1 53CD6B1F
@@ -1275,7 +1275,7 @@ Wire Wire Line
 Wire Wire Line
 	6200 4550 7600 4550
 Wire Wire Line
-	5500 4450 7600 4450
+	5600 4450 7600 4450
 Wire Wire Line
 	3750 2950 3750 3100
 Connection ~ 3750 3100
@@ -1507,11 +1507,11 @@ Wire Wire Line
 Wire Wire Line
 	6200 4600 6200 4550
 Wire Wire Line
-	5500 4600 6200 4600
+	5450 4600 6200 4600
 Wire Wire Line
-	5500 4900 5750 4900
+	5450 4800 5750 4800
 Wire Wire Line
-	6450 4300 6450 4250
+	6450 4400 6450 4350
 Wire Wire Line
 	7600 4150 7500 4150
 Wire Wire Line
@@ -1550,7 +1550,7 @@ Wire Wire Line
 	7000 2650 7050 2650
 Wire Wire Line
 	7050 2650 7050 2700
-Connection ~ 6450 4300
+Connection ~ 6450 4400
 Connection ~ 6650 4450
 Connection ~ 6400 4550
 Wire Wire Line
@@ -1564,13 +1564,13 @@ Wire Wire Line
 Wire Wire Line
 	6650 4450 6650 4850
 Wire Wire Line
-	6900 4300 6900 4600
+	6900 4400 6900 4600
 Wire Wire Line
 	5750 4800 5750 5800
-Connection ~ 5750 4900
+Connection ~ 5750 4800
 Wire Wire Line
-	5750 4400 5750 4300
-Connection ~ 5750 4300
+	5450 4400 6900 4400
+Connection ~ 5750 4400
 Wire Wire Line
 	1250 7000 1350 7000
 Connection ~ 1250 7000
@@ -1622,9 +1622,7 @@ Wire Wire Line
 Wire Wire Line
 	3200 2100 3200 2200
 Wire Wire Line
-	4400 4750 4250 4750
-Wire Wire Line
-	4250 4750 4250 5650
+	4250 4700 4250 5650
 Wire Wire Line
 	4250 5350 4800 5350
 Wire Wire Line
@@ -1727,11 +1725,9 @@ Wire Wire Line
 Connection ~ 7100 1750
 Wire Wire Line
 	9750 1600 9750 1450
-Wire Wire Line
-	5500 4300 6900 4300
-NoConn ~ 4400 4300
-NoConn ~ 4400 4450
-NoConn ~ 4400 4900
+NoConn ~ 4450 4400
+NoConn ~ 4450 4500
+NoConn ~ 4450 4800
 Wire Wire Line
 	3600 3100 3850 3100
 Wire Wire Line
@@ -1739,7 +1735,7 @@ Wire Wire Line
 Wire Wire Line
 	3600 2300 3750 2300
 Wire Wire Line
-	3750 1350 2700 1350
+	2700 1350 3750 1350
 $Comp
 L JUMPER JP2
 U 1 1 548CD67D
@@ -1796,7 +1792,7 @@ F 3 "" H 4950 3850 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	4950 3850 4950 2850
+	4950 2850 4950 3850
 Wire Wire Line
 	4950 2850 5000 2850
 Wire Wire Line
@@ -1844,4 +1840,10 @@ Wire Wire Line
 	5800 3800 5800 3450
 Wire Wire Line
 	5800 3450 5600 3450
+Wire Wire Line
+	4250 4700 4450 4700
+Wire Wire Line
+	5600 4450 5600 4500
+Wire Wire Line
+	5600 4500 5450 4500
 $EndSCHEMATC
