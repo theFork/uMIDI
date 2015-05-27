@@ -30,12 +30,5 @@
 #include <stdint.h>
 
 
-//---------------- constants ----------------//
-#define	INITIAL_PROGRAM		0
-
-
-//---------------- data types ----------------//
-
-
 //---------------- EOF ----------------//
 #endif // _MAIN_H

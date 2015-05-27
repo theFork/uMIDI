@@ -26,8 +26,6 @@
 #include "gpio.h"
 #include "leds.h"
 #include "midi.h"
-#include "pwm.h"
-#include "tests.h"
 #include "timer.h"
 
 #include <avr/interrupt.h>
@@ -66,7 +64,6 @@ int main( void )
     initialize_leds_module();
     initialize_gpio_module();
     initialize_midi_module();
-    initialize_pwm_module();
     initialize_adc_module();
 
     // set watchdog for 128ms
@@ -76,14 +73,11 @@ int main( void )
     PMIC.CTRL = PMIC_LOLVLEN_bm;
     sei();
 
-    // run the test suite
-    run_test_suite();
-
-    // send initial program change
-    send_program_change(INITIAL_PROGRAM);
-
     // Enable the ADC interrupt on completion of a conversion
     enable_adc_interrupt();
+
+    // Blink green LED
+    blink_led(LED_GREEN, F_TASK_SLOW);
 
     // Main loop
     while (true) {

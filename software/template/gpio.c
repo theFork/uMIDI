@@ -38,7 +38,7 @@ struct gpio gpio = {
         .pin3 = { &PORTA, 1, GPIO_UNUSED },
         .pin4 = { &PORTA, 2, GPIO_UNUSED },
         .pin5 = { &PORTA, 3, GPIO_UNUSED },
-        .pin6 = { &PORTA, 4, GPIO_UNUSED },
+        .pin6 = { &PORTA, 4, GPIO_INPUT },
         .pin7 = { &PORTA, 5, GPIO_UNUSED },
         .pin8 = { &PORTA, 6, GPIO_UNUSED },
         .pin9 = { &PORTA, 7, GPIO_UNUSED }
@@ -56,11 +56,11 @@ struct gpio gpio = {
     .header3 = {
         .pin2 = { &PORTC, 4, GPIO_UNUSED },
         .pin3 = { &PORTC, 5, GPIO_UNUSED },
-        .pin4 = { &PORTC, 6, GPIO_OUTPUT },
+        .pin4 = { &PORTC, 6, GPIO_UNUSED },
         .pin5 = { &PORTC, 7, GPIO_UNUSED },
-        .pin6 = { &PORTD, 0, GPIO_OUTPUT },
+        .pin6 = { &PORTD, 0, GPIO_UNUSED },
         .pin7 = { &PORTD, 1, GPIO_UNUSED },
-        .pin8 = { &PORTD, 2, GPIO_OUTPUT },
+        .pin8 = { &PORTD, 2, GPIO_UNUSED },
         .pin9 = { &PORTD, 3, GPIO_UNUSED }
     }
 };
