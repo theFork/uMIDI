@@ -33,6 +33,7 @@
 ////////////////////////////////////////////////////////////////
 
 static enum midi_state midi_state = IDLE;
+static struct midi_event_handlers* event_handlers;
 
 
 
@@ -40,7 +41,7 @@ static enum midi_state midi_state = IDLE;
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void initialize_midi_module(void)
+void initialize_midi_module(const struct midi_event_handlers* handlers)
 {
     // Configure TXD0
     PORTE.DIR |= PIN3_bm;
@@ -55,6 +56,9 @@ void initialize_midi_module(void)
     // Enable RXEN and RXC interrupt
     MIDI_UART.CTRLA = USART_RXCINTLVL_LO_gc;
     MIDI_UART.CTRLB = USART_RXEN_bm | USART_TXEN_bm;
+
+    // Save MIDI event handlers
+    event_handlers = (struct midi_event_handlers*) handlers;
 }
 
 void send_control_change(uint8_t controller, uint8_t value) {
@@ -112,33 +116,10 @@ static void handle_status_byte(uint8_t data) {
         midi_state = NOTE_ON;
     }
     else if ( (data & MIDI_COMMAND_MASK) == MIDI_CONTROL_CHANGE ) {
-        midi_state = CONTROL_CHANGE;
+        midi_state = CONTROL_CHANGE_NUMBER;
     }
     else if ( (data & MIDI_COMMAND_MASK) == MIDI_PROGRAM_CHANGE ) {
         midi_state = PROGRAM_CHANGE;
-    }
-}
-
-static void handle_note_off(uint8_t note) {
-    switch(note) {
-    }
-    midi_state = IDLE;
-}
-
-static void handle_note_on(uint8_t note) {
-    switch(note) {
-    }
-    midi_state = IDLE;
-}
-
-static void handle_program_change(uint8_t program) {
-    midi_state = IDLE;
-}
-
-static void handle_control_change(uint8_t controller) {
-    switch(controller) {
-        default:
-            midi_state = IDLE;
     }
 }
 
@@ -152,6 +133,7 @@ ISR(USARTE0_RXC_vect)
     // Fetch data
     uint8_t data = MIDI_UART.DATA;
 
+    static uint8_t current_controller;
     switch (midi_state) {
     ////
     // MIDI status byte
@@ -165,22 +147,32 @@ ISR(USARTE0_RXC_vect)
     // MIDI data byte 0
     ////
     case NOTE_OFF:
-        handle_note_off(data);
+        event_handlers->note_off(data);
+        midi_state = IDLE;
         break;
 
 
     case NOTE_ON:
-        handle_note_on(data);
+        event_handlers->note_on(data);
+        midi_state = IDLE;
         break;
 
 
     case PROGRAM_CHANGE:
-        handle_program_change(data);
+        event_handlers->program_change(data);
+        midi_state = IDLE;
         break;
 
 
-    case CONTROL_CHANGE:
-        handle_control_change(data);
+    case CONTROL_CHANGE_NUMBER:
+        current_controller = data;
+        midi_state = CONTROL_CHANGE_VALUE;
+        break;
+
+
+    case CONTROL_CHANGE_VALUE:
+        event_handlers->control_change(current_controller, data);
+        midi_state = IDLE;
         break;
 
 

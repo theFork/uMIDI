@@ -36,6 +36,8 @@ extern const struct adc_config adc_config;
 
 extern struct gpio_config gpio_config;
 
+extern struct midi_event_handlers midi_event_handlers;
+
 //---------------- EOF ----------------//
 #endif // _CONFIG_H
 

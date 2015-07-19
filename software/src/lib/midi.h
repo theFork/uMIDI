@@ -64,8 +64,16 @@ enum midi_state
     IDLE,
     NOTE_OFF,
     NOTE_ON,
-    CONTROL_CHANGE,
+    CONTROL_CHANGE_NUMBER,
+    CONTROL_CHANGE_VALUE,
     PROGRAM_CHANGE,
+};
+
+struct midi_event_handlers {
+    void (*control_change)(uint8_t, uint8_t);
+    void (*note_off)(uint8_t);
+    void (*note_on)(uint8_t);
+    void (*program_change)(uint8_t);
 };
 
 
@@ -79,7 +87,7 @@ static inline void uart_write(uint8_t data) {
     MIDI_UART.DATA = data;
 }
 
-void initialize_midi_module(void);
+void initialize_midi_module(const struct midi_event_handlers* handlers);
 void send_control_change(uint8_t, uint8_t);
 void send_note_off(uint8_t);
 void send_note_on(uint8_t);

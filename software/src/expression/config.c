@@ -22,11 +22,14 @@
  * @author Sebastian Neuser
 */
 
+#include <stddef.h>
+
 #include "lib/adc.h"
 #include "lib/gpio.h"
+#include "lib/midi.h"
 
-#include "expression.h"
 #include "config.h"
+#include "expression.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -77,4 +80,12 @@ struct gpio_config gpio_config = {
         .pin8 = { &PORTD, 2, GPIO_UNUSED },
         .pin9 = { &PORTD, 3, GPIO_UNUSED }
     }
+};
+
+//---------------- MIDI ----------------//
+struct midi_event_handlers midi_event_handlers = {
+    .control_change = NULL,
+    .note_off       = NULL,
+    .note_on        = NULL,
+    .program_change = NULL
 };
