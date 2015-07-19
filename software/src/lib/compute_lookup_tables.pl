@@ -54,12 +54,16 @@ my $output_file = shift;
 my ($base, $iterations) = calculate_base();
 printf("Found base %f with %d iterations.\n", $base, $iterations);
 
-printf("Generating lookup table header file %s\n", $output_file);
+printf("Generating lookup table file %s\n", $output_file);
 open(OUTFILE, ">", $output_file) or die;
 select(OUTFILE);
 
 # Print file comment
 print_header();
+
+# Print table resolution constant
+print("\n// Resolution of the lookup tables\n");
+printf("const uint8_t lookup_table_resolution = %du;\n", $opts{"y"});
 
 # Print exponential lookup table
 print("\n// Exponential lookup table\n");

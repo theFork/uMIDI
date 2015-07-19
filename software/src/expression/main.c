@@ -18,26 +18,22 @@
  */
 
 /*
- * Implementation of the PWM module.
-*/
+ * Program entry point and main loop of the uMIDI firmware.
+ */
 
-#include "gpio.h"
-#include "lookup_tables.h"
-#include "midi.h"
-#include "pwm.h"
-#include "wave.h"
+#include "lib/adc.h"
+#include "lib/gpio.h"
+#include "lib/leds.h"
+#include "lib/midi.h"
+#include "lib/timer.h"
 
-#include <stdbool.h>
-#include <stdint.h>
-#include <avr/io.h>
 #include <avr/interrupt.h>
+#include <avr/wdt.h>
 
 
 ////////////////////////////////////////////////////////////////
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
-
-struct wave pwm_wave;
 
 
 
@@ -45,30 +41,47 @@ struct wave pwm_wave;
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void apply_duty_cycle(uint8_t duty)
+static void configure_system_clock(void)
 {
-    TCC1.CCABUF = lookup_exp(duty);
+    // Enable internal 32 MHz oscillator
+    OSC.CTRL |= OSC_RC32MEN_bm;
+    while(!(OSC.STATUS & OSC_RC32MRDY_bm));
+
+    // Select internal 32 MHz oscillator
+    CCP = CCP_IOREG_gc;
+    CLK.CTRL = CLK_SCLKSEL_RC32M_gc;
 }
 
-void initialize_pwm_module(void)
+// Initialization and endless loop
+int main( void )
 {
-    // Do not prescale the system clock (=> 32 MHz)
-    TCC1.CTRLA = TC_CLKSEL_DIV1_gc;
+    // Configure clock and timers
+    configure_system_clock();
+    configure_task_timer();
 
-    // Select single slope PWM mode and enable OC1A output
-    TCC1.CTRLB = TC_WGMODE_DSBOTH_gc | TC1_CCAEN_bm;
+    // Initialize modules
+    initialize_leds_module();
+    initialize_gpio_module();
+    initialize_midi_module();
+    initialize_adc_module();
 
-    // Set TOP value
-    TCC1.PER = (1<<PWM_RESOLUTION) - 1;
+    // set watchdog for 128ms
+    wdt_enable(WDT_PER_128CLK_gc);
 
-    // Set initial compare value to TOP
-    TCC1.CCA = TCC1.PER;
+    // enable interrupts
+    PMIC.CTRL = PMIC_LOLVLEN_bm;
+    sei();
 
-    initialize_wave(&pwm_wave, MIDI_MAX_VALUE, WAVE_SINE, 110);
-}
+    // Enable the ADC interrupt on completion of a conversion
+    enable_adc_interrupt();
 
-void update_pwm(void) {
-    if (pwm_wave.settings.waveform != WAVE_OFF) {
-        apply_duty_cycle(update_wave(&pwm_wave));
+    // Blink green LED
+    blink_led(LED_GREEN, F_TASK_SLOW);
+
+    // Main loop
+    while (true) {
+        wdt_reset();
     }
+
+    return 0;
 }

@@ -32,6 +32,7 @@
 //---------------- Lookup table declarations ----------------//
 extern const uint16_t exp_table[];
 extern const uint16_t sine_table[];
+extern const uint8_t  lookup_table_resolution;
 
 
 //---------------- Inline functions to read out the tables ----------------//
