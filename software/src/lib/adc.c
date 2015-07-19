@@ -23,8 +23,7 @@
 
 #include "adc.h"
 #include "midi.h"
-#include "pwm.h"
-#include "wave.h"
+#include "leds.h"
 
 #include <stddef.h>
 #include <avr/interrupt.h>
@@ -77,7 +76,7 @@ void initialize_adc_module(void)
     PORTA.DIRCLR = _BV(ADC_VREF_PIN);
 
     // Select voltage reference
-    ADCA.REFCTRL = ADC_REFSEL_INTVCC2_gc;
+    ADCA.REFCTRL = ADC_REFSEL_INTVCC_gc;
 
     // Prescale the ADC clock
     ADCA.PRESCALER = ADC_PRESCALER_DIV512_gc;
@@ -119,6 +118,15 @@ void trigger_adc(void)
 //                    I N T E R R U P T S                     //
 ////////////////////////////////////////////////////////////////
 
+static void update_expression_value(uint8_t new_value) {
+    static uint8_t old_value = 0;
+    if (new_value != old_value) {
+        old_value = new_value;
+        flash_led(LED_RED);
+        send_control_change(69, new_value);
+    }
+}
+
 ISR(ADCA_CH0_vect)
 {
     // Disable interrupts
@@ -143,13 +151,9 @@ ISR(ADCA_CH0_vect)
         accumulator = 0;
     }
 
-    // Shift to MIDI value
-    uint8_t midiValue = accumulator >> 5;
-
-    // Set PWM duty cycle
-    if (pwm_wave.settings.waveform == WAVE_OFF) {
-        apply_duty_cycle(midiValue);
-    }
+    // Shift to MIDI value and update
+    uint8_t midi_value = accumulator >> (ADC_RESOLUTION-7);
+    update_expression_value(midi_value);
 
     // Enable interrupts
     sei();
