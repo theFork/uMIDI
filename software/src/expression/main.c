@@ -63,7 +63,7 @@ int main( void )
 
     // Initialize modules
     initialize_leds_module();
-    initialize_gpio_module();
+    initialize_gpio_module(&gpio_config);
     initialize_midi_module();
     initialize_adc_module(&adc_config, &expression_conversion);
 

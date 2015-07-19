@@ -23,6 +23,7 @@
 */
 
 #include "lib/adc.h"
+#include "lib/gpio.h"
 
 #include "expression.h"
 #include "config.h"
@@ -32,6 +33,7 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
+//---------------- ADC ----------------//
 const struct adc_conversion_config expression_conversion = {
     .channel    = 0,
     .input      = 4,
@@ -41,4 +43,38 @@ const struct adc_conversion_config expression_conversion = {
 const struct adc_config adc_config = {
     .mode       = ADC_MODE_UNSIGNED,
     .prescaler  = ADC_PRESCALER_DIV512_gc,
+};
+
+//---------------- GPIO ----------------//
+struct gpio_config gpio_config = {
+    .header1 = {
+        .pin2 = { &PORTA, 0, GPIO_UNUSED },
+        .pin3 = { &PORTA, 1, GPIO_UNUSED },
+        .pin4 = { &PORTA, 2, GPIO_UNUSED },
+        .pin5 = { &PORTA, 3, GPIO_UNUSED },
+        .pin6 = { &PORTA, 4, GPIO_INPUT },
+        .pin7 = { &PORTA, 5, GPIO_UNUSED },
+        .pin8 = { &PORTA, 6, GPIO_UNUSED },
+        .pin9 = { &PORTA, 7, GPIO_UNUSED }
+    },
+    .header2 = {
+        .pin2 = { &PORTB, 0, GPIO_UNUSED },
+        .pin3 = { &PORTB, 1, GPIO_UNUSED },
+        .pin4 = { &PORTB, 2, GPIO_UNUSED },
+        .pin5 = { &PORTB, 3, GPIO_UNUSED },
+        .pin6 = { &PORTC, 0, GPIO_UNUSED },
+        .pin7 = { &PORTC, 1, GPIO_UNUSED },
+        .pin8 = { &PORTC, 2, GPIO_UNUSED },
+        .pin9 = { &PORTC, 3, GPIO_UNUSED }
+    },
+    .header3 = {
+        .pin2 = { &PORTC, 4, GPIO_UNUSED },
+        .pin3 = { &PORTC, 5, GPIO_UNUSED },
+        .pin4 = { &PORTC, 6, GPIO_UNUSED },
+        .pin5 = { &PORTC, 7, GPIO_UNUSED },
+        .pin6 = { &PORTD, 0, GPIO_UNUSED },
+        .pin7 = { &PORTD, 1, GPIO_UNUSED },
+        .pin8 = { &PORTD, 2, GPIO_UNUSED },
+        .pin9 = { &PORTD, 3, GPIO_UNUSED }
+    }
 };

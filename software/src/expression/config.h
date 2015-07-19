@@ -30,10 +30,11 @@
 #include <stdint.h>
 
 
-//---------------- constant declaration ----------------//
+//---------------- constant declarations ----------------//
 extern const struct adc_conversion_config expression_conversion;
 extern const struct adc_config adc_config;
 
+extern struct gpio_config gpio_config;
 
 //---------------- EOF ----------------//
 #endif // _CONFIG_H

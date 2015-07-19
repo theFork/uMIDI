@@ -58,17 +58,12 @@ struct gpio_header
     struct gpio_pin     pin9;
 };
 
-struct gpio
+struct gpio_config
 {
     struct gpio_header  header1;
     struct gpio_header  header2;
     struct gpio_header  header3;
 };
-
-
-//---------------- variable declarations ----------------//
-
-extern struct gpio gpio;
 
 
 //---------------- functions and procedures ----------------//
@@ -92,7 +87,7 @@ static inline void gpio_toggle(struct gpio_pin pin) {
     pin.port->OUT ^= _BV(pin.bit);
 }
 
-void initialize_gpio_module(void);
+void initialize_gpio_module(struct gpio_config* gpio);
 
 
 //---------------- EOF ----------------//
