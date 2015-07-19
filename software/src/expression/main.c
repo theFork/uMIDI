@@ -21,14 +21,16 @@
  * Program entry point and main loop of the uMIDI firmware.
  */
 
+#include <avr/interrupt.h>
+#include <avr/wdt.h>
+
 #include "lib/adc.h"
 #include "lib/gpio.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
 #include "lib/timer.h"
 
-#include <avr/interrupt.h>
-#include <avr/wdt.h>
+#include "config.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -63,7 +65,7 @@ int main( void )
     initialize_leds_module();
     initialize_gpio_module();
     initialize_midi_module();
-    initialize_adc_module();
+    initialize_adc_module(&adc_config, &expression_conversion);
 
     // set watchdog for 128ms
     wdt_enable(WDT_PER_128CLK_gc);
@@ -73,7 +75,7 @@ int main( void )
     sei();
 
     // Enable the ADC interrupt on completion of a conversion
-    enable_adc_interrupt();
+    enable_adc_interrupt(expression_conversion.channel);
 
     // Blink green LED
     blink_led(LED_GREEN, F_TASK_SLOW);

@@ -34,6 +34,8 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
+extern const struct adc_conversion_config expression_conversion;
+
 
 
 ////////////////////////////////////////////////////////////////
@@ -75,7 +77,7 @@ ISR(TCC0_OVF_vect)
     if (prescaler_fast >= F_TIMER / F_TASK_MID) {
         prescaler_fast = 0;
 
-        trigger_adc();
+        trigger_adc(expression_conversion.channel);
     }
 
     ////

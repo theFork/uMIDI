@@ -34,10 +34,34 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-extern struct wave pwm_wave;
+struct adc_channel_regs {
+    volatile uint8_t*   control_register;
+    volatile uint8_t*   mux_register;
+    volatile uint8_t*   interrupt_register;
+    volatile uint8_t*   interrupt_flag;
+    volatile uint16_t*  result_register;
+};
+
+static const struct adc_channel_regs adc_regs[] = {
+    {
+        .control_register   = &ADCA_CH0_CTRL,
+        .mux_register       = &ADCA_CH0_MUXCTRL,
+        .interrupt_register = &ADCA_CH0_INTCTRL,
+        .interrupt_flag     = &ADCA_CH0_INTFLAGS,
+        .result_register    = &ADCA.CH0RES
+    },
+    {
+        .control_register   = &ADCA_CH1_CTRL,
+        .mux_register       = &ADCA_CH1_MUXCTRL,
+        .interrupt_register = &ADCA_CH1_INTCTRL,
+        .interrupt_flag     = &ADCA_CH1_INTFLAGS,
+        .result_register    = &ADCA.CH1RES
+    },
+};
 
 static uint16_t offset;
 static uint16_t sample_buffer[ADC_SAMPLE_BUFFER_SIZE];
+static void (*callbacks[sizeof(adc_regs)/sizeof(struct adc_channel_regs)])(uint8_t);
 
 
 
@@ -45,41 +69,40 @@ static uint16_t sample_buffer[ADC_SAMPLE_BUFFER_SIZE];
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void calibrate_adc_offset(void)
+void calibrate_adc_offset(enum adc_channel channel)
 {
     adc_accumulator accumulator = 0;
     uint8_t i;
     for (i=0; i<ADC_SAMPLE_BUFFER_SIZE; i++) {
-        trigger_adc();
-        while (!ADCA_CH0_INTFLAGS);
-        ADCA_CH0_INTFLAGS = true;
-        accumulator += ADCA.CH0RES;
-        sample_buffer[i] = ADCA.CH0RES;
+        trigger_adc(channel);
+        while (!*adc_regs[channel].interrupt_flag);
+        *adc_regs[channel].interrupt_flag = true;
+        accumulator += *adc_regs[channel].result_register;
+        sample_buffer[i] = *adc_regs[channel].result_register;
     }
     offset = accumulator / ADC_SAMPLE_BUFFER_SIZE;
 }
 
-inline void enable_adc_interrupt(void)
+inline void enable_adc_interrupt(enum adc_channel channel)
 {
-    ADCA_CH0_INTCTRL |= ADC_CH_INTLVL_LO_gc;
+    *adc_regs[channel].interrupt_register |= ADC_CH_INTLVL_LO_gc;
 }
 
-inline void disable_adc_interrupt(void)
+inline void disable_adc_interrupt(enum adc_channel channel)
 {
-    ADCA_CH0_INTCTRL &=~ ADC_CH_INTLVL_LO_gc;
+    *adc_regs[channel].interrupt_register &=~ ADC_CH_INTLVL_LO_gc;
 }
 
-void initialize_adc_module(void)
+void initialize_adc_module(const struct adc_config* config, const struct adc_conversion_config* primary_conversion)
 {
-    // Configure input pin
-    PORTA.DIRCLR = _BV(ADC_INPUT_PIN);
-    PORTA.DIRCLR = _BV(ADC_VREF_PIN);
-
     // Select voltage reference
     ADCA.REFCTRL = ADC_REFSEL_INTVCC_gc;
 
     // Prescale the ADC clock
-    ADCA.PRESCALER = ADC_PRESCALER_DIV512_gc;
+    ADCA.PRESCALER = config->prescaler;
+
+    // Set conversion mode
+    ADCA.CTRLB = config->mode << ADC_CONMODE_bp;
 
     // Copy calibration values
     NVM.CMD = NVM_CMD_READ_CALIB_ROW_gc;
@@ -92,23 +115,35 @@ void initialize_adc_module(void)
     // Enable the ADC
     ADCA.CTRLA |= ADC_ENABLE_bm;
 
-    // Select channel input mode
-    ADCA_CH0_CTRL = ADC_CH_INPUTMODE_SINGLEENDED_gc;
-
-    // Select input source
-    ADCA_CH0_MUXCTRL = ADC_CH_MUXPOS_PIN4_gc;
-
-    // Start a dummy conversion
-    trigger_adc();
-    while (!ADCA_CH0_INTFLAGS);
-    ADCA_CH0_INTFLAGS = true;
+    initialize_adc_conversion(primary_conversion);
 
     // Measure offset and initialize sample buffer
-    calibrate_adc_offset();
+    calibrate_adc_offset(primary_conversion->channel);
 }
 
-void trigger_adc(void)
+void initialize_adc_conversion(const struct adc_conversion_config* config)
 {
+    // Save callback
+    callbacks[config->channel] = config->callback;
+
+    // Configure input pin
+    PORTA.DIRCLR = _BV(config->channel);
+
+    // Select channel input mode
+    *adc_regs[config->channel].control_register = ADC_CH_INPUTMODE_SINGLEENDED_gc;
+
+    // Select input source
+    *adc_regs[config->channel].mux_register = config->input;
+
+    // Start a dummy conversion
+    trigger_adc(config->channel);
+    while (!*adc_regs[config->channel].interrupt_flag);
+    *adc_regs[config->channel].interrupt_flag = true;
+}
+
+void trigger_adc(enum adc_channel channel)
+{
+    *adc_regs[channel].mux_register = ADC_CH_MUXPOS_PIN4_gc;
     ADCA_CH0_CTRL |= ADC_CH_START_bm;
 }
 
@@ -117,15 +152,6 @@ void trigger_adc(void)
 ////////////////////////////////////////////////////////////////
 //                    I N T E R R U P T S                     //
 ////////////////////////////////////////////////////////////////
-
-static void update_expression_value(uint8_t new_value) {
-    static uint8_t old_value = 0;
-    if (new_value != old_value) {
-        old_value = new_value;
-        flash_led(LED_RED);
-        send_control_change(69, new_value);
-    }
-}
 
 ISR(ADCA_CH0_vect)
 {
@@ -153,7 +179,7 @@ ISR(ADCA_CH0_vect)
 
     // Shift to MIDI value and update
     uint8_t midi_value = accumulator >> (ADC_RESOLUTION-7);
-    update_expression_value(midi_value);
+    callbacks[0](midi_value);
 
     // Enable interrupts
     sei();
