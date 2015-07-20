@@ -22,6 +22,7 @@
  * @author Sebastian Neuser
 */
 
+#include "lib/adc.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
 #include "expression.h"
@@ -30,6 +31,12 @@
 ////////////////////////////////////////////////////////////////
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
+
+const struct adc_conversion_config expression_conversion = {
+    .channel    = 0,
+    .input      = 4,
+    .callback   = &update_expression_value,
+};
 
 
 
@@ -44,4 +51,9 @@ void update_expression_value(uint8_t new_value) {
         flash_led(LED_RED);
         send_control_change(69, new_value);
     }
+}
+
+void trigger_expression_conversion(void)
+{
+    trigger_adc(expression_conversion.channel);
 }

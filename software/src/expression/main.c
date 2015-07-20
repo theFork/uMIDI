@@ -28,9 +28,10 @@
 #include "lib/gpio.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
-#include "lib/timer.h"
+#include "lib/state_machine.h"
 
 #include "config.h"
+#include "expression.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -59,13 +60,15 @@ int main( void )
 {
     // Configure clock and timers
     configure_system_clock();
-    configure_task_timer();
 
     // Initialize modules
     initialize_leds_module();
     initialize_gpio_module(&gpio_config);
     initialize_midi_module(&midi_event_handlers);
     initialize_adc_module(&adc_config, &expression_conversion);
+    initialize_state_machine(high_frequency_tasks, high_frequency_tasks_size,
+                             mid_frequency_tasks, mid_frequency_tasks_size,
+                             low_frequency_tasks, low_frequency_tasks_size);
 
     // set watchdog for 128ms
     wdt_enable(WDT_PER_128CLK_gc);
@@ -82,6 +85,7 @@ int main( void )
 
     // Main loop
     while (true) {
+        handle_state_machine();
         wdt_reset();
     }
 

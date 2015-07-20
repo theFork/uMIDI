@@ -31,12 +31,18 @@
 
 
 //---------------- constant declarations ----------------//
-extern const struct adc_conversion_config expression_conversion;
 extern const struct adc_config adc_config;
 
 extern struct gpio_config gpio_config;
 
 extern struct midi_event_handlers midi_event_handlers;
+
+extern state_machine_task_t high_frequency_tasks[];
+extern uint8_t high_frequency_tasks_size;
+extern state_machine_task_t mid_frequency_tasks[];
+extern uint8_t mid_frequency_tasks_size;
+extern state_machine_task_t low_frequency_tasks[];
+extern uint8_t low_frequency_tasks_size;
 
 //---------------- EOF ----------------//
 #endif // _CONFIG_H

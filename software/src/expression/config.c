@@ -26,7 +26,9 @@
 
 #include "lib/adc.h"
 #include "lib/gpio.h"
+#include "lib/leds.h"
 #include "lib/midi.h"
+#include "lib/state_machine.h"
 
 #include "config.h"
 #include "expression.h"
@@ -37,12 +39,6 @@
 ////////////////////////////////////////////////////////////////
 
 //---------------- ADC ----------------//
-const struct adc_conversion_config expression_conversion = {
-    .channel    = 0,
-    .input      = 4,
-    .callback   = &update_expression_value,
-};
-
 const struct adc_config adc_config = {
     .mode       = ADC_MODE_UNSIGNED,
     .prescaler  = ADC_PRESCALER_DIV512_gc,
@@ -89,3 +85,17 @@ struct midi_event_handlers midi_event_handlers = {
     .note_on        = NULL,
     .program_change = NULL
 };
+
+//---------------- State machine ----------------//
+state_machine_task_t high_frequency_tasks[] = {};
+uint8_t high_frequency_tasks_size = sizeof(high_frequency_tasks)/sizeof(state_machine_task_t);
+
+state_machine_task_t mid_frequency_tasks[] = {
+    &trigger_expression_conversion,
+};
+uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(state_machine_task_t);
+
+state_machine_task_t low_frequency_tasks[] = {
+    &update_leds,
+};
+uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(state_machine_task_t);

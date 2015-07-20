@@ -26,7 +26,7 @@
 #include "midi.h"
 #include "pwm.h"
 #include "tests.h"
-#include "timer.h"
+#include "state_machine.h"
 
 #include <avr/wdt.h>
 #include <util/delay.h>

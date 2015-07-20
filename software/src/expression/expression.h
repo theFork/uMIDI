@@ -31,6 +31,7 @@
 
 
 //---------------- constants ----------------//
+extern const struct adc_conversion_config expression_conversion;
 
 
 //---------------- data types ----------------//
@@ -38,6 +39,7 @@
 
 //---------------- functions and procedures ----------------//
 void update_expression_value(uint8_t new_value);
+void trigger_expression_conversion(void);
 
 
 //---------------- EOF ----------------//

@@ -18,14 +18,15 @@
  */
 
 /*
- * Header for the timer module of the uMIDI firmware
+ * Header for the state machine module of the uMIDI firmware
 */
 
-#ifndef _TIMER_H
-#define _TIMER_H
+#ifndef _STATE_MACHINE_H
+#define _STATE_MACHINE_H
 
 
 //---------------- includes ----------------//
+#include <stdint.h>
 
 
 //---------------- constants ----------------//
@@ -36,12 +37,16 @@
 
 
 //---------------- data types ----------------//
+typedef void (*state_machine_task_t)(void);
 
 
 //---------------- functions and procedures ----------------//
-void configure_task_timer(void);
+void handle_state_machine(void);
+void initialize_state_machine(state_machine_task_t high_freq_tasks[], uint8_t high_freq_tasks_size,
+                              state_machine_task_t mid_freq_tasks[], uint8_t mid_freq_tasks_size,
+                              state_machine_task_t low_freq_tasks[], uint8_t low_freq_tasks_size);
 
 
 //---------------- EOF ----------------//
-#endif // _TIMER_H
+#endif // _STATE_MACHINE_H
 
