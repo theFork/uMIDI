@@ -29,6 +29,7 @@
 #include "lib/leds.h"
 #include "lib/midi.h"
 #include "lib/state_machine.h"
+#include "lib/system.h"
 
 #include "config.h"
 #include "expression.h"
@@ -43,17 +44,6 @@
 ////////////////////////////////////////////////////////////////
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
-
-static void configure_system_clock(void)
-{
-    // Enable internal 32 MHz oscillator
-    OSC.CTRL |= OSC_RC32MEN_bm;
-    while(!(OSC.STATUS & OSC_RC32MRDY_bm));
-
-    // Select internal 32 MHz oscillator
-    CCP = CCP_IOREG_gc;
-    CLK.CTRL = CLK_SCLKSEL_RC32M_gc;
-}
 
 // Initialization and endless loop
 int main( void )
