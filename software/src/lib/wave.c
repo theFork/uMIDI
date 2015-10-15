@@ -109,11 +109,12 @@ static uint8_t compute_stairs_wave(void)
 
     // Reinitialize step counter at edge values
     uint8_t *counter = &(state->step_counter);
-    if (*counter == 0 && state->step_direction == DIRECTION_DOWN) {
+    if (*counter == 0) {
         *counter = step_size;
     }
-    if (*counter == settings->max_value && state->step_direction == DIRECTION_UP) {
-        *counter = settings->max_value - step_size;
+    else if (*counter > step_size * STAIR_WAVE_STEPS) {
+        *counter = step_size * STAIR_WAVE_STEPS - step_size;
+        state->step_direction = DIRECTION_DOWN;
     }
 
     // Return quantized counter
