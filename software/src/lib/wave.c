@@ -100,13 +100,7 @@ static uint8_t compute_sine_wave(void)
 
 static uint8_t compute_square_wave(void)
 {
-    // Return quantized counter
-    if (state->step_counter >= settings->max_value/2) {
-        return settings->max_value;
-    }
-    else {
-        return 0;
-    }
+    return (state->step_direction == DIRECTION_UP) ? settings->max_value : 0;
 }
 
 static uint8_t compute_stairs_wave(void)
