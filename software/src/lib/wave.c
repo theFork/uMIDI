@@ -21,6 +21,8 @@
  * Wave computations module.
 */
 
+#include <stdlib.h>
+
 #include "wave.h"
 #include "lookup_tables.h"
 
@@ -72,6 +74,27 @@ static uint8_t compute_ramp(void)
         default:
             return 0;
     }
+}
+
+static uint8_t compute_random_wave(void)
+{
+    static uint8_t current_value = 0;
+
+    // Check if step counter has changed
+    static uint8_t old_step_counter = 0;
+    if (state->step_counter == old_step_counter) {
+        return current_value;
+    }
+    old_step_counter = state->step_counter;
+
+    // Adjust output randomly
+    if (rand() % 2 && current_value <= settings->max_value - RANDOM_WAVE_STEP_SIZE) {
+        current_value += RANDOM_WAVE_STEP_SIZE;
+    }
+    else if (current_value >= RANDOM_WAVE_STEP_SIZE) {
+        current_value -= RANDOM_WAVE_STEP_SIZE;
+    }
+    return current_value;
 }
 
 static uint8_t compute_saw_down_wave(void)
@@ -166,6 +189,9 @@ uint8_t update_wave(struct wave *wave)
 
     // Compute and return wave value
     switch (settings->waveform) {
+        case WAVE_RANDOM:
+            return compute_random_wave();
+
         case WAVE_SAW_DOWN:
             return compute_saw_down_wave();
 

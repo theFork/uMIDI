@@ -30,6 +30,8 @@
 
 
 //---------------- code macros ----------------//
+// step size of the random wave
+#define     RANDOM_WAVE_STEP_SIZE           4
 // the number of levels in the stair wave
 #define     STAIR_WAVE_STEPS                5
 
@@ -49,7 +51,8 @@ enum waveform
     WAVE_SAW_UP,
     WAVE_SAW_DOWN,
     WAVE_SQUARE,
-    WAVE_STAIRS
+    WAVE_STAIRS,
+    WAVE_RANDOM
 };
 
 struct wave_settings
