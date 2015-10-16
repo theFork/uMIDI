@@ -70,10 +70,10 @@ enum midi_state
 };
 
 struct midi_event_handlers {
-    void (*control_change)(uint8_t, uint8_t);
-    void (*note_off)(uint8_t);
-    void (*note_on)(uint8_t);
-    void (*program_change)(uint8_t);
+    void (*control_change)(uint8_t current_controller, uint8_t value);
+    void (*note_off)(uint8_t note);
+    void (*note_on)(uint8_t note);
+    void (*program_change)(uint8_t program);
 };
 
 

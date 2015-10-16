@@ -35,6 +35,63 @@
 static struct wave_settings *settings;
 static struct wave_state    *state;
 
+static uint8_t wave_patterns[16][16] = {
+    { // WAVE_TABLE_01
+        WHAMMY_AMPLITUDE_UNISON,
+        WHAMMY_AMPLITUDE_MINOR_SECOND,
+        WHAMMY_AMPLITUDE_MAJOR_SECOND,
+        WHAMMY_AMPLITUDE_MINOR_THIRD,
+        WHAMMY_AMPLITUDE_MAJOR_THIRD,
+        WHAMMY_AMPLITUDE_PERFECT_FOURTH,
+        WHAMMY_AMPLITUDE_TRITONE,
+        WHAMMY_AMPLITUDE_PERFECT_FIFTH,
+        WHAMMY_AMPLITUDE_MINOR_SIXTH,
+        WHAMMY_AMPLITUDE_MAJOR_SIXTH,
+        WHAMMY_AMPLITUDE_MINOR_SEVENTH,
+        WHAMMY_AMPLITUDE_MAJOR_SEVENTH,
+        WHAMMY_AMPLITUDE_OCTAVE,
+        WHAMMY_AMPLITUDE_OCTAVE,
+        WHAMMY_AMPLITUDE_OCTAVE,
+        WHAMMY_AMPLITUDE_OCTAVE,
+    },
+    { // WAVE_TABLE_02
+        WHAMMY_AMPLITUDE_UNISON,
+        WHAMMY_AMPLITUDE_MINOR_THIRD,
+        WHAMMY_AMPLITUDE_PERFECT_FOURTH,
+        WHAMMY_AMPLITUDE_TRITONE,
+        WHAMMY_AMPLITUDE_PERFECT_FIFTH,
+        WHAMMY_AMPLITUDE_MINOR_SEVENTH,
+        WHAMMY_AMPLITUDE_OCTAVE,
+        WHAMMY_AMPLITUDE_MINOR_SEVENTH,
+        WHAMMY_AMPLITUDE_OCTAVE,
+        WHAMMY_AMPLITUDE_MINOR_SEVENTH,
+        WHAMMY_AMPLITUDE_PERFECT_FIFTH,
+        WHAMMY_AMPLITUDE_TRITONE,
+        WHAMMY_AMPLITUDE_PERFECT_FOURTH,
+        WHAMMY_AMPLITUDE_MINOR_THIRD,
+        WHAMMY_AMPLITUDE_UNISON,
+        WHAMMY_AMPLITUDE_MINOR_THIRD,
+    },
+    { // WAVE_TABLE_02
+        WHAMMY_AMPLITUDE_UNISON,
+        WHAMMY_AMPLITUDE_1ST_MINOR_THIRD,
+        WHAMMY_AMPLITUDE_1ST_PERFECT_FIFTH,
+        WHAMMY_AMPLITUDE_1ST_MINOR_SEVENTH,
+        WHAMMY_AMPLITUDE_1ST_OCTAVE,
+        WHAMMY_AMPLITUDE_2ND_MINOR_THIRD,
+        WHAMMY_AMPLITUDE_2ND_PERFECT_FIFTH,
+        WHAMMY_AMPLITUDE_2ND_MINOR_SEVENTH,
+        WHAMMY_AMPLITUDE_2ND_OCTAVE,
+        WHAMMY_AMPLITUDE_2ND_MINOR_SEVENTH,
+        WHAMMY_AMPLITUDE_2ND_PERFECT_FIFTH,
+        WHAMMY_AMPLITUDE_2ND_MINOR_THIRD,
+        WHAMMY_AMPLITUDE_1ST_OCTAVE,
+        WHAMMY_AMPLITUDE_1ST_MINOR_SEVENTH,
+        WHAMMY_AMPLITUDE_1ST_PERFECT_FIFTH,
+        WHAMMY_AMPLITUDE_1ST_MINOR_THIRD,
+    },
+};
+
 
 
 ////////////////////////////////////////////////////////////////
@@ -150,6 +207,16 @@ static uint8_t compute_triangle_wave(void)
     return state->step_counter;
 }
 
+static uint8_t compute_wave_pattern(uint8_t pattern_number)
+{
+    uint8_t quantization = MIDI_MAX_VALUE / 16;
+    uint8_t sample_index = compute_ramp() / quantization;
+    if (sample_index >= 16) {
+        state->step_counter = 0;
+    }
+    return wave_patterns[pattern_number][sample_index];
+}
+
 void initialize_wave(struct wave* wave, enum waveform waveform, uint8_t speed, uint8_t amplitude, uint8_t offset)
 {
     wave->settings.amplitude = amplitude;
@@ -192,6 +259,9 @@ uint8_t update_wave(struct wave *wave)
     // Compute and return wave value
     uint16_t output;
     switch (settings->waveform) {
+        case WAVE_OFF:
+            return 0;
+
         case WAVE_RANDOM:
             output = compute_random_wave();
             break;
@@ -221,7 +291,7 @@ uint8_t update_wave(struct wave *wave)
             break;
 
         default:
-            break;
+            output = compute_wave_pattern(settings->waveform - WAVE_PATTERN_01);
     }
 
     // Amplify and add offset
