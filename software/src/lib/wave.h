@@ -32,6 +32,7 @@
 //---------------- code macros ----------------//
 // step size of the random wave
 #define     RANDOM_WAVE_STEP_SIZE           4
+
 // the number of levels in the stair wave
 #define     STAIR_WAVE_STEPS                5
 
@@ -59,7 +60,8 @@ struct wave_settings
 {
     enum waveform   waveform;
     uint8_t         speed;
-    uint8_t         max_value;
+    uint8_t         amplitude;
+    uint8_t         offset;
 };
 
 struct wave_state
@@ -78,7 +80,7 @@ struct wave
 
 
 //---------------- functions and procedures ----------------//
-void initialize_wave(struct wave*, uint8_t, enum waveform, uint8_t);
+void initialize_wave(struct wave* wave, enum waveform waveform, uint8_t speed, uint8_t amplitude, uint8_t offset);
 void set_speed(struct wave*, uint8_t);
 void set_waveform(struct wave*, enum waveform);
 uint8_t update_wave(struct wave*);

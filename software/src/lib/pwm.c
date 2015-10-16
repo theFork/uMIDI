@@ -64,7 +64,7 @@ void initialize_pwm_module(void)
     // Set initial compare value to TOP
     TCC1.CCA = TCC1.PER;
 
-    initialize_wave(&pwm_wave, MIDI_MAX_VALUE, WAVE_SINE, 110);
+    initialize_wave(&pwm_wave, WAVE_SINE, 110, MIDI_MAX_VALUE, 0);
 }
 
 void update_pwm(void) {

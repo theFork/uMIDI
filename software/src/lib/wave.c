@@ -23,6 +23,7 @@
 
 #include <stdlib.h>
 
+#include "midi.h"
 #include "wave.h"
 #include "lookup_tables.h"
 
@@ -52,7 +53,7 @@ static void advance_step_counter(void)
 
         case DIRECTION_UP:
             // Increment counter; switch direction at max value
-            if (++state->step_counter >= settings->max_value) {
+            if (++state->step_counter >= MIDI_MAX_VALUE) {
                 state->step_direction = DIRECTION_DOWN;
             }
             break;
@@ -66,7 +67,7 @@ static uint8_t compute_ramp(void)
 {
     switch (state->step_direction) {
         case DIRECTION_DOWN:
-            return settings->max_value - state->step_counter / 2;
+            return MIDI_MAX_VALUE - state->step_counter / 2;
 
         case DIRECTION_UP:
             return state->step_counter / 2;
@@ -88,7 +89,7 @@ static uint8_t compute_random_wave(void)
     old_step_counter = state->step_counter;
 
     // Adjust output randomly
-    if (rand() % 2 && current_value <= settings->max_value - RANDOM_WAVE_STEP_SIZE) {
+    if (rand() % 2 && current_value <= MIDI_MAX_VALUE - RANDOM_WAVE_STEP_SIZE) {
         current_value += RANDOM_WAVE_STEP_SIZE;
     }
     else if (current_value >= RANDOM_WAVE_STEP_SIZE) {
@@ -99,7 +100,7 @@ static uint8_t compute_random_wave(void)
 
 static uint8_t compute_saw_down_wave(void)
 {
-    return settings->max_value - compute_ramp();
+    return MIDI_MAX_VALUE - compute_ramp();
 }
 
 static uint8_t compute_saw_up_wave(void)
@@ -111,7 +112,7 @@ static uint8_t compute_sine_wave(void)
 {
     switch (state->step_direction) {
         case DIRECTION_DOWN:
-            return settings->max_value - lookup_sine(state->step_counter);
+            return MIDI_MAX_VALUE - lookup_sine(state->step_counter);
 
         case DIRECTION_UP:
             return lookup_sine(state->step_counter);
@@ -123,12 +124,12 @@ static uint8_t compute_sine_wave(void)
 
 static uint8_t compute_square_wave(void)
 {
-    return (state->step_direction == DIRECTION_UP) ? settings->max_value : 0;
+    return (state->step_direction == DIRECTION_UP) ? MIDI_MAX_VALUE : 0;
 }
 
 static uint8_t compute_stairs_wave(void)
 {
-    uint8_t step_size = settings->max_value / STAIR_WAVE_STEPS;
+    uint8_t step_size = MIDI_MAX_VALUE / STAIR_WAVE_STEPS;
 
     // Reinitialize step counter at edge values
     uint8_t *counter = &(state->step_counter);
@@ -149,9 +150,10 @@ static uint8_t compute_triangle_wave(void)
     return state->step_counter;
 }
 
-void initialize_wave(struct wave *wave, uint8_t max_value, enum waveform waveform, uint8_t speed)
+void initialize_wave(struct wave* wave, enum waveform waveform, uint8_t speed, uint8_t amplitude, uint8_t offset)
 {
-    wave->settings.max_value = max_value;
+    wave->settings.amplitude = amplitude;
+    wave->settings.offset = offset;
     set_speed(wave, speed);
     set_waveform(wave, waveform);
 }
@@ -159,7 +161,7 @@ void initialize_wave(struct wave *wave, uint8_t max_value, enum waveform wavefor
 void set_speed(struct wave *wave, uint8_t speed)
 {
     wave->settings.speed = speed;
-    wave->state.speed_prescaler = (wave->settings.max_value - speed) / 4;
+    wave->state.speed_prescaler = (MIDI_MAX_VALUE - speed) / 4;
 }
 
 void set_waveform(struct wave *wave, enum waveform waveform)
@@ -188,30 +190,43 @@ uint8_t update_wave(struct wave *wave)
     }
 
     // Compute and return wave value
+    uint16_t output;
     switch (settings->waveform) {
         case WAVE_RANDOM:
-            return compute_random_wave();
+            output = compute_random_wave();
+            break;
 
         case WAVE_SAW_DOWN:
-            return compute_saw_down_wave();
+            output = compute_saw_down_wave();
+            break;
 
         case WAVE_SAW_UP:
-            return compute_saw_up_wave();
+            output = compute_saw_up_wave();
+            break;
 
         case WAVE_SINE:
-            return compute_sine_wave();
+            output = compute_sine_wave();
+            break;
 
         case WAVE_SQUARE:
-            return compute_square_wave();
+            output = compute_square_wave();
+            break;
 
         case WAVE_STAIRS:
-            return compute_stairs_wave();
+            output = compute_stairs_wave();
+            break;
 
         case WAVE_TRIANGLE:
-            return compute_triangle_wave();
+            output = compute_triangle_wave();
+            break;
 
         default:
             break;
     }
-    return 0;
+
+    // Amplify and add offset
+    output *= settings->amplitude;
+    output /= MIDI_MAX_VALUE;
+    output += settings->offset;
+    return output;
 }
