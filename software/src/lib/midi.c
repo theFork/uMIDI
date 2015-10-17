@@ -21,11 +21,12 @@
  * MIDI I/O implementation and ISR.
  */
 
-#include "midi.h"
-#include "leds.h"
-
+#include <stddef.h>
 #include <avr/interrupt.h>
 #include <avr/io.h>
+
+#include "midi.h"
+#include "leds.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -147,19 +148,25 @@ ISR(USARTE0_RXC_vect)
     // MIDI data byte 0
     ////
     case NOTE_OFF:
-        event_handlers->note_off(data);
+        if (event_handlers->note_off != NULL) {
+            event_handlers->note_off(data);
+        }
         midi_state = IDLE;
         break;
 
 
     case NOTE_ON:
-        event_handlers->note_on(data);
+        if (event_handlers->note_on != NULL) {
+            event_handlers->note_on(data);
+        }
         midi_state = IDLE;
         break;
 
 
     case PROGRAM_CHANGE:
-        event_handlers->program_change(data);
+        if (event_handlers->program_change != NULL) {
+            event_handlers->program_change(data);
+        }
         midi_state = IDLE;
         break;
 
@@ -171,7 +178,9 @@ ISR(USARTE0_RXC_vect)
 
 
     case CONTROL_CHANGE_VALUE:
-        event_handlers->control_change(current_controller, data);
+        if (event_handlers->control_change != NULL) {
+            event_handlers->control_change(current_controller, data);
+        }
         midi_state = IDLE;
         break;
 
