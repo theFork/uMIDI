@@ -35,6 +35,8 @@
 enum gpio_type
 {
     GPIO_INPUT,
+    GPIO_INPUT_PULLDOWN,
+    GPIO_INPUT_PULLUP,
     GPIO_OUTPUT,
     GPIO_UNUSED
 };
