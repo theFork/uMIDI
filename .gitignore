@@ -1,7 +1,10 @@
-# files generated during build
+# Files generated during gcc build
 *.hex
 *.o
 *.s
 
-# pcb plots
+# Doxygen output
+software/src/doc/html
+
+# PCB plots
 hardware/plots
