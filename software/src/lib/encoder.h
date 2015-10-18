@@ -1,3 +1,6 @@
+/// \file
+/// \brief  Interface for rotary encoders
+
 /*
  * Copyright 2015 Sebastian Neuser
  *
@@ -41,20 +44,21 @@ enum encoder_action
     ENCODER_ACTION_CCW,                 ///< Encoder was rotated counter-clockwise
 };
 
-/// \brief      AVR GPIO pin configuration of an encoder
-/// \details    Contains pointers to GPIO pin configurations for A, B and the momentary switch
+/// \brief      Configuration of an encoder
 struct encoder_config
 {
     struct gpio_pin*    inputA;         ///< Input A
     struct gpio_pin*    inputB;         ///< Input B
     struct gpio_pin*    inputSwitch;    ///< Push button
 
-    void (*cw_callback)(void);          ///< 
-    void (*ccw_callback)(void);         ///< 
-    void (*push_callback)(void);        ///< 
+    void (*cw_callback  )(void);        ///< Callback for clockwise rotation
+    void (*ccw_callback )(void);        ///< Callback for counter-clockwise rotation
+    void (*push_callback)(void);        ///< Callback for the push button
 };
 
 /// \brief      Internal state of an encoder
+/// \details    The state is used to determine direction of the rotation.
+/// \see        poll_encoder
 struct encoder_state
 {
     bool                inputA;         ///< Input A state
@@ -65,13 +69,17 @@ struct encoder_state
 
 //---------------- functions and procedures ----------------//
 
-/// \brief      TODO
-/// \details    TODO
+/// \brief      Initializes the encoder
+/// \details    Saves the GPIO pins and registers the callbacks.
+/// \param      config
+///                 the encoder configuration
+/// \see        encoder_config
 void initialize_encoder_module(struct encoder_config* config);
 
-/// \brief      TODO
-/// \details    TODO
-void poll_encoder(void);
+/// \brief      Polls the encoder
+/// \details    Checks if the encoder was rotated or pushed and updates the saved state.
+/// \return     the detected action or ENCODER_ACTION_NONE
+enum encoder_action poll_encoder(void);
 
 
 //---------------- EOF ----------------//
