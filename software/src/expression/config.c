@@ -25,10 +25,10 @@
 #include <stddef.h>
 
 #include "lib/adc.h"
+#include "lib/background_tasks.h"
 #include "lib/gpio.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
-#include "lib/state_machine.h"
 
 #include "config.h"
 #include "expression.h"
@@ -86,16 +86,16 @@ struct midi_event_handlers midi_event_handlers = {
     .program_change = NULL
 };
 
-//---------------- State machine ----------------//
-state_machine_task_t high_frequency_tasks[] = {};
-uint8_t high_frequency_tasks_size = sizeof(high_frequency_tasks)/sizeof(state_machine_task_t);
+//---------------- Background tasks ----------------//
+background_task_t high_frequency_tasks[] = {};
+uint8_t high_frequency_tasks_size = sizeof(high_frequency_tasks)/sizeof(background_task_t);
 
-state_machine_task_t mid_frequency_tasks[] = {
+background_task_t mid_frequency_tasks[] = {
     &trigger_expression_conversion,
 };
-uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(state_machine_task_t);
+uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background_task_t);
 
-state_machine_task_t low_frequency_tasks[] = {
+background_task_t low_frequency_tasks[] = {
     &update_leds,
 };
-uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(state_machine_task_t);
+uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);

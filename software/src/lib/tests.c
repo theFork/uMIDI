@@ -21,15 +21,15 @@
  * Test suite for the uMIDI firmware.
  */
 
+#include <avr/wdt.h>
+#include <util/delay.h>
+
+#include "background_tasks.h"
 #include "gpio.h"
 #include "leds.h"
 #include "midi.h"
 #include "pwm.h"
 #include "tests.h"
-#include "state_machine.h"
-
-#include <avr/wdt.h>
-#include <util/delay.h>
 
 
 ////////////////////////////////////////////////////////////////

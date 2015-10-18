@@ -25,10 +25,10 @@
 #include <avr/wdt.h>
 
 #include "lib/adc.h"
+#include "lib/background_tasks.h"
 #include "lib/gpio.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
-#include "lib/state_machine.h"
 #include "lib/system.h"
 
 #include "config.h"
@@ -56,9 +56,9 @@ int main( void )
     initialize_gpio_module(&gpio_config);
     initialize_midi_module(&midi_event_handlers);
     initialize_adc_module(&adc_config, &expression_conversion);
-    initialize_state_machine(high_frequency_tasks, high_frequency_tasks_size,
-                             mid_frequency_tasks, mid_frequency_tasks_size,
-                             low_frequency_tasks, low_frequency_tasks_size);
+    initialize_background_tasks(high_frequency_tasks, high_frequency_tasks_size,
+                                mid_frequency_tasks, mid_frequency_tasks_size,
+                                low_frequency_tasks, low_frequency_tasks_size);
 
     // set watchdog for 128ms
     wdt_enable(WDT_PER_128CLK_gc);
@@ -75,7 +75,7 @@ int main( void )
 
     // Main loop
     while (true) {
-        handle_state_machine();
+        process_background_tasks();
         wdt_reset();
     }
 
