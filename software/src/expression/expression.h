@@ -38,7 +38,7 @@ extern const struct adc_conversion_config expression_conversion;
 
 
 //---------------- functions and procedures ----------------//
-void update_expression_value(uint8_t new_value);
+void update_expression_value(uint16_t new_value);
 void trigger_expression_conversion(void);
 
 

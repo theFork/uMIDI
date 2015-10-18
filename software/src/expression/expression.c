@@ -33,9 +33,9 @@
 ////////////////////////////////////////////////////////////////
 
 const struct adc_conversion_config expression_conversion = {
-    .channel    = 0,
-    .input      = 4,
-    .callback   = &update_expression_value,
+    .channel            = ADC_CHANNEL_0,
+    .input              = ADC_INPUT_4,
+    .callback_unsigned  = &update_expression_value,
 };
 
 
@@ -44,7 +44,7 @@ const struct adc_conversion_config expression_conversion = {
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void update_expression_value(uint8_t new_value) {
+void update_expression_value(uint16_t new_value) {
     static uint8_t old_value = 0;
     if (new_value != old_value) {
         old_value = new_value;
