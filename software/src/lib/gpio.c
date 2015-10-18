@@ -1,3 +1,6 @@
+/// \file
+/// \brief  GPIO configuration and service functions
+
 /*
  * Copyright 2012-2015 Sebastian Neuser
  *
@@ -17,10 +20,6 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * Implementation of the GPIO module.
-*/
-
 #include "gpio.h"
 
 #include <stdbool.h>
@@ -36,9 +35,8 @@ void initialize_gpio_module(struct gpio_config* gpio) {
     // Iterate pins in GPIO config
     struct gpio_pin *pin_pointer = (struct gpio_pin *) &gpio->header1.pin2;
     register8_t* pin_ctrl_register;
-    uint8_t i;
-    for (i=0; i<sizeof(struct gpio_config)/sizeof(struct gpio_pin); i++) {
-        // Configure pin
+    for (uint8_t i=0; i<sizeof(struct gpio_config)/sizeof(struct gpio_pin); ++i) {
+        // Configure pin based on the provided type
         switch (pin_pointer->type) {
         case GPIO_INPUT:
             pin_pointer->port->DIRCLR = _BV(pin_pointer->bit);
@@ -66,6 +64,8 @@ void initialize_gpio_module(struct gpio_config* gpio) {
             pin_pointer->port->OUT = false;
             break;
         }
+
+        // Increment pin pointer
         ++pin_pointer;
     }
 }
