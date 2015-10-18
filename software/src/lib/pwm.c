@@ -1,3 +1,6 @@
+/// \file
+/// \brief  PWM configuration and service functions
+
 /*
  * Copyright 2012-2015 Sebastian Neuser
  *
@@ -17,10 +20,6 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * Implementation of the PWM module.
-*/
-
 #include "gpio.h"
 #include "lookup_tables.h"
 #include "midi.h"
@@ -37,7 +36,8 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-struct wave pwm_wave;
+/// \brief      Internal state of the PWM
+static struct wave pwm_wave;
 
 
 
@@ -55,7 +55,7 @@ void initialize_pwm_module(void)
     // Do not prescale the system clock (=> 32 MHz)
     TCC1.CTRLA = TC_CLKSEL_DIV1_gc;
 
-    // Select single slope PWM mode and enable OC1A output
+    // Select dual slope PWM mode and enable OC1A output
     TCC1.CTRLB = TC_WGMODE_DSBOTH_gc | TC1_CCAEN_bm;
 
     // Set TOP value

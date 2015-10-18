@@ -1,3 +1,6 @@
+/// \file
+/// \brief  PWM configuration and service functions
+
 /*
  * Copyright 2012-2015 Sebastian Neuser
  *
@@ -17,10 +20,6 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * Header of the PWM module.
-*/
-
 #ifndef _PWM_H
 #define _PWM_H
 
@@ -33,8 +32,28 @@
 
 
 //---------------- functions and procedures ----------------//
+
+/// \brief      Updates the PWM duty cycle
+/// \details    Looks up the exponential value corresponding to the provided duty cycle and writes
+///             the PWM counter compare register. This procedure can be used to manually control
+///             the modulation.
+/// \param      duty
+///                 the desired duty cycle
+/// \see        exp_table
 void apply_duty_cycle(uint8_t duty);
+
+/// \brief      Initializes the PWM
+/// \details    CPU timer 1 is clocked with the system clock (32 MHz) and the compare output A
+///             is set up to output a dual slope PWM. Additionally, a sine wave is set up, so that
+///             update_pwm can be used to generate a periodic output signal.
+/// \see        update_pwm
+/// \see        wave
 void initialize_pwm_module(void);
+
+/// \brief      Updates the pwm duty cycle
+/// \details    To enable wave output, this procedure must be called cyclically as a state machine
+///             task.
+/// \see        initialize_state_machine
 void update_pwm(void);
 
 
