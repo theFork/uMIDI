@@ -1,3 +1,6 @@
+/// \file
+/// \brief  System configuration procedures
+
 /*
  * Copyright 2015 Sebastian Neuser
  *
@@ -17,11 +20,6 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * Implementation of the system module.
- * @author Sebastian Neuser
-*/
-
 #ifndef _SYSTEM_H
 #define _SYSTEM_H
 
@@ -36,6 +34,9 @@
 
 
 //---------------- functions and procedures ----------------//
+
+/// \brief      Configures the system clock
+/// \details    Activates and selects the internal 32 MHz RC oscillator as system clock source.
 void configure_system_clock(void);
 
 
