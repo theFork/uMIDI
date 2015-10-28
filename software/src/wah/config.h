@@ -38,7 +38,7 @@
 //---------------- constant declarations ----------------//
 extern struct gpio_config gpio_config;
 
-extern struct midi_event_handlers midi_event_handlers;
+extern struct midi_config midi_config;
 
 extern background_task_t high_frequency_tasks[];
 extern uint8_t high_frequency_tasks_size;

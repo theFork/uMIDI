@@ -79,11 +79,14 @@ struct gpio_config gpio_config = {
 };
 
 //---------------- MIDI ----------------//
-struct midi_event_handlers midi_event_handlers = {
-    .control_change = NULL,
-    .note_off       = NULL,
-    .note_on        = NULL,
-    .program_change = NULL
+struct midi_config midi_config = {
+    .event_handlers = {
+        .control_change = NULL,
+        .note_off       = NULL,
+        .note_on        = NULL,
+        .program_change = NULL
+    },
+    .tx_channel = 1,
 };
 
 //---------------- Background tasks ----------------//

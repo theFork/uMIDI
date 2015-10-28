@@ -54,7 +54,7 @@ int main( void )
     // Initialize modules
     initialize_leds_module();
     initialize_gpio_module(&gpio_config);
-    initialize_midi_module(&midi_event_handlers);
+    initialize_midi_module(&midi_config);
     initialize_adc_module(&adc_config, &expression_conversion);
     initialize_background_tasks(high_frequency_tasks, high_frequency_tasks_size,
                                 mid_frequency_tasks, mid_frequency_tasks_size,

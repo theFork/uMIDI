@@ -1,3 +1,6 @@
+///\file
+///\brief   MIDI message transceiver
+
 /*
  * Copyright 2012-2015 Sebastian Neuser
  *
@@ -17,10 +20,6 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * MIDI I/O implementation and ISR.
- */
-
 #include <stddef.h>
 #include <avr/interrupt.h>
 #include <avr/io.h>
@@ -33,7 +32,15 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-static enum midi_state midi_state = IDLE;
+/// \brief      Current state of the MIDI state machine
+static enum midi_state midi_state = MIDI_STATE_IDLE;
+
+/// \brief      The MIDI transmit channel
+/// \see        initialize_midi_module
+static uint8_t tx_channel = 1;
+
+/// \brief      The MIDI event handlers
+/// \see        initialize_midi_module
 static struct midi_event_handlers* event_handlers;
 
 
@@ -42,7 +49,7 @@ static struct midi_event_handlers* event_handlers;
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void initialize_midi_module(const struct midi_event_handlers* handlers)
+void initialize_midi_module(const struct midi_config* config)
 {
     // Configure TXD0
     PORTE.DIR |= PIN3_bm;
@@ -59,47 +66,48 @@ void initialize_midi_module(const struct midi_event_handlers* handlers)
     MIDI_UART.CTRLB = USART_RXEN_bm | USART_TXEN_bm;
 
     // Save MIDI event handlers
-    event_handlers = (struct midi_event_handlers*) handlers;
+    tx_channel = config->tx_channel;
+    event_handlers = (struct midi_event_handlers*) &config->event_handlers;
 }
 
 void send_control_change(uint8_t controller, uint8_t value) {
-    // send control change status byte
-    uart_write((uint8_t) MIDI_CONTROL_CHANGE | MIDI_TX_CHANNEL);
+    // Send control change status byte
+    uart_write((uint8_t) MIDI_MSG_TYPE_CONTROL_CHANGE | tx_channel);
 
-    // send controller number
+    // Send controller number
     uart_write(controller);
 
-    // send value
+    // Send value
     uart_write(value);
 }
 
 void send_note_off(uint8_t note) {
-    // send note off status byte
-    uart_write((uint8_t) MIDI_NOTE_OFF | MIDI_TX_CHANNEL);
+    // Send note off status byte
+    uart_write((uint8_t) MIDI_MSG_TYPE_NOTE_OFF | tx_channel);
 
-    // send note number
+    // Send note number
     uart_write(note);
 
-    // send maximum velocity
+    // Send maximum velocity
     uart_write(MIDI_MAX_VALUE);
 }
 
 void send_note_on(uint8_t note) {
-    // send note on status byte
-    uart_write((uint8_t) MIDI_NOTE_ON | MIDI_TX_CHANNEL);
+    // Send note on status byte
+    uart_write((uint8_t) MIDI_MSG_TYPE_NOTE_ON | tx_channel);
 
-    // send note number
+    // Send note number
     uart_write(note);
 
-    // send maximum velocity
+    // Send maximum velocity
     uart_write(MIDI_MAX_VALUE);
 }
 
 void send_program_change(uint8_t pnum) {
-    // send program change status byte
-    uart_write((uint8_t) MIDI_PROGRAM_CHANGE | MIDI_TX_CHANNEL);
+    // Send program change status byte
+    uart_write((uint8_t) MIDI_MSG_TYPE_PROGRAM_CHANGE | tx_channel);
 
-    // send program number
+    // Send program number
     uart_write(pnum);
 }
 
@@ -109,21 +117,34 @@ void send_program_change(uint8_t pnum) {
 //                    I N T E R R U P T S                     //
 ////////////////////////////////////////////////////////////////
 
+/// \brief      Updates the MIDI state machine according to the supplied data byte
+/// \param      data
+///                 the MIDI data byte to be parsed
 static void handle_status_byte(uint8_t data) {
-    if ( (data & MIDI_COMMAND_MASK) == MIDI_NOTE_OFF ) {
-        midi_state = NOTE_OFF;
-    }
-    else if ( (data & MIDI_COMMAND_MASK) == MIDI_NOTE_ON ) {
-        midi_state = NOTE_ON;
-    }
-    else if ( (data & MIDI_COMMAND_MASK) == MIDI_CONTROL_CHANGE ) {
-        midi_state = CONTROL_CHANGE_NUMBER;
-    }
-    else if ( (data & MIDI_COMMAND_MASK) == MIDI_PROGRAM_CHANGE ) {
-        midi_state = PROGRAM_CHANGE;
+    switch (data & MIDI_COMMAND_MASK) {
+    case MIDI_MSG_TYPE_NOTE_OFF:
+        midi_state = MIDI_STATE_NOTE_OFF;
+        break;
+
+    case MIDI_MSG_TYPE_NOTE_ON:
+        midi_state = MIDI_STATE_NOTE_ON;
+        break;
+
+    case MIDI_MSG_TYPE_CONTROL_CHANGE:
+        midi_state = MIDI_STATE_CONTROL_CHANGE_NUMBER;
+        break;
+
+    case MIDI_MSG_TYPE_PROGRAM_CHANGE:
+        midi_state = MIDI_STATE_PROGRAM_CHANGE;
+        break;
+
+    default:
+        break;
     }
 }
 
+/// \brief      Main interrupt service routine for incoming MIDI messages
+/// \details    TODO
 ISR(USARTE0_RXC_vect)
 {
     // Disable interrupts
@@ -139,7 +160,7 @@ ISR(USARTE0_RXC_vect)
     ////
     // MIDI status byte
     ////
-    case IDLE:
+    case MIDI_STATE_IDLE:
         handle_status_byte(data);
         break;
 
@@ -147,57 +168,55 @@ ISR(USARTE0_RXC_vect)
     ////
     // MIDI data byte 0
     ////
-    case NOTE_OFF:
+    case MIDI_STATE_NOTE_OFF:
         if (event_handlers->note_off != NULL) {
             event_handlers->note_off(data);
         }
-        midi_state = IDLE;
+        midi_state = MIDI_STATE_IDLE;
         break;
 
 
-    case NOTE_ON:
+    case MIDI_STATE_NOTE_ON:
         if (event_handlers->note_on != NULL) {
             event_handlers->note_on(data);
         }
-        midi_state = IDLE;
+        midi_state = MIDI_STATE_IDLE;
         break;
 
 
-    case PROGRAM_CHANGE:
+    case MIDI_STATE_PROGRAM_CHANGE:
         if (event_handlers->program_change != NULL) {
             event_handlers->program_change(data);
         }
-        midi_state = IDLE;
+        midi_state = MIDI_STATE_IDLE;
         break;
 
 
-    case CONTROL_CHANGE_NUMBER:
+    case MIDI_STATE_CONTROL_CHANGE_NUMBER:
         current_controller = data;
-        midi_state = CONTROL_CHANGE_VALUE;
-        break;
-
-
-    case CONTROL_CHANGE_VALUE:
-        if (event_handlers->control_change != NULL) {
-            event_handlers->control_change(current_controller, data);
-        }
-        midi_state = IDLE;
+        midi_state = MIDI_STATE_CONTROL_CHANGE_VALUE;
         break;
 
 
     ////
     // MIDI data byte 1
     ////
+    case MIDI_STATE_CONTROL_CHANGE_VALUE:
+        if (event_handlers->control_change != NULL) {
+            event_handlers->control_change(current_controller, data);
+        }
+        midi_state = MIDI_STATE_IDLE;
+        break;
 
 
     ////
-    // unimplemented / illegal
+    // Unimplemented / illegal
     ////
     default:
-        midi_state = IDLE;
+        midi_state = MIDI_STATE_IDLE;
         break;
     }
 
-    // enable interrupts
+    // Enable interrupts
     sei();
 }
