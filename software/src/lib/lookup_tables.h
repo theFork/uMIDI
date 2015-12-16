@@ -37,6 +37,9 @@
 /// \brief  Lookup table for an exponential function
 extern const uint16_t exp_table[];
 
+/// \brief  Lookup table for the natural logaritm function
+extern const uint16_t log_table[];
+
 /// \brief  Lookup table for the sine function
 extern const uint16_t sine_table[];
 
@@ -54,6 +57,16 @@ extern const uint8_t  lookup_table_resolution;
 inline uint16_t lookup_exp(uint8_t x)
 {
     return exp_table[x];
+}
+
+/// \brief      Looks up the natural log value in the corresponding table
+/// \details    This inline function does *not* check array bounds!
+/// \param      x
+///                 index of the value in the table
+/// \return     the function value
+inline uint16_t lookup_log(uint8_t x)
+{
+    return log_table[x];
 }
 
 /// \brief      Looks up a sine function value in the corresponding table

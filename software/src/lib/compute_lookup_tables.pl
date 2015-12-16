@@ -83,6 +83,25 @@ for (my $i = 0; $i <= $xmax; $i += 1) {
 }
 print("};\n");
 
+# Print log lookup table
+print("\n// Log lookup table\n");
+print("const uint16_t log_table[] = {\n");
+for (my $i = 0; $i <= $xmax; $i += 1) {
+    # Print indent on new lines
+    if ($i % 16 == 0) {
+        print("   ");
+    }
+
+    my $scaler = 8;
+    printf(" %5d,", int(log(($i/$scaler+1))*($ymax/log(($xmax)/$scaler))));
+
+    # Begin a new line every 16 values
+    if ($i > 0 and $i % 16 == 15) {
+        print("\n");
+    }
+}
+print("};\n");
+
 # Print sine lookup table
 print("\n// Sine lookup table\n");
 print("const uint16_t sine_table[] = {\n");

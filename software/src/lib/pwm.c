@@ -42,7 +42,7 @@
 
 void apply_duty_cycle(uint8_t duty)
 {
-    TCC1.CCABUF = lookup_exp(duty);
+    TCC1.CCABUF = lookup_log(duty);
 }
 
 void initialize_pwm_module(void)
