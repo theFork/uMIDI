@@ -1,8 +1,5 @@
-/// \file
-/// \brief  PWM configuration and service functions
-
 /*
- * Copyright 2012-2015 Sebastian Neuser
+ * Copyright 2015 Sebastian Neuser
  *
  * This file is part of the uMIDI firmware.
  *
@@ -20,19 +17,27 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "gpio.h"
-#include "lookup_tables.h"
-#include "pwm.h"
+/*
+ * Implementation of the expression module.
+ * @author Sebastian Neuser
+*/
 
-#include <stdbool.h>
-#include <stdint.h>
-#include <avr/io.h>
-#include <avr/interrupt.h>
+#include "lib/adc.h"
+#include "lib/gpio.h"
+#include "lib/leds.h"
+#include "lib/midi.h"
+#include "lib/pwm.h"
+#include "lib/wave.h"
+
+#include "config.h"
+#include "wah.h"
 
 
 ////////////////////////////////////////////////////////////////
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
+
+struct wave pwm_wave;
 
 
 
@@ -40,22 +45,34 @@
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void apply_duty_cycle(uint8_t duty)
+void initialize_wah_module(void)
 {
-    TCC1.CCABUF = lookup_exp(duty);
+    initialize_pwm_module();
+    const uint8_t speed = 120;
+    const uint8_t amplitude = MIDI_MAX_VALUE;
+    initialize_wave(&pwm_wave, WAVE_SINE, speed, amplitude, 0);
 }
 
-void initialize_pwm_module(void)
+void enable_wah(bool enable)
 {
-    // Do not prescale the system clock (=> 32 MHz)
-    TCC1.CTRLA = TC_CLKSEL_DIV1_gc;
+    gpio_set(gpio_config.header3.pin4, enable);
+}
 
-    // Select dual slope PWM mode and enable OC1A output
-    TCC1.CTRLB = TC_WGMODE_DSBOTH_gc | TC1_CCAEN_bm;
+void toggle_wah(void)
+{
+    static uint8_t prescaler = 0;
+    ++prescaler;
+    if (prescaler >= 80)  {
+        prescaler = 0;
+        static bool state = false;
+        state = !state;
+        enable_wah(state);
+    }
+}
 
-    // Set TOP value
-    TCC1.PER = (1<<lookup_table_resolution) - 1;
-
-    // Set initial compare value to TOP
-    TCC1.CCA = TCC1.PER;
+void update_wah_pwm(void)
+{
+    if (pwm_wave.settings.waveform != WAVE_OFF) {
+        apply_duty_cycle(update_wave(&pwm_wave));
+    }
 }

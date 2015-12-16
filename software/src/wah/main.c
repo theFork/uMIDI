@@ -1,6 +1,3 @@
-/// \file
-/// \brief  PWM configuration and service functions
-
 /*
  * Copyright 2012-2015 Sebastian Neuser
  *
@@ -20,14 +17,21 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "gpio.h"
-#include "lookup_tables.h"
-#include "pwm.h"
+/*
+ * Program entry point and main loop of the uMIDI firmware.
+ */
 
-#include <stdbool.h>
-#include <stdint.h>
-#include <avr/io.h>
 #include <avr/interrupt.h>
+#include <avr/wdt.h>
+
+#include "lib/background_tasks.h"
+#include "lib/gpio.h"
+#include "lib/leds.h"
+#include "lib/midi.h"
+#include "lib/system.h"
+
+#include "config.h"
+#include "wah.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -40,22 +44,39 @@
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void apply_duty_cycle(uint8_t duty)
+// Initialization and endless loop
+int main( void )
 {
-    TCC1.CCABUF = lookup_exp(duty);
-}
+    // Configure clock and timers
+    configure_system_clock();
 
-void initialize_pwm_module(void)
-{
-    // Do not prescale the system clock (=> 32 MHz)
-    TCC1.CTRLA = TC_CLKSEL_DIV1_gc;
+    // Initialize modules
+    initialize_leds_module();
+    initialize_gpio_module(&gpio_config);
+    initialize_midi_module(&midi_event_handlers);
+    initialize_wah_module();
+    initialize_background_tasks(high_frequency_tasks, high_frequency_tasks_size,
+                                mid_frequency_tasks, mid_frequency_tasks_size,
+                                low_frequency_tasks, low_frequency_tasks_size);
 
-    // Select dual slope PWM mode and enable OC1A output
-    TCC1.CTRLB = TC_WGMODE_DSBOTH_gc | TC1_CCAEN_bm;
+    // set watchdog for 128ms
+    wdt_enable(WDT_PER_128CLK_gc);
 
-    // Set TOP value
-    TCC1.PER = (1<<lookup_table_resolution) - 1;
+    // enable interrupts
+    PMIC.CTRL = PMIC_LOLVLEN_bm;
+    sei();
 
-    // Set initial compare value to TOP
-    TCC1.CCA = TCC1.PER;
+    // Blink green LED
+    blink_led(LED_GREEN, F_TASK_SLOW);
+
+    // Enable Wah
+    enable_wah(true);
+
+    // Main loop
+    while (true) {
+        process_background_tasks();
+        wdt_reset();
+    }
+
+    return 0;
 }
