@@ -37,6 +37,7 @@
 
 
 //---------------- functions and procedures ----------------//
+void handle_midi_cc(uint8_t controller, uint8_t value);
 void enable_wah(bool enable);
 void initialize_wah_module(void);
 void toggle_wah(void);

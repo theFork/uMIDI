@@ -76,3 +76,8 @@ void update_wah_pwm(void)
         apply_duty_cycle(update_wave(&pwm_wave));
     }
 }
+
+void handle_midi_cc(uint8_t controller, uint8_t value)
+{
+    apply_duty_cycle(value);
+}
