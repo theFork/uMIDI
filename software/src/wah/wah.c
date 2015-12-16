@@ -49,8 +49,8 @@ void initialize_wah_module(void)
 {
     initialize_pwm_module();
     const uint8_t speed = 120;
-    const uint8_t amplitude = MIDI_MAX_VALUE;
-    initialize_wave(&pwm_wave, WAVE_SINE, speed, amplitude, 0);
+    const uint8_t amplitude = MIDI_MAX_VALUE-32;
+    initialize_wave(&pwm_wave, WAVE_OFF, speed, amplitude, 0);
 }
 
 void enable_wah(bool enable)
