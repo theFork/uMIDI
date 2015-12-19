@@ -27,13 +27,15 @@
 //---------------- includes ----------------//
 #include <stdint.h>
 
+#include "lookup_tables.h"
+
 
 //---------------- data types ----------------//
 
 
 //---------------- constants ----------------//
 /// \brief      Maximum duty cycle of the PWM.
-#define PWM_MAX_DUTY    ((1L << 14) - 1)
+#define PWM_MAX_DUTY    ((1L << lookup_table_resolution) - 1)
 
 
 //---------------- functions and procedures ----------------//

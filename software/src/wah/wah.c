@@ -38,12 +38,9 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-struct wave pwm_wave;
+static struct wave pwm_wave;
 
-static struct linear_range pwm_range = {
-    .from   = 7000,
-    .to     = PWM_MAX_DUTY,
-};
+static struct linear_range pwm_range;
 
 
 
@@ -59,6 +56,8 @@ static inline uint16_t linear_function(uint8_t midi_value)
 void initialize_wah_module(void)
 {
     // Setup linear conversion function
+    pwm_range.from = 7000;
+    pwm_range.to = PWM_MAX_DUTY;
     init_linear(&pwm_range);
     initialize_pwm_module(&linear_function);
 
