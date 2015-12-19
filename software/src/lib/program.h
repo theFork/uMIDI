@@ -18,7 +18,7 @@
  */
 
 /*
- * header for the program module
+ * Header for the program module
 */
 
 #ifndef _PROGRAM
@@ -34,30 +34,36 @@
 
 
 //---------------- data types ----------------//
-union program_data
-{
-    uint16_t word;
-    struct {
-        // TODO
-    } channels;
-};
 
 struct program
 {
-    uint8_t             number;
-    union program_data  data;
+    uint8_t     number;
+    uint16_t    data;
 };
 
 
 //---------------- functions and procedures ----------------//
-void applyProgramData(union program_data);
-void copyCurrentBankTo(uint8_t);
-void copyCurrentProgramTo(uint8_t);
-void enterProgram(uint8_t);
-uint16_t readProgramData(uint8_t);
-void updateProgramData(uint8_t, uint16_t);
-void wipeCurrentProgram(void);
-void wipeCurrentBank(void);
+
+/// \brief      Callback for program execution
+/// \details    This function is called whenever a new program is entered after configuration
+///             data was read from EEPROM memory.
+/// \param      program_data
+///                 This is the program configuration data that was read from memory.
+void init_program_module(void (*execute_callback)(uint16_t));
+
+void copy_current_bank_to(uint8_t bank_number);
+
+void copy_current_program_to(uint8_t target_bank);
+
+void enter_program(uint8_t number);
+
+uint16_t read_program_data(uint8_t number);
+
+void update_program_data(uint8_t number, uint16_t data);
+
+void wipe_current_program(void);
+
+void wipe_current_bank(void);
 
 
 //---------------- EOF ----------------//

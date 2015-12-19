@@ -33,11 +33,14 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-// current program
-struct program current_program;
-
 // EEPROM program storage
-uint16_t programs[PROGRAM_COUNT] EEMEM;
+static uint16_t program_data_storage[PROGRAM_COUNT] EEMEM;
+
+// Current program
+static struct program current_program;
+
+/// \brief      Callback for program execution
+static void (*execute_program)(uint16_t);
 
 
 
@@ -45,30 +48,30 @@ uint16_t programs[PROGRAM_COUNT] EEMEM;
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void applyProgramData(union program_data data)
+void init_program_module(void (*execute_callback)(uint16_t))
 {
-    // TODO
+    execute_program = execute_callback;
 }
 
-void copyCurrentProgramTo(uint8_t pgm)
+void copy_current_program_to(uint8_t target_program)
 {
-    // copy program
-    updateProgramData(pgm, current_program.data.word);
+    // Copy program
+    update_program_data(target_program, current_program.data);
 }
 
-void copyCurrentBankTo( uint8_t targetBank)
+void copy_current_bank_to(uint8_t target_bank)
 {
-    // compute the source bank
+    // Compute the source bank
     uint8_t sourceBank = ( (current_program.number+1) / 10 ) * 10;
 
-    // write programs
+    // Write programs
     uint16_t data;
     uint8_t program_index;
     for (program_index=0; program_index<10; program_index++) {
         // bank 0 contains only 9 programs, so we have to skip certain actions
         if (program_index == 9) {
             // if bank 0 is the target, do nothing
-            if (targetBank == 0) {
+            if (target_bank == 0) {
                 break;
             }
 
@@ -78,52 +81,51 @@ void copyCurrentBankTo( uint8_t targetBank)
             }
         }
         else {
-            data = readProgramData(sourceBank + program_index);
+            data = read_program_data(sourceBank + program_index);
         }
 
-        updateProgramData((targetBank*10) + program_index, data);
+        update_program_data((target_bank*10) + program_index, data);
     }
 }
 
-void enterProgram(uint8_t num)
+void enter_program(uint8_t number)
 {
-    // if the program has not changed, do nothing
-    if (current_program.number == num) {
+    // If the program has not changed, do nothing
+    if (current_program.number == number) {
         return;
     }
 
-    // load program and set outputs
-    current_program.number = num;
-    current_program.data.word = readProgramData(num);
-    applyProgramData(current_program.data);
+    // Load program and set outputs
+    current_program.number = number;
+    current_program.data = read_program_data(number);
+    // TODO apply_program_data(current_program.data);
 }
 
-
-uint16_t readProgramData(uint8_t num)
+uint16_t read_program_data(uint8_t number)
 {
-    return eeprom_read_word(&programs[num]);
+    return eeprom_read_word(&program_data_storage[number]);
 }
 
-void updateProgramData(uint8_t number, uint16_t data)
+void update_program_data(uint8_t number, uint16_t data)
 {
-    eeprom_write_word(&programs[number], data);
+    eeprom_write_word(&program_data_storage[number], data);
 }
 
-void wipeCurrentProgram(void)
+void wipe_current_program(void)
 {
-    updateProgramData(current_program.number, 0);
-    enterProgram(current_program.number);
+    update_program_data(current_program.number, 0);
+    enter_program(current_program.number);
 }
 
-void wipeCurrentBank(void)
+void wipe_current_bank(void)
 {
-    // write programs
+    // Write programs
     uint8_t bank = ( (current_program.number+1) / 10 ) * 10;
     uint8_t i;
     for (i=0; i<10; i++) {
-        updateProgramData(bank+i, 0);
+        update_program_data(bank+i, 0);
     }
 
-    // apply the changes
-    enterProgram(current_program.number);
+    // Apply the changes
+    enter_program(current_program.number);
 }
