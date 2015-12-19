@@ -65,7 +65,7 @@ void process_background_tasks(void)
     ////
     static uint16_t prescaler_fast = 0;
     ++prescaler_fast;
-    if (prescaler_fast >= F_TIMER / F_TASK_MID) {
+    if (prescaler_fast >= F_TIMER / F_TASK_FAST) {
         prescaler_fast = 0;
 
         for (int i = 0; i < high_frequency_tasks_size; i++) {
@@ -107,8 +107,8 @@ void initialize_background_tasks(background_task_t high_freq_tasks[], uint8_t hi
     // Prescale clock to 500 kHz
     TCC0.CTRLA = TC_CLKSEL_DIV64_gc;
 
-    // Set TOP value to achieve 2 kHz clock
-    TCC0.PER = F_TIMER/4 - 1;
+    // Set TOP value to achieve desired clock
+    TCC0.PER = 500000 / F_TIMER - 1;
 
     // Save pointers to and size of task arrays
     high_frequency_tasks = high_freq_tasks;
