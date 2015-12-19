@@ -93,7 +93,7 @@ for (my $i = 0; $i <= $xmax; $i += 1) {
     }
 
     my $scaler = 8;
-    printf(" %5d,", int(log(($i/$scaler+1))*($ymax/log(($xmax)/$scaler))));
+    printf(" %5d,", int(log($i/$scaler+1)*($ymax/log($xmax/$scaler))));
 
     # Begin a new line every 16 values
     if ($i > 0 and $i % 16 == 15) {
