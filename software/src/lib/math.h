@@ -35,11 +35,11 @@
 //---------------- data types ---------------//
 
 /// \brief      Configuration for a linear function.
-struct linear_config
+struct linear_range
 {
-    uint16_t max;       ///< The value that will be returned by linear() whenn called with midi_value = 127
-    uint16_t offset;    ///< The value that will be returned by linear() when called with midi_value = 0
-    uint16_t slope;     ///< The slope of the linear function (computed in init_linear())
+    uint16_t    from;       ///< The value that will be returned by linear() when called with midi_value = 0
+    uint16_t    to;         ///< The value that will be returned by linear() whenn called with midi_value = 127
+    int16_t     slope;      ///< The slope of the linear function (computed in init_linear())
 };
 
 
@@ -48,11 +48,11 @@ struct linear_config
 /// \brief      Initializes a linear function
 /// \param      config
 ///                 the configuration of the linear funcion to initialize
-void init_linear(struct linear_config* config);
+void init_linear(struct linear_range* config);
 
 /// \brief      Calculates a linear function from a given midi value (0 .. 127)
 /// \param      config
 ///                 the configuration of the linear funcion to initialize
-uint16_t linear(struct linear_config* config, uint8_t midi_value);
+uint16_t linear(struct linear_range* config, uint8_t midi_value);
 
 #endif // _MATH_H

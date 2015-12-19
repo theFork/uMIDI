@@ -34,12 +34,12 @@
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void init_linear(struct linear_config* config)
+void init_linear(struct linear_range* config)
 {
-    config->slope = (config->max - config->offset) / MIDI_MAX_VALUE;
+    config->slope = (int16_t)(config->to - config->from) / MIDI_MAX_VALUE;
 }
 
-uint16_t linear(struct linear_config* config, uint8_t midi_value)
+uint16_t linear(struct linear_range* config, uint8_t midi_value)
 {
-    return config->slope * midi_value + config->offset;
+    return config->slope * midi_value + config->from;
 }

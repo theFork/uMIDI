@@ -40,10 +40,12 @@
 
 struct wave pwm_wave;
 
-static struct linear_config pwm_range = {
-    .max = PWM_MAX_DUTY,
-    .offset = 7000,
+static struct linear_range pwm_range = {
+    .from   = 7000,
+    .to     = PWM_MAX_DUTY,
 };
+
+
 
 ////////////////////////////////////////////////////////////////
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
