@@ -33,15 +33,6 @@
 
 //---------------- functions and procedures ----------------//
 
-/// \brief      Updates the PWM duty cycle
-/// \details    Looks up the exponential value corresponding to the provided duty cycle and writes
-///             the PWM counter compare register. This procedure can be used to manually control
-///             the modulation.
-/// \param      duty
-///                 the desired duty cycle
-/// \see        exp_table
-void apply_duty_cycle(uint8_t duty);
-
 /// \brief      Initializes the PWM
 /// \details    CPU timer 1 is clocked with the system clock (32 MHz) and the compare output A
 ///             is set up to output a dual slope PWM. Additionally, a sine wave is set up, so that
@@ -50,11 +41,12 @@ void apply_duty_cycle(uint8_t duty);
 /// \see        wave
 void initialize_pwm_module(void);
 
-/// \brief      Updates the pwm duty cycle
-/// \details    To enable wave output, this procedure must be called cyclically as a state machine
-///             task.
-/// \see        initialize_state_machine
-void update_pwm(void);
+/// \brief      Updates the PWM duty cycle
+/// \details    Computes a suitable duty cycle compare value and writes the PWM counter compare
+///             register. This procedure can be used to manually control the modulation.
+/// \param      duty
+///                 the desired duty cycle [0..MIDI_MAX_VALUE]
+void set_pwm_duty_cycle(uint8_t duty);
 
 
 //---------------- EOF ----------------//

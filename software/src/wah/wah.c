@@ -73,11 +73,11 @@ void toggle_wah(void)
 void update_wah_pwm(void)
 {
     if (pwm_wave.settings.waveform != WAVE_OFF) {
-        apply_duty_cycle(update_wave(&pwm_wave));
+        set_pwm_duty_cycle(update_wave(&pwm_wave));
     }
 }
 
 void handle_midi_cc(uint8_t controller, uint8_t value)
 {
-    apply_duty_cycle(value);
+    set_pwm_duty_cycle(value);
 }

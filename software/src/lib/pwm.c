@@ -20,19 +20,25 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "gpio.h"
-#include "lookup_tables.h"
-#include "pwm.h"
-
 #include <stdbool.h>
 #include <stdint.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
+#include "gpio.h"
+#include "lookup_tables.h"
+#include "math.h"
+#include "pwm.h"
+
 
 ////////////////////////////////////////////////////////////////
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
+
+static struct linear_config pwm_led_range = {
+    .max = (1 << 14) - 1,
+    .offset = 7000,
+};
 
 
 
@@ -40,14 +46,11 @@
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void apply_duty_cycle(uint8_t duty)
-{
-    TCC1.CCABUF = duty*128;
-//    TCC1.CCABUF = lookup_log(duty);
-}
-
 void initialize_pwm_module(void)
 {
+    // Initialize PWM range function
+    init_linear(&pwm_led_range);
+
     // Do not prescale the system clock (=> 32 MHz)
     TCC1.CTRLA = TC_CLKSEL_DIV1_gc;
 
@@ -59,4 +62,9 @@ void initialize_pwm_module(void)
 
     // Set initial compare value to TOP
     TCC1.CCA = TCC1.PER;
+}
+
+void set_pwm_duty_cycle(uint8_t duty)
+{
+    TCC1.CCABUF = linear(&pwm_led_range, duty);
 }
