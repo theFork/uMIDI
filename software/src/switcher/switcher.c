@@ -26,6 +26,7 @@
 
 #include "lib/gpio.h"
 #include "lib/leds.h"
+#include "lib/program.h"
 #include "lib/usb.h"
 
 #include "config.h"
@@ -36,11 +37,30 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
+union program_data
+{
+    uint16_t word;
+    struct {
+        bool tuner      : 1;
+        bool loop1      : 1;
+        bool loop2      : 1;
+        bool loop3      : 1;
+        bool loop4      : 1;
+        bool loop5      : 1;
+        bool switch1    : 1;
+        bool switch2    : 1;
+    } config;
+};
 
 
 ////////////////////////////////////////////////////////////////
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
+
+void execute_program(uint16_t program_data)
+{
+    // TODO: Implement me
+}
 
 /// \brief      Handler for the `led` command
 bool exec_led(const char* command)
@@ -164,5 +184,6 @@ bool exec_relay(const char* command)
 
 void handle_program_change(uint8_t program)
 {
-    //usb_printf("PC %u %u" USB_NEWLINE, program);
+    flash_led(LED_RED);
+    enter_program(program);
 }

@@ -40,6 +40,9 @@ bool exec_led(const char* command);
 /// \brief      Handler for the `relays` command
 bool exec_relay(const char* command);
 
+/// \brief      TODO
+void execute_program(uint16_t program_data);
+
 ///< \brief     Callback for program changes
 void handle_program_change(uint8_t program);
 

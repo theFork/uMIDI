@@ -27,6 +27,7 @@
 #include "lib/gpio.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
+#include "lib/program.h"
 #include "lib/serial_communication.h"
 #include "lib/system.h"
 #include "lib/usb.h"
@@ -61,6 +62,7 @@ int main( void )
                                 low_frequency_tasks, low_frequency_tasks_size);
     init_usb_module();
     init_serial_communication(serial_commands, serial_commands_size);
+    init_program_module(0x0000, &execute_program);
 
     // set watchdog for 128ms
     wdt_enable(WDT_PER_128CLK_gc);
