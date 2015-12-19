@@ -35,21 +35,17 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-static struct linear_config pwm_led_range = {
-    .max = (1 << 14) - 1,
-    .offset = 7000,
-};
 
-
+static uint16_t (*convert_pwm_range)(uint8_t);
 
 ////////////////////////////////////////////////////////////////
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void initialize_pwm_module(void)
+void initialize_pwm_module(uint16_t (*conversion_function)(uint8_t))
 {
-    // Initialize PWM range function
-    init_linear(&pwm_led_range);
+    // Store conversion function pointer
+    convert_pwm_range = conversion_function;
 
     // Do not prescale the system clock (=> 32 MHz)
     TCC1.CTRLA = TC_CLKSEL_DIV1_gc;
@@ -66,5 +62,5 @@ void initialize_pwm_module(void)
 
 void set_pwm_duty_cycle(uint8_t duty)
 {
-    TCC1.CCABUF = linear(&pwm_led_range, duty);
+    TCC1.CCABUF = convert_pwm_range(duty);
 }

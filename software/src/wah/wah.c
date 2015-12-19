@@ -25,6 +25,7 @@
 #include "lib/adc.h"
 #include "lib/gpio.h"
 #include "lib/leds.h"
+#include "lib/math.h"
 #include "lib/midi.h"
 #include "lib/pwm.h"
 #include "lib/wave.h"
@@ -39,15 +40,27 @@
 
 struct wave pwm_wave;
 
-
+static struct linear_config pwm_range = {
+    .max = PWM_MAX_DUTY,
+    .offset = 7000,
+};
 
 ////////////////////////////////////////////////////////////////
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
+static inline uint16_t linear_function(uint8_t midi_value)
+{
+    return linear(&pwm_range, midi_value);
+}
+
 void initialize_wah_module(void)
 {
-    initialize_pwm_module();
+    // Setup linear conversion function
+    init_linear(&pwm_range);
+    initialize_pwm_module(&linear_function);
+
+    // Setup wave module
     const uint8_t speed = 120;
     const uint8_t amplitude = MIDI_MAX_VALUE-32;
     initialize_wave(&pwm_wave, WAVE_OFF, speed, amplitude, 0);

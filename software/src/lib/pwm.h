@@ -31,15 +31,23 @@
 //---------------- data types ----------------//
 
 
+//---------------- constants ----------------//
+/// \brief      Maximum duty cycle of the PWM.
+#define PWM_MAX_DUTY    ((1L << 14) - 1)
+
+
 //---------------- functions and procedures ----------------//
 
 /// \brief      Initializes the PWM
 /// \details    CPU timer 1 is clocked with the system clock (32 MHz) and the compare output A
-///             is set up to output a dual slope PWM. Additionally, a sine wave is set up, so that
-///             update_pwm can be used to generate a periodic output signal.
+///             is set up to output a dual slope PWM. Additionally, a linear function is set up,
+///             which is used in set_pwm_duty_cycle() to compute the duty cycle compare values.
+/// \param      conversion_function
+///                 Points to a function converting midi values to pwm compare register values
 /// \see        update_pwm
 /// \see        wave
-void initialize_pwm_module(void);
+void initialize_pwm_module(uint16_t (*conversion_function)(uint8_t));
+
 
 /// \brief      Updates the PWM duty cycle
 /// \details    Computes a suitable duty cycle compare value and writes the PWM counter compare
