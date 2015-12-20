@@ -4,7 +4,7 @@
 *.s
 
 # Doxygen output
-software/src/doc/html
+software/doc/html
 
 # PCB plots
 hardware/plots
