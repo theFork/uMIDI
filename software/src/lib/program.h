@@ -92,13 +92,18 @@ void copy_current_program_to(uint8_t target_program);
 void enter_program(uint8_t number);
 
 /// \brief      Initializes the program storage module.
-/// \details    Registers a provided callback function, which is executed whenever the current
+/// \details    Stores the specified program data initialization word, used in the wipe functions
+///             and registers the provided callback function, which is executed whenever the current
 ///             program data word is updated either by wiping the program or loading a new one.
+/// \param      program_initializer
+///                 On wiping, programs are initialized with this value.
 /// \param      execute_program_callback
-///                 Callback for program execution
+///                 Callback for program execution.
 ///                 \param program_data
 ///                        The program configuration data that was read from memory.
-void init_program_module(void (*execute_program_callback)(uint16_t program_data));
+/// \see        wipe_current_program
+/// \see        enter_program
+void init_program_module(uint16_t program_initializer, void (*execute_program_callback)(uint16_t program_data));
 
 /// \brief      Reads a program data word from the specified position in memory.
 /// \param      number
@@ -110,8 +115,8 @@ uint16_t read_program_data(uint8_t number);
 void wipe_current_bank(void);
 
 /// \brief      Reinitializes the currently loaded program.
-/// \details    Clears all bits in the program data word, stores it and executes the initialized
-///             program.
+/// \details    Updates the internal program data word with the initializer, stores it and executes
+///             the initialized program.
 void wipe_current_program(void);
 
 /// \brief      Stores a given program data word in the specified position in memory.

@@ -39,6 +39,9 @@
 /// \brief      EEPROM program storage
 static uint16_t program_data_storage[PROGRAM_COUNT] EEMEM;
 
+/// \brief      Initialization value for empty programs
+static uint16_t program_initializer;
+
 /// \brief      Current program
 static struct program current_program;
 
@@ -69,7 +72,7 @@ void copy_current_bank_to(uint8_t target_bank)
 
             // If bank 0 is the source, write an empty program
             if (sourceBank == 0) {
-                data = 0;
+                data = program_initializer;
             }
         }
         else {
@@ -99,8 +102,9 @@ void enter_program(uint8_t number)
     execute_program(current_program.data);
 }
 
-void init_program_module(void (*execute_program_callback)(uint16_t))
+void init_program_module(uint16_t program_initializer_value, void (*execute_program_callback)(uint16_t program_data))
 {
+    program_initializer = program_initializer_value;
     execute_program = execute_program_callback;
 }
 
@@ -115,7 +119,7 @@ void wipe_current_bank(void)
     uint8_t bank = ( (current_program.number+1) / 10 ) * 10;
     uint8_t i;
     for (i=0; i<10; i++) {
-        write_program(bank+i, 0);
+        write_program(bank+i, program_initializer);
     }
 
     // Apply the changes
@@ -124,7 +128,7 @@ void wipe_current_bank(void)
 
 void wipe_current_program(void)
 {
-    write_program(current_program.number, 0);
+    write_program(current_program.number, program_initializer);
     enter_program(current_program.number);
 }
 
