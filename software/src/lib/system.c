@@ -37,11 +37,24 @@ void configure_system_clock(void)
 {
     // Enable internal 32 MHz oscillator
     OSC.CTRL |= OSC_RC32MEN_bm;
-    while(!(OSC.STATUS & OSC_RC32MRDY_bm));
+
+    while ((OSC.STATUS & OSC_RC32MRDY_bm) == 0);
 
     // Select internal 32 MHz oscillator
     CCP = CCP_IOREG_gc;
     CLK.CTRL = CLK_SCLKSEL_RC32M_gc;
+}
+
+void enable_usb_pll(void)
+{
+    // Set the multiplication factor and clock reference for the PLL.
+    // The USB clock runs at 48 MHz.
+    // 32 MHz / 4 = 4 MHz, 48 MHz / 4 MHz = 6 (factor).
+    OSC.PLLCTRL = (OSC_PLLSRC_RC32M_gc | (6 << OSC_PLLFAC_gp));
+
+    // Enable and wait for PLL
+    OSC.CTRL |= OSC_PLLEN_bm;
+    while ((OSC.STATUS & OSC_PLLRDY_bm) == 0);
 }
 
 void panic(uint16_t delay_red_ms, uint16_t delay_green_ms)
@@ -67,4 +80,3 @@ void panic(uint16_t delay_red_ms, uint16_t delay_green_ms)
         }
     }
 }
-

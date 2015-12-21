@@ -39,9 +39,14 @@
 /// \details    Activates and selects the internal 32 MHz RC oscillator as system clock source.
 void configure_system_clock(void);
 
+/// \brief      Configures the PLL for USB operation
+/// \details    Sets the PLL output frequency to 48 MHz, enables the PLL and waits until it has
+///             successfully locked.
+void enable_usb_pll(void);
+
 /// \brief      Hang and blink
 void panic(uint16_t delay_red_ms, uint16_t delay_green_ms);
 
+
 //---------------- EOF ----------------//
 #endif // _SYSTEM_H
-
