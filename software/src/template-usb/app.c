@@ -38,3 +38,60 @@
 ////////////////////////////////////////////////////////////////
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
+
+static void print_help(void)
+{
+    usb_send_string("\n\r");
+    usb_send_string("Welcome to the uMIDI serial interface!\n\r");
+    usb_send_string("These are your options:\n\r");
+    usb_send_string("    c  :  Clears the console by printing CR/LFs\n\r");
+    usb_send_string("    h  :  Prints this help message\n\r");
+    usb_send_string("    r  :  Toggles the red led\n\r");
+    usb_send_string("    t  :  Tests the usb_printf() function\n\r");
+    usb_send_string("Please enter a command:\n\r");
+}
+
+void serial_communication_task(void)
+{
+    // Announce readiness
+    // TODO: Find out, when it is REALLY ok to send.
+    static uint8_t counter = 80;
+    if (counter > 0) {
+        usb_send_string("Hello, friend!\n\r");
+        --counter;
+    }
+
+    // Receive character with echo enabled
+    char data = usb_receive_char(true);
+
+    // Execute command
+    static uint16_t test_counter = 0;
+    switch (data) {
+    case USB_EMPTY_CHAR:
+        break;
+
+    case 'c':
+        for (int i=0; i<128; ++i) {
+            usb_send_string("\n\r");
+        }
+        break;
+
+    case 'h':
+        print_help();
+        break;
+
+    case 't':
+        usb_printf("\n\rTest call %u, this is %d%d%d%d!\n\r", ++test_counter, 1, 3, 3, 7);
+        break;
+
+    case 'r':
+        toggle_led(LED_RED);
+        usb_send_string("\n\rToggling red LED\n\r");
+        break;
+
+    default:
+        usb_send_string("\n\rUnknown command\n\r");
+        print_help();
+        break;
+    }
+}

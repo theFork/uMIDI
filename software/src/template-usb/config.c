@@ -93,5 +93,6 @@ uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background
 background_task_t low_frequency_tasks[] = {
     &update_leds,
     &usb_main_task,
+    &serial_communication_task,
 };
 uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);

@@ -36,6 +36,9 @@
 
 
 //---------------- functions and procedures ----------------//
+/// \brief      TODO
+/// \details    TODO
+void serial_communication_task(void);
 
 
 //---------------- EOF ----------------//
