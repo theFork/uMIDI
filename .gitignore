@@ -2,6 +2,7 @@
 *.hex
 *.o
 *.s
+*.lst
 
 # Doxygen output
 software/doc/html
