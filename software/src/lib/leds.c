@@ -103,6 +103,9 @@ void initialize_leds_module(void)
     // Populate led map
     leds[RED_LED_BIT] = &red_led;
     leds[GREEN_LED_BIT] = &green_led;
+
+    // Turn all LEDs off
+    set_led(LED_ALL, false);
 }
 
 void blink_led(enum led led, uint8_t prescaler)
