@@ -20,9 +20,13 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <avr/interrupt.h>
 #include <avr/io.h>
+#include <avr/wdt.h>
+#include <util/delay.h>
 
 #include "system.h"
+#include "leds.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -39,3 +43,28 @@ void configure_system_clock(void)
     CCP = CCP_IOREG_gc;
     CLK.CTRL = CLK_SCLKSEL_RC32M_gc;
 }
+
+void panic(uint8_t delay_red_ms, uint8_t delay_green_ms)
+{
+    cli();
+    initialize_leds_module();
+
+    uint8_t cnt_rd = delay_red_ms;
+    uint8_t cnt_gn = delay_green_ms;
+    for(;;) {
+        wdt_reset();
+        _delay_ms(1);
+        cnt_rd--;
+        cnt_gn--;
+
+        if (delay_red_ms != 0 && cnt_rd == 0) {
+            cnt_rd = delay_red_ms;
+            toggle_led(LED_RED);
+        }
+        if (delay_green_ms != 0 && cnt_gn == 0) {
+            cnt_gn = delay_green_ms;
+            toggle_led(LED_GREEN);
+        }
+    }
+}
+

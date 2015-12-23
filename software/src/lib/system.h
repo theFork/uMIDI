@@ -39,6 +39,8 @@
 /// \details    Activates and selects the internal 32 MHz RC oscillator as system clock source.
 void configure_system_clock(void);
 
+/// \brief      Hang and blink
+void panic(uint8_t delay_red_ms, uint8_t delay_green_ms);
 
 //---------------- EOF ----------------//
 #endif // _SYSTEM_H
