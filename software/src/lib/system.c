@@ -44,25 +44,25 @@ void configure_system_clock(void)
     CLK.CTRL = CLK_SCLKSEL_RC32M_gc;
 }
 
-void panic(uint8_t delay_red_ms, uint8_t delay_green_ms)
+void panic(uint16_t delay_red_ms, uint16_t delay_green_ms)
 {
     cli();
+    wdt_disable();
     initialize_leds_module();
 
-    uint8_t cnt_rd = delay_red_ms;
-    uint8_t cnt_gn = delay_green_ms;
+    uint16_t cnt_rd = 0;
+    uint16_t cnt_gn = 0;
     for(;;) {
-        wdt_reset();
         _delay_ms(1);
-        cnt_rd--;
-        cnt_gn--;
+        ++cnt_rd;
+        ++cnt_gn;
 
-        if (delay_red_ms != 0 && cnt_rd == 0) {
-            cnt_rd = delay_red_ms;
+        if (delay_red_ms != 0 && cnt_rd == delay_red_ms) {
+            cnt_rd = 0;
             toggle_led(LED_RED);
         }
-        if (delay_green_ms != 0 && cnt_gn == 0) {
-            cnt_gn = delay_green_ms;
+        if (delay_green_ms != 0 && cnt_gn == delay_green_ms) {
+            cnt_gn = 0;
             toggle_led(LED_GREEN);
         }
     }

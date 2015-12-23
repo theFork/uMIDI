@@ -40,7 +40,7 @@
 void configure_system_clock(void);
 
 /// \brief      Hang and blink
-void panic(uint8_t delay_red_ms, uint8_t delay_green_ms);
+void panic(uint16_t delay_red_ms, uint16_t delay_green_ms);
 
 //---------------- EOF ----------------//
 #endif // _SYSTEM_H
