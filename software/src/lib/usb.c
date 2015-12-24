@@ -118,19 +118,23 @@ void EVENT_CDC_Device_ControLineStateChanged(USB_ClassInfo_CDC_Device_t* const C
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
+static void flush(void)
+{
+    // The following call returns an enum Endpoint_WaitUntilReady_ErrorCodes_t value
+    uint8_t error = CDC_Device_Flush(&VirtualSerial_CDC_Interface);
+    if (error) {
+        panic(100, 400);
+    }
+}
 static void send_string(char* string)
 {
     if (USB_DeviceState == DEVICE_STATE_Configured && ok_to_send) {
-        int error;
+        uint8_t error;
         error = CDC_Device_SendString(&VirtualSerial_CDC_Interface, string);
         if (error) {
             panic(400, 100);
         }
-        error = CDC_Device_Flush(&VirtualSerial_CDC_Interface);
-        if (error) {
-            // enum Endpoint_WaitUntilReady_ErrorCodes_t
-            panic(100, 400);
-        }
+        flush();
     }
 }
 
@@ -145,7 +149,7 @@ void init_usb_module(void)
 
 char usb_getc(void)
 {
-    unsigned char data = CDC_Device_ReceiveByte(&VirtualSerial_CDC_Interface);
+    char data = CDC_Device_ReceiveByte(&VirtualSerial_CDC_Interface);
 
     // Echo back the received character if desired
     if (send_echo) {
@@ -190,7 +194,7 @@ int usb_printf(const char* format, ...)
 void usb_putc(char c)
 {
     CDC_Device_SendByte(&VirtualSerial_CDC_Interface, c);
-    CDC_Device_Flush(&VirtualSerial_CDC_Interface);
+    flush();
 }
 
 void usb_puts(char* string)
