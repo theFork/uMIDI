@@ -48,12 +48,17 @@ static char cmd_buffer[CMD_BUFFER_SIZE] = "";
 /// \brief      Command buffer write index
 static uint8_t cmd_buffer_index = 0;
 
+static bool raw_data_mode = false;
+static uint16_t data_size = 0;
+static char data_buffer[CMD_BUFFER_SIZE] = "";
+static uint8_t data_buffer_index = 0;
+
 
 ////////////////////////////////////////////////////////////////
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-static inline void exec_help(void)
+static inline bool exec_help(void)
 {
     usb_puts("");
     usb_puts("Welcome to the uMIDI serial interface!");
@@ -65,22 +70,30 @@ static inline void exec_help(void)
     usb_puts("                  c='g' -> green LED");
     usb_puts("                  c='r' -> red LED");
     usb_puts("Please enter a command:");
+
+    // Success
+    return true;
 }
 
-static inline void exec_led(char led)
+static inline bool exec_led(char led)
 {
     if (led == 'g') {
         usb_puts("Toggling green LED");
         toggle_led(LED_GREEN);
+        return true;
     }
     else if (led == 'r') {
         usb_puts("Toggling red LED");
         toggle_led(LED_RED);
+        return true;
     }
+    return false;
 }
 
 static void execute_command(const char* command)
 {
+    bool success = true;
+
     // Ignore empty command
     if (strcmp(command, "") == 0) {
         return;
@@ -93,12 +106,12 @@ static void execute_command(const char* command)
     }
 
     else if (strcmp(command, "help") == 0) {
-        exec_help();
+        success = exec_help();
     }
 
     else if (strncmp(command, "led ", 4) == 0) {
         if (strlen(command) == 5) {
-            exec_led(command[4]);
+            success = exec_led(command[4]);
         }
     }
 
@@ -109,7 +122,11 @@ static void execute_command(const char* command)
 
     else {
         usb_printf("Unknown command: [%s]\n\r", command);
-        usb_puts("Type `help` for help...");
+        usb_puts("Type `help` for help.");
+    }
+
+    if (!success) {
+        usb_printf("Error executing command: [%s]\n\r", command);
     }
 
     // Clear command buffer and reset write pointer
