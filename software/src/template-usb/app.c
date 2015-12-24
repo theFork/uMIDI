@@ -20,10 +20,12 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "lib/background_tasks.h"
 #include "lib/gpio.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
 #include "lib/usb.h"
+#include "xboot/xbootapi.h"
 
 #include "config.h"
 #include "app.h"
@@ -33,6 +35,10 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
+/// \brief      Device reset flag
+/// \details    This flag is set when the device receives the `reset` command. The device will then
+///             stop receiving data, send a shutdown message, count down a timeout and reset itself.
+static bool reset = false;
 
 
 ////////////////////////////////////////////////////////////////
@@ -61,6 +67,16 @@ void serial_communication_task(void)
         --counter;
     }
 
+    // Wait for timeout and reset device if the command was issued
+    if (reset) {
+        static uint8_t reset_timeout = RESET_TIMEOUT * F_TASK_SLOW;
+        --reset_timeout;
+        if (reset_timeout == 0) {
+            xboot_reset();
+        }
+        return;
+    }
+
     // Receive character with echo enabled
     char data = usb_receive_char(true);
 
@@ -68,6 +84,11 @@ void serial_communication_task(void)
     static uint16_t test_counter = 0;
     switch (data) {
     case USB_EMPTY_CHAR:
+        break;
+
+    case 'b':
+        usb_send_string("\n\rResetting device...\n\r");
+        reset = true;
         break;
 
     case 'c':

@@ -124,7 +124,7 @@ include $(LUFA_PATH)/LUFA/makefile
 .DEFAULT_GOAL =
 
 # Determine the list of C source files
-SRC  = $(wildcard lib/*.c) $(wildcard *.c)
+SRC  = $(wildcard lib/*.c) xboot/xbootapi.c $(wildcard *.c)
 SRC += $(LUFA_SRC_USB_DEVICE) $(LUFA_PATH)/LUFA/Drivers/USB/Class/Device/CDCClassDevice.c
 
 # Default target.

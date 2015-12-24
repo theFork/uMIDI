@@ -31,6 +31,9 @@
 
 //---------------- constants ----------------//
 
+/// \brief      Device reset timout in [s]
+#define RESET_TIMEOUT           2
+
 
 //---------------- data types ----------------//
 
