@@ -21,6 +21,9 @@
 # Target file name (without extension)
 TARGET = main
 
+# Build a bootloader?
+BOOTLOADER = yes
+
 # Output directory.
 DIR = .
 
@@ -63,6 +66,17 @@ CFLAGS += -std=gnu99
 CFLAGS += -Wall -Wstrict-prototypes
 CFLAGS += -O$(OPT)
 CFLAGS += -DF_CPU=$(F_CPU)UL
+ifeq ($(BOOTLOADER), yes)
+CFLAGS += -DBOOTLOADER
+endif
+
+# Relocate code in bootloader builds
+ifeq ($(BOOTLOADER), yes)
+CODE_START = 0x020000
+CFLAGS += -Wl,--section-start=.text=$(CODE_START)
+else
+CODE_START = 0x000000
+endif
 
 # LUFA library compile-time options and predefined tokens
 CFLAGS += -Wl,--gc-sections
@@ -84,8 +98,13 @@ CFLAGS += -I$(LUFA_PATH)
 AVRDUDE_FLAGS = $(AVRDUDE_PROGRAMMER_CONFIG)
 AVRDUDE_FLAGS += -p x128a4u
 
+ifeq ($(BOOTLOADER), yes)
+AVRDUDE_WRITE_FLASH = -U boot:w:$(DIR)/$(TARGET).hex -U fuse2:w:0xBF:m
+AVRDUDE_VERIFY_FLASH = -U boot:v:$(DIR)/$(TARGET).hex
+else
 AVRDUDE_WRITE_FLASH = -U flash:w:$(DIR)/$(TARGET).hex
 AVRDUDE_VERIFY_FLASH = -U flash:v:$(DIR)/$(TARGET).hex
+endif
 AVRDUDE_READ_EEPROM = -U eeprom:r:$(DIR)/eeprom.eep:i
 AVRDUDE_WRITE_EEPROM = -U eeprom:w:$(DIR)/eeprom.eep:i
 AVRDUDE_WRITE_FUSES = -U fuse1:w:$(FUSE1):m
@@ -170,7 +189,7 @@ OBJ = $(addprefix $(DIR)/,$(patsubst %.c,%.o,$(SRC)))
 %.hex: %.elf
 	$(info )
 	$(info $(MSG_FLASH) $@)
-	$(OBJCOPY) -O ihex -R .eeprom $(DIR)/$< $(DIR)/$@
+	$(OBJCOPY) -O ihex -R .eeprom --change-addresses -$(CODE_START) $(DIR)/$< $(DIR)/$@
 
 # Internal rule:
 # Create assembler files from C source files.
@@ -238,5 +257,5 @@ allinc: clean backup install eep
 .PHONY: all allinc asm backup compile clean eep fuse install
 
 
-.SECONDARY: $(OBJ)
+.SECONDARY:
 .NOTPARALLEL:

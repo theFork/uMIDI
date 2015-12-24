@@ -40,6 +40,10 @@
 /// \details    TODO
 void serial_communication_task(void);
 
+/// \brief      TODO
+/// \details    TODO
+void timeout_task(void);
+
 
 //---------------- EOF ----------------//
 #endif // _APP_H

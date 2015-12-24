@@ -68,7 +68,11 @@ int main( void )
     sei();
 
     // Blink green LED
+#ifdef BOOTLOADER
+    blink_led(LED_RED, F_TASK_SLOW);
+#else
     blink_led(LED_GREEN, F_TASK_SLOW);
+#endif
 
     // Main loop
     while (true) {

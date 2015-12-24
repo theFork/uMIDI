@@ -20,6 +20,8 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <avr/wdt.h>
+
 #include "lib/gpio.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
@@ -39,6 +41,13 @@
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
+void exit_bootloader(void)
+{
+    cli();
+    wdt_disable();
+    asm("jmp 0");
+}
+
 static void print_help(void)
 {
     usb_send_string("\n\r");
@@ -55,11 +64,11 @@ void serial_communication_task(void)
 {
     // Announce readiness
     // TODO: Find out, when it is REALLY ok to send.
-    static uint8_t counter = 80;
-    if (counter > 0) {
-        usb_send_string("Hello, friend!\n\r");
-        --counter;
-    }
+//    static uint8_t counter = 80;
+//    if (counter > 0) {
+//        usb_send_string("Hello, friend!\n\r");
+//        --counter;
+//    }
 
     // Receive character with echo enabled
     char data = usb_receive_char(true);
@@ -68,6 +77,14 @@ void serial_communication_task(void)
     static uint16_t test_counter = 0;
     switch (data) {
     case USB_EMPTY_CHAR:
+        break;
+
+    case 'b':
+#ifdef BOOTLOADER
+        usb_send_string("\n\rThis is the bootloader.\n\r");
+#else
+        usb_send_string("\n\rThis is the main application.\n\r");
+#endif
         break;
 
     case 'c':
@@ -81,7 +98,7 @@ void serial_communication_task(void)
         break;
 
     case 't':
-        usb_printf("\n\rTest call %u, this is %d%d%d%d!\n\r", ++test_counter, 1, 3, 3, 7);
+        //usb_printf("\n\rTest call %u, this is %d%d%d%d!\n\r", ++test_counter, 1, 3, 3, 7);
         break;
 
     case 'r':
@@ -94,4 +111,17 @@ void serial_communication_task(void)
         print_help();
         break;
     }
+}
+
+void timeout_task(void)
+{
+    static uint16_t timeout = F_TASK_SLOW * 10;
+    --timeout;
+    if (timeout > 0) {
+        return;
+    }
+
+#ifdef BOOTLOADER
+    exit_bootloader();
+#endif
 }
