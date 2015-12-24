@@ -62,23 +62,27 @@ void init_usb_module(void);
 
 /// \brief      TODO
 /// \details    TODO
-int usb_printf(const char* format, ...);
-
-/// \brief      TODO
-/// \details    TODO
-char usb_receive_char(bool echo);
-
-/// \brief      TODO
-/// \details    TODO
-void usb_send_char(char c);
-
-/// \brief      TODO
-/// \details    TODO
-void usb_send_string(char* string);
+char usb_getc(void);
 
 /// \brief      TODO
 /// \details    TODO
 void usb_main_task(void);
+
+/// \brief      TODO
+/// \details    TODO
+int usb_printf(const char* format, ...);
+
+/// \brief      TODO
+/// \details    TODO
+void usb_putc(char c);
+
+/// \brief      TODO
+/// \details    TODO
+void usb_puts(char* string);
+
+/// \brief      TODO
+/// \details    TODO
+void usb_set_echo(bool echo);
 
 
 //---------------- EOF ----------------//

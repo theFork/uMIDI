@@ -64,7 +64,10 @@ static USB_ClassInfo_CDC_Device_t VirtualSerial_CDC_Interface = {
 };
 
 /// \brief      TODO
-static volatile uint8_t ok_to_send = 0;
+static uint8_t ok_to_send = 0;
+
+/// \brief      TODO
+static bool send_echo = true;
 
 
 
@@ -115,60 +118,7 @@ void EVENT_CDC_Device_ControLineStateChanged(USB_ClassInfo_CDC_Device_t* const C
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void init_usb_module(void)
-{
-    // Init procedure from LUFA
-    USB_Init();
-
-    // Turn on all low level interrupts
-    PMIC.CTRL |= PMIC_LOLVLEN_bm;
-}
-
-int usb_printf(const char* format, ...)
-{
-    va_list ap;
-    int i;
-    char buffer[80] = "";
-
-    va_start(ap, format);
-    i = vsprintf(buffer, format, ap);
-    va_end(ap);
-
-    usb_send_string(buffer);
-    return i;
-}
-
-char usb_receive_char(bool echo)
-{
-    unsigned char data = CDC_Device_ReceiveByte(&VirtualSerial_CDC_Interface);
-
-    // Echo back the received character if desired
-    if (echo) {
-        switch (data) {
-        case USB_EMPTY_CHAR:
-            // Do not echo dummy characters
-            break;
-
-        case '\r':
-            usb_send_string("\n\r");
-            break;
-
-        default:
-            usb_send_char(data);
-            break;
-        }
-    }
-
-    return data;
-}
-
-void usb_send_char(char c)
-{
-    CDC_Device_SendByte(&VirtualSerial_CDC_Interface, c);
-    CDC_Device_Flush(&VirtualSerial_CDC_Interface);
-}
-
-void usb_send_string(char* string)
+static void send_string(char* string)
 {
     if (USB_DeviceState == DEVICE_STATE_Configured && ok_to_send) {
         int error;
@@ -184,8 +134,71 @@ void usb_send_string(char* string)
     }
 }
 
+void init_usb_module(void)
+{
+    // Init procedure from LUFA
+    USB_Init();
+
+    // Turn on all low level interrupts
+    PMIC.CTRL |= PMIC_LOLVLEN_bm;
+}
+
+char usb_getc(void)
+{
+    unsigned char data = CDC_Device_ReceiveByte(&VirtualSerial_CDC_Interface);
+
+    // Echo back the received character if desired
+    if (send_echo) {
+        switch (data) {
+        case USB_EMPTY_CHAR:
+            // Do not echo dummy characters
+            break;
+
+        case '\r':
+            send_string("\n\r");
+            break;
+
+        default:
+            usb_putc(data);
+            break;
+        }
+    }
+
+    return data;
+}
+
 void usb_main_task(void)
 {
     CDC_Device_USBTask(&VirtualSerial_CDC_Interface);
     USB_USBTask();
+}
+
+int usb_printf(const char* format, ...)
+{
+    va_list ap;
+    int i;
+    char buffer[80] = "";
+
+    va_start(ap, format);
+    i = vsprintf(buffer, format, ap);
+    va_end(ap);
+
+    send_string(buffer);
+    return i;
+}
+
+void usb_putc(char c)
+{
+    CDC_Device_SendByte(&VirtualSerial_CDC_Interface, c);
+    CDC_Device_Flush(&VirtualSerial_CDC_Interface);
+}
+
+void usb_puts(char* string)
+{
+    usb_printf("%s\n\r", string);
+}
+
+void usb_set_echo(bool echo)
+{
+    send_echo = echo;
 }

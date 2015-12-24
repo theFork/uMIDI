@@ -55,26 +55,26 @@ static uint8_t cmd_buffer_index = 0;
 
 static inline void exec_help(void)
 {
-    usb_send_string("\n\r");
-    usb_send_string("Welcome to the uMIDI serial interface!\n\r");
-    usb_send_string("Here is a list of available commands:\n\r");
-    usb_send_string("    clear      :  Clears the console by printing CR/LFs\n\r");
-    usb_send_string("    help       :  Prints this help message\n\r");
-    usb_send_string("    reset      :  Resets the device\n\r");
-    usb_send_string("    led <c>    :  Toggles one of the two LEDs:\n\r");
-    usb_send_string("                  c='g' -> green LED\n\r");
-    usb_send_string("                  c='r' -> red LED\n\r");
-    usb_send_string("Please enter a command:\n\r");
+    usb_puts("");
+    usb_puts("Welcome to the uMIDI serial interface!");
+    usb_puts("Here is a list of available commands:");
+    usb_puts("    clear      :  Clears the console by printing CR/LFs");
+    usb_puts("    help       :  Prints this help message");
+    usb_puts("    reset      :  Resets the device");
+    usb_puts("    led <c>    :  Toggles one of the two LEDs:");
+    usb_puts("                  c='g' -> green LED");
+    usb_puts("                  c='r' -> red LED");
+    usb_puts("Please enter a command:");
 }
 
 static inline void exec_led(char led)
 {
     if (led == 'g') {
-        usb_send_string("Toggling green LED\n\r");
+        usb_puts("Toggling green LED");
         toggle_led(LED_GREEN);
     }
     else if (led == 'r') {
-        usb_send_string("Toggling red LED\n\r");
+        usb_puts("Toggling red LED");
         toggle_led(LED_RED);
     }
 }
@@ -88,7 +88,7 @@ static void execute_command(const char* command)
 
     else if (strcmp(command, "clear") == 0) {
         for (int i=0; i<128; ++i) {
-            usb_send_string("\n\r");
+            usb_puts("");
         }
     }
 
@@ -103,13 +103,13 @@ static void execute_command(const char* command)
     }
 
     else if (strcmp(command, "reset") == 0) {
-        usb_send_string("Resetting device...\n\r");
+        usb_puts("Resetting device...");
         reset = true;
     }
 
     else {
-        usb_printf("\n\rUnknown command: [%s]\n\r", command);
-        usb_send_string("Type `help` for help...\n\r");
+        usb_printf("Unknown command: [%s]\n\r", command);
+        usb_puts("Type `help` for help...");
     }
 
     // Clear command buffer and reset write pointer
@@ -123,7 +123,7 @@ void serial_communication_task(void)
     // TODO: Find out, when it is REALLY ok to send.
     static uint8_t counter = 80;
     if (counter > 0) {
-        usb_send_string("Hello, friend!\n\r");
+        usb_puts("Hello, friend!");
         --counter;
     }
 
@@ -138,7 +138,7 @@ void serial_communication_task(void)
     }
 
     // Receive character with echo enabled
-    char data = usb_receive_char(true);
+    char data = usb_getc();
 
     // Parse and execute commands
     switch (data) {
