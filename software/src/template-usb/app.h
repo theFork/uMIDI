@@ -34,6 +34,10 @@
 /// \brief      Device reset timout in [s]
 #define RESET_TIMEOUT           2
 
+/// \brief      Size of the command buffer of the shell
+/// \details    Must be int the range of `uint8_t`.
+#define CMD_BUFFER_SIZE         80
+
 
 //---------------- data types ----------------//
 

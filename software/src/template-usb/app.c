@@ -20,6 +20,8 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string.h>
+
 #include "lib/background_tasks.h"
 #include "lib/gpio.h"
 #include "lib/leds.h"
@@ -40,21 +42,79 @@
 ///             stop receiving data, send a shutdown message, count down a timeout and reset itself.
 static bool reset = false;
 
+/// \brief      Buffer for incoming commands
+static char cmd_buffer[CMD_BUFFER_SIZE] = "";
+
+/// \brief      Command buffer write index
+static uint8_t cmd_buffer_index = 0;
+
 
 ////////////////////////////////////////////////////////////////
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-static void print_help(void)
+static inline void exec_help(void)
 {
     usb_send_string("\n\r");
     usb_send_string("Welcome to the uMIDI serial interface!\n\r");
-    usb_send_string("These are your options:\n\r");
-    usb_send_string("    c  :  Clears the console by printing CR/LFs\n\r");
-    usb_send_string("    h  :  Prints this help message\n\r");
-    usb_send_string("    r  :  Toggles the red led\n\r");
-    usb_send_string("    t  :  Tests the usb_printf() function\n\r");
+    usb_send_string("Here is a list of available commands:\n\r");
+    usb_send_string("    clear      :  Clears the console by printing CR/LFs\n\r");
+    usb_send_string("    help       :  Prints this help message\n\r");
+    usb_send_string("    reset      :  Resets the device\n\r");
+    usb_send_string("    led <c>    :  Toggles one of the two LEDs:\n\r");
+    usb_send_string("                  c='g' -> green LED\n\r");
+    usb_send_string("                  c='r' -> red LED\n\r");
     usb_send_string("Please enter a command:\n\r");
+}
+
+static inline void exec_led(char led)
+{
+    if (led == 'g') {
+        usb_send_string("Toggling green LED\n\r");
+        toggle_led(LED_GREEN);
+    }
+    else if (led == 'r') {
+        usb_send_string("Toggling red LED\n\r");
+        toggle_led(LED_RED);
+    }
+}
+
+static void execute_command(const char* command)
+{
+    // Ignore empty command
+    if (strcmp(command, "") == 0) {
+        return;
+    }
+
+    else if (strcmp(command, "clear") == 0) {
+        for (int i=0; i<128; ++i) {
+            usb_send_string("\n\r");
+        }
+    }
+
+    else if (strcmp(command, "help") == 0) {
+        exec_help();
+    }
+
+    else if (strncmp(command, "led ", 4) == 0) {
+        if (strlen(command) == 5) {
+            exec_led(command[4]);
+        }
+    }
+
+    else if (strcmp(command, "reset") == 0) {
+        usb_send_string("Resetting device...\n\r");
+        reset = true;
+    }
+
+    else {
+        usb_printf("\n\rUnknown command: [%s]\n\r", command);
+        usb_send_string("Type `help` for help...\n\r");
+    }
+
+    // Clear command buffer and reset write pointer
+    memset(cmd_buffer, '\0', sizeof(cmd_buffer));
+    cmd_buffer_index = 0;
 }
 
 void serial_communication_task(void)
@@ -80,39 +140,22 @@ void serial_communication_task(void)
     // Receive character with echo enabled
     char data = usb_receive_char(true);
 
-    // Execute command
-    static uint16_t test_counter = 0;
+    // Parse and execute commands
     switch (data) {
     case USB_EMPTY_CHAR:
+        // Ignore non-printable (non-ASCII) characters
         break;
 
-    case 'b':
-        usb_send_string("\n\rResetting device...\n\r");
-        reset = true;
-        break;
-
-    case 'c':
-        for (int i=0; i<128; ++i) {
-            usb_send_string("\n\r");
-        }
-        break;
-
-    case 'h':
-        print_help();
-        break;
-
-    case 't':
-        usb_printf("\n\rTest call %u, this is %d%d%d%d!\n\r", ++test_counter, 1, 3, 3, 7);
-        break;
-
-    case 'r':
-        toggle_led(LED_RED);
-        usb_send_string("\n\rToggling red LED\n\r");
+    case '\r':
+        // Parse and execute command
+        execute_command(cmd_buffer);
         break;
 
     default:
-        usb_send_string("\n\rUnknown command\n\r");
-        print_help();
+        // Add char to command buffer; cycle on overflow
+        cmd_buffer[cmd_buffer_index] = data;
+        ++cmd_buffer_index;
+        cmd_buffer_index %= CMD_BUFFER_SIZE;
         break;
     }
 }
