@@ -137,8 +137,13 @@ void serial_communication_task(void)
         return;
     }
 
-    // Receive character with echo enabled
-    char data = usb_getc();
+    // If nothing was received, there is nothing to do
+    if (!usb_bytes_received()) {
+        return;
+    }
+
+    // Receive character
+    int16_t data = usb_getc();
 
     // Parse and execute commands
     switch (data) {

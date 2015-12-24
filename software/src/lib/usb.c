@@ -147,9 +147,14 @@ void init_usb_module(void)
     PMIC.CTRL |= PMIC_LOLVLEN_bm;
 }
 
-char usb_getc(void)
+uint16_t usb_bytes_received(void)
 {
-    char data = CDC_Device_ReceiveByte(&VirtualSerial_CDC_Interface);
+    return CDC_Device_BytesReceived(&VirtualSerial_CDC_Interface);
+}
+
+int16_t usb_getc(void)
+{
+    int16_t data = CDC_Device_ReceiveByte(&VirtualSerial_CDC_Interface);
 
     // Echo back the received character if desired
     if (send_echo) {

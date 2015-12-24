@@ -62,7 +62,11 @@ void init_usb_module(void);
 
 /// \brief      TODO
 /// \details    TODO
-char usb_getc(void);
+uint16_t usb_bytes_received(void);
+
+/// \brief      TODO
+/// \details    TODO
+int16_t usb_getc(void);
 
 /// \brief      TODO
 /// \details    TODO
