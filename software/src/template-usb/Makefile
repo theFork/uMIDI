@@ -238,5 +238,5 @@ allinc: clean backup install eep
 .PHONY: all allinc asm backup compile clean eep fuse install
 
 
-.SECONDARY: $(OBJ)
+.SECONDARY:
 .NOTPARALLEL:

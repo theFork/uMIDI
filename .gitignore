@@ -1,8 +1,9 @@
 # Files generated during gcc build
+*.elf
 *.hex
+*.lst
 *.o
 *.s
-*.lst
 
 # Doxygen output
 software/doc/html
