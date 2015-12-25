@@ -214,9 +214,7 @@ package: $(TARGET).elf
 	$(info )
 	$(info $(MSG_UPDATE))
 	$(OBJCOPY) -O binary -R .eeprom $(DIR)/$< $(DIR)/$(patsubst %.elf,%.bin,$<)
-	# TODO: This is ugly
-	xxd -p $(DIR)/$(patsubst %.elf,%.bin,$<) > $(patsubst %.elf,%.xxd,$<)
-	echo "1337" >> $(patsubst %.elf,%.xxd,$<)
+	./pack_fwupdate.pl $(DIR)/$(patsubst %.elf,%.bin,$<)
 
 # Target:
 # Set fuse bits.
