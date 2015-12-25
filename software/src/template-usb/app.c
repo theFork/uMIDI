@@ -53,8 +53,11 @@ static uint8_t cmd_buffer_index = 0;
 /// \brief      This flag indicates if an update is in progress
 static bool update_in_progress = false;
 
-/// \brief      This number stores the size of an incoming update packet
+/// \brief      Number of pending update bytes
 static uint16_t update_bytes_pending = 0;
+
+/// \brief      Number of pages required for update
+static uint16_t num_pages = 0;
 
 /// \brief      CRC of the firmware
 static uint16_t expected_crc = 0;
@@ -157,6 +160,12 @@ static inline bool exec_update(const char* command)
         return false;
     }
 
+    // Calculate number of pages
+    num_pages = update_bytes_pending / SPM_PAGESIZE;
+    if (update_bytes_pending % SPM_PAGESIZE) {
+        ++num_pages;
+    }
+
     // Erase temporary application memory
     usb_puts("Erasing temporary application flash section...");
     wdt_disable();
@@ -167,7 +176,7 @@ static inline bool exec_update(const char* command)
     }
 
     // Switch to update mode
-    usb_printf("Ready to receive %u bytes...\n\r", update_bytes_pending);
+    usb_printf("Ready to receive %u bytes (%u pages)...\n\r", update_bytes_pending, num_pages);
     usb_set_echo(false);
     update_in_progress = true;
     page_buffer_index = 0;
@@ -267,7 +276,14 @@ static inline void process_update_data(void)
 
     // When a page is full, write it to the temporary application flash
     if (page_buffer_index == SPM_PAGESIZE) {
-        usb_puts("Writing temporary application page...");
+        // TODO: For unknown reasons, the following call prints 0 for the total number of pages:
+        /*
+        usb_printf("Writing temporary application page [%3u/%3u]...\n\r",
+                   temp_app_addr / SPM_PAGESIZE + 1,
+                   num_pages);
+        */
+        usb_printf("Writing temporary application page [%3u", temp_app_addr / SPM_PAGESIZE + 1);
+        usb_printf("/%3u]...\n\r", num_pages);
         if (xboot_app_temp_write_page(temp_app_addr, page_buffer, 0) != XB_SUCCESS) {
             goto fail;
         }
@@ -284,6 +300,7 @@ static inline void process_update_data(void)
             usb_printf("CRC checksum mismatch: %x != %x\n\r", expected_crc, actual_crc);
             goto fail;
         }
+        usb_puts("Success!");
 
         // Tell xboot to install the firmware on next reset
         if (xboot_install_firmware(expected_crc) != XB_SUCCESS) {
