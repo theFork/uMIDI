@@ -118,6 +118,7 @@ MSG_FUSE        = *** Setting fuse bits...
 MSG_GENERATING  = *** Generating source files...
 MSG_LINKING     = *** Linking
 MSG_PROGRAMING  = *** Programing MC...
+MSG_UPDATE      = *** Creating firmware update file...
 
 # Create the LUFA source path variables by including the LUFA root makefile
 include $(LUFA_PATH)/LUFA/makefile
@@ -133,16 +134,17 @@ help:
 	@echo "Hello and welcome to haggl's awesome universal AVR Makefile! ;-)"
 	@echo
 	@echo "These are the available targets:"
-	@echo "    make all      :  clean, compile and install"
-	@echo "    make allinc   :  backup, clean, compile, install and eep"
-	@echo "    make asm      :  compile the software and create .asm-files"
-	@echo "    make backup   :  read data from eeprom"
-	@echo "    make compile  :  compile the software and create .hex-file"
-	@echo "    make clean    :  clean up built project files"
-	@echo "    make eep      :  write data to eeprom"
-	@echo "    make fuse     :  write fuse bits"
-	@echo "    make help     :  display this message"
-	@echo "    make install  :  load the hex file to the device, using avrdude"
+	@echo "    make all      :  Clean, compile and install"
+	@echo "    make allinc   :  Backup, clean, compile, install and eep"
+	@echo "    make asm      :  Compile the software and create .asm-files"
+	@echo "    make backup   :  Read data from eeprom"
+	@echo "    make compile  :  Compile the software and create .hex-file"
+	@echo "    make clean    :  Clean up built project files"
+	@echo "    make eep      :  Write data to eeprom"
+	@echo "    make fuse     :  Write fuse bits"
+	@echo "    make help     :  Display this message"
+	@echo "    make install  :  Load the hex file to the device, using avrdude"
+	@echo "    make package  :  Generate a firmware update file"
 	@echo
 	@echo "You may want to adjust some variables in the Makefile header..."
 	@echo "AND:"
@@ -193,8 +195,9 @@ asm: $(ASM)
 clean:
 	$(info )
 	$(info $(MSG_CLEANING))
-	$(REMOVE) $(DIR)/$(TARGET).hex
 	$(REMOVE) $(DIR)/$(TARGET).elf
+	$(REMOVE) $(DIR)/$(TARGET).hex
+	$(REMOVE) $(DIR)/$(TARGET).bin
 	$(REMOVE) $(OBJ)
 	$(REMOVE) $(ASM)
 
@@ -204,6 +207,16 @@ install: compile
 	$(info )
 	$(info $(MSG_PROGRAMING))
 	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FLASH) $(AVRDUDE_VERIFY_FLASH)
+
+# Target:
+# Create firmware update package
+package: $(TARGET).elf
+	$(info )
+	$(info $(MSG_UPDATE))
+	$(OBJCOPY) -O binary -R .eeprom $(DIR)/$< $(DIR)/$(patsubst %.elf,%.bin,$<)
+	# TODO: This is ugly
+	xxd -p $(DIR)/$(patsubst %.elf,%.bin,$<) > $(patsubst %.elf,%.xxd,$<)
+	echo "1337" >> $(patsubst %.elf,%.xxd,$<)
 
 # Target:
 # Set fuse bits.
@@ -235,7 +248,7 @@ all: clean install
 allinc: clean backup install eep
 
 # Phony targets.
-.PHONY: all allinc asm backup compile clean eep fuse install
+.PHONY: all allinc asm backup compile clean eep fuse install package
 
 
 .SECONDARY:
