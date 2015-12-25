@@ -22,6 +22,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <avr/wdt.h>
 
 #include "lib/background_tasks.h"
 #include "lib/gpio.h"
@@ -152,11 +153,17 @@ static inline bool exec_update(const char* command)
     if (update_bytes_pending == 0) {
         return false;
     }
-    if (update_bytes_pending > SPM_PAGESIZE) {
-        usb_puts("Buffer is too small!\n\r");
+
+    // Erase temporary application memory
+    usb_puts("Erasing temporary application flash section...");
+    wdt_disable();
+    uint8_t error_code = xboot_app_temp_erase();
+    if (error_code != XB_SUCCESS) {
+        usb_printf("Error erasing temprary application section: %d", error_code);
         return false;
     }
 
+    // Switch to update mode
     usb_printf("Ready to receive %u bytes of raw data...\n\r", update_bytes_pending);
     usb_set_echo(false);
     update_in_progress = true;
@@ -225,23 +232,56 @@ static inline void process_command_char(char data)
 
 static inline void process_update_data(void)
 {
+    // Receive and copy byte to page buffer
     page_buffer[page_buffer_index] = usb_getc();
     ++page_buffer_index;
     --update_bytes_pending;
 
     // TODO: Extract CRC from last page and rewind page_buffer_index
-    // TODO: Pad last page
-    // TODO: When a page is full, write it to the temporary application flash
-    // TODO: Calculate CRC of the written application and compare with expected CRC
-    // TODO: Tell xboot to install the firmware on next reset
-    // TODO: Reset device
+    uint16_t expected_crc = 0;
 
-    // Return to normal operation if the update failed
+    // Pad last page with 0xFF for CRC calculation
     if (update_bytes_pending == 0) {
-        usb_puts("Update failed!");
-        update_in_progress = false;
-        usb_set_echo(true);
+        usb_puts("Padding last application page...");
+        while (page_buffer_index < SPM_PAGESIZE)
+        {
+            page_buffer[page_buffer_index] = 0xff;
+            ++page_buffer_index;
+        }
     }
+
+    // When a page is full, write it to the temporary application flash
+    if (page_buffer_index == SPM_PAGESIZE) {
+        usb_puts("Writing temporary application page...");
+        if (xboot_app_temp_write_page(temp_app_addr, page_buffer, 0) != XB_SUCCESS) {
+            goto fail;
+        }
+        temp_app_addr += SPM_PAGESIZE;
+        page_buffer_index = 0;
+    }
+
+    if (update_bytes_pending == 0) {
+        // TODO: Calculate CRC of the written application and compare with expected CRC
+        usb_puts("Performing CRC...");
+        xboot_app_temp_crc16(&expected_crc);
+
+        // Tell xboot to install the firmware on next reset
+        if (xboot_install_firmware(expected_crc) != XB_SUCCESS) {
+            goto fail;
+        }
+
+        // Reset device
+        usb_puts("Resetting device and installing new firmware...");
+        reset = true;
+    }
+
+    return;
+fail:
+    // Return to normal operation if the update failed
+    usb_puts("Update failed!");
+    update_in_progress = false;
+    usb_set_echo(true);
+    wdt_enable(WDT_PER_128CLK_gc);
 }
 
 void serial_communication_task(void)
