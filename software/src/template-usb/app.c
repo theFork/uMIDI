@@ -261,9 +261,14 @@ static inline void process_update_data(void)
     }
 
     if (update_bytes_pending == 0) {
-        // TODO: Calculate CRC of the written application and compare with expected CRC
+        // Calculate CRC of the written application and compare with expected CRC
         usb_puts("Performing CRC...");
-        xboot_app_temp_crc16(&expected_crc);
+        uint16_t actual_crc = 0;
+        xboot_app_temp_crc16(&actual_crc);
+        if (expected_crc != actual_crc) {
+            usb_printf("CRC checksum mismatch: %x != %x\n\r", expected_crc, actual_crc);
+            goto fail;
+        }
 
         // Tell xboot to install the firmware on next reset
         if (xboot_install_firmware(expected_crc) != XB_SUCCESS) {
