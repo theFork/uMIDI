@@ -56,6 +56,9 @@ static bool update_in_progress = false;
 /// \brief      This number stores the size of an incoming update packet
 static uint16_t update_bytes_pending = 0;
 
+/// \brief      CRC of the firmware
+static uint16_t expected_crc = 0;
+
 /// \brief      Buffer for application pages
 static uint8_t page_buffer[SPM_PAGESIZE] = "";
 
@@ -164,9 +167,11 @@ static inline bool exec_update(const char* command)
     }
 
     // Switch to update mode
-    usb_printf("Ready to receive %u bytes of raw data...\n\r", update_bytes_pending);
+    usb_printf("Ready to receive %u bytes...\n\r", update_bytes_pending);
     usb_set_echo(false);
     update_in_progress = true;
+    page_buffer_index = 0;
+    temp_app_addr = 0;
     return true;
 }
 
@@ -237,11 +242,21 @@ static inline void process_update_data(void)
     ++page_buffer_index;
     --update_bytes_pending;
 
-    // TODO: Extract CRC from last page and rewind page_buffer_index
-    uint16_t expected_crc = 0;
-
-    // Pad last page with 0xFF for CRC calculation
+    // When the last byte has arrived
     if (update_bytes_pending == 0) {
+        // Extract expected CRC checksum
+        expected_crc = page_buffer[page_buffer_index-2] << 8;
+        expected_crc |= page_buffer[page_buffer_index-1];
+        if (expected_crc == 0) {
+            usb_puts("Invalid empty CRC found!");
+            return;
+        }
+        usb_printf("Expected CRC checksum: %x\n\r", expected_crc);
+
+        // Rewind page_buffer_index
+        page_buffer_index -= 2;
+
+        // Pad last page with 0xFF for CRC calculation
         usb_puts("Padding last application page...");
         while (page_buffer_index < SPM_PAGESIZE)
         {
