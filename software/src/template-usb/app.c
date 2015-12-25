@@ -246,10 +246,12 @@ static inline void process_command_char(char data)
 
 static inline void process_update_data(void)
 {
-    // Receive and copy byte to page buffer
-    page_buffer[page_buffer_index] = usb_getc();
-    ++page_buffer_index;
-    --update_bytes_pending;
+    // Receive and copy bytes to page buffer
+    while (usb_bytes_received()) {
+        page_buffer[page_buffer_index] = usb_getc();
+        ++page_buffer_index;
+        --update_bytes_pending;
+    }
 
     // When the last byte has arrived
     if (update_bytes_pending == 0) {
