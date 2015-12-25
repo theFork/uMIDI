@@ -29,6 +29,7 @@
 #include "lib/leds.h"
 #include "lib/midi.h"
 #include "lib/usb.h"
+#include "lib/system.h"
 #include "xboot/xbootapi.h"
 
 #include "config.h"
@@ -174,6 +175,7 @@ static inline bool exec_update(const char* command)
         usb_printf("Error erasing temprary application section: %d", error_code);
         return false;
     }
+    wdt_reenable();
 
     // Switch to update mode
     usb_printf("Ready to receive %u bytes (%u pages)...\n\r", update_bytes_pending, num_pages);
@@ -320,7 +322,6 @@ fail:
     usb_puts("Update failed!");
     update_in_progress = false;
     usb_set_echo(true);
-    wdt_enable(WDT_PER_128CLK_gc);
 }
 
 void serial_communication_task(void)

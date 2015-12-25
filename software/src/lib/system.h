@@ -47,6 +47,9 @@ void enable_usb_pll(void);
 /// \brief      Hang and blink
 void panic(uint16_t delay_red_ms, uint16_t delay_green_ms);
 
+/// \brief      Re-enables the watchdog
+void wdt_reenable(void);
+
 
 //---------------- EOF ----------------//
 #endif // _SYSTEM_H

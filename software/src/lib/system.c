@@ -80,3 +80,8 @@ void panic(uint16_t delay_red_ms, uint16_t delay_green_ms)
         }
     }
 }
+
+void wdt_reenable(void)
+{
+    wdt_enable(WDT_PER_128CLK_gc);
+}
