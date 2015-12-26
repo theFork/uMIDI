@@ -1,6 +1,7 @@
 /// \file
-/// \brief      Header for the application specific module
-/// \details    Place your application specific code here.
+/// \brief      Serial communication module
+/// \details    This module contains a firmware update procedure and a command interpreter that
+///             can be extended by custom commands.
 
 /*
  * Copyright 2015 Sebastian Neuser
@@ -26,6 +27,7 @@
 
 
 //---------------- includes ----------------//
+#include <stdbool.h>
 #include <stdint.h>
 
 
@@ -41,10 +43,42 @@
 
 //---------------- data types ----------------//
 
+/// \brief      Command specification
+struct serial_command
+{
+    char* cmd_string;                   ///< The command as typed in the console
+
+    char* help_string;                  ///< Description of the command (used by the `help` command)
+                                        ///<
+                                        ///< The description may contain newline characters, which
+                                        ///< will be automatically followed by white space in the
+                                        ///< help message output to ensure nice formatting.
+
+    bool (*handler)(const char* cmd);   ///< Handler to call when #cmd_string is recognized
+                                        ///< \param cmd
+                                        ///<        the full command line
+                                        ///< \returns `true` if command execution succeeded,
+                                        ///<          `false` otherwise
+};
+
 
 //---------------- functions and procedures ----------------//
-/// \brief      TODO
-/// \details    TODO
+
+/// \brief      Initializes the USB communication module
+/// \details    Registers the specified commands.
+/// \param      commands
+///                 an array of command specifications
+/// \param      commands_size
+///                 the number of command specifications in #commands
+/// \see        serial_command
+/// \see        serial_communication_task
+void init_serial_communication(struct serial_command* commands, uint8_t commands_size);
+
+/// \brief      Main task for USB communication
+/// \details    This task must be run as a slow or medium speed task in order to enable USB
+///             communication and firmware updates. It processes commands arriving on the bus
+///             and takes required actions by calling registered handler functions.
+/// \see        init_serial_communication
 void serial_communication_task(void);
 
 
