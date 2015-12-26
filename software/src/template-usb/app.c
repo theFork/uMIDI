@@ -1,5 +1,6 @@
 /// \file
-/// \brief      Implementation of the application specific module
+/// \brief      Implementation of the serial communication module
+/// \see        module header
 
 /*
  * Copyright 2015 Sebastian Neuser
@@ -78,6 +79,7 @@ static uint32_t temp_app_addr = 0;
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
+/// \brief      Handler for the `help` command
 static inline bool exec_help(void)
 {
     usb_puts("");
@@ -85,7 +87,7 @@ static inline bool exec_help(void)
     usb_puts("Here is a list of available commands:");
     usb_puts("    clear        :  Clears the console by printing CR/LFs.");
     usb_puts("    fwupdate <s> :  Initiates a firmware update:");
-    usb_puts("                    <s>: firmware update packet size");
+    usb_puts("                    <s> : firmware update packet size");
     usb_puts("    help         :  Prints this help message.");
     usb_puts("    led <l> <a>  :  Manipulates the two on-board LEDs:");
     usb_puts("                    <l> : LED to manipulate");
@@ -103,11 +105,11 @@ static inline bool exec_help(void)
     return true;
 }
 
+/// \brief      Handler for the `led` command
 static inline bool exec_led(const char* command)
 {
     // Abort if the command is malformed
-    if (strlen(command) != 7) {
-        usb_printf("Length: %d\n\r", strlen(command));
+    if (strlen(command) != 7 || command[4] != ' ' || command[6] != ' ') {
         return false;
     }
 
@@ -153,8 +155,13 @@ static inline bool exec_led(const char* command)
     return true;
 }
 
+/// \brief      Handler for the `update` command
 static inline bool exec_update(const char* command)
 {
+    // Make sure the command is well-formed
+    if (command[8] != ' ') {
+    }
+
     // Parse size of incoming update packet
     update_bytes_pending = atoi(command + 9);
     if (update_bytes_pending == 0) {
@@ -186,7 +193,14 @@ static inline bool exec_update(const char* command)
     return true;
 }
 
-static void execute_command(const char* command)
+/// \brief      Executes an interactive command
+/// \details    Tries to match the beginning of the supplied string to the registered commands.
+///             If a matching command string is found, its handler is invoked.
+///             In case no suitable command could be matched, or the executed handler returns a
+///             non-zero value, an error message is sent.
+/// \param      command
+///                 the full command line as a C-string
+static inline void execute_command(const char* command)
 {
     bool success = true;
 
@@ -205,11 +219,11 @@ static void execute_command(const char* command)
         success = exec_help();
     }
 
-    else if (strncmp(command, "led ", 4) == 0) {
+    else if (strncmp(command, "led", 3) == 0) {
         success = exec_led(command);
     }
 
-    else if (strncmp(command, "fwupdate ", 9) == 0) {
+    else if (strncmp(command, "fwupdate", 8) == 0) {
         success = exec_update(command);
     }
 
@@ -232,8 +246,14 @@ static void execute_command(const char* command)
     cmd_buffer_index = 0;
 }
 
-static inline void process_command_char(char data)
+/// \brief      Processes a command character
+/// \details    If the supplied character is a carriage return, the command line read so far is
+///             executed, otherwise the character is simply appended to a (circular!) buffer.
+static inline void process_command_char(void)
 {
+    // Fetch a character from the USB data buffer
+    char data = usb_getc();
+
     // Parse and execute commands if the enter key was hit
     if (data == '\r') {
         execute_command(cmd_buffer);
@@ -246,6 +266,9 @@ static inline void process_command_char(char data)
     cmd_buffer_index %= CMD_BUFFER_SIZE;
 }
 
+/// \brief      Processes binary data arriving over USB during the update process
+/// \details    If the supplied character is a carriage return, the command line read so far is
+///             executed, otherwise the character is simply appended to a (circular!) buffer.
 static inline void process_update_data(void)
 {
     // Receive and copy bytes to page buffer
@@ -326,14 +349,6 @@ fail:
 
 void serial_communication_task(void)
 {
-    // Announce readiness
-    // TODO: Find out, when it is REALLY ok to send.
-    static uint8_t counter = 80;
-    if (counter > 0) {
-        usb_puts("Hello, friend!");
-        --counter;
-    }
-
     // Wait for timeout and reset device if the command was issued
     if (reset) {
         static uint8_t reset_timeout = RESET_TIMEOUT * F_TASK_SLOW;
@@ -349,11 +364,11 @@ void serial_communication_task(void)
         return;
     }
 
-    // Just append data to buffer if raw data mode is active
+    // Process update data / command characters
     if (update_in_progress) {
         process_update_data();
     }
     else {
-        process_command_char(usb_getc());
+        process_command_char();
     }
 }
