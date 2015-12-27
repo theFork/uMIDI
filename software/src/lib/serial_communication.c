@@ -28,7 +28,6 @@
 #include "xboot/xbootapi.h"
 
 #include "background_tasks.h"
-#include "leds.h"
 #include "usb.h"
 #include "serial_communication.h"
 #include "system.h"
@@ -94,69 +93,10 @@ static inline bool exec_help(void)
     usb_puts("    fwupdate <s> :  Initiates a firmware update:");
     usb_puts("                    <s> : firmware update packet size");
     usb_puts("    help         :  Prints this help message.");
-    usb_puts("    led <l> <a>  :  Manipulates the two on-board LEDs:");
-    usb_puts("                    <l> : LED to manipulate");
-    usb_puts("                          'g' = green LED");
-    usb_puts("                          'r' = red LED");
-    usb_puts("                          '!' = both LEDs");
-    usb_puts("                    <a> : LED mode / action");
-    usb_puts("                          'b' = blink");
-    usb_puts("                          'f' = flash");
-    usb_puts("                          't' = toggle");
     usb_puts("    reset        :  Resets the device.");
     usb_puts("Please enter a command:");
 
     // Success
-    return true;
-}
-
-/// \brief      Handler for the `led` command
-static inline bool exec_led(const char* command)
-{
-    // Abort if the command is malformed
-    if (strlen(command) != 7 || command[4] != ' ' || command[6] != ' ') {
-        return false;
-    }
-
-    // Parse LED(s) to manipulate
-    enum led led;
-    switch (command[4]) {
-    case 'g':
-        led = LED_GREEN;
-        break;
-
-    case 'r':
-        led = LED_RED;
-        break;
-
-    case '!':
-        led = LED_ALL;
-        break;
-
-    default:
-        usb_puts("LED\n\r");
-        return false;
-    }
-
-    // Parse and execute action
-    switch (command[6]) {
-    case 'b':
-        blink_led(led, F_TASK_SLOW);
-        break;
-
-    case 'f':
-        flash_led(led);
-        break;
-
-    case 't':
-        toggle_led(led);
-        break;
-
-    default:
-        usb_puts("Action\n\r");
-        return false;
-    }
-
     return true;
 }
 
@@ -226,10 +166,6 @@ static inline void execute_command(const char* command)
 
     else if (strcmp(command, "help") == 0) {
         success = exec_help();
-    }
-
-    else if (strncmp(command, "led", 3) == 0) {
-        success = exec_led(command);
     }
 
     else if (strcmp(command, "reset") == 0) {

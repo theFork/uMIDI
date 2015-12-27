@@ -31,6 +31,7 @@
 #include "lib/background_tasks.h"
 #include "lib/gpio.h"
 #include "lib/midi.h"
+#include "lib/serial_communication.h"
 
 
 //---------------- constant declarations ----------------//
@@ -44,6 +45,9 @@ extern background_task_t mid_frequency_tasks[];
 extern uint8_t mid_frequency_tasks_size;
 extern background_task_t low_frequency_tasks[];
 extern uint8_t low_frequency_tasks_size;
+
+extern struct serial_command serial_commands[];
+extern uint8_t serial_commands_size;
 
 //---------------- EOF ----------------//
 #endif // _CONFIG_H

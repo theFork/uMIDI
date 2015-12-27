@@ -22,6 +22,10 @@
  */
 
 #include <stdlib.h>
+#include <string.h>
+
+#include "lib/leds.h"
+#include "lib/usb.h"
 
 #include "config.h"
 #include "app.h"
@@ -37,3 +41,53 @@
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
+/// \brief      Handler for the `led` command
+bool exec_led(const char* command)
+{
+    // Abort if the command is malformed
+    if (strlen(command) != 7 || command[3] != ' ' || command[5] != ' ') {
+        usb_puts("Malformed command" USB_NEWLINE);
+        return false;
+    }
+
+    // Parse LED(s) to manipulate
+    enum led led;
+    switch (command[4]) {
+    case 'g':
+        led = LED_GREEN;
+        break;
+
+    case 'r':
+        led = LED_RED;
+        break;
+
+    case '!':
+        led = LED_ALL;
+        break;
+
+    default:
+        usb_puts("No such LED" USB_NEWLINE);
+        return false;
+    }
+
+    // Parse and execute action
+    switch (command[6]) {
+    case 'b':
+        blink_led(led, F_TASK_SLOW);
+        break;
+
+    case 'f':
+        flash_led(led);
+        break;
+
+    case 't':
+        toggle_led(led);
+        break;
+
+    default:
+        usb_puts("No such action" USB_NEWLINE);
+        return false;
+    }
+
+    return true;
+}
