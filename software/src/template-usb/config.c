@@ -26,6 +26,7 @@
 #include "lib/gpio.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
+#include "lib/serial_communication.h"
 #include "lib/usb.h"
 
 #include "config.h"
