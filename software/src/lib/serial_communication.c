@@ -39,16 +39,23 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-/// \brief      Device reset flag
-/// \details    This flag is set when the device receives the `reset` command. The device will then
-///             stop receiving data, send a shutdown message, count down a timeout and reset itself.
-static bool reset = false;
-
 /// \brief      Buffer for incoming commands
 static char cmd_buffer[CMD_BUFFER_SIZE] = "";
 
 /// \brief      Command buffer write index
 static uint8_t cmd_buffer_index = 0;
+
+/// \brief      Array of user-defined commands
+/// \see        init_serial_communication
+static struct serial_command* user_commands;
+
+/// \brief      Number of registered user commands
+static uint8_t user_commands_size;
+
+/// \brief      Device reset flag
+/// \details    This flag is set when the device receives the `reset` command. The device will then
+///             stop receiving data, send a shutdown message, count down a timeout and reset itself.
+static bool reset = false;
 
 /// \brief      This flag indicates if an update is in progress
 static bool update_in_progress = false;
@@ -343,6 +350,13 @@ fail:
     usb_puts("Update failed!");
     update_in_progress = false;
     usb_set_echo(true);
+}
+
+void init_serial_communication(struct serial_command commands[], uint8_t commands_size)
+{
+    // Save pointer to array of user commands and its size
+    user_commands = commands;
+    user_commands_size = commands_size;
 }
 
 void serial_communication_task(void)
