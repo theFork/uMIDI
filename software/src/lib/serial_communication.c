@@ -88,12 +88,55 @@ static inline bool exec_help(void)
 {
     usb_puts("");
     usb_puts("Welcome to the uMIDI serial interface!");
-    usb_puts("Here is a list of available commands:");
-    usb_puts("    clear        :  Clears the console by printing CR/LFs.");
-    usb_puts("    fwupdate <s> :  Initiates a firmware update:");
-    usb_puts("                    <s> : firmware update packet size");
-    usb_puts("    help         :  Prints this help message.");
-    usb_puts("    reset        :  Resets the device.");
+    usb_puts("Built-in commands:");
+    usb_puts("    clear             :  Clears the console by printing CR/LFs.");
+    usb_puts("    fwupdate <s>      :  Initiates a firmware update:");
+    usb_puts("                         <s> : firmware update packet size");
+    usb_puts("    help              :  Prints this help message.");
+    usb_puts("    reset             :  Resets the device.");
+
+    if (user_commands_size) {
+        usb_puts("Special commands:");
+    }
+
+    char* tok_ptr;
+    for (uint8_t i=0; i<user_commands_size; ++i) {
+        // Check if the help string contains newline characters
+        char* first_nl = strchr(user_commands[i].help_string, '\n');
+        if (first_nl) {
+            // Parse specified options / parameters to the command string
+            char* params = strtok_r(strdup(user_commands[i].help_string), "\n", &tok_ptr);
+
+            if (user_commands[i].help_string == first_nl) {
+                // If the first character of the help string is a newline character, the parsed
+                // params are actually the first line of the description text.
+                usb_printf("    %-16s  :  %s" USB_NEWLINE, user_commands[i].cmd_string, params);
+            }
+            else {
+                // Append options / parameters to command string and print the whole thing
+                char first_column[17] = "";
+                snprintf(first_column, sizeof(first_column),
+                         "%s %s", user_commands[i].cmd_string, params);
+                usb_printf("    %-16s  :  ", first_column);
+
+                // Complete the first line of the help string
+                usb_printf("%s" USB_NEWLINE, strtok_r(NULL, "\n", &tok_ptr));
+            }
+
+            // Split remaining command description at '\n' chars, pad with spaces and print
+            char* tail = strtok_r(NULL, "\n", &tok_ptr);
+            while (tail) {
+                usb_printf("                         %s" USB_NEWLINE, tail);
+                tail = strtok_r(NULL, "\n", &tok_ptr);
+            }
+        }
+        else {
+            // Print simple command description
+            usb_printf("    %-16s  :  %s" USB_NEWLINE,
+                       (user_commands+i)->cmd_string, (user_commands+i)->help_string);
+        }
+    }
+
     usb_puts("Please enter a command:");
 
     // Success
