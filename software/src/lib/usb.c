@@ -1,5 +1,5 @@
 /// \file
-/// \brief      USB CDC module implementation
+/// \brief      USB CDC device driver implementation
 
 /*
  * Copyright 2015 Simon Gansen
@@ -63,10 +63,14 @@ static USB_ClassInfo_CDC_Device_t VirtualSerial_CDC_Interface = {
     },
 };
 
-/// \brief      TODO
-static uint8_t ok_to_send = 0;
+/// \brief      This flag indicates if the USB port is ready to send data
+/// \details    The flag is set / cleared by a LUFA event callback.
+/// \see        EVENT_CDC_Device_ControLineStateChanged
+static bool ok_to_send = 0;
 
-/// \brief      TODO
+/// \brief      Terminal echo flag
+/// \details    When this flag is set, received bytes are immediately echoed back to provide a
+///             shell-like experience.
 static bool send_echo = true;
 
 
@@ -76,26 +80,25 @@ static bool send_echo = true;
 ////////////////////////////////////////////////////////////////
 
 /// \brief      Event handler for the library USB Connection event.
+/// \brief      Indicates device connection by flashing the red on-board LED.
 void EVENT_USB_Device_Connect(void)
 {
     flash_led(LED_RED);
 }
 
 /// \brief      Event handler for the library USB Disconnection event.
+/// \brief      Indicates device disconnection by flashing the red on-board LED.
 void EVENT_USB_Device_Disconnect(void)
 {
     flash_led(LED_RED);
 }
 
 /// \brief      Event handler for the library USB Configuration Changed event.
+/// \details    Configures the endpoints or enters panic mode if something goes wrong.
 void EVENT_USB_Device_ConfigurationChanged(void)
 {
-    bool ok = CDC_Device_ConfigureEndpoints(&VirtualSerial_CDC_Interface);
-    if (!ok) {
-        for(;;) {
-            flash_led(LED_RED);
-            flash_led(LED_GREEN);
-        }
+    if (!CDC_Device_ConfigureEndpoints(&VirtualSerial_CDC_Interface)) {
+        panic(100, 800);
     }
 }
 
@@ -106,6 +109,7 @@ void EVENT_USB_Device_ControlRequest(void)
 }
 
 /// \brief      Callback for control line state changes.
+/// \details    Sets / clears the #ok_to_send flag.
 void EVENT_CDC_Device_ControLineStateChanged(USB_ClassInfo_CDC_Device_t* const CDCInterfaceInfo)
 {
     ok_to_send = (CDCInterfaceInfo->State.ControlLineStates.HostToDevice
@@ -118,20 +122,28 @@ void EVENT_CDC_Device_ControLineStateChanged(USB_ClassInfo_CDC_Device_t* const C
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
+/// \brief      Flushes the USB send buffer
+/// \details    Panics if something goes wrong!
 static void flush(void)
 {
     // The following call returns an enum Endpoint_WaitUntilReady_ErrorCodes_t value
-    uint8_t error = CDC_Device_Flush(&VirtualSerial_CDC_Interface);
-    if (error) {
-        panic(100, 400);
+    if (USB_DeviceState == DEVICE_STATE_Configured && ok_to_send) {
+        enum Endpoint_WaitUntilReady_ErrorCodes_t error;
+        error = CDC_Device_Flush(&VirtualSerial_CDC_Interface);
+        if (error != ENDPOINT_READYWAIT_NoError) {
+            panic(100, 400);
+        }
     }
 }
+
+/// \brief      Writes the given string to the USB send buffer and flushes it
+/// \details    Panics if something goes wrong!
 static void send_string(char* string)
 {
     if (USB_DeviceState == DEVICE_STATE_Configured && ok_to_send) {
-        uint8_t error;
+        enum Endpoint_Stream_RW_ErrorCodes_t error;
         error = CDC_Device_SendString(&VirtualSerial_CDC_Interface, string);
-        if (error) {
+        if (error != ENDPOINT_RWSTREAM_NoError) {
             panic(400, 100);
         }
         flush();
@@ -149,27 +161,32 @@ void init_usb_module(void)
 
 uint16_t usb_bytes_received(void)
 {
-    return CDC_Device_BytesReceived(&VirtualSerial_CDC_Interface);
+    if (USB_DeviceState == DEVICE_STATE_Configured) {
+        return CDC_Device_BytesReceived(&VirtualSerial_CDC_Interface);
+    }
+    return 0;
 }
 
 int16_t usb_getc(void)
 {
-    int16_t data = CDC_Device_ReceiveByte(&VirtualSerial_CDC_Interface);
+    int16_t data = EOF;
+    if (USB_DeviceState == DEVICE_STATE_Configured) {
+        data = CDC_Device_ReceiveByte(&VirtualSerial_CDC_Interface);
+    }
 
-    // Echo back the received character if desired
+    // The LUFA documentation states that "a negative value" is returned if no data was received.
+    // We'll map all of these to EOF to make things a little more deterministic.
+    if (data < 0) {
+        data = EOF;
+    }
+
+    // Echo back the received character if desired and possible
     if (send_echo) {
-        switch (data) {
-        case USB_EMPTY_CHAR:
-            // Do not echo dummy characters
-            break;
-
-        case '\r':
-            send_string("\n\r");
-            break;
-
-        default:
+        if (data == '\r') {
+            send_string(USB_NEWLINE);
+        }
+        else if (0 <= data && data < 128) {
             usb_putc(data);
-            break;
         }
     }
 
@@ -182,29 +199,37 @@ void usb_main_task(void)
     USB_USBTask();
 }
 
-int usb_printf(const char* format, ...)
+void usb_printf(const char* format, ...)
 {
     va_list ap;
-    int i;
     char buffer[80] = "";
 
     va_start(ap, format);
-    i = vsprintf(buffer, format, ap);
+    vsprintf(buffer, format, ap);
     va_end(ap);
 
     send_string(buffer);
-    return i;
 }
 
 void usb_putc(char c)
 {
-    CDC_Device_SendByte(&VirtualSerial_CDC_Interface, c);
-    flush();
+    if (USB_DeviceState == DEVICE_STATE_Configured && ok_to_send) {
+        enum Endpoint_WaitUntilReady_ErrorCodes_t error;
+        error = CDC_Device_SendByte(&VirtualSerial_CDC_Interface, c);
+        if (error != ENDPOINT_READYWAIT_NoError) {
+            panic(800, 100);
+        }
+        flush();
+    }
+    else {
+        flash_led(LED_RED);
+    }
 }
 
 void usb_puts(char* string)
 {
-    usb_printf("%s\n\r", string);
+    send_string(string);
+    send_string(USB_NEWLINE);
 }
 
 void usb_set_echo(bool echo)
