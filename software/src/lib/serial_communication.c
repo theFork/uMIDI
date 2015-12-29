@@ -215,9 +215,13 @@ static inline void execute_command(const char* command)
     }
 
     else if (strcmp(command, "clear") == 0) {
-        for (int i=0; i<128; ++i) {
+        for (int i=0; i<80; ++i) {
             usb_puts("");
         }
+    }
+
+    else if (strncmp(command, "fwupdate", 8) == 0) {
+        success = exec_update(command);
     }
 
     else if (strcmp(command, "help") == 0) {
@@ -228,20 +232,27 @@ static inline void execute_command(const char* command)
         success = exec_led(command);
     }
 
-    else if (strncmp(command, "fwupdate", 8) == 0) {
-        success = exec_update(command);
-    }
-
     else if (strcmp(command, "reset") == 0) {
         usb_puts("Resetting device...");
         reset = true;
     }
 
     else {
+        // Iterate all user-defined commands and try to find a matching one
+        for (uint8_t i=0; i<user_commands_size; ++i) {
+            struct serial_command* user_command = user_commands + i;
+            if (strncmp(command, user_command->cmd_string, strlen(user_command->cmd_string)) == 0) {
+                success = user_command->handler(command);
+                goto cleanup;
+            }
+        }
+
+        // No known command matches :-(
         usb_printf("Unknown command: [%s]\n\r", command);
         usb_puts("Type `help` for help.\n\r");
     }
 
+cleanup:
     if (!success) {
         usb_printf("Error executing command: [%s]\n\r", command);
     }
