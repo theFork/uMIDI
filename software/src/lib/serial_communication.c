@@ -232,7 +232,7 @@ static inline void execute_command(const char* command)
 
     else {
         usb_printf("Unknown command: [%s]\n\r", command);
-        usb_puts("Type `help` for help.");
+        usb_puts("Type `help` for help.\n\r");
     }
 
     if (!success) {
