@@ -177,7 +177,7 @@ static inline bool exec_update(const char* command)
     wdt_disable();
     uint8_t error_code = xboot_app_temp_erase();
     if (error_code != XB_SUCCESS) {
-        usb_printf("Error erasing temprary application section: %d", error_code);
+        usb_printf("Error erasing temprary application section: %d\n\r", error_code);
         return false;
     }
     wdt_reenable();
