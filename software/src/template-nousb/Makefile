@@ -96,7 +96,7 @@ MSG_LINKING     = *** Linking
 MSG_PROGRAMING  = *** Programing MC...
 
 # Determine the list of C source files
-SRC = $(filter-out $(wildcard lib/usb*.c),$(wildcard lib/*.c)) $(wildcard *.c)
+SRC = $(filter-out $(wildcard lib/usb*.c) lib/serial_communication.c,$(wildcard lib/*.c)) $(wildcard *.c)
 
 # Default target.
 help:
