@@ -155,7 +155,7 @@ struct wave
 ///                 the static offset
 /// \see        wave
 /// \see        waveform
-void initialize_wave(struct wave* wave, enum waveform waveform, uint8_t speed,
+void init_wave(struct wave* wave, enum waveform waveform, uint8_t speed,
                      uint8_t amplitude, uint8_t offset);
 
 /// \brief      Updates the speed of a wave

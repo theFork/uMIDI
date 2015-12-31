@@ -81,7 +81,7 @@ void process_background_tasks(void);
 /// \see        F_TASK_FAST
 /// \see        F_TASK_MID
 /// \see        F_TASK_SLOW
-void initialize_background_tasks(background_task_t high_freq_tasks[], uint8_t high_freq_tasks_size,
+void init_background_tasks(background_task_t high_freq_tasks[], uint8_t high_freq_tasks_size,
                                  background_task_t mid_freq_tasks[], uint8_t mid_freq_tasks_size,
                                  background_task_t low_freq_tasks[], uint8_t low_freq_tasks_size);
 

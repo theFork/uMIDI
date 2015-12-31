@@ -63,12 +63,12 @@ void handle_control_change(uint8_t controller_number, uint8_t value)
     }
 }
 
-void initialize_sequencer_module(struct sequencer_config* config, struct gpio_pin* leds[], uint8_t leds_size)
+void init_sequencer_module(struct sequencer_config* config, struct gpio_pin* leds[], uint8_t leds_size)
 {
     status_leds = leds;
     status_leds_size = leds_size;
     controller_number = config->controller_number;
-    initialize_wave(&wave,
+    init_wave(&wave,
                     config->waveform,
                     config->speed,
                     MIDI_MAX_VALUE,

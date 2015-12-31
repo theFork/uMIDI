@@ -119,7 +119,7 @@ static inline void gpio_toggle(struct gpio_pin pin) {
 /// \details    Configures all available GPIO pins according to the provided configuration.
 /// \param      gpio
 ///                 the GPIO configuration
-void initialize_gpio_module(struct gpio_config* gpio);
+void init_gpio_module(struct gpio_config* gpio);
 
 
 //---------------- EOF ----------------//

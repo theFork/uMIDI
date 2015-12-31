@@ -42,7 +42,7 @@ static uint16_t (*convert_pwm_range)(uint8_t);
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void initialize_pwm_module(uint16_t (*conversion_function)(uint8_t))
+void init_pwm_module(uint16_t (*conversion_function)(uint8_t))
 {
     // Store conversion function pointer
     convert_pwm_range = conversion_function;

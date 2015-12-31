@@ -121,7 +121,7 @@ inline void enable_adc_interrupt(enum adc_channel channel)
     *adc_regs[channel].interrupt_register |= ADC_CH_INTLVL_LO_gc;
 }
 
-void initialize_adc_module(const struct adc_config* config,
+void init_adc_module(const struct adc_config* config,
                            const struct adc_conversion_config* calibration_conversion)
 {
     // Select voltage reference
@@ -144,13 +144,13 @@ void initialize_adc_module(const struct adc_config* config,
     // Enable the ADC
     ADCA.CTRLA |= ADC_ENABLE_bm;
 
-    initialize_adc_conversion(calibration_conversion);
+    init_adc_conversion(calibration_conversion);
 
     // Measure offset and initialize sample buffer
     calibrate_adc_offset(calibration_conversion->channel);
 }
 
-void initialize_adc_conversion(const struct adc_conversion_config* config)
+void init_adc_conversion(const struct adc_conversion_config* config)
 {
     // Save callbacks
     callbacks_signed[config->channel] = config->callback_signed;

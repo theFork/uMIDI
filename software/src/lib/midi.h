@@ -143,7 +143,7 @@ static inline void uart_write(uint8_t data) {
 /// \details    Configures the UART, enables the RXC interrupt and registers MIDI message handlers.
 /// \param      config
 ///                 the MIDI module configuration to apply
-void initialize_midi_module(const struct midi_config* config);
+void init_midi_module(const struct midi_config* config);
 
 /// \brief      Sends a control change message
 /// \param      controller
