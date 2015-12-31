@@ -48,7 +48,7 @@ static struct led_state red_led =
 };
 
 /// \brief  This array holds pointers to all LED state variables
-/// \see    initialize_leds_module
+/// \see    init_leds_module
 static struct led_state *leds[LED_COUNT];
 
 
@@ -95,7 +95,7 @@ static void set_or_update_blinking_led_state(struct led_state *led, uint8_t pres
     led->counter = 0;
 }
 
-void initialize_leds_module(void)
+void init_leds_module(void)
 {
     // Configure AVR ports
     LED_PORT.DIRSET = _BV(RED_LED_BIT) | _BV(GREEN_LED_BIT);

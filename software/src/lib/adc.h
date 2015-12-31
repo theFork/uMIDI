@@ -120,8 +120,8 @@ void enable_adc_interrupt(enum adc_channel channel);
 ///             The GPIO pin is *not* configured here -- this must be done through the GPIO module.
 /// \param      config
 ///                 the ADC conversion configuration
-/// \see        initialize_gpio_module
-void initialize_adc_conversion(const struct adc_conversion_config* config);
+/// \see        init_gpio_module
+void init_adc_conversion(const struct adc_conversion_config* config);
 
 /// \brief      Initializes and calibrates the ADC
 /// \details    Selects the voltage reference, sets the clock prescaler and conversion mode and
@@ -130,7 +130,7 @@ void initialize_adc_conversion(const struct adc_conversion_config* config);
 ///                 the shared ADC configuration
 /// \param      calibration_conversion
 ///                 a conversion configuration used for ADC offset calibration
-void initialize_adc_module(const struct adc_config* config,
+void init_adc_module(const struct adc_config* config,
                            const struct adc_conversion_config* calibration_conversion);
 
 /// \brief      Triggers a conversion for the given channel

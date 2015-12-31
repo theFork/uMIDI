@@ -48,7 +48,7 @@
 ///                 Points to a function converting midi values to pwm compare register values
 /// \see        update_pwm
 /// \see        wave
-void initialize_pwm_module(uint16_t (*conversion_function)(uint8_t));
+void init_pwm_module(uint16_t (*conversion_function)(uint8_t));
 
 
 /// \brief      Updates the PWM duty cycle

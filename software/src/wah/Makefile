@@ -18,51 +18,52 @@
 # along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# MCU name
-MCU = atxmega128a4u
-
-# main oscillator and cpu frequencies
-F_OSC = 32000000
-F_CPU = 32000000
-
-# optimization level, can be [0, 1, 2, 3, s].
-# 0 = turn off optimization. s = optimize for size.
-OPT = s
-
-# target file name (without extension)
+# Target file name (without extension)
 TARGET = main
 
-# output directory.
-DIR = ./
+# Output directory.
+DIR = .
 
-# fuse bits
+# Fuse bits
 FUSE1 = 0x00
 FUSE2 = 0xbf
 FUSE4 = 0xfe
 FUSE5 = 0xff
 
+# Optimization level, can be [0, 1, 2, 3, s].
+# 0 = turn off optimization. s = optimize for size.
+OPT = s
+
+# Programmer configuration for avrdude
+AVRDUDE_PROGRAMMER_CONFIG = -c atmelice_pdi
+
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
-# normally you should not need to change the following settings
+# Normally you should not need to change the following settings
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 
 
-# compiler flags.
+# MCU name
+MCU = atxmega128a4u
+
+# Main CPU frequency
+F_CPU = 32000000
+
+# Compiler flags.
 CFLAGS = -mmcu=$(MCU)
-CFLAGS += -O$(OPT)
+CFLAGS += -std=gnu99
 CFLAGS += -Wall -Wstrict-prototypes
-CFLAGS += -std=c99
-CFLAGS += -DF_OSC=$(F_OSC)
-CFLAGS += -DF_CPU=$(F_CPU)
+CFLAGS += -O$(OPT)
+CFLAGS += -DF_CPU=$(F_CPU)UL
 
-# avrdude settings and variables.
-AVRDUDE_FLAGS = -c atmelice_pdi
+# Avrdude settings and variables.
+AVRDUDE_FLAGS = $(AVRDUDE_PROGRAMMER_CONFIG)
 AVRDUDE_FLAGS += -p x128a4u
 
-AVRDUDE_WRITE_FLASH = -U flash:w:$(DIR)$(TARGET).hex
-AVRDUDE_VERIFY_FLASH = -U flash:v:$(DIR)$(TARGET).hex
-AVRDUDE_READ_EEPROM = -U eeprom:r:$(DIR)eeprom.eep:i
-AVRDUDE_WRITE_EEPROM = -U eeprom:w:$(DIR)eeprom.eep:i
+AVRDUDE_WRITE_FLASH = -U flash:w:$(DIR)/$(TARGET).hex
+AVRDUDE_VERIFY_FLASH = -U flash:v:$(DIR)/$(TARGET).hex
+AVRDUDE_READ_EEPROM = -U eeprom:r:$(DIR)/eeprom.eep:i
+AVRDUDE_WRITE_EEPROM = -U eeprom:w:$(DIR)/eeprom.eep:i
 AVRDUDE_WRITE_FUSES = -U fuse1:w:$(FUSE1):m
 AVRDUDE_WRITE_FUSES += -U fuse2:w:$(FUSE2):m
 AVRDUDE_WRITE_FUSES += -U fuse4:w:$(FUSE4):m
@@ -70,11 +71,11 @@ AVRDUDE_WRITE_FUSES += -U fuse5:w:$(FUSE5):m
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
-# please do not edit below
+# Please do not edit below
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 
 
-# define programs and commands.
+# Define programs and commands.
 SHELL = /bin/sh
 CC = avr-gcc
 OBJCOPY = avr-objcopy
@@ -82,136 +83,130 @@ AVRDUDE = avrdude
 REMOVE = rm -f
 MKDIR = mkdir
 
-# define Messages
-MSG_ASSEMBLING = make: *** assembling...
-MSG_BYE = make: *** have a nice day!
-MSG_CLEANING = make: *** cleaning project...
-MSG_COMPILING = make: *** compiling...
-MSG_DOWNLOADING = make: *** backing up EEPROM...
-MSG_DUMPING = make: *** writing EEPROM...
-MSG_EEPROM = make: *** creating load file for EEPROM...
-MSG_FLASH = make: *** creating load file for Flash...
-MSG_GENERATING = make: *** generating source files...
-MSG_LINKING = make: *** linking...
-MSG_HELLO = make: *** hiho!
-MSG_PROGRAMING = make: *** programing MC...
-MSG_FUSE = make: *** setting fuse bits...
+# Define Messages
+MSG_ASSEMBLING  = *** Assembling
+MSG_CLEANING    = *** Cleaning project...
+MSG_COMPILING   = *** Compiling
+MSG_DOWNLOADING = *** Backing up EEPROM...
+MSG_EEPROM      = *** Writing EEPROM...
+MSG_FLASH       = *** Creating hex load file
+MSG_FUSE        = *** Setting fuse bits...
+MSG_GENERATING  = *** Generating source files...
+MSG_LINKING     = *** Linking
+MSG_PROGRAMING  = *** Programing MC...
 
-# determine the list of C source files
-SRC = $(wildcard lib/*.c) $(wildcard *.c)
+# Determine the list of C source files
+SRC = $(filter-out $(wildcard lib/usb*.c) lib/serial_communication.c,$(wildcard lib/*.c)) $(wildcard *.c)
 
-# default target.
+# Default target.
 help:
 	@echo "#------------------------------------------------------------------------------#"
 	@echo "Hello and welcome to haggl's awesome universal AVR Makefile! ;-)"
 	@echo
-	@echo "Here are the available targets:"
-	@echo "\tmake all = clean, compile and install"
-	@echo "\tmake allinc = backup, clean, compile, install and eep"
-	@echo "\tmake asm = compile the software and create .asm-file"
-	@echo "\tmake backup = read data from eeprom"
-	@echo "\tmake compile = compile the software and create .hex and .asm-files"
-	@echo "\tmake clean = clean up built project files"
-	@echo "\tmake eep = write data to eeprom"
-	@echo "\tmake fuse = write fuse bits"
-	@echo "\tmake help = display this message"
-	@echo "\tmake hex = compile the software and create .hex-file"
-	@echo "\tmake install = load the hex file to the device, using avrdude"
+	@echo "These are the available targets:"
+	@echo "    make all      :  clean, compile and install"
+	@echo "    make allinc   :  backup, clean, compile, install and eep"
+	@echo "    make asm      :  compile the software and create .asm-files"
+	@echo "    make backup   :  read data from eeprom"
+	@echo "    make compile  :  compile the software and create .hex-file"
+	@echo "    make clean    :  clean up built project files"
+	@echo "    make eep      :  write data to eeprom"
+	@echo "    make fuse     :  write fuse bits"
+	@echo "    make help     :  display this message"
+	@echo "    make install  :  load the hex file to the device, using avrdude"
 	@echo
-	@echo "Don't forget to adjust the variables in the Makefile header!"
+	@echo "You may want to adjust some variables in the Makefile header..."
 	@echo "AND:"
 	@echo "Be careful with fuse bits!"
 	@echo "#------------------------------------------------------------------------------#"
 
 
-# say hello.
-hello:
-	$(info )
-	$(info $(MSG_HELLO))
-
-# say bye.
-bye:
-	$(info )
-	$(info $(MSG_BYE))
-	$(info )
-
-# compile: create object files from C source files.
-$(DIR)%.o: %.c
+# Internal rule:
+# Compile object files from C source files.
+$(DIR)/%.o: %.c
 	$(info )
 	$(info $(MSG_COMPILING) $<)
 	$(CC) -c $(CFLAGS) $< -o $@
 
-# link: create ELF output file from object files.
-OBJ = $(addprefix $(DIR),$(patsubst %.c,%.o,$(SRC)))
+# Internal rule:
+# Link ELF output file from object files.
+OBJ = $(addprefix $(DIR)/,$(patsubst %.c,%.o,$(SRC)))
 %.elf: $(OBJ)
-	@echo $(OBJ)
 	$(info )
 	$(info $(MSG_LINKING) $@)
-	$(CC) $(CFLAGS) $(OBJ) -o $(DIR)$@
+	$(CC) $(CFLAGS) $(OBJ) -o $(DIR)/$@
 
-# create final output file (.hex) from ELF output file.
-hex: $(TARGET).hex
+# Internal rule:
+# Create final output file (.hex) from ELF.
 %.hex: %.elf
 	$(info )
 	$(info $(MSG_FLASH) $@)
-	$(OBJCOPY) -O ihex -R .eeprom $(DIR)$< $(DIR)$@
+	$(OBJCOPY) -O ihex -R .eeprom $(DIR)/$< $(DIR)/$@
 
-# compile: create assembler files from C source files.
-asm: $(TARGET).s
+# Internal rule:
+# Create assembler files from C source files.
 %.s: %.c
 	$(info )
 	$(info $(MSG_ASSEMBLING) $<)
-	$(CC) -S $(CFLAGS) $< -o $(DIR)$@
+	$(CC) -S $(CFLAGS) $< -o $(DIR)/$@
 
-# target: clean project.
-clean: hello makeclean bye
-makeclean:
+# Target:
+# Compile project and generate hex load file
+compile: $(TARGET).hex
+
+# Target:
+# Generate main target assembly.
+ASM = $(addprefix $(DIR)/,$(patsubst %.c,%.s,$(SRC)))
+asm: $(ASM)
+
+# Target:
+# Clean project.
+clean:
 	$(info )
 	$(info $(MSG_CLEANING))
-	$(REMOVE) $(DIR)$(TARGET).hex
-	$(REMOVE) $(DIR)$(TARGET).elf
-	$(REMOVE) $(DIR)$(TARGET).s
+	$(REMOVE) $(DIR)/$(TARGET).hex
+	$(REMOVE) $(DIR)/$(TARGET).elf
 	$(REMOVE) $(OBJ)
+	$(REMOVE) $(ASM)
 
-# target: compile project
-compile: hello hex asm bye
-
-# target: program the device.
-install: hello makeinstall bye
-makeinstall:
+# Target:
+# Program the device.
+install: compile
 	$(info )
 	$(info $(MSG_PROGRAMING))
 	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FLASH) $(AVRDUDE_VERIFY_FLASH)
 
-# target: set fuse bits.
-fuse: hello makefuse bye
-makefuse:
+# Target:
+# Set fuse bits.
+fuse:
 	$(info )
 	$(info $(MSG_FUSE))
 	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FUSES)
 
-# target: backup eeprom data
-backup: hello makebackup bye
-makebackup:
+# Target:
+# Backup EEPROM data
+backup:
 	$(info )
 	$(info $(MSG_DOWNLOADING))
 	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_READ_EEPROM)
 
-# target: eeprom write
-eep: hello makeeep bye
-makeeep:
+# Target:
+# EEPROM write
+eep:
 	$(info )
-	$(info $(MSG_DUMPING))
+	$(info $(MSG_EEPROM))
 	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_EEPROM)
 
-# target: compile and install.
-all: hello makeclean hex makeinstall bye
+# Target:
+# Clean, compile and install.
+all: clean install
 
-# target: backup, compile, install and eep.
-allinc: hello makeclean hex makebackup makeinstall makeeep bye
+# Target:
+# Clean, backup EEPROM, compile, install and write EEPROM.
+allinc: clean backup install eep
 
-# phony targets.
-.PHONY: all allinc asm backup compile bye clean eep fuse hello hex makebackup makeclean makeeep makefuse makeinstall install
+# Phony targets.
+.PHONY: all allinc asm backup compile clean eep fuse install
 
 
 .SECONDARY: $(OBJ)

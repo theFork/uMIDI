@@ -74,7 +74,7 @@ struct encoder_state
 /// \param      config
 ///                 the encoder configuration
 /// \see        encoder_config
-void initialize_encoder_module(struct encoder_config* config);
+void init_encoder_module(struct encoder_config* config);
 
 /// \brief      Polls the encoder
 /// \details    Checks if the encoder was rotated or pushed and updates the saved state.

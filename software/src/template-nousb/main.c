@@ -50,10 +50,10 @@ int main( void )
     configure_system_clock();
 
     // Initialize modules
-    initialize_leds_module();
-    initialize_gpio_module(&gpio_config);
-    initialize_midi_module(&midi_config);
-    initialize_background_tasks(high_frequency_tasks, high_frequency_tasks_size,
+    init_leds_module();
+    init_gpio_module(&gpio_config);
+    init_midi_module(&midi_config);
+    init_background_tasks(high_frequency_tasks, high_frequency_tasks_size,
                                 mid_frequency_tasks, mid_frequency_tasks_size,
                                 low_frequency_tasks, low_frequency_tasks_size);
 

@@ -45,7 +45,7 @@ struct sequencer_config {
 
 //---------------- functions and procedures ----------------//
 void handle_control_change(uint8_t current_controller, uint8_t value);
-void initialize_sequencer_module(struct sequencer_config* config, struct gpio_pin* leds[], uint8_t leds_size);
+void init_sequencer_module(struct sequencer_config* config, struct gpio_pin* leds[], uint8_t leds_size);
 void update_sequencer(void);
 void update_sequencer_leds(void);
 

@@ -53,18 +53,18 @@ static inline uint16_t linear_function(uint8_t midi_value)
     return linear(&pwm_range, midi_value);
 }
 
-void initialize_wah_module(void)
+void init_wah_module(void)
 {
     // Setup linear conversion function
     pwm_range.from = 7000;
     pwm_range.to = PWM_MAX_DUTY;
     init_linear(&pwm_range);
-    initialize_pwm_module(&linear_function);
+    init_pwm_module(&linear_function);
 
     // Setup wave module
     const uint8_t speed = 120;
     const uint8_t amplitude = MIDI_MAX_VALUE-32;
-    initialize_wave(&pwm_wave, WAVE_OFF, speed, amplitude, 0);
+    init_wave(&pwm_wave, WAVE_OFF, speed, amplitude, 0);
 }
 
 void enable_wah(bool enable)

@@ -266,7 +266,7 @@ static uint8_t compute_wave_pattern(struct wave* wave)
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void initialize_wave(struct wave* wave, enum waveform waveform, uint8_t speed, uint8_t amplitude, uint8_t offset)
+void init_wave(struct wave* wave, enum waveform waveform, uint8_t speed, uint8_t amplitude, uint8_t offset)
 {
     wave->settings.amplitude = amplitude;
     wave->settings.offset = offset;

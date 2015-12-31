@@ -61,7 +61,7 @@ void panic(uint16_t delay_red_ms, uint16_t delay_green_ms)
 {
     cli();
     wdt_disable();
-    initialize_leds_module();
+    init_leds_module();
 
     uint16_t cnt_rd = 0;
     uint16_t cnt_gn = 0;

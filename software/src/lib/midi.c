@@ -36,11 +36,11 @@
 static enum midi_state midi_state = MIDI_STATE_IDLE;
 
 /// \brief      The MIDI transmit channel
-/// \see        initialize_midi_module
+/// \see        init_midi_module
 static uint8_t tx_channel = 1;
 
 /// \brief      The MIDI event handlers
-/// \see        initialize_midi_module
+/// \see        init_midi_module
 static struct midi_event_handlers* event_handlers;
 
 
@@ -49,7 +49,7 @@ static struct midi_event_handlers* event_handlers;
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void initialize_midi_module(const struct midi_config* config)
+void init_midi_module(const struct midi_config* config)
 {
     // Configure TXD0
     PORTE.DIR |= PIN3_bm;

@@ -81,7 +81,7 @@ struct led_state
 //---------------- functions and procedures ----------------//
 /// \brief      Module initialization procedure
 /// \details    Writes relevant AVR GPIO configuration
-void initialize_leds_module(void);
+void init_leds_module(void);
 
 /// \brief      Lets an LED blink in a fixed interval
 /// \details    The prescaler parameter controls the blinking frequency: Every \p prescaler th time
@@ -117,7 +117,7 @@ void toggle_led(enum led);
 /// \brief      State machine task that updates the LEDs
 /// \details    This task must be included in the state machine tasks for the blink and flash modes
 ///             to work.
-/// \see        initialize_state_machine
+/// \see        init_state_machine
 void update_leds(void);
 
 
