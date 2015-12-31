@@ -167,13 +167,13 @@ static inline bool exec_update(const char* command)
     wdt_disable();
     uint8_t error_code = xboot_app_temp_erase();
     if (error_code != XB_SUCCESS) {
-        usb_printf("Error erasing temprary application section: %d\n\r", error_code);
+        usb_printf("Error erasing temprary application section: %d" USB_NEWLINE, error_code);
         return false;
     }
     wdt_reenable();
 
     // Switch to update mode
-    usb_printf("Ready to receive %u bytes (%u pages)...\n\r", update_bytes_pending, num_pages);
+    usb_printf("Ready to receive %u bytes (%u pages)..." USB_NEWLINE, update_bytes_pending, num_pages);
     usb_set_echo(false);
     update_in_progress = true;
     page_buffer_index = 0;
@@ -227,13 +227,13 @@ static inline void execute_command(const char* command)
         }
 
         // No known command matches :-(
-        usb_printf("Unknown command: [%s]\n\r", command);
-        usb_puts("Type `help` for help.\n\r");
+        usb_printf("Unknown command: [%s]" USB_NEWLINE, command);
+        usb_puts("Type `help` for help." USB_NEWLINE);
     }
 
 cleanup:
     if (!success) {
-        usb_printf("Error executing command: [%s]\n\r", command);
+        usb_printf("Error executing command: [%s]" USB_NEWLINE, command);
     }
 
     // Clear command buffer and reset write pointer
@@ -282,7 +282,7 @@ static inline void process_update_data(void)
             usb_puts("Invalid empty CRC found!");
             return;
         }
-        usb_printf("Expected CRC checksum: %x\n\r", expected_crc);
+        usb_printf("Expected CRC checksum: %x" USB_NEWLINE, expected_crc);
 
         // Rewind page_buffer_index
         page_buffer_index -= 2;
@@ -300,12 +300,12 @@ static inline void process_update_data(void)
     if (page_buffer_index == SPM_PAGESIZE) {
         // TODO: For unknown reasons, the following call prints 0 for the total number of pages:
         /*
-        usb_printf("Writing temporary application page [%3u/%3u]...\n\r",
+        usb_printf("Writing temporary application page [%3u/%3u]..." USB_NEWLINE,
                    temp_app_addr / SPM_PAGESIZE + 1,
                    num_pages);
         */
         usb_printf("Writing temporary application page [%3u", temp_app_addr / SPM_PAGESIZE + 1);
-        usb_printf("/%3u]...\n\r", num_pages);
+        usb_printf("/%3u]..." USB_NEWLINE, num_pages);
         if (xboot_app_temp_write_page(temp_app_addr, page_buffer, 0) != XB_SUCCESS) {
             goto fail;
         }
@@ -319,7 +319,7 @@ static inline void process_update_data(void)
         uint16_t actual_crc = 0;
         xboot_app_temp_crc16(&actual_crc);
         if (expected_crc != actual_crc) {
-            usb_printf("CRC checksum mismatch: %x != %x\n\r", expected_crc, actual_crc);
+            usb_printf("CRC checksum mismatch: %x != %x" USB_NEWLINE, expected_crc, actual_crc);
             goto fail;
         }
         usb_puts("Success!");
