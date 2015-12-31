@@ -95,6 +95,9 @@ AVRDUDE_WRITE_FUSES += -U fuse2:w:$(FUSE2):m
 AVRDUDE_WRITE_FUSES += -U fuse4:w:$(FUSE4):m
 AVRDUDE_WRITE_FUSES += -U fuse5:w:$(FUSE5):m
 
+# Device node for attached uMIDI device
+CDC_DEVICE = /dev/umidi
+
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 # Please do not edit below
@@ -120,7 +123,8 @@ MSG_FUSE        = *** Setting fuse bits...
 MSG_GENERATING  = *** Generating source files...
 MSG_LINKING     = *** Linking
 MSG_PROGRAMING  = *** Programing MC...
-MSG_UPDATE      = *** Creating firmware update file...
+MSG_PACKAGE     = *** Creating firmware update file...
+MSG_UPDATE      = *** Uploading new firmware...
 
 # Create the LUFA source path variables by including the LUFA root makefile
 include $(LUFA_PATH)/LUFA/makefile
@@ -137,17 +141,18 @@ help:
 	@echo "Hello and welcome to haggl's awesome universal AVR Makefile! ;-)"
 	@echo
 	@echo "These are the available targets:"
-	@echo "    make all      :  Clean, compile and install"
-	@echo "    make allinc   :  Backup, clean, compile, install and eep"
-	@echo "    make asm      :  Compile the software and create .asm-files"
-	@echo "    make backup   :  Read data from eeprom"
-	@echo "    make compile  :  Compile the software and create .hex-file"
-	@echo "    make clean    :  Clean up built project files"
-	@echo "    make eep      :  Write data to eeprom"
-	@echo "    make fuse     :  Write fuse bits"
-	@echo "    make help     :  Display this message"
-	@echo "    make install  :  Load the hex file to the device, using avrdude"
-	@echo "    make package  :  Generate a firmware update file"
+	@echo "    make all       :  Clean, compile and install"
+	@echo "    make allinc    :  Backup, clean, compile, install and eep"
+	@echo "    make asm       :  Compile the software and create .asm-files"
+	@echo "    make backup    :  Read data from eeprom"
+	@echo "    make compile   :  Compile the software and create .hex-file"
+	@echo "    make clean     :  Clean up built project files"
+	@echo "    make eep       :  Write data to eeprom"
+	@echo "    make fuse      :  Write fuse bits"
+	@echo "    make fwupdate  :  Perform a firmware update"
+	@echo "    make help      :  Display this message"
+	@echo "    make install   :  Load the hex file to the device, using avrdude"
+	@echo "    make package   :  Generate a firmware update file"
 	@echo
 	@echo "You may want to adjust some variables in the Makefile header..."
 	@echo "AND:"
@@ -213,11 +218,21 @@ install: compile
 
 # Target:
 # Create firmware update package
-package: $(TARGET).elf
+package: $(TARGET).bin
+$(TARGET).bin: $(TARGET).elf
 	$(info )
-	$(info $(MSG_UPDATE))
+	$(info $(MSG_PACKAGE))
 	$(OBJCOPY) -O binary -R .eeprom $(DIR)/$< $(DIR)/$(patsubst %.elf,%.bin,$<)
 	./pack_fwupdate.pl $(DIR)/$(patsubst %.elf,%.bin,$<)
+
+# Target:
+# Upload firmware update file
+fwupdate: $(TARGET).bin
+	$(info )
+	$(info $(MSG_UPDATE))
+	echo -n "fwupdate `du -b $(TARGET).bin | sed 's/\s.*//'`\r" > $(CDC_DEVICE)
+	sleep 2
+	cat main.bin > $(CDC_DEVICE)
 
 # Target:
 # Set fuse bits.
@@ -249,7 +264,7 @@ all: clean install
 allinc: clean backup install eep
 
 # Phony targets.
-.PHONY: all allinc asm backup compile clean eep fuse install package
+.PHONY: all allinc asm backup compile clean eep fuse fwupdate install package
 
 
 .SECONDARY:
