@@ -1,12 +1,13 @@
 /// \file
-/// \brief  System configuration procedures
+/// \brief      An application specific module
+/// \details    Put your custom code here for example
 
 /*
  * Copyright 2015 Sebastian Neuser
  *
  * This file is part of the uMIDI firmware.
  *
- * the uMIDI firmware is free software: you can redistribute it and/or modify
+ * The MIDI volume controller firmware is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
@@ -20,8 +21,8 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _SYSTEM_H
-#define _SYSTEM_H
+#ifndef _APP_H
+#define _APP_H
 
 
 //---------------- includes ----------------//
@@ -34,22 +35,9 @@
 
 
 //---------------- functions and procedures ----------------//
-
-/// \brief      Configures the system clock
-/// \details    Activates and selects the internal 32 MHz RC oscillator as system clock source.
-void configure_system_clock(void);
-
-/// \brief      Configures the PLL for USB operation
-/// \details    Sets the PLL output frequency to 48 MHz, enables the PLL and waits until it has
-///             successfully locked.
-void enable_usb_pll(void);
-
-/// \brief      Hang and blink
-void panic(uint16_t delay_red_ms, uint16_t delay_green_ms);
-
-/// \brief      Re-enables the watchdog
-void wdt_reenable(void);
+bool exec_led(const char* command);
 
 
 //---------------- EOF ----------------//
-#endif // _SYSTEM_H
+#endif // _APP_H
+

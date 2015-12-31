@@ -1,5 +1,8 @@
 # Files generated during gcc build
+*.bin
+*.elf
 *.hex
+*.lst
 *.o
 *.s
 
