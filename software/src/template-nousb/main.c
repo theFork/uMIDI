@@ -43,7 +43,7 @@
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-// Initialization and endless loop
+/// \brief      Initialization and endless loop with background tasks
 int main( void )
 {
     // Configure clock and timers
