@@ -38,8 +38,8 @@
 void handle_midi_cc(uint8_t controller, uint8_t value);
 void enable_wah(bool enable);
 void init_wah_module(void);
-void toggle_wah(void);
 void update_wah_pwm(void);
+void handle_switch(void);
 
 
 //---------------- EOF ----------------//

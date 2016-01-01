@@ -20,6 +20,8 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <avr/wdt.h>
+#include <util/delay.h>
 
 #include "lib/adc.h"
 #include "lib/gpio.h"
@@ -40,6 +42,8 @@
 static struct wave pwm_wave;
 
 static struct linear_range pwm_range;
+
+static bool enable_state = false;
 
 
 
@@ -66,21 +70,22 @@ void init_wah_module(void)
     init_wave(&pwm_wave, WAVE_OFF, speed, amplitude, 0);
 }
 
+void handle_switch(void)
+{
+    if (!gpio_get(gpio_config.header3.pin6)) {
+        enable_state = !enable_state;
+        enable_wah(enable_state);
+        _delay_ms(50);
+        while (!gpio_get(gpio_config.header3.pin6)) {
+            wdt_reset();
+        }
+    }
+}
+
 void enable_wah(bool enable)
 {
     gpio_set(gpio_config.header3.pin4, enable);
-}
-
-void toggle_wah(void)
-{
-    static uint8_t prescaler = 0;
-    ++prescaler;
-    if (prescaler >= 80)  {
-        prescaler = 0;
-        static bool state = false;
-        state = !state;
-        enable_wah(state);
-    }
+    gpio_set(gpio_config.header3.pin8, enable);
 }
 
 void update_wah_pwm(void)

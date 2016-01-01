@@ -59,13 +59,13 @@ struct gpio_config gpio_config = {
         .pin9 = { &PORTC, 3, GPIO_UNUSED }
     },
     .header3 = {
-        .pin2 = { &PORTC, 4, GPIO_OUTPUT },
+        .pin2 = { &PORTC, 4, GPIO_OUTPUT },         // Wah LED PWM
         .pin3 = { &PORTC, 5, GPIO_UNUSED },
-        .pin4 = { &PORTC, 6, GPIO_OUTPUT },
+        .pin4 = { &PORTC, 6, GPIO_OUTPUT },         // Wah bypass relais
         .pin5 = { &PORTC, 7, GPIO_UNUSED },
-        .pin6 = { &PORTD, 0, GPIO_UNUSED },
+        .pin6 = { &PORTD, 0, GPIO_INPUT_PULLUP },   // Toggle switch
         .pin7 = { &PORTD, 1, GPIO_UNUSED },
-        .pin8 = { &PORTD, 2, GPIO_UNUSED },
+        .pin8 = { &PORTD, 2, GPIO_OUTPUT },         // Toggle switch LED
         .pin9 = { &PORTD, 3, GPIO_UNUSED }
     }
 };
@@ -93,6 +93,6 @@ uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background
 
 background_task_t low_frequency_tasks[] = {
     &update_leds,
-//    &toggle_wah,
+    &handle_switch,
 };
 uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);
