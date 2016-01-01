@@ -68,9 +68,6 @@ int main( void )
     // Blink green LED
     blink_led(LED_GREEN, F_TASK_SLOW);
 
-    // Enable Wah
-    enable_wah(true);
-
     // Main loop
     while (true) {
         process_background_tasks();
