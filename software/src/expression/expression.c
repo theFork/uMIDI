@@ -25,18 +25,14 @@
 #include "lib/adc.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
+
+#include "config.h"
 #include "expression.h"
 
 
 ////////////////////////////////////////////////////////////////
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
-
-const struct adc_conversion_config expression_conversion = {
-    .channel            = ADC_CHANNEL_0,
-    .input              = ADC_INPUT_4,
-    .callback_unsigned  = &update_expression_value,
-};
 
 
 

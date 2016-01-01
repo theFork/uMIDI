@@ -37,6 +37,7 @@
 
 //---------------- constant declarations ----------------//
 extern const struct adc_config adc_config;
+extern const struct adc_conversion_config expression_conversion;
 
 extern struct gpio_config gpio_config;
 

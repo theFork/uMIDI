@@ -31,7 +31,6 @@
 
 
 //---------------- constants ----------------//
-extern const struct adc_conversion_config expression_conversion;
 
 
 //---------------- data types ----------------//

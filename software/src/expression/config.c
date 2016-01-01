@@ -44,6 +44,12 @@ const struct adc_config adc_config = {
     .prescaler  = ADC_PRESCALER_DIV512_gc,
 };
 
+const struct adc_conversion_config expression_conversion = {
+    .channel            = ADC_CHANNEL_0,
+    .input              = ADC_INPUT_4,
+    .callback_unsigned  = &update_expression_value,
+};
+
 //---------------- GPIO ----------------//
 struct gpio_config gpio_config = {
     .header1 = {
