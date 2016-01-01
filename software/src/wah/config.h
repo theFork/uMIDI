@@ -1,3 +1,6 @@
+/// \file
+/// \brief      Device configuration header
+
 /*
  * Copyright 2015 Sebastian Neuser
  *
@@ -16,11 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-/*
- * Header for the device configuration.
- * @author Sebastian Neuser
-*/
 
 #ifndef _CONFIG_H
 #define _CONFIG_H

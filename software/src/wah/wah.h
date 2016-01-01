@@ -1,3 +1,6 @@
+/// \file
+/// \brief      Wah-wah module API
+
 /*
  * Copyright 2015 Sebastian Neuser
  *
@@ -16,11 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-/*
- * Header for the wah module.
- * @author Sebastian Neuser
-*/
 
 #ifndef _WAH_H
 #define _WAH_H

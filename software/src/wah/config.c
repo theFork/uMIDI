@@ -1,3 +1,6 @@
+/// \file
+/// \brief      Device configuration
+
 /*
  * Copyright 2015 Sebastian Neuser
  *
@@ -16,11 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-/*
- * Device configuration.
- * @author Sebastian Neuser
-*/
 
 #include <stddef.h>
 

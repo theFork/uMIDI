@@ -1,3 +1,6 @@
+/// \file
+/// \brief      Wah-wah module implementation
+
 /*
  * Copyright 2015 Sebastian Neuser
  *
@@ -17,10 +20,6 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * Implementation of the expression module.
- * @author Sebastian Neuser
-*/
 
 #include "lib/adc.h"
 #include "lib/gpio.h"
