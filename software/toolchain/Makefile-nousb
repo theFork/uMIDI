@@ -49,6 +49,11 @@ MCU = atxmega128a4u
 # Main CPU frequency
 F_CPU = 32000000
 
+# Dimensions for lookup tables
+LOOKUP_TABLES_FILE = lib/lookup_tables.c
+LOOKUP_TABLES_XRES = 7
+LOOKUP_TABLES_YRES = 14
+
 # Compiler flags.
 CFLAGS = -mmcu=$(MCU)
 CFLAGS += -std=gnu99
@@ -96,7 +101,8 @@ MSG_LINKING     = *** Linking
 MSG_PROGRAMING  = *** Programing MC...
 
 # Determine the list of C source files
-SRC = $(filter-out $(wildcard lib/usb*.c) lib/serial_communication.c,$(wildcard lib/*.c)) $(wildcard *.c)
+SRC  = $(LOOKUP_TABLES_FILE)
+SRC += $(filter-out $(LOOKUP_TABLES_FILE) $(wildcard lib/usb*.c) lib/serial_communication.c,$(wildcard lib/*.c)) $(wildcard *.c)
 
 # Default target.
 help:
@@ -120,6 +126,13 @@ help:
 	@echo "Be careful with fuse bits!"
 	@echo "#------------------------------------------------------------------------------#"
 
+
+# Internal rule:
+# Generate lookup tables file.
+$(LOOKUP_TABLES_FILE):
+	$(info )
+	$(info $(MSG_GENERATING))
+	../../toolchain/compute_lookup_tables.pl -x $(LOOKUP_TABLES_XRES) -y $(LOOKUP_TABLES_YRES) $(LOOKUP_TABLES_FILE)
 
 # Internal rule:
 # Compile object files from C source files.
@@ -164,8 +177,9 @@ asm: $(ASM)
 clean:
 	$(info )
 	$(info $(MSG_CLEANING))
-	$(REMOVE) $(DIR)/$(TARGET).hex
+	$(REMOVE) $(LOOKUP_TABLES_FILE)
 	$(REMOVE) $(DIR)/$(TARGET).elf
+	$(REMOVE) $(DIR)/$(TARGET).hex
 	$(REMOVE) $(OBJ)
 	$(REMOVE) $(ASM)
 

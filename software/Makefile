@@ -11,13 +11,10 @@ all: $(PROJECTS) doc
 doc:
 	$(DOXYGEN)
 
-$(PROJECTS): $(LIBRARY)
+$(PROJECTS):
 	$(info $(PROJECTS))
 	$(MAKE) -C $@ clean compile
 
-$(LIBRARY):
-	$(MAKE) -C $@ clean lookup
-
 .NOTPARALLEL:
-.PHONY: all doc $(LIBRARY) $(PROJECTS)
+.PHONY: all doc $(PROJECTS)
 # vim: tabstop=4 shiftwidth=4 noexpandtab

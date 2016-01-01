@@ -49,6 +49,11 @@ MCU = atxmega128a4u
 # Main CPU frequency
 F_CPU = 32000000
 
+# Dimensions for lookup tables
+LOOKUP_TABLES_FILE = lib/lookup_tables.c
+LOOKUP_TABLES_XRES = 7
+LOOKUP_TABLES_YRES = 14
+
 # LUFA submodule directory
 LUFA_PATH = lib/lufa
 
@@ -131,7 +136,8 @@ include $(LUFA_PATH)/LUFA/makefile
 .DEFAULT_GOAL =
 
 # Determine the list of C source files
-SRC  = $(wildcard lib/*.c) $(wildcard *.c)
+SRC  = $(LOOKUP_TABLES_FILE)
+SRC += $(filter-out $(LOOKUP_TABLES_FILE),$(wildcard lib/*.c)) $(wildcard *.c)
 SRC += $(XBOOT_PATH)/xbootapi.c
 SRC += $(LUFA_SRC_USB_DEVICE) $(LUFA_PATH)/LUFA/Drivers/USB/Class/Device/CDCClassDevice.c
 
@@ -159,6 +165,13 @@ help:
 	@echo "Be careful with fuse bits!"
 	@echo "#------------------------------------------------------------------------------#"
 
+
+# Internal rule:
+# Generate lookup tables file.
+$(LOOKUP_TABLES_FILE):
+	$(info )
+	$(info $(MSG_GENERATING))
+	../../toolchain/compute_lookup_tables.pl -x $(LOOKUP_TABLES_XRES) -y $(LOOKUP_TABLES_YRES) $(LOOKUP_TABLES_FILE)
 
 # Internal rule:
 # Compile object files from C source files.
@@ -203,6 +216,7 @@ asm: $(ASM)
 clean:
 	$(info )
 	$(info $(MSG_CLEANING))
+	$(REMOVE) $(LOOKUP_TABLES_FILE)
 	$(REMOVE) $(DIR)/$(TARGET).elf
 	$(REMOVE) $(DIR)/$(TARGET).hex
 	$(REMOVE) $(DIR)/$(TARGET).bin
