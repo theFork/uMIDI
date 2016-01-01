@@ -59,8 +59,8 @@ static inline uint16_t linear_function(uint8_t midi_value)
 void init_wah_module(void)
 {
     // Setup linear conversion function
-    pwm_range.from = 7000;
-    pwm_range.to = PWM_MAX_DUTY;
+    pwm_range.from = 550;
+    pwm_range.to = PWM_MAX_DUTY-50;
     init_linear(&pwm_range);
     init_pwm_module(&linear_function);
 
