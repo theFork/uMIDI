@@ -34,6 +34,9 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
+/// \brief      The latest known expression value
+static uint8_t current_value = 0;
+
 
 
 ////////////////////////////////////////////////////////////////
@@ -41,9 +44,8 @@
 ////////////////////////////////////////////////////////////////
 
 void update_expression_value(uint16_t new_value) {
-    static uint8_t old_value = 0;
-    if (new_value != old_value) {
-        old_value = new_value;
+    if (new_value != current_value) {
+        current_value = new_value;
         flash_led(LED_RED);
         send_control_change(69, new_value);
     }
