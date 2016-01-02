@@ -1,4 +1,4 @@
-update=Tue 18 Nov 2014 03:11:52 PM CET
+update=Sat 02 Jan 2016 11:58:43 AM CET
 version=1
 last_client=kicad
 [cvpcb]
@@ -43,23 +43,21 @@ LibName13=led
 LibName14=dip_sockets
 LibName15=pga_sockets
 LibName16=valves
-[general]
-version=1
 [eeschema]
 version=1
 LibDir=
 [eeschema/libraries]
-LibName1=power
-LibName2=device
-LibName3=transistors
-LibName4=conn
-LibName5=linear
-LibName6=74xx
-LibName7=cmos4000
-LibName8=adc-dac
-LibName9=memory
-LibName10=xilinx
-LibName11=special
+LibName1=uMidi-rescue
+LibName2=power
+LibName3=device
+LibName4=transistors
+LibName5=conn
+LibName6=linear
+LibName7=74xx
+LibName8=cmos4000
+LibName9=adc-dac
+LibName10=memory
+LibName11=xilinx
 LibName12=microcontrollers
 LibName13=dsp
 LibName14=microchip
@@ -79,3 +77,5 @@ LibName27=contrib
 LibName28=valves
 LibName29=symbols/regul
 LibName30=symbols/atmel
+[general]
+version=1
