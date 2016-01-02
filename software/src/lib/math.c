@@ -1,4 +1,5 @@
 /// \file
+/// \brief      Implementation of mathematical functions
 
 /*
  * Copyright 2015 Simon Gansen

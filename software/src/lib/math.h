@@ -1,6 +1,5 @@
 /// \file
-/// \brief  TODO
-/// \details TODO
+/// \brief      API for a small collection of mathematical functions
 
 /*
  * Copyright 2015 Simon Gansen
@@ -43,16 +42,18 @@ struct linear_range
 };
 
 
-//---------------- linears ----------------//
+//---------------- functions ----------------//
 
 /// \brief      Initializes a linear function
 /// \param      config
-///                 the configuration of the linear funcion to initialize
+///                 the configuration of the linear function to initialize
 void init_linear(struct linear_range* config);
 
-/// \brief      Calculates a linear function from a given midi value (0 .. 127)
+/// \brief      Calculates a linear function from a given midi value
 /// \param      config
-///                 the configuration of the linear funcion to initialize
+///                 the configuration of the linear function to initialize
+/// \param      midi_value
+///                 the MIDI value to convert [0 .. 127]
 uint16_t linear(struct linear_range* config, uint8_t midi_value);
 
 #endif // _MATH_H
