@@ -51,7 +51,12 @@ P 8500 3550
 F 0 "IC1" H 7750 4750 40  0000 L BNN
 F 1 "ATXMEGA128A4U-M" H 8850 2300 40  0000 L BNN
 F 2 "Atmel:QFN-44-1EP" H 8500 3550 35  0001 C CIN
-F 3 "" H 8500 3550 60  0001 C CNN
+F 3 "http://www.atmel.com/images/Atmel-8387-8-and16-bit-AVR-Microcontroller-XMEGA-A4U_Datasheet.pdf" H 8500 3550 60  0001 C CNN
+F 4 "Digikey" H 7750 4750 40  0001 L BNN "Supplier"
+F 5 "Atmel" H 7750 4750 40  0001 L BNN "Manufacturer"
+F 6 "https://www.digikey.de/product-detail/de/ATXMEGA128A4U-MH/ATXMEGA128A4U-MH-ND/3441470" H 7750 4750 40  0001 L BNN "Supplier Link"
+F 7 "ATXMEGA128A4U-MH-ND" H 7750 4750 40  0001 L BNN "Supplier Part Number"
+F 8 "ATXMEGA128A4U-MH" H 7750 4750 40  0001 L BNN "Manufacturer Part Number"
 	1    8500 3550
 	1    0    0    -1  
 $EndComp
@@ -85,6 +90,11 @@ F 0 "R9" V 7480 1900 40  0000 C CNN
 F 1 "10k" V 7407 1901 40  0000 C CNN
 F 2 "Resistors_SMD:R_0603" V 7330 1900 30  0001 C CNN
 F 3 "" H 7400 1900 30  0001 C CNN
+F 4 "Panasonic" V 7480 1900 40  0001 C CNN "Manufacturer"
+F 5 "P10KGCT-ND" V 7480 1900 40  0001 C CNN "Supplier Part Number"
+F 6 "https://www.digikey.de/product-detail/de/ERJ-3GEYJ103V/P10KGCT-ND/134717" V 7480 1900 40  0001 C CNN "Supplier Link"
+F 7 "Digikey" V 7480 1900 40  0001 C CNN "Supplier"
+F 8 "ERJ-3GEYJ103V" V 7480 1900 40  0001 C CNN "Manufacturer Part Number"
 	1    7400 1900
 	1    0    0    -1  
 $EndComp
@@ -95,7 +105,12 @@ P 6650 2400
 F 0 "P6" V 6600 2400 60  0000 C CNN
 F 1 "PDI" V 6700 2400 60  0000 C CNN
 F 2 "" H 6650 2400 60  0001 C CNN
-F 3 "" H 6650 2400 60  0001 C CNN
+F 3 "http://portal.fciconnect.com/Comergent//fci/drawing/67996.pdf" H 6650 2400 60  0001 C CNN
+F 4 "609-3210-ND" V 6600 2400 60  0001 C CNN "Supplier Part Number"
+F 5 "67996-206HLF" V 6600 2400 60  0001 C CNN "Manufacturer Part Number"
+F 6 "Digikey" V 6600 2400 60  0001 C CNN "Supplier"
+F 7 "FCI" V 6600 2400 60  0001 C CNN "Manufacturer"
+F 8 "https://www.digikey.de/product-detail/de/67996-206HLF/609-3210-ND/1878485" V 6600 2400 60  0001 C CNN "Supplier Link"
 	1    6650 2400
 	-1   0    0    -1  
 $EndComp
@@ -117,7 +132,12 @@ P 3150 3100
 F 0 "IC2" H 3300 3200 40  0000 C CNN
 F 1 "74LS14" H 3350 3000 40  0000 C CNN
 F 2 "" H 3150 3100 60  0001 C CNN
-F 3 "" H 3150 3100 60  0001 C CNN
+F 3 "http://www.nxp.com/documents/data_sheet/74LVT14.pdf" H 3150 3100 60  0001 C CNN
+F 4 "568-8193-1-ND" H 3300 3200 40  0001 C CNN "Supplier Part Number"
+F 5 "NXP" H 3300 3200 40  0001 C CNN "Manufacturer"
+F 6 "74LVT14D,118" H 3300 3200 40  0001 C CNN "Manufacturer Part Number"
+F 7 "https://www.digikey.de/product-detail/de/74LVT14D,118/568-8193-1-ND/2762883" H 3300 3200 40  0001 C CNN "Supplier Link"
+F 8 "Digikey" H 3300 3200 40  0001 C CNN "Supplier"
 	4    3150 3100
 	-1   0    0    -1  
 $EndComp
@@ -128,7 +148,12 @@ P 2200 2300
 F 0 "IC2" H 2350 2400 40  0000 C CNN
 F 1 "74LS14" H 2400 2200 40  0000 C CNN
 F 2 "" H 2200 2300 60  0001 C CNN
-F 3 "" H 2200 2300 60  0001 C CNN
+F 3 "http://www.nxp.com/documents/data_sheet/74LVT14.pdf" H 2200 2300 60  0001 C CNN
+F 4 "568-8193-1-ND" H 2350 2400 40  0001 C CNN "Supplier Part Number"
+F 5 "NXP" H 2350 2400 40  0001 C CNN "Manufacturer"
+F 6 "74LVT14D,118" H 2350 2400 40  0001 C CNN "Manufacturer Part Number"
+F 7 "https://www.digikey.de/product-detail/de/74LVT14D,118/568-8193-1-ND/2762883" H 2350 2400 40  0001 C CNN "Supplier Link"
+F 8 "Digikey" H 2350 2400 40  0001 C CNN "Supplier"
 	1    2200 2300
 	-1   0    0    -1  
 $EndComp
@@ -139,7 +164,12 @@ P 2200 2700
 F 0 "IC2" H 2350 2800 40  0000 C CNN
 F 1 "74LS14" H 2400 2600 40  0000 C CNN
 F 2 "" H 2200 2700 60  0001 C CNN
-F 3 "" H 2200 2700 60  0001 C CNN
+F 3 "http://www.nxp.com/documents/data_sheet/74LVT14.pdf" H 2200 2700 60  0001 C CNN
+F 4 "568-8193-1-ND" H 2350 2800 40  0001 C CNN "Supplier Part Number"
+F 5 "NXP" H 2350 2800 40  0001 C CNN "Manufacturer"
+F 6 "74LVT14D,118" H 2350 2800 40  0001 C CNN "Manufacturer Part Number"
+F 7 "https://www.digikey.de/product-detail/de/74LVT14D,118/568-8193-1-ND/2762883" H 2350 2800 40  0001 C CNN "Supplier Link"
+F 8 "Digikey" H 2350 2800 40  0001 C CNN "Supplier"
 	2    2200 2700
 	-1   0    0    -1  
 $EndComp
@@ -150,7 +180,12 @@ P 3150 2700
 F 0 "IC2" H 3300 2800 40  0000 C CNN
 F 1 "74LS14" H 3350 2600 40  0000 C CNN
 F 2 "" H 3150 2700 60  0001 C CNN
-F 3 "" H 3150 2700 60  0001 C CNN
+F 3 "http://www.nxp.com/documents/data_sheet/74LVT14.pdf" H 3150 2700 60  0001 C CNN
+F 4 "568-8193-1-ND" H 3300 2800 40  0001 C CNN "Supplier Part Number"
+F 5 "NXP" H 3300 2800 40  0001 C CNN "Manufacturer"
+F 6 "74LVT14D,118" H 3300 2800 40  0001 C CNN "Manufacturer Part Number"
+F 7 "https://www.digikey.de/product-detail/de/74LVT14D,118/568-8193-1-ND/2762883" H 3300 2800 40  0001 C CNN "Supplier Link"
+F 8 "Digikey" H 3300 2800 40  0001 C CNN "Supplier"
 	5    3150 2700
 	-1   0    0    -1  
 $EndComp
@@ -161,7 +196,12 @@ P 3150 2300
 F 0 "IC2" H 3300 2400 40  0000 C CNN
 F 1 "74LS14" H 3350 2200 40  0000 C CNN
 F 2 "" H 3150 2300 60  0001 C CNN
-F 3 "" H 3150 2300 60  0001 C CNN
+F 3 "http://www.nxp.com/documents/data_sheet/74LVT14.pdf" H 3150 2300 60  0001 C CNN
+F 4 "568-8193-1-ND" H 3300 2400 40  0001 C CNN "Supplier Part Number"
+F 5 "NXP" H 3300 2400 40  0001 C CNN "Manufacturer"
+F 6 "74LVT14D,118" H 3300 2400 40  0001 C CNN "Manufacturer Part Number"
+F 7 "https://www.digikey.de/product-detail/de/74LVT14D,118/568-8193-1-ND/2762883" H 3300 2400 40  0001 C CNN "Supplier Link"
+F 8 "Digikey" H 3300 2400 40  0001 C CNN "Supplier"
 	6    3150 2300
 	-1   0    0    -1  
 $EndComp
@@ -172,7 +212,12 @@ P 2200 3100
 F 0 "IC2" H 2350 3200 40  0000 C CNN
 F 1 "74LS14" H 2400 3000 40  0000 C CNN
 F 2 "" H 2200 3100 60  0001 C CNN
-F 3 "" H 2200 3100 60  0001 C CNN
+F 3 "http://www.nxp.com/documents/data_sheet/74LVT14.pdf" H 2200 3100 60  0001 C CNN
+F 4 "568-8193-1-ND" H 2350 3200 40  0001 C CNN "Supplier Part Number"
+F 5 "NXP" H 2350 3200 40  0001 C CNN "Manufacturer"
+F 6 "74LVT14D,118" H 2350 3200 40  0001 C CNN "Manufacturer Part Number"
+F 7 "https://www.digikey.de/product-detail/de/74LVT14D,118/568-8193-1-ND/2762883" H 2350 3200 40  0001 C CNN "Supplier Link"
+F 8 "Digikey" H 2350 3200 40  0001 C CNN "Supplier"
 	3    2200 3100
 	-1   0    0    -1  
 $EndComp
@@ -205,7 +250,12 @@ P 4950 4600
 F 0 "CON1" H 5200 4950 60  0000 C CNN
 F 1 "USB-MINI-B" H 4950 4250 60  0000 C CNN
 F 2 "" H 4950 4600 60  0001 C CNN
-F 3 "" H 4950 4600 60  0001 C CNN
+F 3 "https://www.hirose.com/product/en/download_file/key_name/UX60SC%2DMB%2D5ST%2801%29/category/Specification%20Sheet/doc_file_id/36416/?file_category_id=9&item_id=02400016601&is_series=" H 4950 4600 60  0001 C CNN
+F 4 "H2959CT-ND" H 5200 4950 60  0001 C CNN "Supplier Part Number"
+F 5 "https://www.digikey.de/product-detail/de/UX60-MB-5ST/H2959CT-ND/597538" H 5200 4950 60  0001 C CNN "Supplier Link"
+F 6 "Hirose" H 5200 4950 60  0001 C CNN "Manufacturer"
+F 7 "UX60-MB-5ST" H 5200 4950 60  0001 C CNN "Manufacturer Part Number"
+F 8 "Digikey" H 5200 4950 60  0001 C CNN "Supplier"
 	1    4950 4600
 	-1   0    0    -1  
 $EndComp
@@ -239,6 +289,11 @@ F 0 "R2" V 1530 2300 40  0000 C CNN
 F 1 "120" V 1457 2301 40  0000 C CNN
 F 2 "Resistors_SMD:R_0603" V 1380 2300 30  0001 C CNN
 F 3 "" H 1450 2300 30  0001 C CNN
+F 4 "Digikey" V 1530 2300 40  0001 C CNN "Supplier"
+F 5 "ERJ-3GEYJ121V" V 1530 2300 40  0001 C CNN "Manufacturer Part Number"
+F 6 "https://www.digikey.de/product-detail/de/ERJ-3GEYJ121V/P120GCT-ND/134727" V 1530 2300 40  0001 C CNN "Supplier Link"
+F 7 "Panasonic" V 1530 2300 40  0001 C CNN "Manufacturer"
+F 8 "P120GCT-ND" V 1530 2300 40  0001 C CNN "Supplier Part Number"
 	1    1450 2300
 	0    1    1    0   
 $EndComp
@@ -250,6 +305,11 @@ F 0 "R4" V 1530 2700 40  0000 C CNN
 F 1 "120" V 1457 2701 40  0000 C CNN
 F 2 "Resistors_SMD:R_0603" V 1380 2700 30  0001 C CNN
 F 3 "" H 1450 2700 30  0001 C CNN
+F 4 "Digikey" V 1530 2700 40  0001 C CNN "Supplier"
+F 5 "ERJ-3GEYJ121V" V 1530 2700 40  0001 C CNN "Manufacturer Part Number"
+F 6 "https://www.digikey.de/product-detail/de/ERJ-3GEYJ121V/P120GCT-ND/134727" V 1530 2700 40  0001 C CNN "Supplier Link"
+F 7 "Panasonic" V 1530 2700 40  0001 C CNN "Manufacturer"
+F 8 "P120GCT-ND" V 1530 2700 40  0001 C CNN "Supplier Part Number"
 	1    1450 2700
 	0    1    1    0   
 $EndComp
@@ -261,6 +321,11 @@ F 0 "R6" V 1530 3100 40  0000 C CNN
 F 1 "120" V 1457 3101 40  0000 C CNN
 F 2 "Resistors_SMD:R_0603" V 1380 3100 30  0001 C CNN
 F 3 "" H 1450 3100 30  0001 C CNN
+F 4 "Digikey" V 1530 3100 40  0001 C CNN "Supplier"
+F 5 "ERJ-3GEYJ121V" V 1530 3100 40  0001 C CNN "Manufacturer Part Number"
+F 6 "https://www.digikey.de/product-detail/de/ERJ-3GEYJ121V/P120GCT-ND/134727" V 1530 3100 40  0001 C CNN "Supplier Link"
+F 7 "Panasonic" V 1530 3100 40  0001 C CNN "Manufacturer"
+F 8 "P120GCT-ND" V 1530 3100 40  0001 C CNN "Supplier Part Number"
 	1    1450 3100
 	0    1    1    0   
 $EndComp
@@ -272,6 +337,11 @@ F 0 "R1" V 1530 2100 40  0000 C CNN
 F 1 "120" V 1457 2101 40  0000 C CNN
 F 2 "Resistors_SMD:R_0603" V 1380 2100 30  0001 C CNN
 F 3 "" H 1450 2100 30  0001 C CNN
+F 4 "Digikey" V 1530 2100 40  0001 C CNN "Supplier"
+F 5 "ERJ-3GEYJ121V" V 1530 2100 40  0001 C CNN "Manufacturer Part Number"
+F 6 "https://www.digikey.de/product-detail/de/ERJ-3GEYJ121V/P120GCT-ND/134727" V 1530 2100 40  0001 C CNN "Supplier Link"
+F 7 "Panasonic" V 1530 2100 40  0001 C CNN "Manufacturer"
+F 8 "P120GCT-ND" V 1530 2100 40  0001 C CNN "Supplier Part Number"
 	1    1450 2100
 	0    1    1    0   
 $EndComp
@@ -283,6 +353,11 @@ F 0 "R3" V 1530 2500 40  0000 C CNN
 F 1 "120" V 1457 2501 40  0000 C CNN
 F 2 "Resistors_SMD:R_0603" V 1380 2500 30  0001 C CNN
 F 3 "" H 1450 2500 30  0001 C CNN
+F 4 "Digikey" V 1530 2500 40  0001 C CNN "Supplier"
+F 5 "ERJ-3GEYJ121V" V 1530 2500 40  0001 C CNN "Manufacturer Part Number"
+F 6 "https://www.digikey.de/product-detail/de/ERJ-3GEYJ121V/P120GCT-ND/134727" V 1530 2500 40  0001 C CNN "Supplier Link"
+F 7 "Panasonic" V 1530 2500 40  0001 C CNN "Manufacturer"
+F 8 "P120GCT-ND" V 1530 2500 40  0001 C CNN "Supplier Part Number"
 	1    1450 2500
 	0    1    1    0   
 $EndComp
@@ -294,6 +369,11 @@ F 0 "R5" V 1530 2900 40  0000 C CNN
 F 1 "120" V 1457 2901 40  0000 C CNN
 F 2 "Resistors_SMD:R_0603" V 1380 2900 30  0001 C CNN
 F 3 "" H 1450 2900 30  0001 C CNN
+F 4 "Digikey" V 1530 2900 40  0001 C CNN "Supplier"
+F 5 "ERJ-3GEYJ121V" V 1530 2900 40  0001 C CNN "Manufacturer Part Number"
+F 6 "https://www.digikey.de/product-detail/de/ERJ-3GEYJ121V/P120GCT-ND/134727" V 1530 2900 40  0001 C CNN "Supplier Link"
+F 7 "Panasonic" V 1530 2900 40  0001 C CNN "Manufacturer"
+F 8 "P120GCT-ND" V 1530 2900 40  0001 C CNN "Supplier Part Number"
 	1    1450 2900
 	0    1    1    0   
 $EndComp
@@ -371,6 +451,11 @@ F 0 "IC4" H 2140 1530 40  0000 C CNN
 F 1 "6N138" H 2510 1060 40  0000 C CNN
 F 2 "Opto:Optocoupler_DIP8_SMD" H 2150 1070 30  0001 C CIN
 F 3 "" H 2350 1300 60  0001 C CNN
+F 4 "Lite-On Inc." H 2140 1530 40  0001 C CNN "Manufacturer"
+F 5 "160-1798-1-ND" H 2140 1530 40  0001 C CNN "Supplier Part Number"
+F 6 "6N138S-TA1" H 2140 1530 40  0001 C CNN "Manufacturer Part Number"
+F 7 "https://www.digikey.de/product-detail/de/6N138S-TA1/160-1798-1-ND/1969190" H 2140 1530 40  0001 C CNN "Supplier Link"
+F 8 "Digikey" H 2140 1530 40  0001 C CNN "Supplier"
 	1    2350 1300
 	1    0    0    -1  
 $EndComp
@@ -382,6 +467,11 @@ F 0 "R7" V 1580 1050 40  0000 C CNN
 F 1 "220" V 1507 1051 40  0000 C CNN
 F 2 "Resistors_SMD:R_0603" V 1430 1050 30  0001 C CNN
 F 3 "" H 1500 1050 30  0001 C CNN
+F 4 "Panasonic" V 1580 1050 40  0001 C CNN "Manufacturer"
+F 5 "Digikey" V 1580 1050 40  0001 C CNN "Supplier"
+F 6 "https://www.digikey.de/product-detail/de/ERJ-3GEYJ221V/P220GCT-ND/134754" V 1580 1050 40  0001 C CNN "Supplier Link"
+F 7 "ERJ-3GEYJ221V" V 1580 1050 40  0001 C CNN "Manufacturer Part Number"
+F 8 "P220GCT-ND" V 1580 1050 40  0001 C CNN "Supplier Part Number"
 	1    1500 1050
 	0    1    1    0   
 $EndComp
@@ -390,9 +480,14 @@ L DIODE D3
 U 1 1 53C950D4
 P 1800 1300
 F 0 "D3" H 1800 1400 40  0000 C CNN
-F 1 "DIODE" H 1800 1200 40  0000 C CNN
-F 2 "SMD:DO-214-AC_SMA" H 1800 1300 60  0001 C CNN
-F 3 "" H 1800 1300 60  0001 C CNN
+F 1 "B160-13-F" H 1800 1200 40  0000 C CNN
+F 2 "SMD:DI-214-AC_SMA" H 1800 1300 60  0001 C CNN
+F 3 "http://www.diodes.com/_files/datasheets/ds13002.pdf" H 1800 1300 60  0001 C CNN
+F 4 "https://www.digikey.de/product-detail/de/B160-13-F/B160-FDICT-ND/806561" H 1800 1400 40  0001 C CNN "Supplier Link"
+F 5 "B160-13-F" H 1800 1400 40  0001 C CNN "Manufacturer Part Number"
+F 6 "Digikey" H 1800 1400 40  0001 C CNN "Supplier"
+F 7 "B160-FDICT-ND" H 1800 1400 40  0001 C CNN "Supplier Part Number"
+F 8 "Diodes Incorporated" H 1800 1400 40  0001 C CNN "Manufacturer"
 	1    1800 1300
 	0    -1   -1   0   
 $EndComp
@@ -426,6 +521,11 @@ F 0 "R8" V 3330 1050 40  0000 C CNN
 F 1 "270" V 3257 1051 40  0000 C CNN
 F 2 "Resistors_SMD:R_0603" V 3180 1050 30  0001 C CNN
 F 3 "" H 3250 1050 30  0001 C CNN
+F 4 "https://www.digikey.de/product-detail/de/ERJ-3GEYJ271V/P270GCT-ND/134766" V 3330 1050 40  0001 C CNN "Supplier Link"
+F 5 "Panasonic" V 3330 1050 40  0001 C CNN "Manufacturer"
+F 6 "ERJ-3GEYJ271V" V 3330 1050 40  0001 C CNN "Manufacturer Part Number"
+F 7 "Digikey" V 3330 1050 40  0001 C CNN "Supplier"
+F 8 "P270GCT-ND" V 3330 1050 40  0001 C CNN "Supplier Part Number"
 	1    3250 1050
 	-1   0    0    1   
 $EndComp
@@ -467,6 +567,11 @@ F 0 "C7" H 7850 2000 40  0000 L CNN
 F 1 "100n" H 7856 1815 40  0000 L CNN
 F 2 "Capacitors_SMD:C_0603" H 7888 1750 30  0001 C CNN
 F 3 "" H 7850 1900 60  0001 C CNN
+F 4 "Samsung" H 7850 2000 40  0001 L CNN "Manufacturer"
+F 5 "Digikey" H 7850 2000 40  0001 L CNN "Supplier"
+F 6 "CL10B104KB8NNNC" H 7850 2000 40  0001 L CNN "Manufacturer Part Number"
+F 7 "1276-1000-1-ND" H 7850 2000 40  0001 L CNN "Supplier Part Number"
+F 8 "https://www.digikey.de/product-detail/de/CL10B104KB8NNNC/1276-1000-1-ND/3889086" H 7850 2000 40  0001 L CNN "Supplier Link"
 	1    7850 1900
 	1    0    0    -1  
 $EndComp
@@ -478,6 +583,11 @@ F 0 "C8" H 8050 2000 40  0000 L CNN
 F 1 "100n" H 8056 1815 40  0000 L CNN
 F 2 "Capacitors_SMD:C_0603" H 8088 1750 30  0001 C CNN
 F 3 "" H 8050 1900 60  0001 C CNN
+F 4 "Samsung" H 8050 2000 40  0001 L CNN "Manufacturer"
+F 5 "Digikey" H 8050 2000 40  0001 L CNN "Supplier"
+F 6 "CL10B104KB8NNNC" H 8050 2000 40  0001 L CNN "Manufacturer Part Number"
+F 7 "1276-1000-1-ND" H 8050 2000 40  0001 L CNN "Supplier Part Number"
+F 8 "https://www.digikey.de/product-detail/de/CL10B104KB8NNNC/1276-1000-1-ND/3889086" H 8050 2000 40  0001 L CNN "Supplier Link"
 	1    8050 1900
 	1    0    0    -1  
 $EndComp
@@ -489,6 +599,11 @@ F 0 "C9" H 8250 2000 40  0000 L CNN
 F 1 "100n" H 8256 1815 40  0000 L CNN
 F 2 "Capacitors_SMD:C_0603" H 8288 1750 30  0001 C CNN
 F 3 "" H 8250 1900 60  0001 C CNN
+F 4 "Samsung" H 8250 2000 40  0001 L CNN "Manufacturer"
+F 5 "Digikey" H 8250 2000 40  0001 L CNN "Supplier"
+F 6 "CL10B104KB8NNNC" H 8250 2000 40  0001 L CNN "Manufacturer Part Number"
+F 7 "1276-1000-1-ND" H 8250 2000 40  0001 L CNN "Supplier Part Number"
+F 8 "https://www.digikey.de/product-detail/de/CL10B104KB8NNNC/1276-1000-1-ND/3889086" H 8250 2000 40  0001 L CNN "Supplier Link"
 	1    8250 1900
 	1    0    0    -1  
 $EndComp
@@ -500,6 +615,11 @@ F 0 "C12" H 7650 2000 40  0000 L CNN
 F 1 "10u" H 7656 1815 40  0000 L CNN
 F 2 "Capacitors_SMD:C_0603" H 7688 1750 30  0001 C CNN
 F 3 "" H 7650 1900 60  0001 C CNN
+F 4 "C0603C106M9PACTU" H 7650 2000 40  0001 L CNN "Manufacturer Part Number"
+F 5 "399-5504-1-ND" H 7650 2000 40  0001 L CNN "Supplier Part Number"
+F 6 "Kemet" H 7650 2000 40  0001 L CNN "Manufacturer"
+F 7 "Digikey" H 7650 2000 40  0001 L CNN "Supplier"
+F 8 "https://www.digikey.de/product-detail/de/C0603C106M9PACTU/399-5504-1-ND/1950682" H 7650 2000 40  0001 L CNN "Supplier Link"
 	1    7650 1900
 	1    0    0    -1  
 $EndComp
@@ -552,9 +672,14 @@ L INDUCTOR L1
 U 1 1 53CA9BEA
 P 8400 1450
 F 0 "L1" V 8350 1450 40  0000 C CNN
-F 1 "Bead" V 8500 1450 40  0000 C CNN
+F 1 "Bead 1k@100MHz" V 8500 1450 40  0000 C CNN
 F 2 "Capacitors_SMD:C_0603" H 8400 1450 60  0001 C CNN
-F 3 "" H 8400 1450 60  0001 C CNN
+F 3 "http://www.murata.com/en-us/products/productdata/ENFA0003.pdf?context=bWFzdGVyfE0wM1h8MjI3NzI3fGFwcGxpY2F0aW9uL3BkZnxzeXMtbWFzdGVyL00wM1gvaGQ3L2gzMy84Nzk3Mjg4ODI0ODYyL0VORkEwMDAzLnBkZnxhZTUzOGY3Y2U5MmM5NmYxMmViMDFiMWVmMzYwM2VhNjhkNjA2NTlhYzYzZDEyYzdhMzYwZjc5MDNlZjRhOGEy" H 8400 1450 60  0001 C CNN
+F 4 "490-5228-1-ND" V 8350 1450 40  0001 C CNN "Supplier Part Number"
+F 5 "Digikey" V 8350 1450 40  0001 C CNN "Supplier"
+F 6 "https://www.digikey.de/product-detail/de/BLM18RK102SN1D/490-5228-1-ND/1948404" V 8350 1450 40  0001 C CNN "Supplier Link"
+F 7 "Murata" V 8350 1450 40  0001 C CNN "Manufacturer"
+F 8 "BLM18RK102SN1D" V 8350 1450 40  0001 C CNN "Manufacturer Part Number"
 	1    8400 1450
 	0    -1   -1   0   
 $EndComp
@@ -566,6 +691,11 @@ F 0 "C11" H 9150 2000 40  0000 L CNN
 F 1 "10u" H 9156 1815 40  0000 L CNN
 F 2 "Capacitors_SMD:C_0603" H 9188 1750 30  0001 C CNN
 F 3 "" H 9150 1900 60  0001 C CNN
+F 4 "C0603C106M9PACTU" H 9150 2000 40  0001 L CNN "Manufacturer Part Number"
+F 5 "399-5504-1-ND" H 9150 2000 40  0001 L CNN "Supplier Part Number"
+F 6 "Kemet" H 9150 2000 40  0001 L CNN "Manufacturer"
+F 7 "Digikey" H 9150 2000 40  0001 L CNN "Supplier"
+F 8 "https://www.digikey.de/product-detail/de/C0603C106M9PACTU/399-5504-1-ND/1950682" H 9150 2000 40  0001 L CNN "Supplier Link"
 	1    9150 1900
 	1    0    0    -1  
 $EndComp
@@ -577,6 +707,11 @@ F 0 "C10" H 8950 2000 40  0000 L CNN
 F 1 "100n" H 8956 1815 40  0000 L CNN
 F 2 "Capacitors_SMD:C_0603" H 8988 1750 30  0001 C CNN
 F 3 "" H 8950 1900 60  0001 C CNN
+F 4 "Samsung" H 8950 2000 40  0001 L CNN "Manufacturer"
+F 5 "Digikey" H 8950 2000 40  0001 L CNN "Supplier"
+F 6 "CL10B104KB8NNNC" H 8950 2000 40  0001 L CNN "Manufacturer Part Number"
+F 7 "1276-1000-1-ND" H 8950 2000 40  0001 L CNN "Supplier Part Number"
+F 8 "https://www.digikey.de/product-detail/de/CL10B104KB8NNNC/1276-1000-1-ND/3889086" H 8950 2000 40  0001 L CNN "Supplier Link"
 	1    8950 1900
 	1    0    0    -1  
 $EndComp
@@ -610,6 +745,11 @@ F 0 "L2" V 7050 1100 40  0000 C CNN
 F 1 "10u" V 7200 1100 40  0000 C CNN
 F 2 "Capacitors_SMD:C_0603" H 7100 1100 60  0001 C CNN
 F 3 "" H 7100 1100 60  0001 C CNN
+F 4 "Digikey" V 7050 1100 40  0001 C CNN "Supplier"
+F 5 "445-3608-1-ND" V 7050 1100 40  0001 C CNN "Supplier Part Number"
+F 6 "TDK" V 7050 1100 40  0001 C CNN "Manufacturer"
+F 7 "https://www.digikey.de/product-detail/de/GLFR1608T100M-LR/445-3608-1-ND/1856576" V 7050 1100 40  0001 C CNN "Supplier Link"
+F 8 "GLFR1608T100M-LR" V 7050 1100 40  0001 C CNN "Manufacturer Part Number"
 	1    7100 1100
 	1    0    0    -1  
 $EndComp
@@ -620,7 +760,12 @@ P 2400 6800
 F 0 "IC3" H 2150 7000 40  0000 C CNN
 F 1 "LT1129CST-3.3" H 2550 7000 40  0000 C CNN
 F 2 "SOT223:SOT-223" H 2400 6900 35  0001 C CIN
-F 3 "" H 2400 6800 60  0001 C CNN
+F 3 "http://cds.linear.com/docs/en/datasheet/112935ff.pdf" H 2400 6800 60  0001 C CNN
+F 4 "LT1129CST-3.3#PBF" H 2150 7000 40  0001 C CNN "Manufacturer Part Number"
+F 5 "LT1129CST-3.3#PBF-ND" H 2150 7000 40  0001 C CNN "Supplier Part Number"
+F 6 "Linear Technology" H 2150 7000 40  0001 C CNN "Manufacturer"
+F 7 "https://www.digikey.de/product-detail/de/LT1129CST-3.3%23PBF/LT1129CST-3.3%23PBF-ND/889181" H 2150 7000 40  0001 C CNN "Supplier Link"
+F 8 "Digikey" H 2150 7000 40  0001 C CNN "Supplier"
 	1    2400 6800
 	1    0    0    -1  
 $EndComp
@@ -633,9 +778,14 @@ L DIODE D2
 U 1 1 53CAB822
 P 1750 6450
 F 0 "D2" H 1750 6550 40  0000 C CNN
-F 1 "DIODE" H 1750 6350 40  0000 C CNN
-F 2 "SMD:DO-214-AC_SMA" H 1750 6450 60  0001 C CNN
-F 3 "" H 1750 6450 60  0001 C CNN
+F 1 "B160-13-F" H 1750 6350 40  0000 C CNN
+F 2 "SMD:DI-214-AC_SMA" H 1750 6450 60  0001 C CNN
+F 3 "http://www.diodes.com/_files/datasheets/ds13002.pdf" H 1750 6450 60  0001 C CNN
+F 4 "Diodes Incorporated" H 1750 6550 40  0001 C CNN "Manufacturer"
+F 5 "Digikey" H 1750 6550 40  0001 C CNN "Supplier"
+F 6 "B160-FDICT-ND" H 1750 6550 40  0001 C CNN "Supplier Part Number"
+F 7 "https://www.digikey.de/product-detail/de/B160-13-F/B160-FDICT-ND/806561" H 1750 6550 40  0001 C CNN "Supplier Link"
+F 8 "B160-13-F" H 1750 6550 40  0001 C CNN "Manufacturer Part Number"
 	1    1750 6450
 	0    1    1    0   
 $EndComp
@@ -658,6 +808,11 @@ F 0 "C4" H 2950 7150 40  0000 L CNN
 F 1 "10u" H 2956 6965 40  0000 L CNN
 F 2 "Capacitors_SMD:C_0603" H 2988 6900 30  0001 C CNN
 F 3 "" H 2950 7050 60  0001 C CNN
+F 4 "C0603C106M9PACTU" H 2950 7150 40  0001 L CNN "Manufacturer Part Number"
+F 5 "399-5504-1-ND" H 2950 7150 40  0001 L CNN "Supplier Part Number"
+F 6 "Kemet" H 2950 7150 40  0001 L CNN "Manufacturer"
+F 7 "Digikey" H 2950 7150 40  0001 L CNN "Supplier"
+F 8 "https://www.digikey.de/product-detail/de/C0603C106M9PACTU/399-5504-1-ND/1950682" H 2950 7150 40  0001 L CNN "Supplier Link"
 	1    2950 7050
 	1    0    0    -1  
 $EndComp
@@ -691,6 +846,11 @@ F 0 "C1" H 1850 7150 40  0000 L CNN
 F 1 "10u" H 1856 6965 40  0000 L CNN
 F 2 "Capacitors_SMD:C_0603" H 1888 6900 30  0001 C CNN
 F 3 "" H 1850 7050 60  0001 C CNN
+F 4 "C0603C106M9PACTU" H 1850 7150 40  0001 L CNN "Manufacturer Part Number"
+F 5 "399-5504-1-ND" H 1850 7150 40  0001 L CNN "Supplier Part Number"
+F 6 "Kemet" H 1850 7150 40  0001 L CNN "Manufacturer"
+F 7 "Digikey" H 1850 7150 40  0001 L CNN "Supplier"
+F 8 "https://www.digikey.de/product-detail/de/C0603C106M9PACTU/399-5504-1-ND/1950682" H 1850 7150 40  0001 L CNN "Supplier Link"
 	1    1850 7050
 	1    0    0    -1  
 $EndComp
@@ -710,9 +870,14 @@ L DIODE D1
 U 1 1 53CAA4CA
 P 1450 6750
 F 0 "D1" H 1450 6850 40  0000 C CNN
-F 1 "DIODE" H 1450 6650 40  0000 C CNN
-F 2 "SMD:DO-214-AC_SMA" H 1450 6750 60  0001 C CNN
-F 3 "" H 1450 6750 60  0001 C CNN
+F 1 "B160-13-F" H 1450 6650 40  0000 C CNN
+F 2 "SMD:DI-214-AC_SMA" H 1450 6750 60  0001 C CNN
+F 3 "http://www.diodes.com/_files/datasheets/ds13002.pdf" H 1450 6750 60  0001 C CNN
+F 4 "Diodes Incorporated" H 1450 6850 40  0001 C CNN "Manufacturer"
+F 5 "Digikey" H 1450 6850 40  0001 C CNN "Supplier"
+F 6 "B160-FDICT-ND" H 1450 6850 40  0001 C CNN "Supplier Part Number"
+F 7 "https://www.digikey.de/product-detail/de/B160-13-F/B160-FDICT-ND/806561" H 1450 6850 40  0001 C CNN "Supplier Link"
+F 8 "B160-13-F" H 1450 6850 40  0001 C CNN "Manufacturer Part Number"
 	1    1450 6750
 	1    0    0    -1  
 $EndComp
@@ -746,6 +911,11 @@ F 0 "C2" H 3950 2350 40  0000 L CNN
 F 1 "100n" H 3956 2165 40  0000 L CNN
 F 2 "Capacitors_SMD:C_0603" H 3988 2100 30  0001 C CNN
 F 3 "" H 3950 2250 60  0001 C CNN
+F 4 "Samsung" H 3950 2350 40  0001 L CNN "Manufacturer"
+F 5 "Digikey" H 3950 2350 40  0001 L CNN "Supplier"
+F 6 "CL10B104KB8NNNC" H 3950 2350 40  0001 L CNN "Manufacturer Part Number"
+F 7 "1276-1000-1-ND" H 3950 2350 40  0001 L CNN "Supplier Part Number"
+F 8 "https://www.digikey.de/product-detail/de/CL10B104KB8NNNC/1276-1000-1-ND/3889086" H 3950 2350 40  0001 L CNN "Supplier Link"
 	1    3950 2250
 	1    0    0    -1  
 $EndComp
@@ -757,6 +927,11 @@ F 0 "C3" H 4250 2350 40  0000 L CNN
 F 1 "100n" H 4256 2165 40  0000 L CNN
 F 2 "Capacitors_SMD:C_0603" H 4288 2100 30  0001 C CNN
 F 3 "" H 4250 2250 60  0001 C CNN
+F 4 "Samsung" H 4250 2350 40  0001 L CNN "Manufacturer"
+F 5 "Digikey" H 4250 2350 40  0001 L CNN "Supplier"
+F 6 "CL10B104KB8NNNC" H 4250 2350 40  0001 L CNN "Manufacturer Part Number"
+F 7 "1276-1000-1-ND" H 4250 2350 40  0001 L CNN "Supplier Part Number"
+F 8 "https://www.digikey.de/product-detail/de/CL10B104KB8NNNC/1276-1000-1-ND/3889086" H 4250 2350 40  0001 L CNN "Supplier Link"
 	1    4250 2250
 	1    0    0    -1  
 $EndComp
@@ -789,7 +964,12 @@ P 10850 2900
 F 0 "P7" V 10800 2900 60  0000 C CNN
 F 1 "GPIO1" V 10900 2900 60  0000 C CNN
 F 2 "Connect:VASCH5x2" H 10850 2900 60  0001 C CNN
-F 3 "" H 10850 2900 60  0001 C CNN
+F 3 "http://multimedia.3m.com/mws/media/22504O/3mtm-100-in-loprof-hdr-100x-100strt-ra-4-wall-ts0818.pdf" H 10850 2900 60  0001 C CNN
+F 4 "https://www.digikey.de/product-detail/de/30310-6002HB/30310-6002HB-ND/1237393" V 10800 2900 60  0001 C CNN "Supplier Link"
+F 5 "30310-6002HB-ND" V 10800 2900 60  0001 C CNN "Supplier Part Number"
+F 6 "Digikey" V 10800 2900 60  0001 C CNN "Supplier"
+F 7 "30310-6002HB" V 10800 2900 60  0001 C CNN "Manufacturer Part Number"
+F 8 "3M" V 10800 2900 60  0001 C CNN "Manufacturer"
 	1    10850 2900
 	1    0    0    -1  
 $EndComp
@@ -809,9 +989,14 @@ L CONN_10 P8
 U 1 1 53CAB9DB
 P 10850 4100
 F 0 "P8" V 10800 4100 60  0000 C CNN
-F 1 "GPIO1" V 10900 4100 60  0000 C CNN
+F 1 "GPIO2" V 10900 4100 60  0000 C CNN
 F 2 "Connect:VASCH5x2" H 10850 4100 60  0001 C CNN
-F 3 "" H 10850 4100 60  0001 C CNN
+F 3 "http://multimedia.3m.com/mws/media/22504O/3mtm-100-in-loprof-hdr-100x-100strt-ra-4-wall-ts0818.pdf" H 10850 4100 60  0001 C CNN
+F 4 "https://www.digikey.de/product-detail/de/30310-6002HB/30310-6002HB-ND/1237393" V 10800 4100 60  0001 C CNN "Supplier Link"
+F 5 "30310-6002HB-ND" V 10800 4100 60  0001 C CNN "Supplier Part Number"
+F 6 "Digikey" V 10800 4100 60  0001 C CNN "Supplier"
+F 7 "30310-6002HB" V 10800 4100 60  0001 C CNN "Manufacturer Part Number"
+F 8 "3M" V 10800 4100 60  0001 C CNN "Manufacturer"
 	1    10850 4100
 	1    0    0    -1  
 $EndComp
@@ -831,9 +1016,14 @@ L CONN_10 P9
 U 1 1 53CAC3EE
 P 10850 5300
 F 0 "P9" V 10800 5300 60  0000 C CNN
-F 1 "GPIO1" V 10900 5300 60  0000 C CNN
+F 1 "GPIO3" V 10900 5300 60  0000 C CNN
 F 2 "Connect:VASCH5x2" H 10850 5300 60  0001 C CNN
-F 3 "" H 10850 5300 60  0001 C CNN
+F 3 "http://multimedia.3m.com/mws/media/22504O/3mtm-100-in-loprof-hdr-100x-100strt-ra-4-wall-ts0818.pdf" H 10850 5300 60  0001 C CNN
+F 4 "https://www.digikey.de/product-detail/de/30310-6002HB/30310-6002HB-ND/1237393" V 10800 5300 60  0001 C CNN "Supplier Link"
+F 5 "30310-6002HB-ND" V 10800 5300 60  0001 C CNN "Supplier Part Number"
+F 6 "Digikey" V 10800 5300 60  0001 C CNN "Supplier"
+F 7 "30310-6002HB" V 10800 5300 60  0001 C CNN "Manufacturer Part Number"
+F 8 "3M" V 10800 5300 60  0001 C CNN "Manufacturer"
 	1    10850 5300
 	1    0    0    -1  
 $EndComp
@@ -853,9 +1043,14 @@ L TVS D4
 U 1 1 53CD4F63
 P 6400 5400
 F 0 "D4" H 6400 5550 60  0000 C CNN
-F 1 "TVS" H 6400 5250 60  0000 C CNN
+F 1 "TVS 5V" H 6400 5250 60  0000 C CNN
 F 2 "Capacitors_SMD:C_0603" H 6400 5400 60  0001 C CNN
-F 3 "" H 6400 5400 60  0001 C CNN
+F 3 "http://www.comchiptech.com/cms/UserFiles/CPDU-Series-RevD.pdf" H 6400 5400 60  0001 C CNN
+F 4 "Comchip Technology" H 6400 5550 60  0001 C CNN "Manufacturer"
+F 5 "641-1088-1-ND" H 6400 5550 60  0001 C CNN "Supplier Part Number"
+F 6 "CPDU5V0" H 6400 5550 60  0001 C CNN "Manufacturer Part Number"
+F 7 "Digikey" H 6400 5550 60  0001 C CNN "Supplier"
+F 8 "https://www.digikey.de/product-detail/de/CPDU5V0/641-1088-1-ND/1121210" H 6400 5550 60  0001 C CNN "Supplier Link"
 	1    6400 5400
 	0    -1   -1   0   
 $EndComp
@@ -864,9 +1059,14 @@ L TVS D5
 U 1 1 53CD4F93
 P 6650 5150
 F 0 "D5" H 6650 5300 60  0000 C CNN
-F 1 "TVS" H 6650 5000 60  0000 C CNN
+F 1 "TVS 5V" H 6650 5000 60  0000 C CNN
 F 2 "Capacitors_SMD:C_0603" H 6650 5150 60  0001 C CNN
-F 3 "" H 6650 5150 60  0001 C CNN
+F 3 "http://www.comchiptech.com/cms/UserFiles/CPDU-Series-RevD.pdf" H 6650 5150 60  0001 C CNN
+F 4 "Comchip Technology" H 6650 5300 60  0001 C CNN "Manufacturer"
+F 5 "641-1088-1-ND" H 6650 5300 60  0001 C CNN "Supplier Part Number"
+F 6 "CPDU5V0" H 6650 5300 60  0001 C CNN "Manufacturer Part Number"
+F 7 "Digikey" H 6650 5300 60  0001 C CNN "Supplier"
+F 8 "https://www.digikey.de/product-detail/de/CPDU5V0/641-1088-1-ND/1121210" H 6650 5300 60  0001 C CNN "Supplier Link"
 	1    6650 5150
 	0    -1   -1   0   
 $EndComp
@@ -875,9 +1075,14 @@ L TVS D6
 U 1 1 53CD4F9E
 P 6900 4900
 F 0 "D6" H 6900 5050 60  0000 C CNN
-F 1 "TVS" H 6900 4750 60  0000 C CNN
+F 1 "TVS 5V" H 6900 4750 60  0000 C CNN
 F 2 "Capacitors_SMD:C_0603" H 6900 4900 60  0001 C CNN
-F 3 "" H 6900 4900 60  0001 C CNN
+F 3 "http://www.comchiptech.com/cms/UserFiles/CPDU-Series-RevD.pdf" H 6900 4900 60  0001 C CNN
+F 4 "Comchip Technology" H 6900 5050 60  0001 C CNN "Manufacturer"
+F 5 "641-1088-1-ND" H 6900 5050 60  0001 C CNN "Supplier Part Number"
+F 6 "CPDU5V0" H 6900 5050 60  0001 C CNN "Manufacturer Part Number"
+F 7 "Digikey" H 6900 5050 60  0001 C CNN "Supplier"
+F 8 "https://www.digikey.de/product-detail/de/CPDU5V0/641-1088-1-ND/1121210" H 6900 5050 60  0001 C CNN "Supplier Link"
 	1    6900 4900
 	0    -1   -1   0   
 $EndComp
@@ -922,6 +1127,11 @@ F 0 "C5" H 5750 4700 40  0000 L CNN
 F 1 "100n" H 5756 4515 40  0000 L CNN
 F 2 "Capacitors_SMD:C_0603" H 5788 4450 30  0001 C CNN
 F 3 "" H 5750 4600 60  0001 C CNN
+F 4 "Samsung" H 5750 4700 40  0001 L CNN "Manufacturer"
+F 5 "Digikey" H 5750 4700 40  0001 L CNN "Supplier"
+F 6 "CL10B104KB8NNNC" H 5750 4700 40  0001 L CNN "Manufacturer Part Number"
+F 7 "1276-1000-1-ND" H 5750 4700 40  0001 L CNN "Supplier Part Number"
+F 8 "https://www.digikey.de/product-detail/de/CL10B104KB8NNNC/1276-1000-1-ND/3889086" H 5750 4700 40  0001 L CNN "Supplier Link"
 	1    5750 4600
 	1    0    0    -1  
 $EndComp
@@ -1002,6 +1212,11 @@ F 0 "C6" V 4850 5300 40  0000 L CNN
 F 1 "4.7n" V 5150 5300 40  0000 L CNN
 F 2 "" H 5038 5200 30  0001 C CNN
 F 3 "" H 5000 5350 60  0001 C CNN
+F 4 "490-1506-1-ND" V 4850 5300 40  0001 L CNN "Supplier Part Number"
+F 5 "Digikey" V 4850 5300 40  0001 L CNN "Supplier"
+F 6 "GRM188R71H472KA01D" V 4850 5300 40  0001 L CNN "Manufacturer Part Number"
+F 7 "https://www.digikey.de/product-detail/de/GRM188R71H472KA01D/490-1506-1-ND/587880" V 4850 5300 40  0001 L CNN "Supplier Link"
+F 8 "Murata" V 4850 5300 40  0001 L CNN "Manufacturer"
 	1    5000 5350
 	0    1    1    0   
 $EndComp
@@ -1013,6 +1228,11 @@ F 0 "R10" V 5080 5650 40  0000 C CNN
 F 1 "1M" V 4900 5650 40  0000 C CNN
 F 2 "Resistors_SMD:R_0603" V 4930 5650 30  0001 C CNN
 F 3 "" H 5000 5650 30  0001 C CNN
+F 4 "ERJ-3GEYJ105V" V 5080 5650 40  0001 C CNN "Manufacturer Part Number"
+F 5 "Digikey" V 5080 5650 40  0001 C CNN "Supplier"
+F 6 "Panasonic" V 5080 5650 40  0001 C CNN "Manufacturer"
+F 7 "https://www.digikey.de/product-detail/de/ERJ-3GEYJ105V/P1.0MGCT-ND/134885" V 5080 5650 40  0001 C CNN "Supplier Link"
+F 8 "P1.0MGCT-ND" V 5080 5650 40  0001 C CNN "Supplier Part Number"
 	1    5000 5650
 	0    -1   -1   0   
 $EndComp
@@ -1024,6 +1244,11 @@ F 0 "L3" V 3300 6750 40  0000 C CNN
 F 1 "10u" V 3450 6750 40  0000 C CNN
 F 2 "Capacitors_SMD:C_0603" H 3350 6750 60  0001 C CNN
 F 3 "" H 3350 6750 60  0001 C CNN
+F 4 "Digikey" V 3300 6750 40  0001 C CNN "Supplier"
+F 5 "445-3608-1-ND" V 3300 6750 40  0001 C CNN "Supplier Part Number"
+F 6 "TDK" V 3300 6750 40  0001 C CNN "Manufacturer"
+F 7 "https://www.digikey.de/product-detail/de/GLFR1608T100M-LR/445-3608-1-ND/1856576" V 3300 6750 40  0001 C CNN "Supplier Link"
+F 8 "GLFR1608T100M-LR" V 3300 6750 40  0001 C CNN "Manufacturer Part Number"
 	1    3350 6750
 	0    -1   -1   0   
 $EndComp
@@ -1035,6 +1260,11 @@ F 0 "C13" H 3700 7100 40  0000 L CNN
 F 1 "10u" H 3706 6915 40  0000 L CNN
 F 2 "Capacitors_SMD:C_0603" H 3738 6850 30  0001 C CNN
 F 3 "" H 3700 7000 60  0001 C CNN
+F 4 "C0603C106M9PACTU" H 3700 7100 40  0001 L CNN "Manufacturer Part Number"
+F 5 "399-5504-1-ND" H 3700 7100 40  0001 L CNN "Supplier Part Number"
+F 6 "Kemet" H 3700 7100 40  0001 L CNN "Manufacturer"
+F 7 "Digikey" H 3700 7100 40  0001 L CNN "Supplier"
+F 8 "https://www.digikey.de/product-detail/de/C0603C106M9PACTU/399-5504-1-ND/1950682" H 3700 7100 40  0001 L CNN "Supplier Link"
 	1    3700 7000
 	1    0    0    -1  
 $EndComp
@@ -1046,6 +1276,11 @@ F 0 "C16" H 4400 7100 40  0000 L CNN
 F 1 "100n" H 4406 6915 40  0000 L CNN
 F 2 "Capacitors_SMD:C_0603" H 4438 6850 30  0001 C CNN
 F 3 "" H 4400 7000 60  0001 C CNN
+F 4 "Samsung" H 4400 7100 40  0001 L CNN "Manufacturer"
+F 5 "Digikey" H 4400 7100 40  0001 L CNN "Supplier"
+F 6 "CL10B104KB8NNNC" H 4400 7100 40  0001 L CNN "Manufacturer Part Number"
+F 7 "1276-1000-1-ND" H 4400 7100 40  0001 L CNN "Supplier Part Number"
+F 8 "https://www.digikey.de/product-detail/de/CL10B104KB8NNNC/1276-1000-1-ND/3889086" H 4400 7100 40  0001 L CNN "Supplier Link"
 	1    4400 7000
 	1    0    0    -1  
 $EndComp
@@ -1057,6 +1292,11 @@ F 0 "C15" H 4200 7100 40  0000 L CNN
 F 1 "100n" H 4206 6915 40  0000 L CNN
 F 2 "Capacitors_SMD:C_0603" H 4238 6850 30  0001 C CNN
 F 3 "" H 4200 7000 60  0001 C CNN
+F 4 "Samsung" H 4200 7100 40  0001 L CNN "Manufacturer"
+F 5 "Digikey" H 4200 7100 40  0001 L CNN "Supplier"
+F 6 "CL10B104KB8NNNC" H 4200 7100 40  0001 L CNN "Manufacturer Part Number"
+F 7 "1276-1000-1-ND" H 4200 7100 40  0001 L CNN "Supplier Part Number"
+F 8 "https://www.digikey.de/product-detail/de/CL10B104KB8NNNC/1276-1000-1-ND/3889086" H 4200 7100 40  0001 L CNN "Supplier Link"
 	1    4200 7000
 	1    0    0    -1  
 $EndComp
@@ -1068,6 +1308,11 @@ F 0 "C14" H 4000 7100 40  0000 L CNN
 F 1 "100n" H 4006 6915 40  0000 L CNN
 F 2 "Capacitors_SMD:C_0603" H 4038 6850 30  0001 C CNN
 F 3 "" H 4000 7000 60  0001 C CNN
+F 4 "Samsung" H 4000 7100 40  0001 L CNN "Manufacturer"
+F 5 "Digikey" H 4000 7100 40  0001 L CNN "Supplier"
+F 6 "CL10B104KB8NNNC" H 4000 7100 40  0001 L CNN "Manufacturer Part Number"
+F 7 "1276-1000-1-ND" H 4000 7100 40  0001 L CNN "Supplier Part Number"
+F 8 "https://www.digikey.de/product-detail/de/CL10B104KB8NNNC/1276-1000-1-ND/3889086" H 4000 7100 40  0001 L CNN "Supplier Link"
 	1    4000 7000
 	1    0    0    -1  
 $EndComp
@@ -1131,6 +1376,11 @@ F 0 "R11" V 6930 3300 40  0000 C CNN
 F 1 "120" V 6857 3301 40  0000 C CNN
 F 2 "Resistors_SMD:R_0603" V 6780 3300 30  0001 C CNN
 F 3 "" H 6850 3300 30  0001 C CNN
+F 4 "Digikey" V 6930 3300 40  0001 C CNN "Supplier"
+F 5 "ERJ-3GEYJ121V" V 6930 3300 40  0001 C CNN "Manufacturer Part Number"
+F 6 "https://www.digikey.de/product-detail/de/ERJ-3GEYJ121V/P120GCT-ND/134727" V 6930 3300 40  0001 C CNN "Supplier Link"
+F 7 "Panasonic" V 6930 3300 40  0001 C CNN "Manufacturer"
+F 8 "P120GCT-ND" V 6930 3300 40  0001 C CNN "Supplier Part Number"
 	1    6850 3300
 	0    1    1    0   
 $EndComp
@@ -1142,6 +1392,11 @@ F 0 "R12" V 6930 3600 40  0000 C CNN
 F 1 "120" V 6857 3601 40  0000 C CNN
 F 2 "Resistors_SMD:R_0603" V 6780 3600 30  0001 C CNN
 F 3 "" H 6850 3600 30  0001 C CNN
+F 4 "Digikey" V 6930 3600 40  0001 C CNN "Supplier"
+F 5 "ERJ-3GEYJ121V" V 6930 3600 40  0001 C CNN "Manufacturer Part Number"
+F 6 "https://www.digikey.de/product-detail/de/ERJ-3GEYJ121V/P120GCT-ND/134727" V 6930 3600 40  0001 C CNN "Supplier Link"
+F 7 "Panasonic" V 6930 3600 40  0001 C CNN "Manufacturer"
+F 8 "P120GCT-ND" V 6930 3600 40  0001 C CNN "Supplier Part Number"
 	1    6850 3600
 	0    1    1    0   
 $EndComp
@@ -1150,9 +1405,14 @@ L LED-RESCUE-uMidi D7
 U 1 1 546F2E09
 P 6350 3300
 F 0 "D7" H 6350 3400 50  0000 C CNN
-F 1 "LED" H 6350 3200 50  0000 C CNN
+F 1 "LED Green" H 6350 3200 50  0000 C CNN
 F 2 "" H 6350 3300 60  0001 C CNN
-F 3 "" H 6350 3300 60  0001 C CNN
+F 3 "http://optoelectronics.liteon.com/upload/download/DS22-2000-228/S_110_LTST-C191KGKT.pdf" H 6350 3300 60  0001 C CNN
+F 4 "LTST-C191KGKT" H 6350 3400 50  0001 C CNN "Manufacturer Part Number"
+F 5 "Digikey" H 6350 3400 50  0001 C CNN "Supplier"
+F 6 "https://www.digikey.de/product-detail/de/LTST-C191KGKT/160-1446-1-ND/386834" H 6350 3400 50  0001 C CNN "Supplier Link"
+F 7 "Lite-On Inc." H 6350 3400 50  0001 C CNN "Manufacturer"
+F 8 "160-1446-1-ND" H 6350 3400 50  0001 C CNN "Supplier Part Number"
 	1    6350 3300
 	-1   0    0    1   
 $EndComp
@@ -1161,9 +1421,14 @@ L LED-RESCUE-uMidi D8
 U 1 1 546F2EDE
 P 6350 3600
 F 0 "D8" H 6350 3700 50  0000 C CNN
-F 1 "LED" H 6350 3500 50  0000 C CNN
+F 1 "LED Red" H 6350 3500 50  0000 C CNN
 F 2 "" H 6350 3600 60  0001 C CNN
-F 3 "" H 6350 3600 60  0001 C CNN
+F 3 "http://optoelectronics.liteon.com/upload/download/DS22-2000-223/S_110_LTST-C191KRKT.pdf" H 6350 3600 60  0001 C CNN
+F 4 "LTST-C191KRKT" H 6350 3700 50  0001 C CNN "Manufacturer Part Number"
+F 5 "160-1447-1-ND" H 6350 3700 50  0001 C CNN "Supplier Part Number"
+F 6 "https://www.digikey.de/product-detail/de/LTST-C191KRKT/160-1447-1-ND/386836" H 6350 3700 50  0001 C CNN "Supplier Link"
+F 7 "Lite-On Inc." H 6350 3700 50  0001 C CNN "Manufacturer"
+F 8 "Digikey" H 6350 3700 50  0001 C CNN "Supplier"
 	1    6350 3600
 	-1   0    0    1   
 $EndComp
@@ -1186,6 +1451,11 @@ F 0 "R13" V 3030 1550 40  0000 C CNN
 F 1 "4.7k" V 2957 1551 40  0000 C CNN
 F 2 "Resistors_SMD:R_0603" V 2880 1550 30  0001 C CNN
 F 3 "" H 2950 1550 30  0001 C CNN
+F 4 "https://www.digikey.de/product-detail/de/ERJ-3GEYJ472V/P4.7KGCT-ND/135199" V 3030 1550 40  0001 C CNN "Supplier Link"
+F 5 "Panasonic" V 3030 1550 40  0001 C CNN "Manufacturer"
+F 6 "ERJ-3GEYJ472V" V 3030 1550 40  0001 C CNN "Manufacturer Part Number"
+F 7 "P4.7KGCT-ND" V 3030 1550 40  0001 C CNN "Supplier Part Number"
+F 8 "Digikey" V 3030 1550 40  0001 C CNN "Supplier"
 	1    2950 1550
 	-1   0    0    1   
 $EndComp
@@ -1208,6 +1478,11 @@ F 0 "R14" V 9730 1900 40  0000 C CNN
 F 1 "10k" V 9657 1901 40  0000 C CNN
 F 2 "Resistors_SMD:R_0603" V 9580 1900 30  0001 C CNN
 F 3 "" H 9650 1900 30  0001 C CNN
+F 4 "Panasonic" V 9730 1900 40  0001 C CNN "Manufacturer"
+F 5 "P10KGCT-ND" V 9730 1900 40  0001 C CNN "Supplier Part Number"
+F 6 "https://www.digikey.de/product-detail/de/ERJ-3GEYJ103V/P10KGCT-ND/134717" V 9730 1900 40  0001 C CNN "Supplier Link"
+F 7 "Digikey" V 9730 1900 40  0001 C CNN "Supplier"
+F 8 "ERJ-3GEYJ103V" V 9730 1900 40  0001 C CNN "Manufacturer Part Number"
 	1    9650 1900
 	1    0    0    -1  
 $EndComp
@@ -1219,6 +1494,11 @@ F 0 "R15" V 9930 1900 40  0000 C CNN
 F 1 "10k" V 9857 1901 40  0000 C CNN
 F 2 "Resistors_SMD:R_0603" V 9780 1900 30  0001 C CNN
 F 3 "" H 9850 1900 30  0001 C CNN
+F 4 "Panasonic" V 9930 1900 40  0001 C CNN "Manufacturer"
+F 5 "P10KGCT-ND" V 9930 1900 40  0001 C CNN "Supplier Part Number"
+F 6 "https://www.digikey.de/product-detail/de/ERJ-3GEYJ103V/P10KGCT-ND/134717" V 9930 1900 40  0001 C CNN "Supplier Link"
+F 7 "Digikey" V 9930 1900 40  0001 C CNN "Supplier"
+F 8 "ERJ-3GEYJ103V" V 9930 1900 40  0001 C CNN "Manufacturer Part Number"
 	1    9850 1900
 	1    0    0    -1  
 $EndComp
