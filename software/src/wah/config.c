@@ -27,6 +27,8 @@
 #include "lib/gpio.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
+#include "lib/serial_communication.h"
+#include "lib/usb.h"
 
 #include "config.h"
 #include "wah.h"
@@ -88,11 +90,13 @@ background_task_t high_frequency_tasks[] = {
 uint8_t high_frequency_tasks_size = sizeof(high_frequency_tasks)/sizeof(background_task_t);
 
 background_task_t mid_frequency_tasks[] = {
+    &usb_main_task,
 };
 uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background_task_t);
 
 background_task_t low_frequency_tasks[] = {
     &update_leds,
     &handle_switch,
+    &serial_communication_task,
 };
 uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);
