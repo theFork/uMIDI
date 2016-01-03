@@ -1,4 +1,4 @@
-(module Atmel:QFN-44-1EP placed (layer F.Cu) (tedit 5483520A)
+(module QFN-44-1EP placed (layer F.Cu) (tedit 5483520A)
   (descr "7x7mm QFN 44+1 pads")
   (tags "QFN VQFN")
   (attr smd)

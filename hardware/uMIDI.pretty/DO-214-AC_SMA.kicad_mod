@@ -1,4 +1,4 @@
-(module SMD_Packages:DO-214-AC_SMA placed (layer F.Cu) (tedit 548D956D)
+(module DO-214-AC_SMA placed (layer F.Cu) (tedit 548D956D)
   (descr "DO-214AC (SMA)  PACKAGE.")
   (tags DO-214AC_SMA)
   (attr smd)

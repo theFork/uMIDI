@@ -1,4 +1,4 @@
-(module Connect:PINHEAD1-2 placed (layer F.Cu) (tedit 5471CAFA)
+(module Pinhead1-2 placed (layer F.Cu) (tedit 5471CAFA)
   (solder_mask_margin 0.3)
   (clearance 0.3)
   (attr virtual)

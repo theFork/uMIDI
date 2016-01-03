@@ -1,4 +1,4 @@
-(module SMD_Packages:SOIC-14_N placed (layer F.Cu) (tedit 54844844)
+(module SOIC-14_N placed (layer F.Cu) (tedit 54844844)
   (descr "Module CMS SOJ 14 pins Large")
   (tags "CMS SOJ")
   (attr smd)

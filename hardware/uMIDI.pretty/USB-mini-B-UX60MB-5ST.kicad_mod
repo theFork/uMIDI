@@ -1,4 +1,4 @@
-(module UX60MB-5ST (layer F.Cu) (tedit 548D5E7C)
+(module USB-mini-B-UX60MB-5ST (layer F.Cu) (tedit 548D5E7C)
   (fp_text reference UX60MB-5ST (at 0 -6.35) (layer F.SilkS)
     (effects (font (size 1.5 1.5) (thickness 0.15)))
   )
