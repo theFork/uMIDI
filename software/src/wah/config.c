@@ -100,3 +100,17 @@ background_task_t low_frequency_tasks[] = {
     &serial_communication_task,
 };
 uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);
+
+//---------------- Custom commands ----------------//
+struct serial_command serial_commands[] = {
+    {
+        .cmd_string = "enable",
+        .help_string = "<a>\n"
+            "Enable or disable the effect:\n"
+            "<a> : action\n"
+            "      't' = enable\n"
+            "       ?  = disable",
+        .handler = &exec_enable
+    },
+};
+uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);

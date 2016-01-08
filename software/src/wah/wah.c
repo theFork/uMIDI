@@ -29,6 +29,8 @@
 #include "lib/math.h"
 #include "lib/midi.h"
 #include "lib/pwm.h"
+#include "lib/serial_communication.h"
+#include "lib/usb.h"
 #include "lib/wave.h"
 
 #include "config.h"
@@ -86,6 +88,17 @@ void enable_wah(bool enable)
 {
     gpio_set(gpio_config.header3.pin4, enable);
     gpio_set(gpio_config.header3.pin8, enable);
+}
+
+bool exec_enable(const char* command)
+{
+    if (strlen(command) != 8) {
+        usb_puts("Malformed command" USB_NEWLINE);
+        return false;
+    }
+
+    enable_wah(command[7] == 't');
+    return true;
 }
 
 void update_wah_pwm(void)
