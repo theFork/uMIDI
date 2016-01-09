@@ -65,6 +65,7 @@ void init_wah_module(void)
     pwm_range.to = PWM_MAX_DUTY-50;
     init_linear(&pwm_range);
     init_pwm_module(&linear_function);
+    set_pwm_duty_cycle(pwm_range.from);
 
     // Setup wave module
     const uint8_t speed = 120;
