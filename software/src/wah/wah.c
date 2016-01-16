@@ -22,6 +22,7 @@
 
 #include <avr/wdt.h>
 #include <util/delay.h>
+#include <stdlib.h>
 
 #include "lib/adc.h"
 #include "lib/gpio.h"
@@ -99,6 +100,50 @@ bool exec_enable(const char* command)
     }
 
     enable_wah(command[7] == 't');
+    return true;
+}
+
+bool exec_speed(const char* command)
+{
+    if (strlen(command) < 7 || command[5] != ' ') {
+        usb_puts("Malformed command" USB_NEWLINE);
+        return false;
+    }
+
+    uint8_t speed = atoi(command+6) % MIDI_MAX_VALUE;
+    usb_printf("Setting waveform speed to %u" USB_NEWLINE, speed);
+    set_speed(&pwm_wave, speed);
+    return true;
+}
+
+bool exec_waveform(const char* command)
+{
+    if (strlen(command) < 7 || command[8] != ' ') {
+        usb_puts("Malformed command" USB_NEWLINE);
+        return false;
+    }
+
+    enum waveform waveform = pwm_wave.settings.waveform;
+    if (strncmp("next", command+9, sizeof("next")) == 0) {
+        waveform = ++waveform % WAVE_RANDOM;
+        usb_printf("Switching to next waveform (%u)" USB_NEWLINE, waveform);
+        goto exec;
+    }
+    if (strncmp("off", command+9, sizeof("off")) == 0) {
+        waveform = WAVE_OFF;
+        usb_puts("Switching to pedal mode" USB_NEWLINE);
+        goto exec;
+    }
+    if (strncmp("prev", command+9, sizeof("next")) == 0) {
+        waveform = pwm_wave.settings.waveform == 0 ? WAVE_RANDOM : --waveform;
+        usb_printf("Switching to previous waveform (%u)" USB_NEWLINE, waveform);
+        goto exec;
+    }
+    usb_puts("Unknown parameter" USB_NEWLINE);
+    return false;
+
+exec:
+    set_waveform(&pwm_wave, waveform);
     return true;
 }
 

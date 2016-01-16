@@ -112,5 +112,19 @@ struct serial_command serial_commands[] = {
             "       ?  = disable",
         .handler = &exec_enable
     },
+    {
+        .cmd_string = "speed",
+        .help_string = "<s>\n"
+            "Adjust the speed of the effect if in waveform mode:\n"
+            "<s> : wave speed\n",
+        .handler = &exec_speed
+    },
+    {
+        .cmd_string = "waveform",
+        .help_string = "<w>\n"
+            "En-/disable waveform mode and set waveform:\n"
+            "<w> : waveform\n",
+        .handler = &exec_waveform
+    },
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);
