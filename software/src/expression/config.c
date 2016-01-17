@@ -1,9 +1,12 @@
+/// \file
+/// \brief      Device configuration
+
 /*
  * Copyright 2015 Sebastian Neuser
  *
  * This file is part of the uMIDI firmware.
  *
- * the uMIDI firmware is free software: you can redistribute it and/or modify
+ * The uMIDI firmware is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
@@ -17,11 +20,6 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * Device configuration.
- * @author Sebastian Neuser
-*/
-
 #include <stddef.h>
 
 #include "lib/adc.h"
@@ -29,6 +27,8 @@
 #include "lib/gpio.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
+#include "lib/serial_communication.h"
+#include "lib/usb.h"
 
 #include "config.h"
 #include "expression.h"
@@ -44,6 +44,12 @@ const struct adc_config adc_config = {
     .prescaler  = ADC_PRESCALER_DIV512_gc,
 };
 
+const struct adc_conversion_config expression_conversion = {
+    .channel            = ADC_CHANNEL_0,
+    .input              = ADC_INPUT_4,
+    .callback_unsigned  = &update_expression_value,
+};
+
 //---------------- GPIO ----------------//
 struct gpio_config gpio_config = {
     .header1 = {
@@ -51,7 +57,7 @@ struct gpio_config gpio_config = {
         .pin3 = { &PORTA, 1, GPIO_UNUSED },
         .pin4 = { &PORTA, 2, GPIO_UNUSED },
         .pin5 = { &PORTA, 3, GPIO_UNUSED },
-        .pin6 = { &PORTA, 4, GPIO_INPUT },
+        .pin6 = { &PORTA, 4, GPIO_INPUT },  // ADC input
         .pin7 = { &PORTA, 5, GPIO_UNUSED },
         .pin8 = { &PORTA, 6, GPIO_UNUSED },
         .pin9 = { &PORTA, 7, GPIO_UNUSED }
@@ -69,12 +75,12 @@ struct gpio_config gpio_config = {
     .header3 = {
         .pin2 = { &PORTC, 4, GPIO_UNUSED },
         .pin3 = { &PORTC, 5, GPIO_UNUSED },
-        .pin4 = { &PORTC, 6, GPIO_UNUSED },
+        .pin4 = { &PORTC, 6, GPIO_OUTPUT }, // Enable LED
         .pin5 = { &PORTC, 7, GPIO_UNUSED },
         .pin6 = { &PORTD, 0, GPIO_UNUSED },
         .pin7 = { &PORTD, 1, GPIO_UNUSED },
         .pin8 = { &PORTD, 2, GPIO_UNUSED },
-        .pin9 = { &PORTD, 3, GPIO_UNUSED }
+        .pin9 = { &PORTD, 3, GPIO_INPUT_PULLUP } // Enable switch
     }
 };
 
@@ -95,10 +101,13 @@ uint8_t high_frequency_tasks_size = sizeof(high_frequency_tasks)/sizeof(backgrou
 
 background_task_t mid_frequency_tasks[] = {
     &trigger_expression_conversion,
+    &usb_main_task,
 };
 uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background_task_t);
 
 background_task_t low_frequency_tasks[] = {
+    &handle_enable_switch,
     &update_leds,
+    &serial_communication_task,
 };
 uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);
