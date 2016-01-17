@@ -75,12 +75,12 @@ struct gpio_config gpio_config = {
     .header3 = {
         .pin2 = { &PORTC, 4, GPIO_UNUSED },
         .pin3 = { &PORTC, 5, GPIO_UNUSED },
-        .pin4 = { &PORTC, 6, GPIO_UNUSED },
+        .pin4 = { &PORTC, 6, GPIO_OUTPUT }, // Enable LED
         .pin5 = { &PORTC, 7, GPIO_UNUSED },
         .pin6 = { &PORTD, 0, GPIO_UNUSED },
         .pin7 = { &PORTD, 1, GPIO_UNUSED },
         .pin8 = { &PORTD, 2, GPIO_UNUSED },
-        .pin9 = { &PORTD, 3, GPIO_UNUSED }
+        .pin9 = { &PORTD, 3, GPIO_INPUT_PULLUP } // Enable switch
     }
 };
 
@@ -106,6 +106,7 @@ background_task_t mid_frequency_tasks[] = {
 uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background_task_t);
 
 background_task_t low_frequency_tasks[] = {
+    &handle_enable_switch,
     &update_leds,
     &serial_communication_task,
 };

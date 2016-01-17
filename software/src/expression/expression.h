@@ -29,12 +29,20 @@
 
 
 //---------------- constants ----------------//
+/// \brief      The MIDI note that represents uMIDI wah's enable / bypass state
+#define MIDI_NOTE_ENABLE_WAH            42
 
 
 //---------------- data types ----------------//
 
 
 //---------------- functions and procedures ----------------//
+
+/// \brief      A background task that handles the enable switch
+/// \details    This task polls the enable switch input. If the input changed, a MIDI note on / off
+///             message is transmitted.
+/// \see        MIDI_NOTE_ENABLE_WAH
+void handle_enable_switch(void);
 
 /// \brief      Updates the stored expression value
 /// \details    If the value changed, the new value is sent as a MIDI control change message for
