@@ -126,7 +126,7 @@ static void advance_step_counter(struct wave* wave)
 /// \param      wave
 ///                 the wave
 /// \return     the wave output
-static uint8_t compute_ramp(struct wave* wave)
+static midi_value_t compute_ramp(struct wave* wave)
 {
     switch (wave->state.step_direction) {
         case DIRECTION_DOWN:
@@ -145,12 +145,12 @@ static uint8_t compute_ramp(struct wave* wave)
 /// \param      wave
 ///                 the wave
 /// \return     the wave output
-static uint8_t compute_random_wave(struct wave* wave)
+static midi_value_t compute_random_wave(struct wave* wave)
 {
-    static uint8_t current_value = 0;
+    static midi_value_t current_value = 0;
 
     // Check if step counter has changed
-    static uint8_t old_step_counter = 0;
+    static midi_value_t old_step_counter = 0;
     if (wave->state.step_counter == old_step_counter) {
         return current_value;
     }
@@ -170,7 +170,7 @@ static uint8_t compute_random_wave(struct wave* wave)
 /// \param      wave
 ///                 the wave
 /// \return     the wave output
-static uint8_t compute_saw_down_wave(struct wave* wave)
+static midi_value_t compute_saw_down_wave(struct wave* wave)
 {
     return MIDI_MAX_VALUE - compute_ramp(wave);
 }
@@ -179,7 +179,7 @@ static uint8_t compute_saw_down_wave(struct wave* wave)
 /// \param      wave
 ///                 the wave
 /// \return     the wave output
-static uint8_t compute_saw_up_wave(struct wave* wave)
+static midi_value_t compute_saw_up_wave(struct wave* wave)
 {
     return compute_ramp(wave);
 }
@@ -188,7 +188,7 @@ static uint8_t compute_saw_up_wave(struct wave* wave)
 /// \param      wave
 ///                 the wave
 /// \return     the wave output
-static uint8_t compute_sine_wave(struct wave* wave)
+static midi_value_t compute_sine_wave(struct wave* wave)
 {
     switch (wave->state.step_direction) {
         case DIRECTION_DOWN:
@@ -206,7 +206,7 @@ static uint8_t compute_sine_wave(struct wave* wave)
 /// \param      wave
 ///                 the wave
 /// \return     the wave output
-static uint8_t compute_square_wave(struct wave* wave)
+static midi_value_t compute_square_wave(struct wave* wave)
 {
     return (wave->state.step_direction == DIRECTION_UP) ? MIDI_MAX_VALUE : 0;
 }
@@ -215,7 +215,7 @@ static uint8_t compute_square_wave(struct wave* wave)
 /// \param      wave
 ///                 the wave
 /// \return     the wave output
-static uint8_t compute_stairs_wave(struct wave* wave)
+static midi_value_t compute_stairs_wave(struct wave* wave)
 {
     uint8_t step_size = MIDI_MAX_VALUE / STAIR_WAVE_STEPS;
 
@@ -237,7 +237,7 @@ static uint8_t compute_stairs_wave(struct wave* wave)
 /// \param      wave
 ///                 the wave
 /// \return     the wave output
-static uint8_t compute_triangle_wave(struct wave* wave)
+static midi_value_t compute_triangle_wave(struct wave* wave)
 {
     return wave->state.step_counter;
 }
@@ -246,7 +246,7 @@ static uint8_t compute_triangle_wave(struct wave* wave)
 /// \param      wave
 ///                 the wave
 /// \return     the wave output
-static uint8_t compute_wave_pattern(struct wave* wave)
+static midi_value_t compute_wave_pattern(struct wave* wave)
 {
     // Compute sample coordinates
     uint8_t pattern_number = wave->settings.waveform - WAVE_PATTERN_01;
@@ -266,7 +266,7 @@ static uint8_t compute_wave_pattern(struct wave* wave)
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void init_wave(struct wave* wave, enum waveform waveform, uint8_t speed, uint8_t amplitude, uint8_t offset)
+void init_wave(struct wave* wave, enum waveform waveform, midi_value_t speed, midi_value_t amplitude, midi_value_t offset)
 {
     wave->settings.amplitude = amplitude;
     wave->settings.offset = offset;
@@ -274,7 +274,7 @@ void init_wave(struct wave* wave, enum waveform waveform, uint8_t speed, uint8_t
     set_waveform(wave, waveform);
 }
 
-void set_speed(struct wave *wave, uint8_t speed)
+void set_speed(struct wave *wave, midi_value_t speed)
 {
     wave->settings.speed = speed;
     wave->state.speed_prescaler = (MIDI_MAX_VALUE - speed) / 4;
@@ -290,7 +290,7 @@ void set_waveform(struct wave *wave, enum waveform waveform)
     wave->state.step_direction = DIRECTION_UP;
 }
 
-uint8_t update_wave(struct wave *wave)
+midi_value_t update_wave(struct wave *wave)
 {
     // Increment speed counter and reset it if the prescaler was reached
     ++wave->state.speed_counter;

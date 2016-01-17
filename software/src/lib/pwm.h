@@ -45,10 +45,9 @@
 ///             is set up to output a dual slope PWM. Additionally, a linear function is set up,
 ///             which is used in set_pwm_duty_cycle() to compute the duty cycle compare values.
 /// \param      conversion_function
-///                 Points to a function converting midi values to pwm compare register values
-/// \see        update_pwm
+///                 pointer to a function converting midi values to pwm compare register values
 /// \see        wave
-void init_pwm_module(uint16_t (*conversion_function)(uint8_t));
+void init_pwm_module(uint16_t (*conversion_function)(midi_value_t value));
 
 
 /// \brief      Updates the PWM duty cycle
@@ -56,7 +55,7 @@ void init_pwm_module(uint16_t (*conversion_function)(uint8_t));
 ///             register. This procedure can be used to manually control the modulation.
 /// \param      duty
 ///                 the desired duty cycle [0..MIDI_MAX_VALUE]
-void set_pwm_duty_cycle(uint8_t duty);
+void set_pwm_duty_cycle(midi_value_t duty);
 
 
 //---------------- EOF ----------------//
