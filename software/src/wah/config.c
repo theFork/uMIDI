@@ -1,3 +1,6 @@
+/// \file
+/// \brief      Device configuration
+
 /*
  * Copyright 2015 Sebastian Neuser
  *
@@ -17,11 +20,6 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * Device configuration.
- * @author Sebastian Neuser
-*/
-
 #include <stddef.h>
 
 #include "lib/adc.h"
@@ -29,6 +27,8 @@
 #include "lib/gpio.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
+#include "lib/serial_communication.h"
+#include "lib/usb.h"
 
 #include "config.h"
 #include "wah.h"
@@ -61,13 +61,13 @@ struct gpio_config gpio_config = {
         .pin9 = { &PORTC, 3, GPIO_UNUSED }
     },
     .header3 = {
-        .pin2 = { &PORTC, 4, GPIO_OUTPUT },
+        .pin2 = { &PORTC, 4, GPIO_OUTPUT },         // Wah LED PWM
         .pin3 = { &PORTC, 5, GPIO_UNUSED },
-        .pin4 = { &PORTC, 6, GPIO_OUTPUT },
+        .pin4 = { &PORTC, 6, GPIO_OUTPUT },         // Wah bypass relais
         .pin5 = { &PORTC, 7, GPIO_UNUSED },
-        .pin6 = { &PORTD, 0, GPIO_UNUSED },
+        .pin6 = { &PORTD, 0, GPIO_INPUT_PULLUP },   // Toggle switch
         .pin7 = { &PORTD, 1, GPIO_UNUSED },
-        .pin8 = { &PORTD, 2, GPIO_UNUSED },
+        .pin8 = { &PORTD, 2, GPIO_OUTPUT },         // Toggle switch LED
         .pin9 = { &PORTD, 3, GPIO_UNUSED }
     }
 };
@@ -75,7 +75,7 @@ struct gpio_config gpio_config = {
 //---------------- MIDI ----------------//
 struct midi_config midi_config = {
     .event_handlers = {
-        .control_change = NULL,
+        .control_change = handle_midi_cc,
         .note_off       = NULL,
         .note_on        = NULL,
         .program_change = NULL
@@ -90,11 +90,41 @@ background_task_t high_frequency_tasks[] = {
 uint8_t high_frequency_tasks_size = sizeof(high_frequency_tasks)/sizeof(background_task_t);
 
 background_task_t mid_frequency_tasks[] = {
+    &usb_main_task,
 };
 uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background_task_t);
 
 background_task_t low_frequency_tasks[] = {
     &update_leds,
-//    &toggle_wah,
+    &handle_switch,
+    &serial_communication_task,
 };
 uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);
+
+//---------------- Custom commands ----------------//
+struct serial_command serial_commands[] = {
+    {
+        .cmd_string = "enable",
+        .help_string = "<a>\n"
+            "Enable or disable the effect:\n"
+            "<a> : action\n"
+            "      't' = enable\n"
+            "       ?  = disable",
+        .handler = &exec_enable
+    },
+    {
+        .cmd_string = "speed",
+        .help_string = "<s>\n"
+            "Adjust the speed of the effect if in waveform mode:\n"
+            "<s> : wave speed\n",
+        .handler = &exec_speed
+    },
+    {
+        .cmd_string = "waveform",
+        .help_string = "<w>\n"
+            "En-/disable waveform mode and set waveform:\n"
+            "<w> : waveform\n",
+        .handler = &exec_waveform
+    },
+};
+uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);

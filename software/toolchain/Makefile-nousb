@@ -52,7 +52,7 @@ F_CPU = 32000000
 # Dimensions for lookup tables
 LOOKUP_TABLES_FILE = lib/lookup_tables.c
 LOOKUP_TABLES_XRES = 7
-LOOKUP_TABLES_YRES = 14
+LOOKUP_TABLES_YRES = 10
 
 # Compiler flags.
 CFLAGS = -mmcu=$(MCU)

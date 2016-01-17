@@ -1,3 +1,6 @@
+/// \file
+/// \brief      Device configuration header
+
 /*
  * Copyright 2015 Sebastian Neuser
  *
@@ -16,11 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-/*
- * Header for the device configuration.
- * @author Sebastian Neuser
-*/
 
 #ifndef _CONFIG_H
 #define _CONFIG_H
@@ -46,6 +44,9 @@ extern background_task_t mid_frequency_tasks[];
 extern uint8_t mid_frequency_tasks_size;
 extern background_task_t low_frequency_tasks[];
 extern uint8_t low_frequency_tasks_size;
+
+extern struct serial_command serial_commands[];
+extern uint8_t serial_commands_size;
 
 //---------------- EOF ----------------//
 #endif // _CONFIG_H

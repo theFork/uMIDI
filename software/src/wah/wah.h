@@ -1,3 +1,6 @@
+/// \file
+/// \brief      Wah-wah module API
+
 /*
  * Copyright 2015 Sebastian Neuser
  *
@@ -17,11 +20,6 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * Header for the wah module.
- * @author Sebastian Neuser
-*/
-
 #ifndef _WAH_H
 #define _WAH_H
 
@@ -39,9 +37,12 @@
 //---------------- functions and procedures ----------------//
 void handle_midi_cc(uint8_t controller, uint8_t value);
 void enable_wah(bool enable);
+bool exec_enable(const char* command);
+bool exec_speed(const char* command);
+bool exec_waveform(const char* command);
 void init_wah_module(void);
-void toggle_wah(void);
 void update_wah_pwm(void);
+void handle_switch(void);
 
 
 //---------------- EOF ----------------//

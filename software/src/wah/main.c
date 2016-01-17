@@ -1,3 +1,6 @@
+/// \file
+/// \brief      Entry point and main loop of the uMIDI firmware
+
 /*
  * Copyright 2012-2015 Sebastian Neuser
  *
@@ -17,10 +20,6 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * Program entry point and main loop of the uMIDI firmware.
- */
-
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
 
@@ -28,7 +27,9 @@
 #include "lib/gpio.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
+#include "lib/serial_communication.h"
 #include "lib/system.h"
+#include "lib/usb.h"
 
 #include "config.h"
 #include "wah.h"
@@ -49,6 +50,7 @@ int main( void )
 {
     // Configure clock and timers
     configure_system_clock();
+    enable_usb_pll();
 
     // Initialize modules
     init_leds_module();
@@ -58,6 +60,8 @@ int main( void )
     init_background_tasks(high_frequency_tasks, high_frequency_tasks_size,
                                 mid_frequency_tasks, mid_frequency_tasks_size,
                                 low_frequency_tasks, low_frequency_tasks_size);
+    init_usb_module();
+    init_serial_communication(serial_commands, serial_commands_size);
 
     // set watchdog for 128ms
     wdt_enable(WDT_PER_128CLK_gc);
@@ -68,9 +72,6 @@ int main( void )
 
     // Blink green LED
     blink_led(LED_GREEN, F_TASK_SLOW);
-
-    // Enable Wah
-    enable_wah(true);
 
     // Main loop
     while (true) {
