@@ -144,7 +144,11 @@ static void handle_status_byte(midi_value_t data) {
 }
 
 /// \brief      Main interrupt service routine for incoming MIDI messages
-/// \details    TODO
+/// \details    This routine reads and parses MIDI data arriving on the USART and calls the
+///             callback functions registered during module initialization. For the time being, all
+///             MIDI packets are handled, regardless of the MIDI channel, so uMIDI devices are
+///             effectively in OMNI mode.
+/// \see        init_midi_module
 ISR(USARTE0_RXC_vect)
 {
     // Disable interrupts
