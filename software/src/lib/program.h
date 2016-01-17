@@ -40,10 +40,6 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * Header for the program module
-*/
-
 #ifndef _PROGRAM
 #define _PROGRAM
 

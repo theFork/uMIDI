@@ -37,7 +37,7 @@ static enum midi_state midi_state = MIDI_STATE_IDLE;
 
 /// \brief      The MIDI transmit channel
 /// \see        init_midi_module
-static uint8_t tx_channel = 1;
+static enum midi_channel tx_channel = 1;
 
 /// \brief      The MIDI event handlers
 /// \see        init_midi_module
@@ -70,7 +70,7 @@ void init_midi_module(const struct midi_config* config)
     event_handlers = (struct midi_event_handlers*) &config->event_handlers;
 }
 
-void send_control_change(uint8_t controller, uint8_t value) {
+void send_control_change(midi_value_t controller, midi_value_t value) {
     // Send control change status byte
     uart_write((uint8_t) MIDI_MSG_TYPE_CONTROL_CHANGE | tx_channel);
 
@@ -81,7 +81,7 @@ void send_control_change(uint8_t controller, uint8_t value) {
     uart_write(value);
 }
 
-void send_note_off(uint8_t note) {
+void send_note_off(midi_value_t note) {
     // Send note off status byte
     uart_write((uint8_t) MIDI_MSG_TYPE_NOTE_OFF | tx_channel);
 
@@ -92,7 +92,7 @@ void send_note_off(uint8_t note) {
     uart_write(MIDI_MAX_VALUE);
 }
 
-void send_note_on(uint8_t note) {
+void send_note_on(midi_value_t note) {
     // Send note on status byte
     uart_write((uint8_t) MIDI_MSG_TYPE_NOTE_ON | tx_channel);
 
@@ -103,7 +103,7 @@ void send_note_on(uint8_t note) {
     uart_write(MIDI_MAX_VALUE);
 }
 
-void send_program_change(uint8_t pnum) {
+void send_program_change(midi_value_t pnum) {
     // Send program change status byte
     uart_write((uint8_t) MIDI_MSG_TYPE_PROGRAM_CHANGE | tx_channel);
 
@@ -120,7 +120,7 @@ void send_program_change(uint8_t pnum) {
 /// \brief      Updates the MIDI state machine according to the supplied data byte
 /// \param      data
 ///                 the MIDI data byte to be parsed
-static void handle_status_byte(uint8_t data) {
+static void handle_status_byte(midi_value_t data) {
     switch (data & MIDI_COMMAND_MASK) {
     case MIDI_MSG_TYPE_NOTE_OFF:
         midi_state = MIDI_STATE_NOTE_OFF;
@@ -144,7 +144,11 @@ static void handle_status_byte(uint8_t data) {
 }
 
 /// \brief      Main interrupt service routine for incoming MIDI messages
-/// \details    TODO
+/// \details    This routine reads and parses MIDI data arriving on the USART and calls the
+///             callback functions registered during module initialization. For the time being, all
+///             MIDI packets are handled, regardless of the MIDI channel, so uMIDI devices are
+///             effectively in OMNI mode.
+/// \see        init_midi_module
 ISR(USARTE0_RXC_vect)
 {
     // Disable interrupts
@@ -155,7 +159,7 @@ ISR(USARTE0_RXC_vect)
     // Fetch data
     uint8_t data = MIDI_UART.DATA;
 
-    static uint8_t current_controller;
+    static midi_value_t current_controller;
     switch (midi_state) {
     ////
     // MIDI status byte

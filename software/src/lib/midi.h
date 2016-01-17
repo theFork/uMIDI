@@ -48,6 +48,8 @@
 
 //---------------- data types ----------------//
 
+typedef uint8_t midi_value_t;
+
 /// \brief      MIDI status byte values (second nibble)
 enum midi_channel
 {
@@ -95,22 +97,23 @@ enum midi_state
 /// \see        ISR(USARTE0_RXC_vect)
 struct midi_event_handlers
 {
-    void (*control_change)(uint8_t controller, uint8_t value);
+    void (*control_change)(midi_value_t controller, midi_value_t value);
                                                 ///< Callback for control changes
                                                 ///< \param controller
                                                 ///<    the changed MIDI controller's number
                                                 ///< \param value
                                                 ///<    the new MIDI controller value
 
-    void (*note_off)(uint8_t note);             ///< Callback for note off messges
+    void (*note_off)(midi_value_t note);        ///< Callback for note off messges
                                                 ///< \param note
                                                 ///<    the MIDI note that was turned off
 
-    void (*note_on)(uint8_t note);              ///< Callback for not on messages
+    void (*note_on)(midi_value_t note);         ///< Callback for not on messages
                                                 ///< \param note
                                                 ///<    the MIDI note that was turned on
 
-    void (*program_change)(uint8_t program);    ///< Callback for program changes
+    void (*program_change)(midi_value_t program);
+                                                ///< Callback for program changes
                                                 ///< \param note
                                                 ///<    the MIDI program to load
 };
@@ -150,22 +153,22 @@ void init_midi_module(const struct midi_config* config);
 ///                 the MIDI controller number
 /// \param      value
 ///                 the new value for the controller
-void send_control_change(uint8_t controller, uint8_t value);
+void send_control_change(midi_value_t controller, midi_value_t value);
 
 /// \brief      Sends a note off message
 /// \param      note
 ///                 the MIDI note number
-void send_note_off(uint8_t note);
+void send_note_off(midi_value_t note);
 
 /// \brief      Sends a note on message
 /// \param      note
 ///                 the MIDI note number
-void send_note_on(uint8_t note);
+void send_note_on(midi_value_t note);
 
 /// \brief      Sends a program change message
 /// \param      program
 ///                 the new MIDI program to load
-void send_program_change(uint8_t program);
+void send_program_change(midi_value_t program);
 
 
 //---------------- EOF ----------------//

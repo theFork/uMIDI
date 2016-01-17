@@ -28,6 +28,7 @@
 #include "gpio.h"
 #include "lookup_tables.h"
 #include "math.h"
+#include "midi.h"
 #include "pwm.h"
 
 
@@ -36,13 +37,13 @@
 ////////////////////////////////////////////////////////////////
 
 
-static uint16_t (*convert_pwm_range)(uint8_t);
+static uint16_t (*convert_pwm_range)(midi_value_t value);
 
 ////////////////////////////////////////////////////////////////
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void init_pwm_module(uint16_t (*conversion_function)(uint8_t))
+void init_pwm_module(uint16_t (*conversion_function)(midi_value_t value))
 {
     // Store conversion function pointer
     convert_pwm_range = conversion_function;
@@ -60,7 +61,7 @@ void init_pwm_module(uint16_t (*conversion_function)(uint8_t))
     TCC1.CCA = TCC1.PER;
 }
 
-void set_pwm_duty_cycle(uint8_t duty)
+void set_pwm_duty_cycle(midi_value_t duty)
 {
     TCC1.CCABUF = convert_pwm_range(duty);
 }

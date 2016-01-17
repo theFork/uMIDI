@@ -27,6 +27,8 @@
 #include <stdbool.h>
 #include <avr/io.h>
 
+#include "midi.h"
+
 
 //---------------- constants ----------------//
 
@@ -54,6 +56,6 @@ void init_linear(struct linear_range* config);
 ///                 the configuration of the linear function to initialize
 /// \param      midi_value
 ///                 the MIDI value to convert [0 .. 127]
-uint16_t linear(struct linear_range* config, uint8_t midi_value);
+uint16_t linear(struct linear_range* config, midi_value_t midi_value);
 
 #endif // _MATH_H

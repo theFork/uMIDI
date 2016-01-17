@@ -27,6 +27,8 @@
 //---------------- includes ----------------//
 #include <stdint.h>
 
+#include "midi.h"
+
 
 //---------------- code macros ----------------//
 
@@ -115,9 +117,9 @@ enum waveform
 struct wave_settings
 {
     enum waveform   waveform;                   ///< Waveform
-    uint8_t         speed;                      ///< Speed of the wave [0, 127]
-    uint8_t         amplitude;                  ///< Amplitude [0, 127]
-    uint8_t         offset;                     ///< Static offset [0, 127]
+    midi_value_t    speed;                      ///< Speed of the wave [0, 127]
+    midi_value_t    amplitude;                  ///< Amplitude [0, 127]
+    midi_value_t    offset;                     ///< Static offset [0, 127]
 };
 
 /// \brief      Internal state of a wave
@@ -155,8 +157,8 @@ struct wave
 ///                 the static offset
 /// \see        wave
 /// \see        waveform
-void init_wave(struct wave* wave, enum waveform waveform, uint8_t speed,
-                     uint8_t amplitude, uint8_t offset);
+void init_wave(struct wave* wave, enum waveform waveform, midi_value_t speed,
+               midi_value_t amplitude, midi_value_t offset);
 
 /// \brief      Updates the speed of a wave
 /// \param      wave
@@ -164,7 +166,7 @@ void init_wave(struct wave* wave, enum waveform waveform, uint8_t speed,
 /// \param      speed
 ///                 the new speed
 /// \see        wave
-void set_speed(struct wave*, uint8_t speed);
+void set_speed(struct wave*, midi_value_t speed);
 
 /// \brief      Updates the waveform of a wave
 /// \param      wave
@@ -179,7 +181,7 @@ void set_waveform(struct wave*, enum waveform);
 /// \param      wave
 ///                 the wave whose output should be computed
 /// \return     the current output value
-uint8_t update_wave(struct wave*);
+midi_value_t update_wave(struct wave*);
 
 
 //---------------- EOF ----------------//
