@@ -1,3 +1,6 @@
+/// \file
+/// \brief      Sequencer module implementation
+
 /*
  * Copyright 2015 Sebastian Neuser
  *
@@ -16,11 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-/*
- * Implementation of the sequencer module.
- * @author Sebastian Neuser
-*/
 
 #include "config.h"
 #include "lib/gpio.h"
