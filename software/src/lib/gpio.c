@@ -42,12 +42,6 @@ void init_gpio_module(struct gpio_config* gpio) {
             pin_pointer->port->DIRCLR = _BV(pin_pointer->bit);
             break;
 
-        case GPIO_INPUT_PULLDOWN:
-            pin_pointer->port->DIRCLR = _BV(pin_pointer->bit);
-            pin_ctrl_register = &pin_pointer->port->PIN0CTRL + pin_pointer->bit;
-            *pin_ctrl_register = PORT_OPC_PULLDOWN_gc;
-            break;
-
         case GPIO_INPUT_PULLUP:
             pin_pointer->port->DIRCLR = _BV(pin_pointer->bit);
             pin_ctrl_register = &pin_pointer->port->PIN0CTRL + pin_pointer->bit;
@@ -58,10 +52,12 @@ void init_gpio_module(struct gpio_config* gpio) {
             pin_pointer->port->DIRSET = _BV(pin_pointer->bit);
             break;
 
+        case GPIO_INPUT_PULLDOWN:
         case GPIO_UNUSED:
         default:
-            pin_pointer->port->DIRSET = _BV(pin_pointer->bit);
-            pin_pointer->port->OUT = false;
+            pin_pointer->port->DIRCLR = _BV(pin_pointer->bit);
+            pin_ctrl_register = &pin_pointer->port->PIN0CTRL + pin_pointer->bit;
+            *pin_ctrl_register = PORT_OPC_PULLDOWN_gc;
             break;
         }
 
