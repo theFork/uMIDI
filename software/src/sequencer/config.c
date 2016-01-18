@@ -1,3 +1,6 @@
+/// \file
+/// \brief      Device configuration
+
 /*
  * Copyright 2015 Sebastian Neuser
  *

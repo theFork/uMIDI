@@ -1,3 +1,6 @@
+/// \file
+/// \brief      Entry point and main loop of the uMIDI firmware
+
 /*
  * Copyright 2012-2015 Sebastian Neuser
  *
@@ -15,10 +18,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-/*
- * Program entry point and main loop of the uMIDI firmware.
  */
 
 #include <avr/interrupt.h>
