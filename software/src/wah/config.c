@@ -52,8 +52,8 @@ uint8_t gpio_mappings_size = sizeof(gpio_mappings)/sizeof(struct gpio_mapping);
 struct midi_config midi_config = {
     .event_handlers = {
         .control_change = handle_midi_cc,
-        .note_off       = NULL,
-        .note_on        = NULL,
+        .note_off       = handle_midi_note_off,
+        .note_on        = handle_midi_note_on,
         .program_change = NULL
     },
     .tx_channel = 1,

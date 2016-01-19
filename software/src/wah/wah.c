@@ -145,6 +145,18 @@ void handle_midi_cc(midi_value_t controller, midi_value_t value)
     set_pwm_duty_cycle(value);
 }
 
+void handle_midi_note_off(midi_value_t note, midi_value_t velocity) {
+    if (note == MIDI_NOTE_ENABLE_WAH) {
+        enable_wah(false);
+    }
+}
+
+void handle_midi_note_on(midi_value_t note, midi_value_t velocity) {
+    if (note == MIDI_NOTE_ENABLE_WAH) {
+        enable_wah(true);
+    }
+}
+
 void handle_switch(void)
 {
     // If the momentary switch was pressed (pull-down)
