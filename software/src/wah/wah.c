@@ -60,8 +60,14 @@ static inline uint16_t linear_function(uint8_t midi_value)
     return linear(&pwm_range, midi_value);
 }
 
+static inline void toggle_wah(void)
+{
+    enable_wah(!enable_state);
+}
+
 void enable_wah(bool enable)
 {
+    enable_state = enable;
     gpio_set(gpio.header3.pin4, enable);
     gpio_set(gpio.header3.pin8, enable);
 }
@@ -143,8 +149,7 @@ void handle_switch(void)
 {
     // If the momentary switch was pressed (pull-down)
     if (!gpio_get(gpio.header3.pin6)) {
-        enable_state = !enable_state;
-        enable_wah(enable_state);
+        toggle_wah();
 
         // De-bounce
         _delay_ms(50);
