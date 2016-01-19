@@ -154,17 +154,15 @@ void handle_switch(void)
 void init_wah_module(void)
 {
     // Setup linear conversion function
-    pwm_range.from = 550;
-    pwm_range.to = PWM_MAX_DUTY-50;
+    pwm_range.from = 570;
+    pwm_range.to = PWM_MAX_DUTY-190;
     init_linear(&pwm_range);
     init_pwm_module(&linear_function);
     set_pwm_duty_cycle(pwm_range.from);
 
     // Setup wave module
-    const uint8_t speed = 40;
-    const uint8_t amplitude = MIDI_MAX_VALUE-6;
-    init_wave(&pwm_wave, WAVE_OFF, speed, amplitude, 0);
     configure_tap_tempo_wave(&pwm_wave);
+    init_wave(&pwm_wave, WAVE_OFF, 90, MIDI_MAX_VALUE-23, 71);
 }
 
 void update_wah_pwm(void)
