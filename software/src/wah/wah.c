@@ -134,16 +134,19 @@ exec:
     return true;
 }
 
-void handle_midi_cc(uint8_t controller, uint8_t value)
+void handle_midi_cc(midi_value_t controller, midi_value_t value)
 {
     set_pwm_duty_cycle(value);
 }
 
 void handle_switch(void)
 {
+    // If the momentary switch was pressed (pull-down)
     if (!gpio_get(gpio.header3.pin6)) {
         enable_state = !enable_state;
         enable_wah(enable_state);
+
+        // De-bounce
         _delay_ms(50);
         while (!gpio_get(gpio.header3.pin6)) {
             wdt_reset();
