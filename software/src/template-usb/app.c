@@ -1,6 +1,6 @@
 /// \file
 /// \brief      Implementation of an application specific module
-/// \see        module header
+/// \see        app.h
 
 /*
  * Copyright 2015 Sebastian Neuser

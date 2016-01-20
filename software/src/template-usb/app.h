@@ -1,6 +1,6 @@
 /// \file
 /// \brief      An application specific module
-/// \details    Put your custom code here for example
+/// \details    Place your application specific code here.
 
 /*
  * Copyright 2015 Sebastian Neuser
