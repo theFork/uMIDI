@@ -266,7 +266,7 @@ static midi_value_t compute_wave_pattern(struct wave* wave)
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void init_wave(struct wave* wave, enum waveform waveform, midi_value_t speed, midi_value_t amplitude, midi_value_t offset)
+void init_wave(struct wave * const wave, enum waveform waveform, midi_value_t speed, midi_value_t amplitude, midi_value_t offset)
 {
     wave->settings.amplitude = amplitude;
     wave->settings.offset = offset;
@@ -274,13 +274,13 @@ void init_wave(struct wave* wave, enum waveform waveform, midi_value_t speed, mi
     set_waveform(wave, waveform);
 }
 
-void set_speed(struct wave *wave, midi_value_t speed)
+void set_speed(struct wave * const wave, midi_value_t speed)
 {
     wave->settings.speed = speed;
     wave->state.speed_prescaler = (MIDI_MAX_VALUE - speed) / 4;
 }
 
-void set_waveform(struct wave *wave, enum waveform waveform)
+void set_waveform(struct wave * const wave, enum waveform waveform)
 {
     wave->settings.waveform = waveform;
 
@@ -290,7 +290,7 @@ void set_waveform(struct wave *wave, enum waveform waveform)
     wave->state.step_direction = DIRECTION_UP;
 }
 
-midi_value_t update_wave(struct wave *wave)
+midi_value_t update_wave(struct wave* const wave)
 {
     // Increment speed counter and reset it if the prescaler was reached
     ++wave->state.speed_counter;

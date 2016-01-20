@@ -43,7 +43,7 @@ static uint16_t (*convert_pwm_range)(midi_value_t value);
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void init_pwm_module(uint16_t (*conversion_function)(midi_value_t value))
+void init_pwm_module(uint16_t (* const conversion_function)(midi_value_t value))
 {
     // Store conversion function pointer
     convert_pwm_range = conversion_function;

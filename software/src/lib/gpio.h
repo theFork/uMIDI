@@ -81,14 +81,14 @@ struct gpio_config
 /// \brief      Enables a GPIO output pin
 /// \param      pin
 ///                 the GPIO pin
-static inline void gpio_drive_high(struct gpio_pin pin) {
+static inline void gpio_drive_high(const struct gpio_pin pin) {
     pin.port->OUT |= _BV(pin.bit);
 }
 
 /// \brief      Disables a GPIO output pin
 /// \param      pin
 ///                 the GPIO pin
-static inline void gpio_drive_low(struct gpio_pin pin) {
+static inline void gpio_drive_low(const struct gpio_pin pin) {
     pin.port->OUT &=~ _BV(pin.bit);
 }
 
@@ -96,7 +96,7 @@ static inline void gpio_drive_low(struct gpio_pin pin) {
 /// \param      pin
 ///                 the GPIO pin
 /// \return     `true` if the input pin is driven high; `false` otherwise
-static inline bool gpio_get(struct gpio_pin pin) {
+static inline bool gpio_get(const struct gpio_pin pin) {
     return pin.port->IN & _BV(pin.bit);
 }
 
@@ -105,13 +105,13 @@ static inline bool gpio_get(struct gpio_pin pin) {
 ///                 the GPIO pin
 /// \param      value
 ///                 `true` enables the output; `false` disables it
-static inline void gpio_set(struct gpio_pin pin, bool value) {
+static inline void gpio_set(const struct gpio_pin pin, bool value) {
     value ? gpio_drive_high(pin) : gpio_drive_low(pin);
 }
 
 /// \brief      Toggles a GPIO output pin
 /// \param      pin
-static inline void gpio_toggle(struct gpio_pin pin) {
+static inline void gpio_toggle(const struct gpio_pin pin) {
     pin.port->OUT ^= _BV(pin.bit);
 }
 
@@ -119,7 +119,7 @@ static inline void gpio_toggle(struct gpio_pin pin) {
 /// \details    Configures all available GPIO pins according to the provided configuration.
 /// \param      gpio
 ///                 the GPIO configuration
-void init_gpio_module(struct gpio_config* gpio);
+void init_gpio_module(const struct gpio_config* gpio);
 
 
 //---------------- EOF ----------------//

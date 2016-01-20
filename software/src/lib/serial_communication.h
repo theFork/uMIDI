@@ -80,7 +80,7 @@ struct serial_command
 ///                 the number of command specifications in \p commands
 /// \see        serial_command
 /// \see        serial_communication_task
-void init_serial_communication(struct serial_command commands[], uint8_t commands_size);
+void init_serial_communication(const struct serial_command commands[], uint8_t commands_size);
 
 /// \brief      Main task for USB communication
 /// \details    This task must be run as a slow or medium speed task in order to enable USB

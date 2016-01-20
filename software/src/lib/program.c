@@ -102,7 +102,7 @@ void enter_program(uint8_t number)
     execute_program(current_program.data);
 }
 
-void init_program_module(uint16_t program_initializer_value, void (*execute_program_callback)(uint16_t program_data))
+void init_program_module(uint16_t program_initializer_value, void (* const execute_program_callback)(uint16_t program_data))
 {
     program_initializer = program_initializer_value;
     execute_program = execute_program_callback;

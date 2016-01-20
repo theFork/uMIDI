@@ -49,7 +49,7 @@ static struct midi_event_handlers* event_handlers;
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void init_midi_module(const struct midi_config* config)
+void init_midi_module(const struct midi_config* const config)
 {
     // Configure TXD0
     PORTE.DIR |= PIN3_bm;
