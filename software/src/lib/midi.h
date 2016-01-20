@@ -138,6 +138,8 @@ struct midi_config
     enum midi_channel           rx_channel;     ///< MIDI receive channel
     enum midi_channel           tx_channel;     ///< MIDI transmit channel
     bool                        omni_mode;      ///< Setting this flag enables Omni mode
+    bool                        signal_rx;      ///< If set to `true`, the red on-board LED flashes
+                                                ///< on every received MIDI message
 };
 
 

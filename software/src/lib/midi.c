@@ -52,6 +52,10 @@ static enum midi_channel rx_channel;
 /// \see        init_midi_module
 static enum midi_channel tx_channel;
 
+/// \brief      If set to `true`, the red on-board LED flashes on every received MIDI message
+/// \see        init_midi_module
+static bool signal_rx;
+
 
 
 ////////////////////////////////////////////////////////////////
@@ -78,6 +82,7 @@ void init_midi_module(const struct midi_config* const config)
     rx_channel = config->rx_channel;
     tx_channel = config->tx_channel;
     omni_mode = config->omni_mode;
+    signal_rx = config->signal_rx;
     event_handlers = (struct midi_event_handlers*) &config->event_handlers;
 }
 
@@ -187,7 +192,9 @@ ISR(USARTE0_RXC_vect)
     // Disable interrupts
     cli();
 
-    flash_led(LED_RED);
+    if (signal_rx) {
+        flash_led(LED_RED);
+    }
 
     // Fetch data
     uint8_t data = MIDI_UART.DATA;
