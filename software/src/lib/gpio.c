@@ -31,7 +31,7 @@
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void init_gpio_module(struct gpio_config* gpio) {
+void init_gpio_module(const struct gpio_config* const gpio) {
     // Iterate pins in GPIO config
     struct gpio_pin *pin_pointer = (struct gpio_pin *) &gpio->header1.pin2;
     register8_t* pin_ctrl_register;

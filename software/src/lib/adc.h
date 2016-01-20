@@ -131,7 +131,7 @@ void init_adc_conversion(const struct adc_conversion_config* config);
 /// \param      calibration_conversion
 ///                 a conversion configuration used for ADC offset calibration
 void init_adc_module(const struct adc_config* config,
-                           const struct adc_conversion_config* calibration_conversion);
+                     const struct adc_conversion_config* calibration_conversion);
 
 /// \brief      Triggers a conversion for the given channel
 /// \param      channel

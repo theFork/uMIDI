@@ -61,7 +61,7 @@ static void (*push_callback)(void);
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void init_encoder_module(struct encoder_config* config)
+void init_encoder_module(const struct encoder_config* const config)
 {
     inputA = config->inputA;
     inputB = config->inputB;

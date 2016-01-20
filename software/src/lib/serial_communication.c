@@ -46,7 +46,7 @@ static uint8_t cmd_buffer_index = 0;
 
 /// \brief      Array of user-defined commands
 /// \see        init_serial_communication
-static struct serial_command* user_commands;
+static const struct serial_command* user_commands;
 
 /// \brief      Number of registered user commands
 static uint8_t user_commands_size;
@@ -219,7 +219,7 @@ static inline void execute_command(const char* command)
     else {
         // Iterate all user-defined commands and try to find a matching one
         for (uint8_t i=0; i<user_commands_size; ++i) {
-            struct serial_command* user_command = user_commands + i;
+            const struct serial_command* user_command = user_commands + i;
             if (strncmp(command, user_command->cmd_string, strlen(user_command->cmd_string)) == 0) {
                 success = user_command->handler(command);
                 goto cleanup;
@@ -342,7 +342,7 @@ fail:
     usb_set_echo(true);
 }
 
-void init_serial_communication(struct serial_command commands[], uint8_t commands_size)
+void init_serial_communication(const struct serial_command * const commands, uint8_t commands_size)
 {
     // Save pointer to array of user commands and its size
     user_commands = commands;

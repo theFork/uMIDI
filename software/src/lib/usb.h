@@ -90,7 +90,7 @@ void usb_putc(char c);
 /// \brief      Sends the given string and a newline sequence over USB
 /// \details    Flushes the USB send buffer.
 /// \see        USB_NEWLINE
-void usb_puts(char* string);
+void usb_puts(const char* string);
 
 /// \brief      Enables / disables terminal echo
 /// \details    When the echo is enabled, every character received over USB is immediately sent

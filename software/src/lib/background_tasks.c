@@ -100,9 +100,9 @@ void process_background_tasks(void)
     }
 }
 
-void init_background_tasks(background_task_t high_freq_tasks[], uint8_t high_freq_tasks_size,
-                                 background_task_t mid_freq_tasks[], uint8_t mid_freq_tasks_size,
-                                 background_task_t low_freq_tasks[], uint8_t low_freq_tasks_size)
+void init_background_tasks(background_task_t * const high_freq_tasks, uint8_t high_freq_tasks_size,
+                           background_task_t * const mid_freq_tasks, uint8_t mid_freq_tasks_size,
+                           background_task_t * const low_freq_tasks, uint8_t low_freq_tasks_size)
 {
     // Prescale clock to 500 kHz
     TCC0.CTRLA = TC_CLKSEL_DIV64_gc;

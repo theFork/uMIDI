@@ -138,7 +138,7 @@ static void flush(void)
 
 /// \brief      Writes the given string to the USB send buffer and flushes it
 /// \details    Panics if something goes wrong!
-static void send_string(char* string)
+static void send_string(const char * const string)
 {
     if (USB_DeviceState == DEVICE_STATE_Configured && ok_to_send) {
         enum Endpoint_Stream_RW_ErrorCodes_t error;
@@ -199,7 +199,7 @@ void usb_main_task(void)
     USB_USBTask();
 }
 
-void usb_printf(const char* format, ...)
+void usb_printf(const char * const format, ...)
 {
     va_list ap;
     char buffer[80] = "";
@@ -226,7 +226,7 @@ void usb_putc(char c)
     }
 }
 
-void usb_puts(char* string)
+void usb_puts(const char * const string)
 {
     send_string(string);
     send_string(USB_NEWLINE);
