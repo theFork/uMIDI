@@ -1,0 +1,136 @@
+/**
+\mainpage
+
+\section intro What is uMIDI?
+uMIDI is a small general purpose micro-controller board built to receive, forward and send MIDI
+messages accompanied by a (soon to become ;-) quite sophisticated software library / framework.
+You can use uMIDI for virtually everything you can think of involving (but not limited to) MIDI:
+
+- MIDI merging / splitting
+- MIDI controllers (trigger pads, pedals, sequencers, ...)
+- MIDI-controllable devices (Guitar/Bass/Synth effects, possibly visual effects)
+- and the list goes on...
+
+The board is also equipped with a mini USB port, which in conjunction with the serial communication
+module allows you to connect the board to your PC as a character device.
+
+\section features Hardware features
+- receive / forward / send arbitrary MIDI messages
+- control interface via USB character device
+- 24 GPIO ports with special functions:
+    - 1x SPI
+    - 2x UART
+    - 8x ADC
+    - 2x DAC
+    - 6x PWM
+- 4 GPIO ports connected to solder jumpers
+- 2 LEDs (red + green)
+
+
+
+\section software Software library
+uMIDI comes with a quite sophisticated high-level software library and framework, which enables you
+to accomplish most basic tasks very quickly. You can find the documentation of the API at \ref
+src/lib - if you intend to simply use the library as-is, looking at the header files should suffice.
+
+The framework features easy to use device initialization routines which provide an abstraction from
+the hardware. You just need to specify, which features (GPIO, ADC, PWM, ...) you want to use and how
+they should be set up with a set of configuration `struct`s and pass those to the initialization
+routines - no bit-masking / -shifting or other error-prone steps required.
+It is recommended to keep all your configuration structures in one file - this way you have one
+single place, where all hardware-related information can be found.
+
+Background tasks whose call-frequency may jitter to some extend can be implemented very comfortably
+using the \ref background_tasks.h "background tasks module". The module uses "system ticks" from a
+CPU timer to schedule registered tasks at three different base frequencies. Of course you can use a
+counter to further divide down the call-frequency of a specific task.
+
+The two on-board LEDs can be controlled by the corresponding \ref leds.h "LEDs module". The LEDs
+can be in one of three modes (static, blinking or flashing once), which are managed by a background
+task. You can set the mode and/or (in static mode) toggle LEDs manually via service functions. This
+can be done separately for each LED or for both LEDs at the same time.
+
+The \ref gpio.h "GPIO module" is dedicated to.. well.. the GPIO pins. It offers service procedures
+to set and poll GPIO pins and an easy way to configure all pins with a single data structure.
+
+If you want to implement some kind of modulation with a specific waveform like a sine or triangle
+wave, you should look into the \ref wave.h "wave module". This module lets you define waves -
+again via configuration structures - in terms of waveform, frequency, amplitude and offset. A
+special background task can then be used to periodically update the output value of a wave. You can
+even register one wave to react to tap tempo events, in which case a second background task listens
+for such events and updates the registered wave's frequency accordingly.
+
+Some non-trivial waveforms are not computed from scratch every time - they are read from
+\ref lookup_tables.h "lookup tables", which are generated during the build process by a small
+[PERL script](../../toolchain/compute_lookup_tables.pl).
+These tables also contain "linear to logarithmic" and "linear to exponential" translations in case
+you need them. The x-resolution of the tables is fixed at 100 values, but you can adjust the
+amplitude resolution of the log/exp lookup tables in the Makefile, if you need to. In order to do
+this, you just have to change the `LOOKUP_TABLES_YRES` variable in the Makefile.
+
+The lookup tables can also be used in conjunction with the \ref pwm.h "PWM module". In fact, the
+logarithmic and exponential functions are intended for this. You can use a linear MIDI expression
+value to drive a PWM output exponentially. This may come in handy, as loudness for example is
+perceived logarithmically. The samples in the exponential / logarithmic tables can be used directly
+as counter compare values for a 10 bit PWM - if you have to configure your PWM for a different
+counter resolution, you may have to adjust the amplitude resolution of the tables (see previous
+paragraph).
+
+The \ref math.h "math module" is a rather loose collection of small helper functions for
+mathematical computations. There is, for example, a function that linearly scales MIDI values
+[0..127] to an arbitrary configurable output range, which could also be used to convert MIDI values
+to PWM counter compare values.
+There are also some basic fixed-point math functions that you can use to convert normal 16 bit
+integers to 16+16 bit fixed-point for high precision computations. For now, only multiplication and
+division are implemented (use the standard +/- operators for addition and subtraction). After the
+fixed-point computations are finished, the result can easily be converted back to a 16 bit integer.
+
+The framework also provides ready-to-use USB support built on top of the famous
+[LUFA](https://github.com/abcminiuser/lufa) library, which allows you to
+- connect uMIDI devices to a PC as a character device,
+- print out logging and/or debugging information,
+- control your board using a shell-like command-line interpreter and
+- perform firmware upgrades via USB.
+
+The file [99-umidi.rules](../../toolchain/99-umidi.rules) shows an example of a `udev`-rule that
+creates an alias for the character device named `/dev/umidi` whenever a uMIDI device is attached.
+This way you don't have to tell `minicom` over and over again which device to use in case you are
+working with multiple character devices attached to your workstation.
+
+The firmware upgrade requires the [xboot](https://github.com/alexforencich/xboot) bootloader, which
+is included as a submodule. A configuration file suitable for uMIDI can be found at
+`conf/x128a4u.conf.mk` in the [xboot-tree](../../src/lib/xboot).
+
+Furthermore, the library contains modules for several peripheral devices:
+- 3-phase encoder with momentary switch
+- 4-phase encoder with momentary switch
+- [uMIDI-hmi](https://github.com/haggl/uMIDI-hmi), a prototyping board featuring two encoders with
+  momentary switch, two stand-alone momentary switches and eight LEDs
+
+
+
+\section start Getting started
+This repository contains the source code for several (example) applications:
+- \ref src/expression       "An expression pedal"
+- \ref src/sequencer        "A simple sequencer for MIDI messages"
+- \ref src/wah              "A MIDI controllable Wah-Wah"
+
+You can look at those to get a general idea of how the API is designed and used. In addition,
+there are two project templates:
+- \ref src/template-nousb   "A very minimalistic project without USB support"
+- \ref src/template-usb     "An empty project with USB support"
+
+If you want to be able to use the serial communication module to talk to your board, you should
+start with the latter, as all necessary files are already included in the Makefile and mandatory
+steps to get the USB transceiver up and running are already implemented.
+
+
+
+\section building Build instructions
+TODO  
+- without USB
+- bootloader
+- with USB / LUFA
+- firmware update package
+
+*/
