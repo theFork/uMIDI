@@ -2,7 +2,7 @@
 title tap_tempo_task
 
 legend
-frequency = 100Hz;
+f_task = 100 Hz;
 end legend
 
 start
@@ -11,17 +11,25 @@ start
 
 if (tap arrived) then (true)
 
-    if (taps > 0) then (true)
+    partition "count taps" {
+    if (taps < buffer size) then (true)
+        :++taps;
+    else
+    endif
+    }
+
+    if (taps > 1) then (true)
 
         partition "register tap intervals" {
-        :bpm = 60*frequency/counter
-        counter = 0
-        bpm <&arrow-right> buffer;
+        :f_tap = f_task/counter
+        f_tap <&arrow-right> buffer;
         }
 
         partition "compute average" {
+        :accu = 0;
         while (i < taps)
-            :accu += buffer[i++];
+            :accu += buffer(i)
+            ++i;
         endwhile
         :avg = accu / taps;
         }
@@ -31,19 +39,15 @@ if (tap arrived) then (true)
         :turn on LED;
     endif
 
-    partition "count taps" {
-    if (taps < buffer size) then (true)
-        :++taps;
-    else
-    endif
-    }
+    :counter = 0;
 
-elseif (counter == 80) then (true)
+elseif (counter == 400) then (true)
 
     partition "reset" {
     :turn off LED;
     :counter = 0
-     taps = 0;
+    taps = 0
+    buffer_index = 0;
     }
 
 else
