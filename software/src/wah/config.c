@@ -91,6 +91,7 @@ uint8_t high_frequency_tasks_size = sizeof(high_frequency_tasks)/sizeof(backgrou
 
 background_task_t mid_frequency_tasks[] = {
     &usb_main_task,
+    &tap_tempo_task,
 };
 uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background_task_t);
 
@@ -118,6 +119,11 @@ struct serial_command serial_commands[] = {
             "Adjust the speed of the effect if in waveform mode:\n"
             "<s> : wave speed\n",
         .handler = &exec_speed
+    },
+    {
+        .cmd_string = "tap",
+        .help_string = "\nSend this command repeatedly to tap in a tempo\n",
+        .handler = &exec_tap
     },
     {
         .cmd_string = "waveform",
