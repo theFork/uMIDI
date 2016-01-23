@@ -22,9 +22,10 @@
 
 #include <stdlib.h>
 
+#include "background_tasks.h"
+#include "lookup_tables.h"
 #include "midi.h"
 #include "wave.h"
-#include "lookup_tables.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -274,10 +275,22 @@ void init_wave(struct wave * const wave, enum waveform waveform, midi_value_t sp
     set_waveform(wave, waveform);
 }
 
+void set_frequency(struct wave * const wave, fixed_t frequency)
+{
+    wave->settings.frequency = frequency;
+    const fixed_t counter_max = fixed_div(fixed_from_int(F_TASK_FAST), wave->settings.frequency);
+    wave->state.speed_prescaler = fixed_to_int(counter_max);
+}
+
 void set_speed(struct wave * const wave, midi_value_t speed)
 {
-    wave->settings.speed = speed;
-    wave->state.speed_prescaler = (MIDI_MAX_VALUE - speed) / 4;
+    // Scale range from [0..127] to [15..300] bpm
+    fixed_t freq = fixed_from_int(speed);
+    freq /= 127;
+    freq *= 285;
+    freq += fixed_from_int(15);
+    freq /= 60;
+    set_frequency(wave, freq);
 }
 
 void set_waveform(struct wave * const wave, enum waveform waveform)

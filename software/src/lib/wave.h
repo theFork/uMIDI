@@ -27,6 +27,7 @@
 //---------------- includes ----------------//
 #include <stdint.h>
 
+#include "math.h"
 #include "midi.h"
 
 
@@ -114,10 +115,11 @@ enum waveform
 
 /// \brief      Wave configuration
 /// \see        waveform
+/// \see        fixed_t
 struct wave_settings
 {
     enum waveform   waveform;                   ///< Waveform
-    midi_value_t    speed;                      ///< Speed of the wave [0, 127]
+    fixed_t         frequency;                  ///< Speed of the wave in [Hz]
     midi_value_t    amplitude;                  ///< Amplitude [0, 127]
     midi_value_t    offset;                     ///< Static offset [0, 127]
 };
@@ -126,8 +128,8 @@ struct wave_settings
 /// \see        direction
 struct wave_state
 {
-    uint8_t         speed_prescaler;            ///< Prescaler value for the speed counter
-    uint8_t         speed_counter;              ///< Current speed counter value
+    uint16_t        speed_prescaler;            ///< Prescaler value for the speed counter
+    uint16_t        speed_counter;              ///< Current speed counter value
     uint8_t         step_counter;               ///< Current step counter value
     enum direction  step_direction;             ///< Current step counter direction
 };
@@ -160,28 +162,37 @@ struct wave
 void init_wave(struct wave* wave, enum waveform waveform, midi_value_t speed,
                midi_value_t amplitude, midi_value_t offset);
 
+/// \brief      Updates the frequency of a wave
+/// \param      wave
+///                 the wave to update
+/// \param      frequency
+///                 the new frequency
+/// \see        wave
+void set_frequency(struct wave* wave, fixed_t frequency);
+
 /// \brief      Updates the speed of a wave
+/// \details    Sets the wave frequency to the given speed in [BPM], adding an offset of 15 BPM.
 /// \param      wave
 ///                 the wave to update
 /// \param      speed
-///                 the new speed
+///                 the new speed in [BPM]
 /// \see        wave
-void set_speed(struct wave*, midi_value_t speed);
+void set_speed(struct wave* wave, midi_value_t speed);
 
 /// \brief      Updates the waveform of a wave
 /// \param      wave
 ///                 the wave to update
 /// \param      waveform
 ///                 the new waveform
-void set_waveform(struct wave*, enum waveform);
+void set_waveform(struct wave* wave, enum waveform waveform);
 
 /// \brief      Computes the current wave output value
-/// \details    This function must be called cyclically. Over time the output value follows the
-///             configured waveform.
+/// \details    This function must be registered as a fast background task. Over time the output
+///             value follows the configured waveform.
 /// \param      wave
 ///                 the wave whose output should be computed
 /// \return     the current output value
-midi_value_t update_wave(struct wave*);
+midi_value_t update_wave(struct wave* wave);
 
 
 //---------------- EOF ----------------//
