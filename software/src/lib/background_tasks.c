@@ -108,7 +108,8 @@ void init_background_tasks(background_task_t * const high_freq_tasks, uint8_t hi
     TCC0.CTRLA = TC_CLKSEL_DIV64_gc;
 
     // Set TOP value to achieve desired clock
-    TCC0.PER = 500000 / F_TIMER - 1;
+    // FIXME: Why must the clock be divided by two??
+    TCC0.PER = 500000 / (F_TIMER/2) - 1;
 
     // Save pointers to and size of task arrays
     high_frequency_tasks = high_freq_tasks;
