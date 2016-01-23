@@ -129,7 +129,10 @@ struct serial_command serial_commands[] = {
         .cmd_string = "waveform",
         .help_string = "<w>\n"
             "En-/disable waveform mode and set waveform:\n"
-            "<w> : waveform\n",
+            "<w> : waveform\n"
+            "      \"next\" = switch to next waveform\n"
+            "      \"prev\" = switch to previous waveform\n"
+            "      \"off\"  = disable",
         .handler = &exec_waveform
     },
 };

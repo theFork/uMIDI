@@ -109,7 +109,8 @@ bool exec_waveform(const char* command)
 
     enum waveform waveform = pwm_wave.settings.waveform;
     if (strncmp("next", command+9, sizeof("next")) == 0) {
-        waveform = ++waveform % WAVE_RANDOM;
+        ++waveform;
+        waveform %= WAVE_RANDOM;
         usb_printf("Switching to next waveform (%u)" USB_NEWLINE, waveform);
         goto exec;
     }
@@ -119,7 +120,12 @@ bool exec_waveform(const char* command)
         goto exec;
     }
     if (strncmp("prev", command+9, sizeof("next")) == 0) {
-        waveform = pwm_wave.settings.waveform == 0 ? WAVE_RANDOM : --waveform;
+        if (pwm_wave.settings.waveform == 0) {
+            waveform = WAVE_RANDOM;
+        }
+        else {
+            --waveform;
+        }
         usb_printf("Switching to previous waveform (%u)" USB_NEWLINE, waveform);
         goto exec;
     }
