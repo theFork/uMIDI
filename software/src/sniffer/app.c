@@ -93,20 +93,20 @@ bool exec_led(const char* command)
 
 void handle_control_change(uint8_t controller, uint8_t value)
 {
-    usb_printf("CC %u %u" USB_NEWLINE, controller, value);
+    //usb_printf("CC %u %u" USB_NEWLINE, controller, value);
 }
 
 void handle_note_off(uint8_t note)
 {
-    usb_printf("NOTE OFF %u" USB_NEWLINE, note);
+    //usb_printf("NOTE OFF %u" USB_NEWLINE, note);
 }
 
 void handle_note_on(uint8_t note)
 {
-    usb_printf("NOTE ON %u" USB_NEWLINE, note);
+    //usb_printf("NOTE ON %u" USB_NEWLINE, note);
 }
 
 void handle_program_change(uint8_t program)
 {
-    usb_printf("PC %u %u" USB_NEWLINE, program);
+    //usb_printf("PC %u %u" USB_NEWLINE, program);
 }
