@@ -27,6 +27,7 @@
 #include "gpio.h"
 #include "midi.h"
 #include "leds.h"
+#include "usb.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -152,33 +153,42 @@ void set_omni_mode(bool enable)
 /// \brief      Updates the MIDI state machine according to the supplied data byte
 /// \param      data
 ///                 the MIDI data byte to be parsed
-static void handle_status_byte(midi_value_t data)
+/// \returns    \c true if the packet is not ignored (due to the RX channel setting) and the command
+///             is implemented
+static bool handle_status_byte(midi_value_t data)
 {
     // If the device is not in omni mode, ignore messages on foreign channels
     if (!omni_mode && (data & MIDI_CHANNEL_MASK) != rx_channel) {
-        return;
+        return false;
     }
 
     switch (data & MIDI_MESSAGE_TYPE_MASK) {
     case MIDI_MSG_TYPE_NOTE_OFF:
         midi_state = MIDI_STATE_NOTE_OFF_NUMBER;
+        usb_printf("NOFF ] ");
         break;
 
     case MIDI_MSG_TYPE_NOTE_ON:
         midi_state = MIDI_STATE_NOTE_ON_NUMBER;
+        usb_printf("NON ] ");
         break;
 
     case MIDI_MSG_TYPE_CONTROL_CHANGE:
         midi_state = MIDI_STATE_CONTROL_CHANGE_NUMBER;
+        usb_printf("CC ] ");
         break;
 
     case MIDI_MSG_TYPE_PROGRAM_CHANGE:
         midi_state = MIDI_STATE_PROGRAM_CHANGE;
+        usb_printf("PC ] ");
         break;
 
     default:
+        return false;
         break;
     }
+
+    return true;
 }
 
 /// \brief      Main interrupt service routine for incoming MIDI messages
@@ -198,6 +208,7 @@ ISR(USARTE0_RXC_vect)
 
     // Fetch data
     uint8_t data = MIDI_UART.DATA;
+    usb_printf(PSTR("[ 0x%02x -> "), data);
 
     static midi_value_t first_data_byte = 0;
     switch (midi_state) {
@@ -205,7 +216,9 @@ ISR(USARTE0_RXC_vect)
     // MIDI status byte
     ////
     case MIDI_STATE_IDLE:
-        handle_status_byte(data);
+        if (!handle_status_byte(data)) {
+            goto invalid;
+        }
         break;
 
 
@@ -214,16 +227,19 @@ ISR(USARTE0_RXC_vect)
     ////
     case MIDI_STATE_CONTROL_CHANGE_NUMBER:
         first_data_byte = data;
+        usb_printf(PSTR("%3u ] "), data);
         midi_state = MIDI_STATE_CONTROL_CHANGE_VALUE;
         break;
 
     case MIDI_STATE_NOTE_OFF_NUMBER:
         first_data_byte = data;
+        usb_printf(PSTR("%3u ] "), data);
         midi_state = MIDI_STATE_NOTE_OFF_VALUE;
         break;
 
     case MIDI_STATE_NOTE_ON_NUMBER:
         first_data_byte = data;
+        usb_printf(PSTR("%3u ] "), data);
         midi_state = MIDI_STATE_NOTE_ON_VALUE;
         break;
 
@@ -231,6 +247,7 @@ ISR(USARTE0_RXC_vect)
         if (event_handlers->program_change != NULL) {
             event_handlers->program_change(data);
         }
+        usb_printf(PSTR("%3u ]" USB_NEWLINE), data);
         midi_state = MIDI_STATE_IDLE;
         break;
 
@@ -242,6 +259,7 @@ ISR(USARTE0_RXC_vect)
         if (event_handlers->control_change != NULL) {
             event_handlers->control_change(first_data_byte, data);
         }
+        usb_printf(PSTR("%3u ]" USB_NEWLINE), data);
         midi_state = MIDI_STATE_IDLE;
         break;
 
@@ -249,6 +267,7 @@ ISR(USARTE0_RXC_vect)
         if (event_handlers->note_off != NULL) {
             event_handlers->note_off(first_data_byte, data);
         }
+        usb_printf(PSTR("%3u ]" USB_NEWLINE), data);
         midi_state = MIDI_STATE_IDLE;
         break;
 
@@ -256,6 +275,7 @@ ISR(USARTE0_RXC_vect)
         if (event_handlers->note_on != NULL) {
             event_handlers->note_on(first_data_byte, data);
         }
+        usb_printf(PSTR("%3u ]" USB_NEWLINE), data);
         midi_state = MIDI_STATE_IDLE;
         break;
 
@@ -264,6 +284,8 @@ ISR(USARTE0_RXC_vect)
     // Unimplemented / illegal
     ////
     default:
+invalid:
+        usb_puts(PSTR(" IGNORED ]"));
         midi_state = MIDI_STATE_IDLE;
         break;
     }
