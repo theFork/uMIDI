@@ -88,7 +88,8 @@ bool exec_speed(const char* command)
         return false;
     }
 
-    uint8_t speed = atoi(command+6) % MIDI_MAX_VALUE;
+    midi_value_t speed = atoi(command+6);
+    speed %= MIDI_MAX_VALUE + 1;
     usb_printf("Setting waveform speed to %u" USB_NEWLINE, speed);
     set_speed(&pwm_wave, speed);
     return true;
