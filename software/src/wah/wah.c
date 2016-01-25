@@ -222,10 +222,9 @@ void tap_tempo_task(void)
             average += tap_tempo_buffer[i];
         }
         average = fixed_div(average, fixed_from_int(taps));
-        usb_printf("freq: 0x%04lx.%04lx Hz | %3d bpm" USB_NEWLINE,
-                   average >> 16,
-                   average & 0xffff,
-                   fixed_to_int(average*60));
+
+        // Set wave frequency
+        set_frequency(&pwm_wave, average);
     }
 
     // Reset counter
