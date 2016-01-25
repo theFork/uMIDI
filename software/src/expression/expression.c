@@ -77,13 +77,13 @@ void handle_enable_switch(void)
     // Only save switch state on first run
     static bool first_run = true;
     if (first_run) {
-        switch_state = gpio_get(gpio_config.header3.pin9);
+        switch_state = gpio_get(gpio_config.header3.pin7);
         first_run = false;
         return;
     }
 
     // Poll switch
-    bool current_switch_state = gpio_get(gpio_config.header3.pin9);
+    bool current_switch_state = gpio_get(gpio_config.header3.pin7);
     if (switch_state != current_switch_state) {
         switch_state = current_switch_state;
 

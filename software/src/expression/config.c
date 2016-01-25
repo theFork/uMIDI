@@ -78,9 +78,9 @@ struct gpio_config gpio_config = {
         .pin4 = { &PORTC, 6, GPIO_UNUSED },
         .pin5 = { &PORTC, 7, GPIO_UNUSED },
         .pin6 = { &PORTD, 0, GPIO_OUTPUT }, // Enable LED
-        .pin7 = { &PORTD, 1, GPIO_UNUSED },
+        .pin7 = { &PORTD, 1, GPIO_INPUT_PULLUP }, // Enable switch
         .pin8 = { &PORTD, 2, GPIO_UNUSED },
-        .pin9 = { &PORTD, 3, GPIO_INPUT_PULLUP } // Enable switch
+        .pin9 = { &PORTD, 3, GPIO_UNUSED }
     },
     .jumpers = {
         .jp2 =  { &PORTR, 0, GPIO_INPUT_PULLUP },
