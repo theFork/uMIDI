@@ -85,6 +85,7 @@ struct midi_config midi_config = {
 
 //---------------- Background tasks ----------------//
 background_task_t high_frequency_tasks[] = {
+    &serial_communication_task,
     &update_wah_pwm,
 };
 uint8_t high_frequency_tasks_size = sizeof(high_frequency_tasks)/sizeof(background_task_t);
@@ -98,7 +99,6 @@ uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background
 background_task_t low_frequency_tasks[] = {
     &update_leds,
     &handle_switch,
-    &serial_communication_task,
 };
 uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);
 
