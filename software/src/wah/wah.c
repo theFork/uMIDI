@@ -172,13 +172,6 @@ void init_wah_module(void)
 
 void tap_tempo_task(void)
 {
-    // Skip every other invocation
-    static bool skipping = false;
-    skipping = !skipping;
-    if (skipping) {
-        return;
-    }
-
     static uint8_t taps = 0;
     static uint8_t buffer_index = 0;
 
@@ -211,7 +204,7 @@ void tap_tempo_task(void)
     else {
         // Register tap interval with cyclic buffer
         static fixed_t tap_tempo_buffer[TAP_TEMPO_BUFFER_SIZE] = {0, };
-        fixed_t tap_frequency = fixed_div(fixed_from_int(TAP_TEMPO_TASK_FREQUENCY), fixed_from_int(counter));
+        fixed_t tap_frequency = fixed_from_int(TAP_TEMPO_TASK_FREQUENCY) / counter;
         tap_tempo_buffer[buffer_index] = tap_frequency;
         ++buffer_index;
         buffer_index %= TAP_TEMPO_BUFFER_SIZE;
@@ -221,7 +214,7 @@ void tap_tempo_task(void)
         for (int i=0; i<taps; i++) {
             average += tap_tempo_buffer[i];
         }
-        average = fixed_div(average, fixed_from_int(taps));
+        average /= taps;
 
         // Set wave frequency
         set_frequency(&pwm_wave, average);

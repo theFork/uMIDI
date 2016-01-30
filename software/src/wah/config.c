@@ -92,13 +92,13 @@ uint8_t high_frequency_tasks_size = sizeof(high_frequency_tasks)/sizeof(backgrou
 
 background_task_t mid_frequency_tasks[] = {
     &usb_main_task,
-    &tap_tempo_task,
 };
 uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background_task_t);
 
 background_task_t low_frequency_tasks[] = {
-    &update_leds,
     &handle_switch,
+    &tap_tempo_task,
+    &update_leds,
 };
 uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);
 

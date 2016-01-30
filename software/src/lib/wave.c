@@ -278,8 +278,8 @@ void init_wave(struct wave * const wave, enum waveform waveform, midi_value_t sp
 void set_frequency(struct wave * const wave, fixed_t frequency)
 {
     wave->settings.frequency = frequency;
-    const fixed_t counter_max = fixed_div(fixed_from_int(F_TASK_FAST), wave->settings.frequency);
-    wave->state.speed_prescaler = fixed_to_int(counter_max);
+    const fixed_t wave_frequency = fixed_from_int(F_TASK_FAST/(2*MIDI_MAX_VALUE));
+    wave->state.speed_prescaler = fixed_to_int(fixed_div(wave_frequency, wave->settings.frequency));
 }
 
 void set_speed(struct wave * const wave, midi_value_t speed)
@@ -313,9 +313,12 @@ midi_value_t update_wave(struct wave* const wave)
         // Advance step counter
         advance_step_counter(wave);
     }
+    else {
+        goto return_output;
+    }
 
     // Compute and return wave value
-    uint16_t output;
+    static uint16_t output = 0;
     switch (wave->settings.waveform) {
         case WAVE_OFF:
             return 0;
@@ -356,5 +359,7 @@ midi_value_t update_wave(struct wave* const wave)
     output *= wave->settings.amplitude;
     output /= MIDI_MAX_VALUE;
     output += wave->settings.offset;
+
+return_output:
     return output;
 }
