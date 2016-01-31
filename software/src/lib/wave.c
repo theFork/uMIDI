@@ -261,14 +261,17 @@ static midi_value_t compute_triangle_wave(struct wave* wave)
 static midi_value_t compute_wave_pattern(struct wave* wave)
 {
     // Compute sample coordinates
-    uint8_t pattern_number = wave->settings.waveform - WAVE_PATTERN_01;
-    uint8_t quantization = WAVE_STEPS / 16;
-    uint8_t sample_index = compute_ramp(wave) / quantization;
-
-    // Reset step counter after last sample
-    if (sample_index >= 16) {
-        wave->state.step_counter = 0;
+    static uint8_t sample_index = 0;
+    switch (wave->state.step_counter) {
+    case 0:
+    case WAVE_STEPS/2:
+    case WAVE_STEPS:
+        ++sample_index;
+        sample_index %= 16;
     }
+
+    // Read and return sample
+    uint8_t pattern_number = wave->settings.waveform - WAVE_PATTERN_01;
     return wave_patterns[pattern_number][sample_index];
 }
 
