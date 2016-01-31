@@ -161,8 +161,8 @@ void init_wah_module(void)
     set_pwm_duty_cycle(pwm_range.from);
 
     // Setup wave module
-    const uint8_t speed = 120;
-    const uint8_t amplitude = MIDI_MAX_VALUE-32;
+    const uint8_t speed = 40;
+    const uint8_t amplitude = MIDI_MAX_VALUE-6;
     init_wave(&pwm_wave, WAVE_OFF, speed, amplitude, 0);
     configure_tap_tempo_wave(&pwm_wave);
 }
