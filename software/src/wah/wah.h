@@ -43,7 +43,6 @@ bool exec_waveform(const char* command);
 void handle_midi_cc(uint8_t controller, uint8_t value);
 void handle_switch(void);
 void init_wah_module(void);
-void tap_tempo_task(void);
 void update_wah_pwm(void);
 
 

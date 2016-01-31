@@ -29,6 +29,7 @@
 #include "lib/midi.h"
 #include "lib/serial_communication.h"
 #include "lib/usb.h"
+#include "lib/wave.h"
 
 #include "config.h"
 #include "wah.h"
