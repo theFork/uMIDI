@@ -40,6 +40,9 @@
 /// \brief       Number of levels in the stair wave
 #define     STAIR_WAVE_STEPS                5
 
+/// \brief       Number of levels in the stair wave
+#define     WAVE_STEPS                      100
+
 /// \brief      Tap tempo buffer size
 /// \details    The tempo is computed as an average over this many tapped tempo values.
 #define     TAP_TEMPO_BUFFER_SIZE           3

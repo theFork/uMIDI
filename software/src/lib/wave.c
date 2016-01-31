@@ -120,7 +120,7 @@ static void advance_step_counter(struct wave* wave)
 
         case DIRECTION_UP:
             // Increment counter; switch direction at max value
-            if (++wave->state.step_counter >= MIDI_MAX_VALUE) {
+            if (++wave->state.step_counter >= WAVE_STEPS) {
                 wave->state.step_direction = DIRECTION_DOWN;
             }
             break;
@@ -136,12 +136,15 @@ static void advance_step_counter(struct wave* wave)
 /// \return     the wave output
 static midi_value_t compute_ramp(struct wave* wave)
 {
+    uint16_t ramp_value = wave->state.step_counter / 2;
+    ramp_value *= MIDI_MAX_VALUE;
+    ramp_value /= WAVE_STEPS;
     switch (wave->state.step_direction) {
         case DIRECTION_DOWN:
-            return MIDI_MAX_VALUE - wave->state.step_counter / 2;
+            return MIDI_MAX_VALUE - ramp_value;
 
         case DIRECTION_UP:
-            return wave->state.step_counter / 2;
+            return ramp_value;
 
         default:
             return 0;
@@ -200,10 +203,10 @@ static midi_value_t compute_sine_wave(struct wave* wave)
 {
     switch (wave->state.step_direction) {
         case DIRECTION_DOWN:
-            return MIDI_MAX_VALUE - lookup_sine(wave->state.step_counter);
+            return MIDI_MAX_VALUE - lookup_sine(wave->state.step_counter % WAVE_STEPS);
 
         case DIRECTION_UP:
-            return lookup_sine(wave->state.step_counter);
+            return lookup_sine(wave->state.step_counter % WAVE_STEPS);
 
         default:
             return 0;
@@ -219,26 +222,27 @@ static midi_value_t compute_square_wave(struct wave* wave)
     return (wave->state.step_direction == DIRECTION_UP) ? MIDI_MAX_VALUE : 0;
 }
 
-/// \brief      Computes a square wave
+/// \brief      Computes a stairs wave
 /// \param      wave
 ///                 the wave
 /// \return     the wave output
 static midi_value_t compute_stairs_wave(struct wave* wave)
 {
-    uint8_t step_size = MIDI_MAX_VALUE / STAIR_WAVE_STEPS;
+    uint8_t step_size = WAVE_STEPS / STAIR_WAVE_STEPS;
 
-    // Reinitialize step counter at edge values
-    uint8_t *counter = &(wave->state.step_counter);
-    if (*counter == 0) {
-        *counter = step_size;
-    }
-    else if (*counter > step_size * STAIR_WAVE_STEPS) {
-        *counter = step_size * STAIR_WAVE_STEPS - step_size;
-        wave->state.step_direction = DIRECTION_DOWN;
+    // Compute quantized counter
+    uint16_t stair_value = (wave->state.step_counter / step_size) * step_size;
+
+    // Add one stair when we're counting up
+    if (wave->state.step_direction == DIRECTION_UP) {
+        stair_value += step_size;
     }
 
-    // Return quantized counter
-    return (*counter / step_size) * step_size;
+    // Scale to MIDI_MAX_VALUE
+    stair_value *= MIDI_MAX_VALUE;
+    stair_value /= WAVE_STEPS;
+
+    return stair_value;
 }
 
 /// \brief      Computes a triangle wave
@@ -247,7 +251,7 @@ static midi_value_t compute_stairs_wave(struct wave* wave)
 /// \return     the wave output
 static midi_value_t compute_triangle_wave(struct wave* wave)
 {
-    return wave->state.step_counter;
+    return ((uint16_t) wave->state.step_counter) * MIDI_MAX_VALUE / WAVE_STEPS;
 }
 
 /// \brief      Computes a wave according to the specified pattern
@@ -258,7 +262,7 @@ static midi_value_t compute_wave_pattern(struct wave* wave)
 {
     // Compute sample coordinates
     uint8_t pattern_number = wave->settings.waveform - WAVE_PATTERN_01;
-    uint8_t quantization = MIDI_MAX_VALUE / 16;
+    uint8_t quantization = WAVE_STEPS / 16;
     uint8_t sample_index = compute_ramp(wave) / quantization;
 
     // Reset step counter after last sample
@@ -295,7 +299,7 @@ void register_tap(void)
 void set_frequency(struct wave * const wave, fixed_t frequency)
 {
     wave->settings.frequency = frequency;
-    const fixed_t wave_frequency = fixed_from_int(F_TASK_FAST/(2*MIDI_MAX_VALUE));
+    const fixed_t wave_frequency = fixed_from_int(F_TASK_FAST/(2*WAVE_STEPS));
     wave->state.speed_prescaler = fixed_to_int(fixed_div(wave_frequency, wave->settings.frequency));
 }
 
