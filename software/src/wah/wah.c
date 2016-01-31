@@ -107,7 +107,7 @@ bool exec_waveform(const char* command)
     enum waveform waveform = pwm_wave.settings.waveform;
     if (strncmp("next", command+9, sizeof("next")) == 0) {
         ++waveform;
-        waveform %= WAVE_RANDOM;
+        waveform %= WAVE_RANDOM+1;
         usb_printf("Switching to next waveform (%u)" USB_NEWLINE, waveform);
         goto exec;
     }
