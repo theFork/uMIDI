@@ -43,8 +43,13 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-#define TAP_TEMPO_BUFFER_SIZE       8
-#define TAP_TEMPO_TASK_FREQUENCY    100
+/// \brief      Tap tempo buffer size
+/// \details    The tempo is computed as an average over this many tapped tempo values.
+#define TAP_TEMPO_BUFFER_SIZE       3
+
+/// \brief      Tap tempo background task frequency
+/// \see        F_TASK_SLOW
+#define TAP_TEMPO_TASK_FREQUENCY    F_TASK_SLOW
 
 static struct wave pwm_wave;
 
