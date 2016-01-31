@@ -22,9 +22,11 @@
 
 #include <stdlib.h>
 
+#include "background_tasks.h"
+#include "leds.h"
+#include "lookup_tables.h"
 #include "midi.h"
 #include "wave.h"
-#include "lookup_tables.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -89,6 +91,12 @@ static uint8_t wave_patterns[16][16] = {
     },
 };
 
+/// \brief      This flag indicates if a tempo tap occurred
+static bool tap_arrived = false;
+
+/// \brief      This flag indicates if a tempo tap occurred
+static struct wave* tap_tempo_wave = {0,};
+
 
 
 /////////////////////////////////////////////////////////////////////
@@ -112,7 +120,7 @@ static void advance_step_counter(struct wave* wave)
 
         case DIRECTION_UP:
             // Increment counter; switch direction at max value
-            if (++wave->state.step_counter >= MIDI_MAX_VALUE) {
+            if (++wave->state.step_counter >= WAVE_STEPS) {
                 wave->state.step_direction = DIRECTION_DOWN;
             }
             break;
@@ -128,12 +136,15 @@ static void advance_step_counter(struct wave* wave)
 /// \return     the wave output
 static midi_value_t compute_ramp(struct wave* wave)
 {
+    uint16_t ramp_value = wave->state.step_counter / 2;
+    ramp_value *= MIDI_MAX_VALUE;
+    ramp_value /= WAVE_STEPS;
     switch (wave->state.step_direction) {
         case DIRECTION_DOWN:
-            return MIDI_MAX_VALUE - wave->state.step_counter / 2;
+            return MIDI_MAX_VALUE - ramp_value;
 
         case DIRECTION_UP:
-            return wave->state.step_counter / 2;
+            return ramp_value;
 
         default:
             return 0;
@@ -192,10 +203,10 @@ static midi_value_t compute_sine_wave(struct wave* wave)
 {
     switch (wave->state.step_direction) {
         case DIRECTION_DOWN:
-            return MIDI_MAX_VALUE - lookup_sine(wave->state.step_counter);
+            return MIDI_MAX_VALUE - lookup_sine(wave->state.step_counter % WAVE_STEPS);
 
         case DIRECTION_UP:
-            return lookup_sine(wave->state.step_counter);
+            return lookup_sine(wave->state.step_counter % WAVE_STEPS);
 
         default:
             return 0;
@@ -211,26 +222,27 @@ static midi_value_t compute_square_wave(struct wave* wave)
     return (wave->state.step_direction == DIRECTION_UP) ? MIDI_MAX_VALUE : 0;
 }
 
-/// \brief      Computes a square wave
+/// \brief      Computes a stairs wave
 /// \param      wave
 ///                 the wave
 /// \return     the wave output
 static midi_value_t compute_stairs_wave(struct wave* wave)
 {
-    uint8_t step_size = MIDI_MAX_VALUE / STAIR_WAVE_STEPS;
+    uint8_t step_size = WAVE_STEPS / STAIR_WAVE_STEPS;
 
-    // Reinitialize step counter at edge values
-    uint8_t *counter = &(wave->state.step_counter);
-    if (*counter == 0) {
-        *counter = step_size;
-    }
-    else if (*counter > step_size * STAIR_WAVE_STEPS) {
-        *counter = step_size * STAIR_WAVE_STEPS - step_size;
-        wave->state.step_direction = DIRECTION_DOWN;
+    // Compute quantized counter
+    uint16_t stair_value = (wave->state.step_counter / step_size) * step_size;
+
+    // Add one stair when we're counting up
+    if (wave->state.step_direction == DIRECTION_UP) {
+        stair_value += step_size;
     }
 
-    // Return quantized counter
-    return (*counter / step_size) * step_size;
+    // Scale to MIDI_MAX_VALUE
+    stair_value *= MIDI_MAX_VALUE;
+    stair_value /= WAVE_STEPS;
+
+    return stair_value;
 }
 
 /// \brief      Computes a triangle wave
@@ -239,7 +251,7 @@ static midi_value_t compute_stairs_wave(struct wave* wave)
 /// \return     the wave output
 static midi_value_t compute_triangle_wave(struct wave* wave)
 {
-    return wave->state.step_counter;
+    return ((uint16_t) wave->state.step_counter) * MIDI_MAX_VALUE / WAVE_STEPS;
 }
 
 /// \brief      Computes a wave according to the specified pattern
@@ -249,14 +261,17 @@ static midi_value_t compute_triangle_wave(struct wave* wave)
 static midi_value_t compute_wave_pattern(struct wave* wave)
 {
     // Compute sample coordinates
-    uint8_t pattern_number = wave->settings.waveform - WAVE_PATTERN_01;
-    uint8_t quantization = MIDI_MAX_VALUE / 16;
-    uint8_t sample_index = compute_ramp(wave) / quantization;
-
-    // Reset step counter after last sample
-    if (sample_index >= 16) {
-        wave->state.step_counter = 0;
+    static uint8_t sample_index = 0;
+    switch (wave->state.step_counter) {
+    case 0:
+    case WAVE_STEPS/2:
+    case WAVE_STEPS:
+        ++sample_index;
+        sample_index %= 16;
     }
+
+    // Read and return sample
+    uint8_t pattern_number = wave->settings.waveform - WAVE_PATTERN_01;
     return wave_patterns[pattern_number][sample_index];
 }
 
@@ -266,6 +281,11 @@ static midi_value_t compute_wave_pattern(struct wave* wave)
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
+void configure_tap_tempo_wave(struct wave * const wave)
+{
+    tap_tempo_wave = wave;
+}
+
 void init_wave(struct wave * const wave, enum waveform waveform, midi_value_t speed, midi_value_t amplitude, midi_value_t offset)
 {
     wave->settings.amplitude = amplitude;
@@ -274,10 +294,27 @@ void init_wave(struct wave * const wave, enum waveform waveform, midi_value_t sp
     set_waveform(wave, waveform);
 }
 
+void register_tap(void)
+{
+    tap_arrived = true;
+}
+
+void set_frequency(struct wave * const wave, fixed_t frequency)
+{
+    wave->settings.frequency = frequency;
+    const fixed_t wave_frequency = fixed_from_int(F_TASK_FAST/(2*WAVE_STEPS));
+    wave->state.speed_prescaler = fixed_to_int(fixed_div(wave_frequency, wave->settings.frequency));
+}
+
 void set_speed(struct wave * const wave, midi_value_t speed)
 {
-    wave->settings.speed = speed;
-    wave->state.speed_prescaler = (MIDI_MAX_VALUE - speed) / 4;
+    // Scale range from [0..127] to [15..300] bpm
+    fixed_t freq = fixed_from_int(speed);
+    freq /= 127;
+    freq *= 285;
+    freq += fixed_from_int(15);
+    freq /= 60;
+    set_frequency(wave, freq);
 }
 
 void set_waveform(struct wave * const wave, enum waveform waveform)
@@ -290,6 +327,60 @@ void set_waveform(struct wave * const wave, enum waveform waveform)
     wave->state.step_direction = DIRECTION_UP;
 }
 
+void tap_tempo_task(void)
+{
+    static uint8_t taps = 0;
+    static uint8_t buffer_index = 0;
+
+    // Increment counter
+    static uint16_t counter = 0;
+    ++counter;
+
+    if (!tap_arrived) {
+        if (counter < 400) {
+            return;
+        }
+
+        // Reset after timeout
+        set_led(LED_RED, false);
+        counter = 0;
+        taps = 0;
+        buffer_index = 0;
+        return;
+    }
+    tap_arrived = false;
+
+    // Increment tap counter to buffer size
+    if (taps < TAP_TEMPO_BUFFER_SIZE) {
+        ++taps;
+    }
+
+    if (taps == 1) {
+        set_led(LED_RED, true);
+    }
+    else {
+        // Register tap interval with cyclic buffer
+        static fixed_t tap_tempo_buffer[TAP_TEMPO_BUFFER_SIZE] = {0, };
+        fixed_t tap_frequency = fixed_from_int(TAP_TEMPO_TASK_FREQUENCY) / counter;
+        tap_tempo_buffer[buffer_index] = tap_frequency;
+        ++buffer_index;
+        buffer_index %= TAP_TEMPO_BUFFER_SIZE;
+
+        // Compute average
+        fixed_t average = 0;
+        for (int i=0; i<taps; i++) {
+            average += tap_tempo_buffer[i];
+        }
+        average /= taps;
+
+        // Set wave frequency
+        set_frequency(tap_tempo_wave, average);
+    }
+
+    // Reset counter
+    counter = 0;
+}
+
 midi_value_t update_wave(struct wave* const wave)
 {
     // Increment speed counter and reset it if the prescaler was reached
@@ -300,9 +391,12 @@ midi_value_t update_wave(struct wave* const wave)
         // Advance step counter
         advance_step_counter(wave);
     }
+    else {
+        goto return_output;
+    }
 
     // Compute and return wave value
-    uint16_t output;
+    static uint16_t output = 0;
     switch (wave->settings.waveform) {
         case WAVE_OFF:
             return 0;
@@ -343,5 +437,7 @@ midi_value_t update_wave(struct wave* const wave)
     output *= wave->settings.amplitude;
     output /= MIDI_MAX_VALUE;
     output += wave->settings.offset;
+
+return_output:
     return output;
 }

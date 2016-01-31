@@ -9,5 +9,8 @@
 # Doxygen output
 software/doc/html
 
+# PlantUML output
+software/doc/uml/*.png
+
 # PCB plots
 hardware/plots

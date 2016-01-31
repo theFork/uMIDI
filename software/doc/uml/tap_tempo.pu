@@ -1,0 +1,57 @@
+@startuml
+title tap_tempo_task
+
+legend
+f_task = 100 Hz;
+end legend
+
+start
+
+:++counter;
+
+if (tap arrived) then (true)
+
+    partition "count taps" {
+    if (taps < buffer size) then (true)
+        :++taps;
+    else
+    endif
+    }
+
+    if (taps > 1) then (true)
+
+        partition "register tap intervals" {
+        :f_tap = f_task/counter
+        f_tap <&arrow-right> buffer;
+        }
+
+        partition "compute average" {
+        :accu = 0;
+        while (i < taps)
+            :accu += buffer(i)
+            ++i;
+        endwhile
+        :avg = accu / taps;
+        }
+
+        :update waveform speed;
+    else
+        :turn on LED;
+    endif
+
+    :counter = 0;
+
+elseif (counter == 400) then (true)
+
+    partition "reset" {
+    :turn off LED;
+    :counter = 0
+    taps = 0
+    buffer_index = 0;
+    }
+
+else
+endif
+
+stop
+@enduml

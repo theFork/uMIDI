@@ -27,12 +27,12 @@ use Getopt::Std;
 # --------- C O M M A N D   L I N E   A R G U M E N T S --------- #
 # Parse options
 my %opts;
-getopts("x:y:" , \%opts);
+getopts("y:" , \%opts);
 
 
 # ------------------------- C H E C K S ------------------------- #
 # Check command line parameters
-if (!exists($opts{"x"}) or !exists($opts{"y"})) {
+if (!exists($opts{"y"})) {
     print_help_and_exit();
 }
 if ($#ARGV < 0) {
@@ -43,7 +43,7 @@ if ($#ARGV < 0) {
 # ---------------------- V A R I A B L E S ---------------------- #
 
 my $PRECISION = 1e-6;
-my $xmax = 2**$opts{"x"} - 1;
+my $MIDI_MAX_VALUE = 127;
 my $ymax = 2**$opts{"y"} - 1;
 my $output_file = shift;
 
@@ -68,7 +68,7 @@ printf("const uint8_t lookup_table_resolution = %du;\n", $opts{"y"});
 # Print exponential lookup table
 print("\n// Exponential lookup table\n");
 print("const uint16_t exp_table[] = {\n");
-for (my $i = 0; $i <= $xmax; $i += 1) {
+for (my $i = 0; $i <= $MIDI_MAX_VALUE; $i += 1) {
     # Print indent on new lines
     if ($i % 16 == 0) {
         print("   ");
@@ -86,14 +86,14 @@ print("};\n");
 # Print log lookup table
 print("\n// Log lookup table\n");
 print("const uint16_t log_table[] = {\n");
-for (my $i = 0; $i <= $xmax; $i += 1) {
+for (my $i = 0; $i <= $MIDI_MAX_VALUE; $i += 1) {
     # Print indent on new lines
     if ($i % 16 == 0) {
         print("   ");
     }
 
     my $scaler = 8;
-    printf(" %5d,", int(log($i/$scaler+1)*($ymax/log($xmax/$scaler))));
+    printf(" %5d,", int(log($i/$scaler+1)*($ymax/log($MIDI_MAX_VALUE/$scaler))));
 
     # Begin a new line every 16 values
     if ($i > 0 and $i % 16 == 15) {
@@ -105,17 +105,16 @@ print("};\n");
 # Print sine lookup table
 print("\n// Sine lookup table\n");
 print("const uint16_t sine_table[] = {\n");
-for (my $i = 0; $i <= 127; $i += 1) {
+for (my $i = 0; $i < 100; $i += 1) {
     # Print indent on new lines
-    if ($i % 16 == 0) {
+    if ($i % 10 == 0) {
         print("   ");
     }
 
-    my $ymax = $xmax + 1;
-    printf(" %4d,", int($xmax/2 * sin(3.141592653589793*$i/$ymax) + $xmax/2 + .5));
+    printf(" %4d,", int($MIDI_MAX_VALUE/2 * sin(3.141592653589793*$i/100) + $MIDI_MAX_VALUE/2 + .5));
 
-    # Begin a new line every 16 values
-    if ($i > 0 and $i % 16 == 15) {
+    # Begin a new line every 10 values
+    if ($i % 10 == 9) {
         print("\n");
     }
 }
@@ -142,7 +141,7 @@ sub calculate_base
 sub calculate_error
 {
     my $base = shift;
-    my $y = $base ** $xmax;
+    my $y = $base ** $MIDI_MAX_VALUE;
     my $div = $ymax - $y;
     return $div;
 }

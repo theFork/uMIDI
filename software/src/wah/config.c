@@ -85,6 +85,7 @@ struct midi_config midi_config = {
 
 //---------------- Background tasks ----------------//
 background_task_t high_frequency_tasks[] = {
+    &serial_communication_task,
     &update_wah_pwm,
 };
 uint8_t high_frequency_tasks_size = sizeof(high_frequency_tasks)/sizeof(background_task_t);
@@ -95,9 +96,9 @@ background_task_t mid_frequency_tasks[] = {
 uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background_task_t);
 
 background_task_t low_frequency_tasks[] = {
-    &update_leds,
     &handle_switch,
-    &serial_communication_task,
+    &tap_tempo_task,
+    &update_leds,
 };
 uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);
 
@@ -120,10 +121,18 @@ struct serial_command serial_commands[] = {
         .handler = &exec_speed
     },
     {
+        .cmd_string = "tap",
+        .help_string = "\nSend this command repeatedly to tap in a tempo\n",
+        .handler = &exec_tap
+    },
+    {
         .cmd_string = "waveform",
         .help_string = "<w>\n"
             "En-/disable waveform mode and set waveform:\n"
-            "<w> : waveform\n",
+            "<w> : waveform\n"
+            "      \"next\" = switch to next waveform\n"
+            "      \"prev\" = switch to previous waveform\n"
+            "      \"off\"  = disable",
         .handler = &exec_waveform
     },
 };

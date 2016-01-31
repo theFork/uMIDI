@@ -20,9 +20,10 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <stdbool.h>
+#include <stdlib.h>
 #include <avr/wdt.h>
 #include <util/delay.h>
-#include <stdlib.h>
 
 #include "lib/adc.h"
 #include "lib/gpio.h"
@@ -59,33 +60,6 @@ static inline uint16_t linear_function(uint8_t midi_value)
     return linear(&pwm_range, midi_value);
 }
 
-void init_wah_module(void)
-{
-    // Setup linear conversion function
-    pwm_range.from = 550;
-    pwm_range.to = PWM_MAX_DUTY-50;
-    init_linear(&pwm_range);
-    init_pwm_module(&linear_function);
-    set_pwm_duty_cycle(pwm_range.from);
-
-    // Setup wave module
-    const uint8_t speed = 120;
-    const uint8_t amplitude = MIDI_MAX_VALUE-32;
-    init_wave(&pwm_wave, WAVE_OFF, speed, amplitude, 0);
-}
-
-void handle_switch(void)
-{
-    if (!gpio_get(gpio_config.header3.pin6)) {
-        enable_state = !enable_state;
-        enable_wah(enable_state);
-        _delay_ms(50);
-        while (!gpio_get(gpio_config.header3.pin6)) {
-            wdt_reset();
-        }
-    }
-}
-
 void enable_wah(bool enable)
 {
     gpio_set(gpio_config.header3.pin4, enable);
@@ -110,9 +84,16 @@ bool exec_speed(const char* command)
         return false;
     }
 
-    uint8_t speed = atoi(command+6) % MIDI_MAX_VALUE;
+    midi_value_t speed = atoi(command+6);
+    speed %= MIDI_MAX_VALUE + 1;
     usb_printf("Setting waveform speed to %u" USB_NEWLINE, speed);
     set_speed(&pwm_wave, speed);
+    return true;
+}
+
+bool exec_tap(const char* command)
+{
+    register_tap();
     return true;
 }
 
@@ -125,7 +106,8 @@ bool exec_waveform(const char* command)
 
     enum waveform waveform = pwm_wave.settings.waveform;
     if (strncmp("next", command+9, sizeof("next")) == 0) {
-        waveform = ++waveform % WAVE_RANDOM;
+        ++waveform;
+        waveform %= WAVE_RANDOM+1;
         usb_printf("Switching to next waveform (%u)" USB_NEWLINE, waveform);
         goto exec;
     }
@@ -135,7 +117,12 @@ bool exec_waveform(const char* command)
         goto exec;
     }
     if (strncmp("prev", command+9, sizeof("next")) == 0) {
-        waveform = pwm_wave.settings.waveform == 0 ? WAVE_RANDOM : --waveform;
+        if (pwm_wave.settings.waveform == 0) {
+            waveform = WAVE_RANDOM;
+        }
+        else {
+            --waveform;
+        }
         usb_printf("Switching to previous waveform (%u)" USB_NEWLINE, waveform);
         goto exec;
     }
@@ -147,14 +134,42 @@ exec:
     return true;
 }
 
+void handle_midi_cc(uint8_t controller, uint8_t value)
+{
+    set_pwm_duty_cycle(value);
+}
+
+void handle_switch(void)
+{
+    if (!gpio_get(gpio_config.header3.pin6)) {
+        enable_state = !enable_state;
+        enable_wah(enable_state);
+        _delay_ms(50);
+        while (!gpio_get(gpio_config.header3.pin6)) {
+            wdt_reset();
+        }
+    }
+}
+
+void init_wah_module(void)
+{
+    // Setup linear conversion function
+    pwm_range.from = 550;
+    pwm_range.to = PWM_MAX_DUTY-50;
+    init_linear(&pwm_range);
+    init_pwm_module(&linear_function);
+    set_pwm_duty_cycle(pwm_range.from);
+
+    // Setup wave module
+    const uint8_t speed = 40;
+    const uint8_t amplitude = MIDI_MAX_VALUE-6;
+    init_wave(&pwm_wave, WAVE_OFF, speed, amplitude, 0);
+    configure_tap_tempo_wave(&pwm_wave);
+}
+
 void update_wah_pwm(void)
 {
     if (pwm_wave.settings.waveform != WAVE_OFF) {
         set_pwm_duty_cycle(update_wave(&pwm_wave));
     }
-}
-
-void handle_midi_cc(uint8_t controller, uint8_t value)
-{
-    set_pwm_duty_cycle(value);
 }

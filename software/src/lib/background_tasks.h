@@ -31,13 +31,13 @@
 //---------------- constants ----------------//
 
 /// \brief      Frequency of the CPU timer used in by the task scheduler in [Hz]
-#define     F_TIMER             2000
+#define     F_TIMER             20000
 
 /// \brief      High priority task frequency in [Hz]
 #define     F_TASK_FAST         F_TIMER
 
 /// \brief      Medium priority task frequency in [Hz]
-#define     F_TASK_MID          (F_TASK_FAST / 10)
+#define     F_TASK_MID          (F_TASK_FAST / 20)
 
 /// \brief      Low priority task frequency in [Hz]
 #define     F_TASK_SLOW         (F_TASK_MID / 10)
