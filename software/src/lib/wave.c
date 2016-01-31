@@ -23,6 +23,7 @@
 #include <stdlib.h>
 
 #include "background_tasks.h"
+#include "leds.h"
 #include "lookup_tables.h"
 #include "midi.h"
 #include "wave.h"
@@ -89,6 +90,12 @@ static uint8_t wave_patterns[16][16] = {
         WHAMMY_AMPLITUDE_1ST_MINOR_THIRD,
     },
 };
+
+/// \brief      This flag indicates if a tempo tap occurred
+static bool tap_arrived = false;
+
+/// \brief      This flag indicates if a tempo tap occurred
+static struct wave* tap_tempo_wave = {0,};
 
 
 
@@ -267,12 +274,22 @@ static midi_value_t compute_wave_pattern(struct wave* wave)
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
+void configure_tap_tempo_wave(struct wave * const wave)
+{
+    tap_tempo_wave = wave;
+}
+
 void init_wave(struct wave * const wave, enum waveform waveform, midi_value_t speed, midi_value_t amplitude, midi_value_t offset)
 {
     wave->settings.amplitude = amplitude;
     wave->settings.offset = offset;
     set_speed(wave, speed);
     set_waveform(wave, waveform);
+}
+
+void register_tap(void)
+{
+    tap_arrived = true;
 }
 
 void set_frequency(struct wave * const wave, fixed_t frequency)
@@ -301,6 +318,60 @@ void set_waveform(struct wave * const wave, enum waveform waveform)
     wave->state.speed_counter = 0;
     wave->state.step_counter = 0;
     wave->state.step_direction = DIRECTION_UP;
+}
+
+void tap_tempo_task(void)
+{
+    static uint8_t taps = 0;
+    static uint8_t buffer_index = 0;
+
+    // Increment counter
+    static uint16_t counter = 0;
+    ++counter;
+
+    if (!tap_arrived) {
+        if (counter < 400) {
+            return;
+        }
+
+        // Reset after timeout
+        set_led(LED_RED, false);
+        counter = 0;
+        taps = 0;
+        buffer_index = 0;
+        return;
+    }
+    tap_arrived = false;
+
+    // Increment tap counter to buffer size
+    if (taps < TAP_TEMPO_BUFFER_SIZE) {
+        ++taps;
+    }
+
+    if (taps == 1) {
+        set_led(LED_RED, true);
+    }
+    else {
+        // Register tap interval with cyclic buffer
+        static fixed_t tap_tempo_buffer[TAP_TEMPO_BUFFER_SIZE] = {0, };
+        fixed_t tap_frequency = fixed_from_int(TAP_TEMPO_TASK_FREQUENCY) / counter;
+        tap_tempo_buffer[buffer_index] = tap_frequency;
+        ++buffer_index;
+        buffer_index %= TAP_TEMPO_BUFFER_SIZE;
+
+        // Compute average
+        fixed_t average = 0;
+        for (int i=0; i<taps; i++) {
+            average += tap_tempo_buffer[i];
+        }
+        average /= taps;
+
+        // Set wave frequency
+        set_frequency(tap_tempo_wave, average);
+    }
+
+    // Reset counter
+    counter = 0;
 }
 
 midi_value_t update_wave(struct wave* const wave)

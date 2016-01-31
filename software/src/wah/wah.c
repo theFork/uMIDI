@@ -43,20 +43,11 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-/// \brief      Tap tempo buffer size
-/// \details    The tempo is computed as an average over this many tapped tempo values.
-#define TAP_TEMPO_BUFFER_SIZE       3
-
-/// \brief      Tap tempo background task frequency
-/// \see        F_TASK_SLOW
-#define TAP_TEMPO_TASK_FREQUENCY    F_TASK_SLOW
-
 static struct wave pwm_wave;
 
 static struct linear_range pwm_range;
 
 static bool enable_state = false;
-static bool tap_arrived = false;
 
 
 
@@ -102,7 +93,7 @@ bool exec_speed(const char* command)
 
 bool exec_tap(const char* command)
 {
-    tap_arrived = true;
+    register_tap();
     return true;
 }
 
@@ -173,60 +164,7 @@ void init_wah_module(void)
     const uint8_t speed = 120;
     const uint8_t amplitude = MIDI_MAX_VALUE-32;
     init_wave(&pwm_wave, WAVE_OFF, speed, amplitude, 0);
-}
-
-void tap_tempo_task(void)
-{
-    static uint8_t taps = 0;
-    static uint8_t buffer_index = 0;
-
-    // Increment counter
-    static uint16_t counter = 0;
-    ++counter;
-
-    if (!tap_arrived) {
-        if (counter < 400) {
-            return;
-        }
-
-        // Reset after timeout
-        set_led(LED_RED, false);
-        counter = 0;
-        taps = 0;
-        buffer_index = 0;
-        return;
-    }
-    tap_arrived = false;
-
-    // Increment tap counter to buffer size
-    if (taps < TAP_TEMPO_BUFFER_SIZE) {
-        ++taps;
-    }
-
-    if (taps == 1) {
-        set_led(LED_RED, true);
-    }
-    else {
-        // Register tap interval with cyclic buffer
-        static fixed_t tap_tempo_buffer[TAP_TEMPO_BUFFER_SIZE] = {0, };
-        fixed_t tap_frequency = fixed_from_int(TAP_TEMPO_TASK_FREQUENCY) / counter;
-        tap_tempo_buffer[buffer_index] = tap_frequency;
-        ++buffer_index;
-        buffer_index %= TAP_TEMPO_BUFFER_SIZE;
-
-        // Compute average
-        fixed_t average = 0;
-        for (int i=0; i<taps; i++) {
-            average += tap_tempo_buffer[i];
-        }
-        average /= taps;
-
-        // Set wave frequency
-        set_frequency(&pwm_wave, average);
-    }
-
-    // Reset counter
-    counter = 0;
+    configure_tap_tempo_wave(&pwm_wave);
 }
 
 void update_wah_pwm(void)
