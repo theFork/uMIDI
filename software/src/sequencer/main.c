@@ -23,12 +23,14 @@
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
 
+#include "lib/background_tasks.h"
 #include "lib/encoder.h"
 #include "lib/gpio.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
-#include "lib/background_tasks.h"
+#include "lib/serial_communication.h"
 #include "lib/system.h"
+#include "lib/usb.h"
 
 #include "config.h"
 #include "sequencer.h"
@@ -49,6 +51,7 @@ int main( void )
 {
     // Configure clock and timers
     configure_system_clock();
+    enable_usb_pll();
 
     // Initialize modules
     init_gpio_module(&gpio_config);
@@ -59,6 +62,8 @@ int main( void )
     init_background_tasks(high_frequency_tasks, high_frequency_tasks_size,
                                 mid_frequency_tasks, mid_frequency_tasks_size,
                                 low_frequency_tasks, low_frequency_tasks_size);
+    init_usb_module();
+    init_serial_communication(NULL, 0);
 
 
     // set watchdog for 128ms

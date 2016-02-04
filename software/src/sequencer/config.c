@@ -27,11 +27,13 @@
 
 #include <stddef.h>
 
+#include "lib/background_tasks.h"
 #include "lib/encoder.h"
 #include "lib/gpio.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
-#include "lib/background_tasks.h"
+#include "lib/serial_communication.h"
+#include "lib/usb.h"
 #include "lib/wave.h"
 
 #include "config.h"
@@ -117,11 +119,14 @@ uint8_t sequencer_leds_size = sizeof(sequencer_leds)/sizeof(struct gpio_pin*);
 
 //---------------- State machine ----------------//
 background_task_t high_frequency_tasks[] = {
+    &serial_communication_task,
     &update_sequencer,
 };
 uint8_t high_frequency_tasks_size = sizeof(high_frequency_tasks)/sizeof(background_task_t);
 
-background_task_t mid_frequency_tasks[] = {};
+background_task_t mid_frequency_tasks[] = {
+    &usb_main_task,
+};
 uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background_task_t);
 
 background_task_t low_frequency_tasks[] = {
