@@ -302,8 +302,8 @@ void register_tap(void)
 void set_frequency(struct wave * const wave, fixed_t frequency)
 {
     wave->settings.frequency = frequency;
-    const fixed_t wave_frequency = fixed_from_int(F_TASK_FAST/(2*WAVE_STEPS));
-    wave->state.speed_prescaler = fixed_to_int(fixed_div(wave_frequency, wave->settings.frequency));
+    const fixed_t max_frequency = fixed_from_int(F_TASK_FAST/(2*WAVE_STEPS));
+    wave->state.speed_prescaler = fixed_to_int(fixed_div(max_frequency, wave->settings.frequency));
 }
 
 void set_speed(struct wave * const wave, midi_value_t speed)
@@ -383,19 +383,21 @@ void tap_tempo_task(void)
 
 midi_value_t update_wave(struct wave* const wave)
 {
-    // Increment speed counter and reset it if the prescaler was reached
+    // Increment speed counter
     ++wave->state.speed_counter;
-    if (wave->state.speed_counter >= wave->state.speed_prescaler) {
-        wave->state.speed_counter = 0;
 
-        // Advance step counter
-        advance_step_counter(wave);
-    }
-    else {
+    // Change the wave output value only if the speed prescaler was reached
+    if (wave->state.speed_counter < wave->state.speed_prescaler) {
         goto return_output;
     }
 
-    // Compute and return wave value
+    // Reset speed counter
+    wave->state.speed_counter = 0;
+
+    // Advance step counter
+    advance_step_counter(wave);
+
+    // Compute new wave output value
     static uint16_t output = 0;
     switch (wave->settings.waveform) {
         case WAVE_OFF:
