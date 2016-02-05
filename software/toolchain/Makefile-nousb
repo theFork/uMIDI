@@ -131,7 +131,7 @@ help:
 $(LOOKUP_TABLES_FILE):
 	$(info )
 	$(info $(MSG_GENERATING))
-	../../toolchain/compute_lookup_tables.pl -x $(LOOKUP_TABLES_XRES) -y $(LOOKUP_TABLES_YRES) $(LOOKUP_TABLES_FILE)
+	../../toolchain/compute_lookup_tables.pl -y $(LOOKUP_TABLES_YRES) $(LOOKUP_TABLES_FILE)
 
 # Internal rule:
 # Compile object files from C source files.
