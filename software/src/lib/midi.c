@@ -66,27 +66,27 @@ void init_midi_module(const struct midi_config* const config)
     MIDI_UART.CTRLB = USART_RXEN_bm | USART_TXEN_bm;
 
     // Save MIDI event handlers
-    tx_channel = config->tx_channel;
+    tx_channel = config->tx_channel & 0x0f;
     event_handlers = (struct midi_event_handlers*) &config->event_handlers;
 }
 
 void send_control_change(midi_value_t controller, midi_value_t value) {
     // Send control change status byte
-    uart_write((uint8_t) MIDI_MSG_TYPE_CONTROL_CHANGE | tx_channel);
+    uart_write((uint8_t) MIDI_MSG_TYPE_CONTROL_CHANGE | (tx_channel & 0x7f));
 
     // Send controller number
-    uart_write(controller);
+    uart_write(controller & 0x7f);
 
     // Send value
-    uart_write(value);
+    uart_write(value & 0x7f);
 }
 
 void send_note_off(midi_value_t note) {
     // Send note off status byte
-    uart_write((uint8_t) MIDI_MSG_TYPE_NOTE_OFF | tx_channel);
+    uart_write((uint8_t) MIDI_MSG_TYPE_NOTE_OFF | (tx_channel & 0x7f));
 
     // Send note number
-    uart_write(note);
+    uart_write(note & 0x7f);
 
     // Send maximum velocity
     uart_write(MIDI_MAX_VALUE);
@@ -94,10 +94,10 @@ void send_note_off(midi_value_t note) {
 
 void send_note_on(midi_value_t note) {
     // Send note on status byte
-    uart_write((uint8_t) MIDI_MSG_TYPE_NOTE_ON | tx_channel);
+    uart_write((uint8_t) MIDI_MSG_TYPE_NOTE_ON | (tx_channel & 0x7f));
 
     // Send note number
-    uart_write(note);
+    uart_write(note & 0x7f);
 
     // Send maximum velocity
     uart_write(MIDI_MAX_VALUE);
@@ -105,10 +105,10 @@ void send_note_on(midi_value_t note) {
 
 void send_program_change(midi_value_t pnum) {
     // Send program change status byte
-    uart_write((uint8_t) MIDI_MSG_TYPE_PROGRAM_CHANGE | tx_channel);
+    uart_write((uint8_t) MIDI_MSG_TYPE_PROGRAM_CHANGE | (tx_channel & 0x7f));
 
     // Send program number
-    uart_write(pnum);
+    uart_write(pnum & 0x7f);
 }
 
 
@@ -159,7 +159,7 @@ ISR(USARTE0_RXC_vect)
     // Fetch data
     uint8_t data = MIDI_UART.DATA;
 
-    static midi_value_t current_controller;
+    static midi_value_t current_controller = 0;
     switch (midi_state) {
     ////
     // MIDI status byte
