@@ -20,12 +20,25 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
+#include <stdlib.h>
+
 #include "lib/gpio.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
 #include "lib/wave.h"
+#include "lib/usb.h"
+
+#include "config.h"
 #include "sequencer.h"
+
+
+////////////////////////////////////////////////////////////////
+//               P R I V A T E   D E F I N E S                //
+////////////////////////////////////////////////////////////////
+
+#define     STRING_NEXT     "next"
+#define     STRING_PREV     "prev"
+
 
 
 ////////////////////////////////////////////////////////////////
@@ -52,6 +65,58 @@ static void step_sequencer_leds(void)
     led_index %= status_leds_size;
 }
 
+bool exec_speed(const char* command)
+{
+    if (strlen(command) < 7 || command[5] != ' ') {
+        usb_puts("Malformed command" USB_NEWLINE);
+        return false;
+    }
+
+    midi_value_t speed = atoi(command+6);
+    speed %= MIDI_MAX_VALUE + 1;
+    usb_printf("Setting waveform speed to %u" USB_NEWLINE, speed);
+    set_speed(&wave, speed);
+    return true;
+}
+
+bool exec_tap(const char* command)
+{
+    register_tap();
+    return true;
+}
+
+bool exec_pattern(const char* command)
+{
+    if (strlen(command) < 12 || command[7] != ' ') {
+        usb_puts("Malformed command" USB_NEWLINE);
+        return false;
+    }
+
+    enum waveform waveform = wave.settings.waveform;
+    if (strncmp(STRING_NEXT, command+8, sizeof(STRING_NEXT)) == 0) {
+        ++waveform;
+        waveform %= WAVE_PATTERN_08+1;
+        usb_printf("Switching to next pattern (%u)" USB_NEWLINE, waveform-WAVE_PATTERN_01);
+        goto exec;
+    }
+    if (strncmp(STRING_PREV, command+8, sizeof(STRING_PREV)) == 0) {
+        if (wave.settings.waveform == WAVE_PATTERN_01) {
+            waveform = WAVE_PATTERN_08;
+        }
+        else {
+            --waveform;
+        }
+        usb_printf("Switching to previous pattern (%u)" USB_NEWLINE, waveform-WAVE_PATTERN_01);
+        goto exec;
+    }
+    usb_puts("Unknown parameter" USB_NEWLINE);
+    return false;
+
+exec:
+    set_waveform(&wave, waveform);
+    return true;
+}
+
 void handle_control_change(uint8_t controller_number, uint8_t value)
 {
     //send_control_change(controller_number, value);
@@ -75,6 +140,7 @@ void init_sequencer_module(struct sequencer_config* config, struct gpio_pin* led
     status_leds_size = leds_size;
     controller_number = config->controller_number;
     init_wave(&wave, config->waveform, config->speed, MIDI_MAX_VALUE, 0);
+    configure_tap_tempo_wave(&wave);
 }
 
 void update_sequencer(void)

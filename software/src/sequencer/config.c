@@ -130,6 +130,33 @@ background_task_t mid_frequency_tasks[] = {
 uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background_task_t);
 
 background_task_t low_frequency_tasks[] = {
+    &tap_tempo_task,
     &update_leds,
 };
 uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);
+
+//---------------- Custom commands ----------------//
+struct serial_command serial_commands[] = {
+    {
+        .cmd_string = "speed",
+        .help_string = "<s>\n"
+            "Adjust the speed of the sequencer:\n"
+            "<s> : wave speed\n",
+        .handler = &exec_speed
+    },
+    {
+        .cmd_string = "tap",
+        .help_string = "\nSend this command repeatedly to tap in a tempo\n",
+        .handler = &exec_tap
+    },
+    {
+        .cmd_string = "pattern",
+        .help_string = "<p>\n"
+            "Select sequencer pattern:\n"
+            "<p> : pattern\n"
+            "      \"next\" = switch to next pattern\n"
+            "      \"prev\" = switch to previous pattern\n",
+        .handler = &exec_pattern
+    },
+};
+uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);
