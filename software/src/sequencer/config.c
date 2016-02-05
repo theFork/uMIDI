@@ -47,9 +47,9 @@
 //---------------- GPIO ----------------//
 struct gpio_config gpio_config = {
     .header1 = {
-        .pin2 = { &PORTA, 0, GPIO_UNUSED },
-        .pin3 = { &PORTA, 1, GPIO_UNUSED },
-        .pin4 = { &PORTA, 2, GPIO_UNUSED },
+        .pin2 = { &PORTA, 0, GPIO_INPUT_PULLUP },
+        .pin3 = { &PORTA, 1, GPIO_INPUT_PULLUP },
+        .pin4 = { &PORTA, 2, GPIO_INPUT_PULLUP },
         .pin5 = { &PORTA, 3, GPIO_UNUSED },
         .pin6 = { &PORTA, 4, GPIO_OUTPUT },
         .pin7 = { &PORTA, 5, GPIO_OUTPUT },
@@ -86,8 +86,13 @@ struct gpio_config gpio_config = {
 
 //---------------- Encoder ----------------//
 struct encoder_config encoder_config = {
-    .inputA = &gpio_config.header2.pin2,
-    .inputA = &gpio_config.header2.pin3,
+    .inputA = &gpio_config.header1.pin3,
+    .inputB = &gpio_config.header1.pin2,
+    .inputSwitch = &gpio_config.header1.pin4,
+
+    .cw_callback = &encoder_cw_callback,
+    .ccw_callback = &encoder_ccw_callback,
+    .push_callback = &encoder_push_callback,
 };
 
 //---------------- MIDI ----------------//
@@ -121,6 +126,7 @@ uint8_t sequencer_leds_size = sizeof(sequencer_leds)/sizeof(struct gpio_pin*);
 background_task_t high_frequency_tasks[] = {
     &serial_communication_task,
     &update_sequencer,
+    (void (*)(void)) &poll_encoder,
 };
 uint8_t high_frequency_tasks_size = sizeof(high_frequency_tasks)/sizeof(background_task_t);
 

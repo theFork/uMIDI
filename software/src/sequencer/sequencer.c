@@ -22,6 +22,7 @@
 
 #include <stdlib.h>
 
+#include <util/delay.h>
 #include "lib/gpio.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
@@ -53,9 +54,9 @@ static uint8_t              status_leds_size;
 
 
 
-////////////////////////////////////////////////////////////////
-//      F U N C T I O N S   A N D   P R O C E D U R E S       //
-////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+// S T A T I C   F U N C T I O N S   A N D   P R O C E D U R E S //
+///////////////////////////////////////////////////////////////////
 
 static void step_sequencer_leds(void)
 {
@@ -64,6 +65,12 @@ static void step_sequencer_leds(void)
     ++led_index;
     led_index %= status_leds_size;
 }
+
+
+
+////////////////////////////////////////////////////////////////
+//      F U N C T I O N S   A N D   P R O C E D U R E S       //
+////////////////////////////////////////////////////////////////
 
 bool exec_speed(const char* command)
 {
@@ -152,4 +159,31 @@ void update_sequencer(void)
         send_control_change(controller_number, new_value);
         step_sequencer_leds();
     }
+}
+
+void encoder_cw_callback(void)
+{
+    // Add one BPM to the current wave speed as long as we are below 300 BPM
+    fixed_t bpm = wave.settings.frequency * 60;
+    if (bpm <= fixed_from_int(300)) {
+        bpm += fixed_from_int(1);
+        set_frequency(&wave, bpm/60);
+        usb_printf("Setting wave speed to %u BPM" USB_NEWLINE, fixed_to_int(bpm));
+    }
+}
+
+void encoder_ccw_callback(void)
+{
+    // Subtract one BPM from the current wave speed as long as we are above 15 BPM
+    fixed_t bpm = wave.settings.frequency * 60;
+    if (bpm >= fixed_from_int(15)) {
+        bpm -= fixed_from_int(1);
+        set_frequency(&wave, bpm/60);
+        usb_printf("Setting wave speed to %u BPM" USB_NEWLINE, fixed_to_int(bpm));
+    }
+}
+
+void encoder_push_callback(void)
+{
+    register_tap();
 }
