@@ -105,7 +105,7 @@ struct midi_config midi_config = {
 //---------------- Sequencers ----------------//
 struct sequencer_config sequencer_config = {
     .controller_number = 11,
-    .waveform   = WAVE_RANDOM,
+    .waveform   = WAVE_PATTERN_01,
     .speed      = 60
 };
 
@@ -131,6 +131,5 @@ uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background
 
 background_task_t low_frequency_tasks[] = {
     &update_leds,
-    &update_sequencer_leds,
 };
 uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);

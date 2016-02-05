@@ -44,6 +44,14 @@ static uint8_t              status_leds_size;
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
+static void step_sequencer_leds(void)
+{
+    static uint8_t led_index = 0;
+    gpio_toggle(*status_leds[led_index]);
+    ++led_index;
+    led_index %= status_leds_size;
+}
+
 void handle_control_change(uint8_t controller_number, uint8_t value)
 {
     //send_control_change(controller_number, value);
@@ -66,11 +74,7 @@ void init_sequencer_module(struct sequencer_config* config, struct gpio_pin* led
     status_leds = leds;
     status_leds_size = leds_size;
     controller_number = config->controller_number;
-    init_wave(&wave,
-                    config->waveform,
-                    config->speed,
-                    MIDI_MAX_VALUE,
-                    0);
+    init_wave(&wave, config->waveform, config->speed, MIDI_MAX_VALUE, 0);
 }
 
 void update_sequencer(void)
@@ -78,30 +82,8 @@ void update_sequencer(void)
     static uint8_t old_value = 0;
     uint8_t new_value = update_wave(&wave);
     if (new_value != old_value) {
-        if (wave.state.step_counter == 0) {
-            gpio_drive_high(*status_leds[0]);
-        }
-        else {
-            gpio_drive_low(*status_leds[0]);
-        }
-
         old_value = new_value;
         send_control_change(controller_number, new_value);
+        step_sequencer_leds();
     }
-}
-
-void update_sequencer_leds(void)
-{
-    static uint8_t prescaler = 0;
-    if (++prescaler < 10) {
-        return;
-    }
-    prescaler = 0;
-
-    /*
-    static uint8_t led_index = 0;
-    gpio_toggle(*status_leds[led_index]);
-    ++led_index;
-    led_index %= status_leds_size;
-    */
 }
