@@ -206,8 +206,23 @@ ISR(USARTE0_RXC_vect)
         flash_led(LED_RED);
     }
 
+    // Read USART errors
+    if (MIDI_UART.STATUS & USART_BUFOVF_bm) {
+        usb_puts(PSTR("\nERROR: USART buffer overflow!"));
+        flash_led(LED_RED);
+    }
+    if (MIDI_UART.STATUS & USART_FERR_bm) {
+        usb_puts(PSTR("\nERROR: USART frame error!"));
+        flash_led(LED_RED);
+    }
+
     // Fetch data
     uint8_t data = MIDI_UART.DATA;
+    if (midi_state != MIDI_STATE_IDLE && data > MIDI_MAX_VALUE) {
+        usb_puts(PSTR("\nERROR: Received invalid MIDI data byte! Details:"));
+        flash_led(LED_RED);
+    }
+
     usb_printf(PSTR("[ 0x%02x -> "), data);
 
     static midi_value_t first_data_byte = 0;
