@@ -75,3 +75,7 @@ Closing a jumper results in a connection of the corresponding MCU pin to GND.
 | PR1           | JP3               |
 | PD4           | JP4               |
 | PD5           | JP5               |
+
+Since sometimes there is no silkscreen, the jumper designators on the bottom layer are depicted below. Mind the **mirrored** top-layer silkscreen.
+
+![Solder Jumpers](solder_jumpers.gif)
