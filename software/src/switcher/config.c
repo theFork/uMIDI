@@ -2,7 +2,7 @@
 /// \brief      Device configuration
 
 /*
- * Copyright 2015 Sebastian Neuser
+ * Copyright 2016 Simon Gansen
  *
  * This file is part of the uMIDI firmware.
  *
@@ -39,29 +39,34 @@
 
 //---------------- GPIO ----------------//
 struct gpio_config gpio_config = {
+    // GPIO1: Relais hard-wired to status LEDs
     .header1 = {
-        .pin2 = { &PORTA, 0, GPIO_UNUSED },
-        .pin3 = { &PORTA, 1, GPIO_UNUSED },
-        .pin4 = { &PORTA, 2, GPIO_UNUSED },
-        .pin5 = { &PORTA, 3, GPIO_UNUSED },
-        .pin6 = { &PORTA, 4, GPIO_UNUSED },
-        .pin7 = { &PORTA, 5, GPIO_UNUSED },
-        .pin8 = { &PORTA, 6, GPIO_UNUSED },
-        .pin9 = { &PORTA, 7, GPIO_UNUSED }
+        .pin2 = { &PORTA, 0, GPIO_OUTPUT }, // Tune and mute
+        .pin3 = { &PORTA, 1, GPIO_OUTPUT }, // Loop 1
+        .pin4 = { &PORTA, 2, GPIO_OUTPUT }, // Loop 2
+        .pin5 = { &PORTA, 3, GPIO_OUTPUT }, // Loop 3
+        .pin6 = { &PORTA, 4, GPIO_OUTPUT }, // Loop 4
+        .pin7 = { &PORTA, 5, GPIO_OUTPUT }, // Loop 5
+        .pin8 = { &PORTA, 6, GPIO_OUTPUT }, // Switch 1
+        .pin9 = { &PORTA, 7, GPIO_OUTPUT }  // Switch 2
     },
+
+    // GPIO2: Toggle switches (all low-active)
     .header2 = {
-        .pin2 = { &PORTB, 0, GPIO_UNUSED },
-        .pin3 = { &PORTB, 1, GPIO_UNUSED },
-        .pin4 = { &PORTB, 2, GPIO_UNUSED },
-        .pin5 = { &PORTB, 3, GPIO_UNUSED },
-        .pin6 = { &PORTC, 0, GPIO_UNUSED },
-        .pin7 = { &PORTC, 1, GPIO_UNUSED },
-        .pin8 = { &PORTC, 2, GPIO_UNUSED },
-        .pin9 = { &PORTC, 3, GPIO_UNUSED }
+        .pin2 = { &PORTB, 0, GPIO_INPUT_PULLUP }, // Toggle Tune and mute
+        .pin3 = { &PORTB, 1, GPIO_INPUT_PULLUP }, // Toggle Loop 1
+        .pin4 = { &PORTB, 2, GPIO_INPUT_PULLUP }, // Toggle Loop 2
+        .pin5 = { &PORTB, 3, GPIO_INPUT_PULLUP }, // Toggle Loop 3
+        .pin6 = { &PORTC, 0, GPIO_INPUT_PULLUP }, // Toggle Loop 4
+        .pin7 = { &PORTC, 1, GPIO_INPUT_PULLUP }, // Toggle Loop 5
+        .pin8 = { &PORTC, 2, GPIO_INPUT_PULLUP }, // Toggle Switch 1
+        .pin9 = { &PORTC, 3, GPIO_INPUT_PULLUP }  // Toggle Switch 2
     },
+
+    // GPIO3: "Save" toggle switch and LED
     .header3 = {
-        .pin2 = { &PORTC, 4, GPIO_UNUSED },
-        .pin3 = { &PORTC, 5, GPIO_UNUSED },
+        .pin2 = { &PORTC, 4, GPIO_OUTPUT },         // "Save" LED
+        .pin3 = { &PORTC, 5, GPIO_INPUT_PULLUP },   // "Save" toggle switch
         .pin4 = { &PORTC, 6, GPIO_UNUSED },
         .pin5 = { &PORTC, 7, GPIO_UNUSED },
         .pin6 = { &PORTD, 0, GPIO_UNUSED },
@@ -74,9 +79,6 @@ struct gpio_config gpio_config = {
 //---------------- MIDI ----------------//
 struct midi_config midi_config = {
     .event_handlers = {
-        .control_change = handle_control_change,
-        .note_off       = handle_note_off,
-        .note_on        = handle_note_on,
         .program_change = handle_program_change
     },
     .tx_channel = 1,

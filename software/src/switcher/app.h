@@ -1,8 +1,8 @@
 /// \file
-/// \brief      MIDI sniffer module API
+/// \brief      MIDI switcher module API
 
 /*
- * Copyright 2015 Sebastian Neuser
+ * Copyright 2016 Simon Gansen
  *
  * This file is part of the uMIDI firmware.
  *
@@ -35,15 +35,6 @@
 
 //---------------- functions and procedures ----------------//
 bool exec_led(const char* command);
-
-///< \brief     Callback for control change messges
-void handle_control_change(uint8_t controller, uint8_t value);
-
-///< \brief     Callback for note off messges
-void handle_note_off(uint8_t note);
-
-///< \brief     Callback for not on messages
-void handle_note_on(uint8_t note);
 
 ///< \brief     Callback for program changes
 void handle_program_change(uint8_t program);
