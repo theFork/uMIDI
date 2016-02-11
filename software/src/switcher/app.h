@@ -34,7 +34,11 @@
 
 
 //---------------- functions and procedures ----------------//
+/// \brief      Handler for the `led` command
 bool exec_led(const char* command);
+
+/// \brief      Handler for the `relays` command
+bool exec_relay(const char* command);
 
 ///< \brief     Callback for program changes
 void handle_program_change(uint8_t program);

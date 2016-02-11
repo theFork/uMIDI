@@ -20,9 +20,11 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include "lib/gpio.h"
 #include "lib/leds.h"
 #include "lib/usb.h"
 
@@ -88,6 +90,75 @@ bool exec_led(const char* command)
         return false;
     }
 
+    return true;
+}
+
+bool exec_relay(const char* command)
+{
+    // Abort if the command is malformed
+    if (strlen(command) != 8 || command[3] != ' ' || command[6] != ' ') {
+        usb_puts("Malformed command" USB_NEWLINE);
+        return false;
+    }
+
+    // Select relay (corresponding gpio) to manipulate
+    // TODO: Create global aliases for the gpio pins
+    struct gpio_pin selected_gpio;
+
+    // Tune/Mute
+    if (command[4] == 't' && command[5] == 'm') {
+        selected_gpio = gpio_config.header1.pin2;
+    }
+    // Loopers
+    else if (command[4] == 'l') {
+        flash_led(LED_RED);
+        switch (command[5]) {
+            case '1':
+                selected_gpio = gpio_config.header1.pin3;
+                break;
+            case '2':
+                selected_gpio = gpio_config.header1.pin4;
+                break;
+            case '3':
+                selected_gpio = gpio_config.header1.pin5;
+                break;
+            case '4':
+                selected_gpio = gpio_config.header1.pin6;
+                break;
+            case '5':
+                selected_gpio = gpio_config.header1.pin7;
+                break;
+            default:
+                usb_puts("No such looper relay" USB_NEWLINE);
+                return false;
+        }
+    }
+    // Switches
+    else if (command[4] == 's') {
+        switch (command[5]) {
+            case '1':
+                selected_gpio = gpio_config.header1.pin8;
+                break;
+            case '2':
+                selected_gpio = gpio_config.header1.pin9;
+                break;
+            default:
+                usb_puts("No such switch relay" USB_NEWLINE);
+                return false;
+        }
+    }
+    else {
+        flash_led(LED_RED);
+        usb_puts("Unrecognized relay" USB_NEWLINE);
+        return false;
+    }
+
+    // Parse action and switch relay
+    bool action = false;
+    if (command[7] == 'a') {
+        action = true;
+    }
+    gpio_set(selected_gpio, action);
     return true;
 }
 

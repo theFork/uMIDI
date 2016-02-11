@@ -116,5 +116,23 @@ struct serial_command serial_commands[] = {
                        "      't' = toggle",
         .handler = &exec_led
     },
+    {
+        .cmd_string = "rel",
+        .help_string = "<r> <s>\n"
+                       "Manipulates the switchers relays:\n"
+                       "<l> : Relay to manipulate\n"
+                       "      'tm'  = Tune/Mute\n"
+                       "      'l1' = Loop 1\n"
+                       "      'l2' = Loop 2\n"
+                       "      'l3' = Loop 3\n"
+                       "      'l4' = Loop 4\n"
+                       "      'l5' = Loop 5\n"
+                       "      's1' = Switch 1\n"
+                       "      's2' = Switch 2\n"
+                       "<s> : Relay status\n"
+                       "      'a' = activate relay\n"
+                       "      'd' = deactivate relay",
+        .handler = &exec_relay
+    }
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);
