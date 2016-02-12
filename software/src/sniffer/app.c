@@ -40,6 +40,28 @@
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
+bool exec_channel(const char* command)
+{
+    // Abort if the command is malformed
+    if (strlen(command) < 9 || command[7] != ' ') {
+        usb_puts("Malformed command" USB_NEWLINE);
+        return false;
+    }
+
+    enum midi_channel channel = atoi(command+8);
+    if (channel == 0) {
+        usb_puts("Listening on all channels");
+        set_omni_mode(true);
+    }
+    else {
+        usb_printf("Listening on MIDI channel %u" USB_NEWLINE, channel);
+        set_midi_rx_channel(channel-1);
+        set_omni_mode(false);
+    }
+
+    return true;
+}
+
 /// \brief      Handler for the `led` command
 bool exec_led(const char* command)
 {

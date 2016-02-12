@@ -103,6 +103,13 @@ uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background
 //---------------- Custom commands ----------------//
 struct serial_command serial_commands[] = {
     {
+        .cmd_string = "channel",
+        .help_string = "<n>\n"
+                       "Sets the MIDI receive channel to sniff on:\n"
+                       "<n> : channel number [1..16] or 'x' for Omni mode",
+        .handler = &exec_channel
+    },
+    {
         .cmd_string = "led",
         .help_string = "<l> <a>\n"
                        "Manipulates the two on-board LEDs:\n"
