@@ -182,6 +182,24 @@ void send_note_on(midi_value_t note);
 ///                 the new MIDI program to load
 void send_program_change(midi_value_t program);
 
+/// \brief      Updates the midi receive channel
+/// \param      channel
+///                 the channel to listen on
+void set_midi_rx_channel(enum midi_channel channel);
+
+/// \brief      Updates the midi transmit channel
+/// \param      channel
+///                 the channel to talk on
+void set_midi_tx_channel(enum midi_channel channel);
+
+/// \brief      Puts the device into Omni mode
+/// \details    In Omni mode the device handles all received MIDI messages regardless of the
+///             channel. When not in Omni mode, only messages on the configured receive channel
+///             are processed.
+/// \param      enable
+///                 if `true`, Omni mode is enabled; if `false`, it is disabled
+void set_omni_mode(bool enable);
+
 
 //---------------- EOF ----------------//
 #endif // _MIDI_H

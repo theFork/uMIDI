@@ -134,6 +134,21 @@ void send_program_change(midi_value_t pnum)
     uart_write(pnum & 0x7f);
 }
 
+void set_midi_rx_channel(enum midi_channel channel)
+{
+    rx_channel = channel;
+}
+
+void set_midi_tx_channel(enum midi_channel channel)
+{
+    tx_channel = channel;
+}
+
+void set_omni_mode(bool enable)
+{
+    omni_mode = enable;
+}
+
 
 
 ////////////////////////////////////////////////////////////////
