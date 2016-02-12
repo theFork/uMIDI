@@ -38,8 +38,6 @@
 ///< \brief     Implementation of the `chan` command
 bool exec_channel(const char* command);
 
-bool exec_led(const char* command);
-
 ///< \brief     Callback for control change messges
 void handle_control_change(uint8_t controller, uint8_t value);
 
