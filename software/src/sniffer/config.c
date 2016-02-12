@@ -109,19 +109,5 @@ struct serial_command serial_commands[] = {
                        "<n> : channel number [1..16] or 'x' for Omni mode",
         .handler = &exec_channel
     },
-    {
-        .cmd_string = "led",
-        .help_string = "<l> <a>\n"
-                       "Manipulates the two on-board LEDs:\n"
-                       "<l> : LED to manipulate\n"
-                       "      'g' = green LED\n"
-                       "      'r' = red LED\n"
-                       "      '!' = both LEDs\n"
-                       "<a> : LED mode / action\n"
-                       "      'b' = blink\n"
-                       "      'f' = flash\n"
-                       "      't' = toggle",
-        .handler = &exec_led
-    },
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);
