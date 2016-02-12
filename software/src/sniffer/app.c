@@ -23,10 +23,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "lib/leds.h"
+#include "lib/midi.h"
 #include "lib/usb.h"
 
-#include "config.h"
 #include "app.h"
 
 
@@ -60,24 +59,4 @@ bool exec_channel(const char* command)
     }
 
     return true;
-}
-
-void handle_control_change(uint8_t controller, uint8_t value)
-{
-    //usb_printf("CC %u %u" USB_NEWLINE, controller, value);
-}
-
-void handle_note_off(uint8_t note)
-{
-    //usb_printf("NOTE OFF %u" USB_NEWLINE, note);
-}
-
-void handle_note_on(uint8_t note)
-{
-    //usb_printf("NOTE ON %u" USB_NEWLINE, note);
-}
-
-void handle_program_change(uint8_t program)
-{
-    //usb_printf("PC %u %u" USB_NEWLINE, program);
 }
