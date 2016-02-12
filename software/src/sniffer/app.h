@@ -38,18 +38,6 @@
 ///< \brief     Implementation of the `chan` command
 bool exec_channel(const char* command);
 
-///< \brief     Callback for control change messges
-void handle_control_change(uint8_t controller, uint8_t value);
-
-///< \brief     Callback for note off messges
-void handle_note_off(uint8_t note);
-
-///< \brief     Callback for not on messages
-void handle_note_on(uint8_t note);
-
-///< \brief     Callback for program changes
-void handle_program_change(uint8_t program);
-
 
 //---------------- EOF ----------------//
 #endif // _APP_H

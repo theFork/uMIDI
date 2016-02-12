@@ -74,10 +74,10 @@ struct gpio_config gpio_config = {
 //---------------- MIDI ----------------//
 struct midi_config midi_config = {
     .event_handlers = {
-        .control_change = handle_control_change,
-        .note_off       = handle_note_off,
-        .note_on        = handle_note_on,
-        .program_change = handle_program_change
+        .control_change = NULL,
+        .note_off       = NULL,
+        .note_on        = NULL,
+        .program_change = NULL
     },
     .rx_channel = MIDI_CHANNEL_01,
     .tx_channel = MIDI_CHANNEL_01,
