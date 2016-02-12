@@ -40,8 +40,11 @@
 /// \brief      UART used for MIDI I/O
 #define     MIDI_UART                   USARTE0
 
-/// \brief      Bitmask for the MIDI status byte
-#define     MIDI_COMMAND_MASK           0xf0
+/// \brief      Bitmask for the channel in the MIDI status byte
+#define     MIDI_CHANNEL_MASK           0x0f
+
+/// \brief      Bitmask for the message type in the MIDI status byte
+#define     MIDI_MESSAGE_TYPE_MASK      0xf0
 
 /// \brief      Maximum MIDI value
 #define     MIDI_MAX_VALUE              127
@@ -123,7 +126,9 @@ struct midi_event_handlers
 struct midi_config
 {
     struct midi_event_handlers  event_handlers; ///< MIDI event handler callbacks
+    enum midi_channel           rx_channel;     ///< MIDI receive channel
     enum midi_channel           tx_channel;     ///< MIDI transmit channel
+    bool                        omni_mode;      ///< Setting this flag enables Omni mode
 };
 
 

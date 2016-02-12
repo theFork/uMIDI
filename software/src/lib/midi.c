@@ -33,16 +33,24 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-/// \brief      Current state of the MIDI state machine
-static enum midi_state midi_state = MIDI_STATE_IDLE;
-
-/// \brief      The MIDI transmit channel
-/// \see        init_midi_module
-static enum midi_channel tx_channel = 1;
-
 /// \brief      The MIDI event handlers
 /// \see        init_midi_module
 static struct midi_event_handlers* event_handlers;
+
+/// \brief      Current state of the MIDI state machine
+static enum midi_state midi_state = MIDI_STATE_IDLE;
+
+/// \brief      Omni mode state
+/// \see        init_midi_module
+static bool omni_mode;
+
+/// \brief      The MIDI receive channel
+/// \see        init_midi_module
+static enum midi_channel rx_channel;
+
+/// \brief      The MIDI transmit channel
+/// \see        init_midi_module
+static enum midi_channel tx_channel;
 
 
 
@@ -66,8 +74,10 @@ void init_midi_module(const struct midi_config* const config)
     MIDI_UART.CTRLA = USART_RXCINTLVL_LO_gc;
     MIDI_UART.CTRLB = USART_RXEN_bm | USART_TXEN_bm;
 
-    // Save MIDI event handlers
-    tx_channel = config->tx_channel & 0x0f;
+    // Save MIDI RX/TX channels, omni mode state and event handlers
+    rx_channel = config->rx_channel;
+    tx_channel = config->tx_channel;
+    omni_mode = config->omni_mode;
     event_handlers = (struct midi_event_handlers*) &config->event_handlers;
 }
 
@@ -135,7 +145,12 @@ void send_program_change(midi_value_t pnum)
 ///                 the MIDI data byte to be parsed
 static void handle_status_byte(midi_value_t data)
 {
-    switch (data & MIDI_COMMAND_MASK) {
+    // If the device is not in omni mode, ignore messages on foreign channels
+    if (!omni_mode && (data & MIDI_CHANNEL_MASK) != rx_channel) {
+        return;
+    }
+
+    switch (data & MIDI_MESSAGE_TYPE_MASK) {
     case MIDI_MSG_TYPE_NOTE_OFF:
         midi_state = MIDI_STATE_NOTE_OFF;
         break;
