@@ -27,8 +27,9 @@
 //---------------- includes ----------------//
 #include <stdbool.h>
 #include <stdint.h>
-
 #include <avr/io.h>
+
+#include "gpio.h"
 
 
 //---------------- constants ----------------//
@@ -147,6 +148,12 @@ static inline void uart_write(uint8_t data) {
 /// \param      config
 ///                 the MIDI module configuration to apply
 void init_midi_module(const struct midi_config* config);
+
+/// \brief      Reads the MIDI channel configuration from the solder jumpers
+/// \param      jumpers
+///                 the the solder jumpers configuration struct
+/// \return     the selected MIDI channel
+enum midi_channel read_midi_channel_from_jumpers(const struct jumpers * jumpers);
 
 /// \brief      Sends a control change message
 /// \param      controller

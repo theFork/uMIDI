@@ -24,6 +24,7 @@
 #include <avr/interrupt.h>
 #include <avr/io.h>
 
+#include "gpio.h"
 #include "midi.h"
 #include "leds.h"
 
@@ -68,6 +69,14 @@ void init_midi_module(const struct midi_config* const config)
     // Save MIDI event handlers
     tx_channel = config->tx_channel & 0x0f;
     event_handlers = (struct midi_event_handlers*) &config->event_handlers;
+}
+
+enum midi_channel read_midi_channel_from_jumpers(const struct jumpers * jumpers)
+{
+    return gpio_get(jumpers->jp5) << 3
+         | gpio_get(jumpers->jp4) << 2
+         | gpio_get(jumpers->jp3) << 1
+         | gpio_get(jumpers->jp2);
 }
 
 void send_control_change(midi_value_t controller, midi_value_t value)
