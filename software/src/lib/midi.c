@@ -70,7 +70,8 @@ void init_midi_module(const struct midi_config* const config)
     event_handlers = (struct midi_event_handlers*) &config->event_handlers;
 }
 
-void send_control_change(midi_value_t controller, midi_value_t value) {
+void send_control_change(midi_value_t controller, midi_value_t value)
+{
     // Send control change status byte
     uart_write((uint8_t) MIDI_MSG_TYPE_CONTROL_CHANGE | (tx_channel & 0x7f));
 
@@ -81,7 +82,8 @@ void send_control_change(midi_value_t controller, midi_value_t value) {
     uart_write(value & 0x7f);
 }
 
-void send_note_off(midi_value_t note) {
+void send_note_off(midi_value_t note)
+{
     // Send note off status byte
     uart_write((uint8_t) MIDI_MSG_TYPE_NOTE_OFF | (tx_channel & 0x7f));
 
@@ -92,7 +94,8 @@ void send_note_off(midi_value_t note) {
     uart_write(MIDI_MAX_VALUE);
 }
 
-void send_note_on(midi_value_t note) {
+void send_note_on(midi_value_t note)
+{
     // Send note on status byte
     uart_write((uint8_t) MIDI_MSG_TYPE_NOTE_ON | (tx_channel & 0x7f));
 
@@ -103,7 +106,8 @@ void send_note_on(midi_value_t note) {
     uart_write(MIDI_MAX_VALUE);
 }
 
-void send_program_change(midi_value_t pnum) {
+void send_program_change(midi_value_t pnum)
+{
     // Send program change status byte
     uart_write((uint8_t) MIDI_MSG_TYPE_PROGRAM_CHANGE | (tx_channel & 0x7f));
 
@@ -120,7 +124,8 @@ void send_program_change(midi_value_t pnum) {
 /// \brief      Updates the MIDI state machine according to the supplied data byte
 /// \param      data
 ///                 the MIDI data byte to be parsed
-static void handle_status_byte(midi_value_t data) {
+static void handle_status_byte(midi_value_t data)
+{
     switch (data & MIDI_COMMAND_MASK) {
     case MIDI_MSG_TYPE_NOTE_OFF:
         midi_state = MIDI_STATE_NOTE_OFF;
