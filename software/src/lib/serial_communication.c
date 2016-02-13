@@ -173,18 +173,32 @@ static inline bool exec_update(const char * const command)
         ++num_pages;
     }
 
+    // Abort if the program is too big to fit into memory
+    if (num_pages > MAX_PAGE_NUM) {
+        usb_puts("Program is too big! Aborting.");
+        return true;
+    }
+
+    // Warn if the program is approaching the maximum size
+    uint8_t pages_left = MAX_PAGE_NUM - num_pages;
+    if (pages_left < 20) {
+        usb_printf("Warning: Only %u pages of program space left!" USB_NEWLINE, pages_left);
+    }
+
     // Erase temporary application memory
     usb_puts("Erasing temporary application flash section...");
     wdt_disable();
     uint8_t error_code = xboot_app_temp_erase();
     if (error_code != XB_SUCCESS) {
         usb_printf("Error erasing temprary application section: %d" USB_NEWLINE, error_code);
-        return false;
+        return true;
     }
     wdt_reenable();
 
     // Switch to update mode
-    usb_printf("Ready to receive %u bytes (%u pages)..." USB_NEWLINE, update_bytes_pending, num_pages);
+    usb_printf("Ready to receive %u bytes (%u pages)..." USB_NEWLINE,
+               update_bytes_pending,
+               num_pages);
     echo_on = false;
     update_in_progress = true;
     page_buffer_index = 0;
@@ -404,7 +418,7 @@ static inline void process_update_data(void)
                    num_pages);
         */
         usb_printf("Writing temporary application page [%3u", temp_app_addr / SPM_PAGESIZE + 1);
-        usb_printf("/%3u]..." USB_NEWLINE, num_pages);
+        usb_printf("/%3u/%3u]..." USB_NEWLINE, num_pages, MAX_PAGE_NUM);
         if (xboot_app_temp_write_page(temp_app_addr, page_buffer, 0) != XB_SUCCESS) {
             goto fail;
         }
