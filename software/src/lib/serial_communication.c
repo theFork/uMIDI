@@ -255,6 +255,13 @@ static inline void process_command_char(void)
         return;
     }
 
+    if (data == '\b') {
+        if (cmd_buffer_index > 0) {
+            --cmd_buffer_index;
+        }
+        return;
+    }
+
     // Add char to command buffer; cycle on overflow
     cmd_buffer[cmd_buffer_index] = data;
     ++cmd_buffer_index;
