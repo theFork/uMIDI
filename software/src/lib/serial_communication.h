@@ -33,9 +33,6 @@
 
 //---------------- constants ----------------//
 
-/// \brief      Device reset timout in [s]
-#define RESET_TIMEOUT           2
-
 /// \brief      Size of the command buffer of the shell
 /// \details    Must be int the range of `uint8_t`.
 #define CMD_BUFFER_SIZE         80
@@ -46,6 +43,12 @@
 
 /// \brief      ASCII escape character
 #define ESCAPE_CHAR_CODE        27
+
+/// \brief      Maximum program size in number of pages
+#define MAX_PAGE_NUM            (PROGMEM_SIZE / SPM_PAGESIZE / 2 - 1)
+
+/// \brief      Device reset timout in [s]
+#define RESET_TIMEOUT           2
 
 
 //---------------- data types ----------------//
