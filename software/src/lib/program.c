@@ -106,11 +106,19 @@ void init_program_module(uint16_t program_initializer_value, void (* const execu
 {
     program_initializer = program_initializer_value;
     execute_program = execute_program_callback;
+    current_program.number = 0;
+    current_program.data = program_initializer;
 }
 
 uint16_t read_program_data(uint8_t number)
 {
     return eeprom_read_word(&program_data_storage[number]);
+}
+
+void update_current_program(uint16_t program_data)
+{
+    current_program.data = program_data;
+    write_program(current_program.number, program_data);
 }
 
 void wipe_current_bank(void)
