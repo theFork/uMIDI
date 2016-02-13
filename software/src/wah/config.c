@@ -70,6 +70,12 @@ struct gpio_config gpio_config = {
         .pin7 = { &PORTD, 1, GPIO_UNUSED },
         .pin8 = { &PORTD, 2, GPIO_OUTPUT },         // Toggle switch LED
         .pin9 = { &PORTD, 3, GPIO_UNUSED }
+    },
+    .jumpers = {
+        .jp2 =  { &PORTR, 0, GPIO_INPUT_PULLUP },
+        .jp3 =  { &PORTR, 1, GPIO_INPUT_PULLUP },
+        .jp4 =  { &PORTD, 4, GPIO_INPUT_PULLUP },
+        .jp5 =  { &PORTD, 5, GPIO_INPUT_PULLUP }
     }
 };
 
