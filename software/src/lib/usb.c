@@ -68,11 +68,6 @@ static USB_ClassInfo_CDC_Device_t VirtualSerial_CDC_Interface = {
 /// \see        EVENT_CDC_Device_ControLineStateChanged
 static bool ok_to_send = 0;
 
-/// \brief      Terminal echo flag
-/// \details    When this flag is set, received bytes are immediately echoed back to provide a
-///             shell-like experience.
-static bool send_echo = true;
-
 
 
 ////////////////////////////////////////////////////////////////
@@ -180,16 +175,6 @@ int16_t usb_getc(void)
         data = EOF;
     }
 
-    // Echo back the received character if desired and possible
-    if (send_echo) {
-        if (data == '\r') {
-            send_string(USB_NEWLINE);
-        }
-        else if (0 <= data && data < 128) {
-            usb_putc(data);
-        }
-    }
-
     return data;
 }
 
@@ -230,9 +215,4 @@ void usb_puts(const char * const string)
 {
     send_string(string);
     send_string(USB_NEWLINE);
-}
-
-void usb_set_echo(bool echo)
-{
-    send_echo = echo;
 }

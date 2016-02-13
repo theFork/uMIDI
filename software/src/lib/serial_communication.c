@@ -77,6 +77,11 @@ static uint16_t page_buffer_index = 0;
 /// \brief      Temporary application write address
 static uint32_t temp_app_addr = 0;
 
+/// \brief      Terminal echo flag
+/// \details    When this flag is set, received bytes are immediately echoed back to provide a
+///             shell-like experience.
+static bool echo_on = true;
+
 
 
 ////////////////////////////////////////////////////////////////
@@ -144,7 +149,7 @@ static inline bool exec_help(void)
 }
 
 /// \brief      Handler for the `update` command
-static inline bool exec_update(const char* command)
+static inline bool exec_update(const char * const command)
 {
     // Make sure the command is well-formed
     if (command[8] != ' ') {
@@ -174,7 +179,7 @@ static inline bool exec_update(const char* command)
 
     // Switch to update mode
     usb_printf("Ready to receive %u bytes (%u pages)..." USB_NEWLINE, update_bytes_pending, num_pages);
-    usb_set_echo(false);
+    echo_on = false;
     update_in_progress = true;
     page_buffer_index = 0;
     temp_app_addr = 0;
@@ -188,7 +193,7 @@ static inline bool exec_update(const char* command)
 ///             non-zero value, an error message is sent.
 /// \param      command
 ///                 the full command line as a C-string
-static inline void execute_command(const char* command)
+static inline void execute_command(const char * const command)
 {
     bool success = true;
 
@@ -249,12 +254,23 @@ static inline void process_command_char(void)
     // Fetch a character from the USB data buffer
     char data = usb_getc();
 
+    // Echo back the received character if desired and possible
+    if (echo_on) {
+        if (data == '\r') {
+            usb_puts("");
+        }
+        else if (0 <= data && data < 128) {
+            usb_putc(data);
+        }
+    }
+
     // Parse and execute commands if the enter key was hit
     if (data == '\r') {
         execute_command(cmd_buffer);
         return;
     }
 
+    // Rewind buffer index if backspace was received
     if (data == '\b') {
         if (cmd_buffer_index > 0) {
             --cmd_buffer_index;
@@ -346,7 +362,7 @@ fail:
     // Return to normal operation if the update failed
     usb_puts("Update failed!");
     update_in_progress = false;
-    usb_set_echo(true);
+    echo_on = true;
 }
 
 void init_serial_communication(const struct serial_command * const commands, uint8_t commands_size)
