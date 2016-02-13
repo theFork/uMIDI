@@ -67,12 +67,21 @@ struct gpio_header
     struct gpio_pin     pin9;       ///< Pin 9 in the pin header on the PCB
 };
 
+struct jumpers
+{
+    struct gpio_pin     jp2;        ///< JP2 on the bottom side of the PCB
+    struct gpio_pin     jp3;        ///< JP3 on the bottom side of the PCB
+    struct gpio_pin     jp4;        ///< JP4 on the bottom side of the PCB
+    struct gpio_pin     jp5;        ///< JP5 on the bottom side of the PCB
+};
+
 /// \brief      Configurations for all available GPIO pins
 struct gpio_config
 {
     struct gpio_header  header1;    ///< Pin header GPIO1 on the PCB
     struct gpio_header  header2;    ///< Pin header GPIO2 on the PCB
     struct gpio_header  header3;    ///< Pin header GPIO3 on the PCB
+    struct jumpers      jumpers;    ///< Solder jumpers on the bottom side of the PCB
 };
 
 

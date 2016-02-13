@@ -27,8 +27,9 @@
 //---------------- includes ----------------//
 #include <stdbool.h>
 #include <stdint.h>
-
 #include <avr/io.h>
+
+#include "gpio.h"
 
 
 //---------------- constants ----------------//
@@ -39,8 +40,11 @@
 /// \brief      UART used for MIDI I/O
 #define     MIDI_UART                   USARTE0
 
-/// \brief      Bitmask for the MIDI status byte
-#define     MIDI_COMMAND_MASK           0xf0
+/// \brief      Bitmask for the channel in the MIDI status byte
+#define     MIDI_CHANNEL_MASK           0x0f
+
+/// \brief      Bitmask for the message type in the MIDI status byte
+#define     MIDI_MESSAGE_TYPE_MASK      0xf0
 
 /// \brief      Maximum MIDI value
 #define     MIDI_MAX_VALUE              127
@@ -122,7 +126,9 @@ struct midi_event_handlers
 struct midi_config
 {
     struct midi_event_handlers  event_handlers; ///< MIDI event handler callbacks
+    enum midi_channel           rx_channel;     ///< MIDI receive channel
     enum midi_channel           tx_channel;     ///< MIDI transmit channel
+    bool                        omni_mode;      ///< Setting this flag enables Omni mode
 };
 
 
@@ -148,6 +154,12 @@ static inline void uart_write(uint8_t data) {
 ///                 the MIDI module configuration to apply
 void init_midi_module(const struct midi_config* config);
 
+/// \brief      Reads the MIDI channel configuration from the solder jumpers
+/// \param      jumpers
+///                 the the solder jumpers configuration struct
+/// \return     the selected MIDI channel
+enum midi_channel read_midi_channel_from_jumpers(const struct jumpers * jumpers);
+
 /// \brief      Sends a control change message
 /// \param      controller
 ///                 the MIDI controller number
@@ -169,6 +181,24 @@ void send_note_on(midi_value_t note);
 /// \param      program
 ///                 the new MIDI program to load
 void send_program_change(midi_value_t program);
+
+/// \brief      Updates the midi receive channel
+/// \param      channel
+///                 the channel to listen on
+void set_midi_rx_channel(enum midi_channel channel);
+
+/// \brief      Updates the midi transmit channel
+/// \param      channel
+///                 the channel to talk on
+void set_midi_tx_channel(enum midi_channel channel);
+
+/// \brief      Puts the device into Omni mode
+/// \details    In Omni mode the device handles all received MIDI messages regardless of the
+///             channel. When not in Omni mode, only messages on the configured receive channel
+///             are processed.
+/// \param      enable
+///                 if `true`, Omni mode is enabled; if `false`, it is disabled
+void set_omni_mode(bool enable);
 
 
 //---------------- EOF ----------------//

@@ -68,6 +68,12 @@ struct gpio_config gpio_config = {
         .pin7 = { &PORTD, 1, GPIO_UNUSED },
         .pin8 = { &PORTD, 2, GPIO_UNUSED },
         .pin9 = { &PORTD, 3, GPIO_UNUSED }
+    },
+    .jumpers = {
+        .jp2 =  { &PORTR, 0, GPIO_INPUT_PULLUP },
+        .jp3 =  { &PORTR, 1, GPIO_INPUT_PULLUP },
+        .jp4 =  { &PORTD, 4, GPIO_INPUT_PULLUP },
+        .jp5 =  { &PORTD, 5, GPIO_INPUT_PULLUP }
     }
 };
 
@@ -84,6 +90,7 @@ struct midi_config midi_config = {
 
 //---------------- Background tasks ----------------//
 background_task_t high_frequency_tasks[] = {
+    &serial_communication_task,
 };
 uint8_t high_frequency_tasks_size = sizeof(high_frequency_tasks)/sizeof(background_task_t);
 
@@ -94,7 +101,6 @@ uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background
 
 background_task_t low_frequency_tasks[] = {
     &update_leds,
-    &serial_communication_task,
 };
 uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);
 
