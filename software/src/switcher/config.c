@@ -133,6 +133,18 @@ struct serial_command serial_commands[] = {
                        "      'a' = activate relay\n"
                        "      'd' = deactivate relay",
         .handler = &exec_relay
+    },
+    {
+        .cmd_string = "save",
+        .help_string = "Saves the current program configuration",
+        .handler = &exec_save
+    },
+    {
+        .cmd_string = "load",
+        .help_string = "<n>\n"
+                       "Loads the specified program:\n"
+                       "<n> : program number",
+        .handler = &exec_load
     }
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);

@@ -106,6 +106,11 @@ void init_program_module(uint16_t program_initializer, void (*execute_program_ca
 ///                 Program number [0..119].
 uint16_t read_program_data(uint8_t number);
 
+/// \brief      Updates and stores the current program
+/// \param      program_data
+///                 the new configuration
+void update_current_program(uint16_t program_data);
+
 /// \brief      Reinitializes all programs in the current bank.
 /// \see        wipe_current_program
 void wipe_current_bank(void);

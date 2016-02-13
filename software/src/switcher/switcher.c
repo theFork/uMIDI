@@ -55,6 +55,8 @@ union program_data
     } bit;
 };
 
+static union program_data current_program;
+
 
 ////////////////////////////////////////////////////////////////
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
@@ -62,17 +64,18 @@ union program_data
 
 void execute_program(uint16_t program_data)
 {
-    union program_data program;
-    program.word = program_data;
+    current_program.word = program_data;
 
-    gpio_set(GPIO_OUT_TUNE_MUTE, program.bit.tuner);
-    gpio_set(GPIO_OUT_LOOP1, program.bit.loop1);
-    gpio_set(GPIO_OUT_LOOP2, program.bit.loop2);
-    gpio_set(GPIO_OUT_LOOP3, program.bit.loop3);
-    gpio_set(GPIO_OUT_LOOP4, program.bit.loop4);
-    gpio_set(GPIO_OUT_LOOP5, program.bit.loop5);
-    gpio_set(GPIO_OUT_SWITCH1, program.bit.switch1);
-    gpio_set(GPIO_OUT_SWITCH2, program.bit.switch2);
+    usb_printf("Applying relais configuration: %04x" USB_NEWLINE, current_program.word);
+
+    gpio_set(GPIO_OUT_TUNE_MUTE, current_program.bit.tuner);
+    gpio_set(GPIO_OUT_LOOP1, current_program.bit.loop1);
+    gpio_set(GPIO_OUT_LOOP2, current_program.bit.loop2);
+    gpio_set(GPIO_OUT_LOOP3, current_program.bit.loop3);
+    gpio_set(GPIO_OUT_LOOP4, current_program.bit.loop4);
+    gpio_set(GPIO_OUT_LOOP5, current_program.bit.loop5);
+    gpio_set(GPIO_OUT_SWITCH1, current_program.bit.switch1);
+    gpio_set(GPIO_OUT_SWITCH2, current_program.bit.switch2);
 
 }
 
@@ -127,6 +130,19 @@ bool exec_led(const char* command)
     return true;
 }
 
+bool exec_load(const char* command)
+{
+    // Abort if the command is malformed
+    if (strlen(command) < 6 || command[4] != ' ') {
+        usb_puts("Malformed command" USB_NEWLINE);
+        return false;
+    }
+
+    uint8_t number = atoi(command+5);
+    enter_program(number);
+    return true;
+}
+
 bool exec_relay(const char* command)
 {
     // Abort if the command is malformed
@@ -136,12 +152,13 @@ bool exec_relay(const char* command)
     }
 
     // Select relay (corresponding gpio) to manipulate
-    // TODO: Create global aliases for the gpio pins
     struct gpio_pin selected_gpio;
+    uint8_t program_bit_index;
 
     // Tune/Mute
     if (command[4] == 't' && command[5] == 'm') {
         selected_gpio = GPIO_OUT_TUNE_MUTE;
+        program_bit_index = 0;
     }
     // Loopers
     else if (command[4] == 'l') {
@@ -149,18 +166,23 @@ bool exec_relay(const char* command)
         switch (command[5]) {
             case '1':
                 selected_gpio = GPIO_OUT_LOOP1;
+                program_bit_index = 1;
                 break;
             case '2':
                 selected_gpio = GPIO_OUT_LOOP2;
+                program_bit_index = 2;
                 break;
             case '3':
                 selected_gpio = GPIO_OUT_LOOP3;
+                program_bit_index = 3;
                 break;
             case '4':
                 selected_gpio = GPIO_OUT_LOOP4;
+                program_bit_index = 4;
                 break;
             case '5':
                 selected_gpio = GPIO_OUT_LOOP5;
+                program_bit_index = 5;
                 break;
             default:
                 usb_puts("No such looper relay" USB_NEWLINE);
@@ -172,9 +194,11 @@ bool exec_relay(const char* command)
         switch (command[5]) {
             case '1':
                 selected_gpio = GPIO_OUT_SWITCH1;
+                program_bit_index = 6;
                 break;
             case '2':
                 selected_gpio = GPIO_OUT_SWITCH2;
+                program_bit_index = 7;
                 break;
             default:
                 usb_puts("No such switch relay" USB_NEWLINE);
@@ -191,8 +215,24 @@ bool exec_relay(const char* command)
     bool action = false;
     if (command[7] == 'a') {
         action = true;
+        current_program.word |= _BV(program_bit_index);
+    }
+    else {
+        current_program.word &=~ _BV(program_bit_index);
     }
     gpio_set(selected_gpio, action);
+    return true;
+}
+
+bool exec_save(const char* command)
+{
+    // Abort if the command is malformed
+    if (strlen(command) != 4) {
+        usb_puts("Malformed command" USB_NEWLINE);
+        return false;
+    }
+
+    update_current_program(current_program.word);
     return true;
 }
 

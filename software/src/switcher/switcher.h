@@ -37,8 +37,14 @@
 /// \brief      Handler for the `led` command
 bool exec_led(const char* command);
 
+/// \brief      Handler for the `load` command
+bool exec_load(const char* command);
+
 /// \brief      Handler for the `relays` command
 bool exec_relay(const char* command);
+
+/// \brief      Handler for the `save` command
+bool exec_save(const char* command);
 
 /// \brief      TODO
 void execute_program(uint16_t program_data);
