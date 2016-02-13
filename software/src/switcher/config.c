@@ -30,7 +30,7 @@
 #include "lib/usb.h"
 
 #include "config.h"
-#include "app.h"
+#include "switcher.h"
 
 
 ////////////////////////////////////////////////////////////////
