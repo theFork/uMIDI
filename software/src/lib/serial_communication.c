@@ -44,6 +44,12 @@ static char cmd_buffer[CMD_BUFFER_SIZE] = "";
 /// \brief      Command buffer write index
 static uint8_t cmd_buffer_index = 0;
 
+/// \brief      Buffer for incoming commands
+static char cmd_history[CMD_HISTORY_SIZE][CMD_BUFFER_SIZE] = {"",};
+
+/// \brief      Command buffer write index
+static uint8_t cmd_history_index = 0;
+
 /// \brief      Array of user-defined commands
 /// \see        init_serial_communication
 static const struct serial_command* user_commands;
@@ -76,6 +82,11 @@ static uint16_t page_buffer_index = 0;
 
 /// \brief      Temporary application write address
 static uint32_t temp_app_addr = 0;
+
+/// \brief      Terminal echo flag
+/// \details    When this flag is set, received bytes are immediately echoed back to provide a
+///             shell-like experience.
+static bool echo_on = true;
 
 
 
@@ -144,7 +155,7 @@ static inline bool exec_help(void)
 }
 
 /// \brief      Handler for the `update` command
-static inline bool exec_update(const char* command)
+static inline bool exec_update(const char * const command)
 {
     // Make sure the command is well-formed
     if (command[8] != ' ') {
@@ -174,7 +185,7 @@ static inline bool exec_update(const char* command)
 
     // Switch to update mode
     usb_printf("Ready to receive %u bytes (%u pages)..." USB_NEWLINE, update_bytes_pending, num_pages);
-    usb_set_echo(false);
+    echo_on = false;
     update_in_progress = true;
     page_buffer_index = 0;
     temp_app_addr = 0;
@@ -188,7 +199,7 @@ static inline bool exec_update(const char* command)
 ///             non-zero value, an error message is sent.
 /// \param      command
 ///                 the full command line as a C-string
-static inline void execute_command(const char* command)
+static inline void execute_command(const char * const command)
 {
     bool success = true;
 
@@ -241,6 +252,68 @@ cleanup:
     cmd_buffer_index = 0;
 }
 
+/// \brief      Prints out a command from the history
+/// \details    Clears out the last printed command first.
+/// \param      offset
+///                 offset of the command to be printed
+static inline void print_command_from_history(const int8_t offset)
+{
+    // Cycle command history index
+    cmd_history_index += CMD_HISTORY_SIZE;
+    cmd_history_index += offset;
+    cmd_history_index %= CMD_HISTORY_SIZE;
+
+    // Overwrite previously printed command
+    usb_putc('\r');
+
+    // Print out command and save command length for the next invocation
+    usb_printf("%-40s", cmd_history[cmd_history_index]);
+}
+
+/// \brief      Handles ANSI escape sequences
+/// \return     `true` as long as we are in the middle of an escape sequence
+static bool handle_escape_sequence(const char data)
+{
+    static uint8_t escape_byte_index = 0;
+    if (data == ESCAPE_CHAR_CODE) {
+        escape_byte_index = 1;
+        return true;
+    }
+    if (escape_byte_index == 1) {
+        if (data == '[') {
+            escape_byte_index = 2;
+        }
+        else {
+            usb_puts("Unrecognized escape sequence!");
+            escape_byte_index = 0;
+        }
+        return true;
+    }
+    if (escape_byte_index == 2) {
+        if (data == 'A') {
+            print_command_from_history(-1);
+        }
+        if (data == 'B') {
+            print_command_from_history(1);
+        }
+        escape_byte_index = 3;
+        return true;
+    }
+    if (escape_byte_index == 3) {
+        usb_puts("");
+        escape_byte_index = 0;
+
+        // Execute selected command if the enter key was hit
+        if (data == '\r') {
+            execute_command(cmd_history[cmd_history_index]);
+            ++cmd_history_index;
+            cmd_history_index %= CMD_HISTORY_SIZE;
+        }
+        return true;
+    }
+    return false;
+}
+
 /// \brief      Processes a command character
 /// \details    If the supplied character is a carriage return, the command line read so far is
 ///             executed, otherwise the character is simply appended to a (circular!) buffer.
@@ -249,12 +322,31 @@ static inline void process_command_char(void)
     // Fetch a character from the USB data buffer
     char data = usb_getc();
 
+    // Handle escape sequence if any and abort
+    if (handle_escape_sequence(data)) {
+        return;
+    }
+
+    // Echo back the received character if desired and possible
+    if (echo_on) {
+        if (data == '\r') {
+            usb_puts("");
+        }
+        else if (0 <= data && data < 128) {
+            usb_putc(data);
+        }
+    }
+
     // Parse and execute commands if the enter key was hit
     if (data == '\r') {
+        strncpy(cmd_history[cmd_history_index], cmd_buffer, CMD_BUFFER_SIZE);
+        ++cmd_history_index;
+        cmd_history_index %= CMD_HISTORY_SIZE;
         execute_command(cmd_buffer);
         return;
     }
 
+    // Rewind buffer index if backspace was received
     if (data == '\b') {
         if (cmd_buffer_index > 0) {
             --cmd_buffer_index;
@@ -346,7 +438,7 @@ fail:
     // Return to normal operation if the update failed
     usb_puts("Update failed!");
     update_in_progress = false;
-    usb_set_echo(true);
+    echo_on = true;
 }
 
 void init_serial_communication(const struct serial_command * const commands, uint8_t commands_size)
