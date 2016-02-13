@@ -62,7 +62,10 @@ int main( void )
                                 low_frequency_tasks, low_frequency_tasks_size);
     init_usb_module();
     init_serial_communication(serial_commands, serial_commands_size);
-    init_program_module(0x0000, &execute_program);
+
+    // Initial program has alway tune/mute activated
+    init_program_module(0x01, &execute_program);
+    execute_program(0x01);
 
     // set watchdog for 128ms
     wdt_enable(WDT_PER_128CLK_gc);

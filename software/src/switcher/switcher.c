@@ -39,7 +39,10 @@
 
 union program_data
 {
+    // Either raw data in the memory ...
     uint16_t word;
+
+    // ... or named bits
     struct {
         bool tuner      : 1;
         bool loop1      : 1;
@@ -49,7 +52,7 @@ union program_data
         bool loop5      : 1;
         bool switch1    : 1;
         bool switch2    : 1;
-    } config;
+    } bit;
 };
 
 
@@ -59,7 +62,18 @@ union program_data
 
 void execute_program(uint16_t program_data)
 {
-    // TODO: Implement me
+    union program_data program;
+    program.word = program_data;
+
+    gpio_set(GPIO_OUT_TUNE_MUTE, program.bit.tuner);
+    gpio_set(GPIO_OUT_LOOP1, program.bit.loop1);
+    gpio_set(GPIO_OUT_LOOP2, program.bit.loop2);
+    gpio_set(GPIO_OUT_LOOP3, program.bit.loop3);
+    gpio_set(GPIO_OUT_LOOP4, program.bit.loop4);
+    gpio_set(GPIO_OUT_LOOP5, program.bit.loop5);
+    gpio_set(GPIO_OUT_SWITCH1, program.bit.switch1);
+    gpio_set(GPIO_OUT_SWITCH2, program.bit.switch2);
+
 }
 
 /// \brief      Handler for the `led` command
