@@ -107,26 +107,26 @@ bool exec_relay(const char* command)
 
     // Tune/Mute
     if (command[4] == 't' && command[5] == 'm') {
-        selected_gpio = gpio_config.header1.pin2;
+        selected_gpio = GPIO_OUT_TUNE_MUTE;
     }
     // Loopers
     else if (command[4] == 'l') {
         flash_led(LED_RED);
         switch (command[5]) {
             case '1':
-                selected_gpio = gpio_config.header1.pin3;
+                selected_gpio = GPIO_OUT_LOOP1;
                 break;
             case '2':
-                selected_gpio = gpio_config.header1.pin4;
+                selected_gpio = GPIO_OUT_LOOP2;
                 break;
             case '3':
-                selected_gpio = gpio_config.header1.pin5;
+                selected_gpio = GPIO_OUT_LOOP3;
                 break;
             case '4':
-                selected_gpio = gpio_config.header1.pin6;
+                selected_gpio = GPIO_OUT_LOOP4;
                 break;
             case '5':
-                selected_gpio = gpio_config.header1.pin7;
+                selected_gpio = GPIO_OUT_LOOP5;
                 break;
             default:
                 usb_puts("No such looper relay" USB_NEWLINE);
@@ -137,10 +137,10 @@ bool exec_relay(const char* command)
     else if (command[4] == 's') {
         switch (command[5]) {
             case '1':
-                selected_gpio = gpio_config.header1.pin8;
+                selected_gpio = GPIO_OUT_SWITCH1;
                 break;
             case '2':
-                selected_gpio = gpio_config.header1.pin9;
+                selected_gpio = GPIO_OUT_SWITCH2;
                 break;
             default:
                 usb_puts("No such switch relay" USB_NEWLINE);
