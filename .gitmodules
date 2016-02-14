@@ -4,3 +4,6 @@
 [submodule "software/src/xboot"]
 	path = software/src/lib/xboot
 	url = git@github.com:thefork/xboot.git
+[submodule "hardware/uMIDI.pretty"]
+	path = hardware/uMIDI.pretty
+	url = git@github.com:theFork/uMIDI.pretty
