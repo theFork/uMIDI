@@ -278,10 +278,19 @@ static inline void print_command_from_history(const int8_t offset)
     cmd_history_index %= CMD_HISTORY_SIZE;
 
     // Overwrite previously printed command
-    usb_putc('\r');
+    static uint8_t last_cmd_length = 0;
+    for (int i=0; i < last_cmd_length; ++i) {
+        usb_printf("\b \b");
+        cmd_buffer[cmd_buffer_index] = '\0';
+    }
+
+    // Copy command from history to current command buffer
+    strncpy(cmd_buffer, cmd_history[cmd_history_index], CMD_BUFFER_SIZE);
+    cmd_buffer_index = strlen(cmd_buffer);
 
     // Print out command and save command length for the next invocation
-    usb_printf("%-40s", cmd_history[cmd_history_index]);
+    usb_printf(cmd_buffer);
+    last_cmd_length = cmd_buffer_index;
 }
 
 /// \brief      Handles ANSI escape sequences
@@ -310,19 +319,7 @@ static bool handle_escape_sequence(const char data)
         if (data == 'B') {
             print_command_from_history(1);
         }
-        escape_byte_index = 3;
-        return true;
-    }
-    if (escape_byte_index == 3) {
-        usb_puts("");
         escape_byte_index = 0;
-
-        // Execute selected command if the enter key was hit
-        if (data == '\r') {
-            execute_command(cmd_history[cmd_history_index]);
-            ++cmd_history_index;
-            cmd_history_index %= CMD_HISTORY_SIZE;
-        }
         return true;
     }
     return false;
