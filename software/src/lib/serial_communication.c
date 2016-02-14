@@ -360,11 +360,13 @@ static inline void process_command_char(void)
         return;
     }
 
-    // Rewind buffer index if backspace was received
+    // Clear last character and rewind buffer index if backspace was received
     if (data == '\b') {
+        usb_printf(" \b");
         if (cmd_buffer_index > 0) {
             --cmd_buffer_index;
         }
+        cmd_buffer[cmd_buffer_index] = '\0';
         return;
     }
 
