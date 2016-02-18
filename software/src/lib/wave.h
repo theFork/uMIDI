@@ -37,10 +37,10 @@
 /// \details    The output will change in a random direction by this amount
 #define     RANDOM_WAVE_STEP_SIZE           4
 
-/// \brief       Number of levels in the stair wave
+/// \brief      Number of levels in the stair wave
 #define     STAIR_WAVE_STEPS                5
 
-/// \brief       Number of levels in the stair wave
+/// \brief      Number of different output levels of waves
 #define     WAVE_STEPS                      100
 
 /// \brief      Tap tempo buffer size
