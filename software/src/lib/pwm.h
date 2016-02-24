@@ -42,8 +42,8 @@
 
 /// \brief      Initializes the PWM
 /// \details    CPU timer 1 is clocked with the system clock (32 MHz) and the compare output A
-///             is set up to output a dual slope PWM. Additionally, a linear function is set up,
-///             which is used in set_pwm_duty_cycle() to compute the duty cycle compare values.
+///             is set up to output a dual slope PWM. Additionally, a conversion function which is
+///             used in set_pwm_duty_cycle() to compute the duty cycle compare values is registered.
 /// \param      conversion_function
 ///                 pointer to a function converting midi values to pwm compare register values
 /// \see        wave
