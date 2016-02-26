@@ -36,7 +36,7 @@ FUSE5 = 0xff
 OPT = s
 
 # Programmer configuration for avrdude
-AVRDUDE_PROGRAMMER_CONFIG = -c atmelice_pdi
+AVRDUDE_PROGRAMMER ?= atmelice_pdi
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
@@ -62,7 +62,7 @@ CFLAGS += -O$(OPT)
 CFLAGS += -DF_CPU=$(F_CPU)UL
 
 # Avrdude settings and variables.
-AVRDUDE_FLAGS = $(AVRDUDE_PROGRAMMER_CONFIG)
+AVRDUDE_FLAGS  = -c $(AVRDUDE_PROGRAMMER)
 AVRDUDE_FLAGS += -p x128a4u
 
 AVRDUDE_WRITE_FLASH = -U flash:w:$(DIR)/$(TARGET).hex
