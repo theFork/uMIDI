@@ -92,14 +92,24 @@ The framework also provides ready-to-use USB support built on top of the famous
 - control your board using a shell-like command-line interpreter and
 - perform firmware upgrades via USB.
 
+The \ref usb.h "USB module" implements a CDC device and provides a simple and familiar interface
+inspired by `<stdio.h>`. To get USB up and running you only need to configure the PLL to provide
+a 48 kHz clock for the USB hardware, call the initialization routine and register a background task
+that calls some [LUFA](https://github.com/abcminiuser/lufa) procedures to do the actual work.
+
 The file [99-umidi.rules](../../toolchain/99-umidi.rules) shows an example of a `udev`-rule that
 creates an alias for the character device named `/dev/umidi` whenever a uMIDI device is attached.
 This way you don't have to tell `minicom` over and over again which device to use in case you are
 working with multiple character devices attached to your workstation.
 
-The firmware upgrade requires the [xboot](https://github.com/alexforencich/xboot) bootloader, which
-is included as a submodule. A configuration file suitable for uMIDI can be found at
-`conf/x128a4u.conf.mk` in the [xboot-tree](../../src/lib/xboot).
+Higher-level USB functionality is implemented in the \ref serial_communication.h
+"serial communication module". It provides a command-line interpreter (featuring a short history and
+tab-completion) for which you can define and register arbitrary custom commands via configuration
+structures and callbacks.
+There are also some built-in commands, one of which receives a new firmware, writes it to a special
+program memory section and reboots the device into the
+[xboot](https://github.com/alexforencich/xboot) bootloader, which then replaces the old firmware
+with the new one. See \ref bootloader for further instructions on the bootloader.
 
 Furthermore, the library contains modules for several peripheral devices:
 - 3-phase encoder with momentary switch
@@ -113,6 +123,7 @@ Furthermore, the library contains modules for several peripheral devices:
 This repository contains the source code for several (example) applications:
 - \ref src/expression       "An expression pedal"
 - \ref src/sequencer        "A simple sequencer for MIDI messages"
+- \ref src/switcher         "A guitar effects switcher"
 - \ref src/wah              "A MIDI controllable Wah-Wah"
 
 You can look at those to get a general idea of how the API is designed and used. In addition,
@@ -127,10 +138,70 @@ steps to get the USB transceiver up and running are already implemented.
 
 
 \section building Build instructions
-TODO  
-- without USB
-- bootloader
-- with USB / LUFA
-- firmware update package
+The following software packages are required to successfully build the firmware:
+- `avr-gcc` >= 4.8
+- `avrdude` >= 6.1
+- `make`
+- `perl`
+
+Fairly recent (in Debian terms ;-) versions of `avr-gcc` and `avrdude` are required, because older
+versions do not yet fully support the xmega128a4u chip. As of Debian Jessie, you can simply use the
+official repositories.
+
+There are two basic "flavors" of the uMIDI firmware: Either you use the USB module with all its
+wonderful features, or you don't. In most cases, having USB support comes in *very* handy, so this
+is most likely a feature you want to have. However, if you choose to do so, you have to include the
+[LUFA](https://github.com/abcminiuser/lufa) library, which consequently leads to significantly
+larger (about 6 kB) firmware binaries. But keeping in mind the fairly large program memory of the
+micro-controller, this should rarely be a problem.
+
+The repository uses two submodules that are required for the build process (only with USB support).
+So it is best to clone those along with uMIDI:
+<br /> `git clone --recursive git@github.com/theFork/uMIDI.git`
+
+The [toolchain](../../toolchain/)-folder contains two standard Makefiles - one for each flavor. By
+starting the make-process without specifying a target shows a help message explaining all available
+targets. For most basic applications it should not be necessary to edit the Makefiles - except from
+the variable `AVRDUDE_PROGRAMMER_CONFIG`, which tells `avrdude` what programmer type to use. You
+can either edit the Makefile or override the option on the command line, for example:
+<br /> `AVRDUDE_PROGRAMMER_CONFIG=dragon_pdi make install`
+
+Once you have successfully installed a firmware with USB support, you can upgrade firmwares without
+the need for a programmer. The `make`-target "package" converts the .hex file to binary and then
+uses a toolchain script called [pack_fwupdate.pl](../../toolchain/pack_fwupdate.pl) to create a
+firmware update file, which you can send to your device through a simple pipe after telling the
+device how many bytes to expect. Of course there is also a target "fwupdate", which takes care of
+this for you automagically.
+
+
+
+\section bootloader Building and installing the bootloader
+The firmware upgrade requires the [xboot](https://github.com/alexforencich/xboot) bootloader, which
+is included as a submodule. The bootloader does not need to do very much - it only has to copy the
+new firmware from one place in program space to another.
+
+A suitable configuration file that disables all unnecessary features can be found at
+[conf/x128a4u.conf.mk](../../src/lib/xboot/conf/x128a4u.conf.mk) in the submodule. If the programmer
+you are using is not an `atmelice_pdi` type, you will need to adjust the variable
+`AVRDUDE_PROGRAMMER` accordingly.
+
+To build and install the bootloader, navigate to the [xboot submodule](../../src/lib/xboot) and cast
+<br />
+`make conf/x128a4u.conf.mk && make program`.
+
+
+
+\section contributing Contributing
+We would very much like to see contributions to the library / framework and more applications. If
+you would like to submit patches, here is a quick checklist of requirements:
+
+- Please adhere to the existing code style (Yes, we are very picky!).
+- There is an additional global [Makefile](../../Makefile), which cleans and compiles the library,
+  all projects and this documentation. Please make sure that all of this succeeds without errors
+  or warnings (`make >/dev/null` should print out nothing).
+- If you are unsure about something, feel free to contact us via github.
+
+We also accept bugreports and feature requests on github. Should you find a bug or miss a feature,
+feel free to file an issue.
 
 */
