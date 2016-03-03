@@ -1,7 +1,7 @@
 # This Makefile cleans and builds all projects and generates documentation.
 
 LIBRARY=./src/lib
-PROJECTS= $(filter-out src/lib/.,$(wildcard src/*/.))
+PROJECTS=$(filter-out src/lib/.,$(wildcard src/*/.))
 
 DOXYGEN="doxygen"
 MAKE="make"
