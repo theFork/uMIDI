@@ -3,8 +3,8 @@
 LIBRARY=./src/lib
 PROJECTS=$(filter-out src/lib/.,$(wildcard src/*/.))
 
-DOXYGEN="doxygen"
-MAKE="make"
+DOXYGEN=doxygen
+MAKE=make
 
 all: $(PROJECTS) doc
 
