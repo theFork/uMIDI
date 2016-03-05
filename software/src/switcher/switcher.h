@@ -34,9 +34,6 @@
 
 
 //---------------- functions and procedures ----------------//
-/// \brief      Handler for the `led` command
-bool exec_led(const char* command);
-
 /// \brief      Handler for the `load` command
 bool exec_load(const char* command);
 

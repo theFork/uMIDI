@@ -103,20 +103,6 @@ uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background
 //---------------- Custom commands ----------------//
 struct serial_command serial_commands[] = {
     {
-        .cmd_string = "led",
-        .help_string = "<l> <a>\n"
-                       "Manipulates the two on-board LEDs:\n"
-                       "<l> : LED to manipulate\n"
-                       "      'g' = green LED\n"
-                       "      'r' = red LED\n"
-                       "      '!' = both LEDs\n"
-                       "<a> : LED mode / action\n"
-                       "      'b' = blink\n"
-                       "      'f' = flash\n"
-                       "      't' = toggle",
-        .handler = &exec_led
-    },
-    {
         .cmd_string = "rel",
         .help_string = "<r> <s>\n"
                        "Manipulates the switchers relays:\n"
