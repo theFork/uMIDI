@@ -94,8 +94,8 @@ static uint8_t wave_patterns[16][16] = {
 /// \brief      This flag indicates if a tempo tap occurred
 static bool tap_arrived = false;
 
-/// \brief      This flag indicates if a tempo tap occurred
-static struct wave* tap_tempo_wave = {0,};
+/// \brief      Points to the waveform whose speed can be tapped in
+static struct wave* tap_tempo_wave = NULL;
 
 
 

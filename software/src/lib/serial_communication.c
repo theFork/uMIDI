@@ -328,6 +328,8 @@ static bool handle_escape_sequence(const char data)
 /// \brief      Processes a command character
 /// \details    If the supplied character is a carriage return, the command line read so far is
 ///             executed, otherwise the character is simply appended to a (circular!) buffer.
+///             If #echo_on is set, the character is also immediately sent back to the sender,
+///             whereby carriage return characters are replaced by #USB_NEWLINE.
 static inline void process_command_char(void)
 {
     // Fetch a character from the USB data buffer

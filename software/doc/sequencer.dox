@@ -1,0 +1,6 @@
+/**
+\dir        src/sequencer
+\brief      A MIDI sequencer
+\details    The software sends MIDI CC messages, following certain waveforms or custom programmmable
+            patterns.
+*/

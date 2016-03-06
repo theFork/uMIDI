@@ -44,7 +44,12 @@ void configure_system_clock(void);
 ///             successfully locked.
 void enable_usb_pll(void);
 
-/// \brief      Hang and blink
+/// \brief      Stops program execution and blinks the on-board LEDs.
+/// \details    Disables interrupts and watchdog and traps the program in an endless loop.
+/// \param      delay_red_ms
+///                 blink interval of the red LED in [ms]
+/// \param      delay_green_ms
+///                 blink interval of the red LED in [ms]
 void panic(uint16_t delay_red_ms, uint16_t delay_green_ms);
 
 /// \brief      Re-enables the watchdog

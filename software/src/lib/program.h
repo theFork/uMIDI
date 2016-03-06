@@ -94,9 +94,8 @@ void enter_program(uint8_t number);
 /// \param      program_initializer
 ///                 On wiping, programs are initialized with this value.
 /// \param      execute_program_callback
-///                 Callback for program execution.
-///                 \param program_data
-///                        The program configuration data that was read from memory.
+///                 Callback for program execution. This procedure is called with the program
+///                 configuration data that was read from memory as the parameter `program_data`.
 /// \see        wipe_current_program
 /// \see        enter_program
 void init_program_module(uint16_t program_initializer, void (*execute_program_callback)(uint16_t program_data));
