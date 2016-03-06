@@ -74,9 +74,6 @@ int main( void )
     PMIC.CTRL = PMIC_LOLVLEN_bm;
     sei();
 
-    // Blink green LED
-    blink_led(LED_GREEN, F_TASK_SLOW);
-
     // Main loop
     while (true) {
         process_background_tasks();

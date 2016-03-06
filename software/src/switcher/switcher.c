@@ -66,7 +66,7 @@ void execute_program(uint16_t program_data)
 {
     current_program.word = program_data;
 
-    usb_printf("Applying relais configuration: %04x" USB_NEWLINE, current_program.word);
+    usb_printf("Applying relays configuration: %04x" USB_NEWLINE, current_program.word);
 
     gpio_set(GPIO_OUT_TUNE_MUTE, current_program.bit.tuner);
     gpio_set(GPIO_OUT_LOOP1, current_program.bit.loop1);
@@ -111,7 +111,6 @@ bool exec_relay(const char* command)
     }
     // Loopers
     else if (command[4] == 'l') {
-        flash_led(LED_RED);
         switch (command[5]) {
             case '1':
                 selected_gpio = GPIO_OUT_LOOP1;
@@ -155,7 +154,6 @@ bool exec_relay(const char* command)
         }
     }
     else {
-        flash_led(LED_RED);
         usb_puts("Unrecognized relay" USB_NEWLINE);
         return false;
     }
@@ -187,6 +185,5 @@ bool exec_save(const char* command)
 
 void handle_program_change(uint8_t program)
 {
-    flash_led(LED_RED);
     enter_program(program);
 }
