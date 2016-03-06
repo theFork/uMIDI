@@ -46,11 +46,11 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-static uint8_t              controller_number;
-static struct wave          wave;
+static uint8_t                  controller_number;
+static struct wave              wave;
 
-static struct gpio_pin**    status_leds;
-static uint8_t              status_leds_size;
+static const struct gpio_pin**  status_leds;
+static uint8_t                  status_leds_size;
 
 
 
@@ -141,7 +141,7 @@ void handle_control_change(uint8_t controller_number, uint8_t value)
     }
 }
 
-void init_sequencer_module(struct sequencer_config* config, struct gpio_pin* leds[], uint8_t leds_size)
+void init_sequencer_module(struct sequencer_config* config, const struct gpio_pin* leds[], uint8_t leds_size)
 {
     status_leds = leds;
     status_leds_size = leds_size;
