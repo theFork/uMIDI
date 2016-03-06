@@ -247,7 +247,7 @@ fwupdate: $(TARGET).bin
 	$(info $(MSG_UPDATE))
 	echo -n "fwupdate `du -b $(TARGET).bin | sed 's/\s.*//'`\r" > $(CDC_DEVICE)
 	sleep 2
-	cat main.bin > $(CDC_DEVICE)
+	cat main.bin > $(CDC_DEVICE) & cat $(CDC_DEVICE)
 
 # Target:
 # Set fuse bits.
