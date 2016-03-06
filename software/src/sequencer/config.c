@@ -27,11 +27,13 @@
 
 #include <stddef.h>
 
+#include "lib/background_tasks.h"
 #include "lib/encoder.h"
 #include "lib/gpio.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
-#include "lib/background_tasks.h"
+#include "lib/serial_communication.h"
+#include "lib/usb.h"
 #include "lib/wave.h"
 
 #include "config.h"
@@ -45,9 +47,9 @@
 //---------------- GPIO ----------------//
 struct gpio_config gpio_config = {
     .header1 = {
-        .pin2 = { &PORTA, 0, GPIO_UNUSED },
-        .pin3 = { &PORTA, 1, GPIO_UNUSED },
-        .pin4 = { &PORTA, 2, GPIO_UNUSED },
+        .pin2 = { &PORTA, 0, GPIO_INPUT_PULLUP },
+        .pin3 = { &PORTA, 1, GPIO_INPUT_PULLUP },
+        .pin4 = { &PORTA, 2, GPIO_INPUT_PULLUP },
         .pin5 = { &PORTA, 3, GPIO_UNUSED },
         .pin6 = { &PORTA, 4, GPIO_OUTPUT },
         .pin7 = { &PORTA, 5, GPIO_OUTPUT },
@@ -84,8 +86,13 @@ struct gpio_config gpio_config = {
 
 //---------------- Encoder ----------------//
 struct encoder_config encoder_config = {
-    .inputA = &gpio_config.header2.pin2,
-    .inputA = &gpio_config.header2.pin3,
+    .inputA = &gpio_config.header1.pin3,
+    .inputB = &gpio_config.header1.pin2,
+    .inputSwitch = &gpio_config.header1.pin4,
+
+    .cw_callback = &encoder_cw_callback,
+    .ccw_callback = &encoder_ccw_callback,
+    .push_callback = &encoder_push_callback,
 };
 
 //---------------- MIDI ----------------//
@@ -103,7 +110,7 @@ struct midi_config midi_config = {
 //---------------- Sequencers ----------------//
 struct sequencer_config sequencer_config = {
     .controller_number = 11,
-    .waveform   = WAVE_RANDOM,
+    .waveform   = WAVE_PATTERN_01,
     .speed      = 60
 };
 
@@ -117,15 +124,45 @@ uint8_t sequencer_leds_size = sizeof(sequencer_leds)/sizeof(struct gpio_pin*);
 
 //---------------- State machine ----------------//
 background_task_t high_frequency_tasks[] = {
+    &serial_communication_task,
     &update_sequencer,
+    (void (*)(void)) &poll_encoder,
 };
 uint8_t high_frequency_tasks_size = sizeof(high_frequency_tasks)/sizeof(background_task_t);
 
-background_task_t mid_frequency_tasks[] = {};
+background_task_t mid_frequency_tasks[] = {
+    &usb_main_task,
+};
 uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background_task_t);
 
 background_task_t low_frequency_tasks[] = {
+    &tap_tempo_task,
     &update_leds,
-    &update_sequencer_leds,
 };
 uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);
+
+//---------------- Custom commands ----------------//
+struct serial_command serial_commands[] = {
+    {
+        .cmd_string = "speed",
+        .help_string = "<s>\n"
+            "Adjust the speed of the sequencer:\n"
+            "<s> : wave speed\n",
+        .handler = &exec_speed
+    },
+    {
+        .cmd_string = "tap",
+        .help_string = "\nSend this command repeatedly to tap in a tempo\n",
+        .handler = &exec_tap
+    },
+    {
+        .cmd_string = "pattern",
+        .help_string = "<p>\n"
+            "Select sequencer pattern:\n"
+            "<p> : pattern\n"
+            "      \"next\" = switch to next pattern\n"
+            "      \"prev\" = switch to previous pattern\n",
+        .handler = &exec_pattern
+    },
+};
+uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);
