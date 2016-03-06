@@ -187,3 +187,14 @@ void handle_program_change(uint8_t program)
 {
     enter_program(program);
 }
+
+void poll_switches(void)
+{
+    // TODO: Handle save switch
+
+    // Return if no switch pressed
+
+    // Debounce
+
+    // Update current program
+}

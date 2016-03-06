@@ -49,6 +49,8 @@ void execute_program(uint16_t program_data);
 ///< \brief     Callback for program changes
 void handle_program_change(uint8_t program);
 
+///< \brief     Task for polling all switches and update current program
+void poll_switches(void);
 
 //---------------- EOF ----------------//
 #endif // _APP_H
