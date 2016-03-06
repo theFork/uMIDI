@@ -1,6 +1,0 @@
-[submodule "software/src/lib/lufa"]
-	path = software/src/lib/lufa
-	url = git@github.com:abcminiuser/lufa.git
-[submodule "software/src/xboot"]
-	path = software/src/lib/xboot
-	url = git@github.com:thefork/xboot.git
