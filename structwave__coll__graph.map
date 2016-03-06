@@ -1,0 +1,4 @@
+<map id="wave" name="wave">
+<area shape="rect" id="node2" href="$structwave__settings.html" title="Wave configuration." alt="" coords="5,6,112,143"/>
+<area shape="rect" id="node4" href="$structwave__state.html" title="Internal state of a wave." alt="" coords="136,6,264,143"/>
+</map>

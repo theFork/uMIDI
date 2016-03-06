@@ -1,0 +1,5 @@
+<map id="gpio_config" name="gpio_config">
+<area shape="rect" id="node2" href="$structjumpers.html" title="{jumpers\n|+ jp2\l+ jp3\l+ jp4\l+ jp5\l|}" alt="" coords="5,347,72,485"/>
+<area shape="rect" id="node4" href="$structgpio__pin.html" title="Configuration of a single GPIO pin." alt="" coords="61,5,131,125"/>
+<area shape="rect" id="node6" href="$structgpio__header.html" title="Configurations of the GPIO pins contained in one 10&#45;pin header." alt="" coords="96,313,187,519"/>
+</map>

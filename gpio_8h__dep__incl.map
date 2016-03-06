@@ -1,0 +1,15 @@
+<map id="src/lib/gpio.h" name="src/lib/gpio.h">
+<area shape="rect" id="node3" href="$midi_8h.html" title="MIDI message transceiver." alt="" coords="251,83,347,112"/>
+<area shape="rect" id="node11" href="$pwm_8c.html" title="PWM configuration and service functions." alt="" coords="348,237,447,267"/>
+<area shape="rect" id="node18" href="$midi_8c.html" title="MIDI message transceiver." alt="" coords="424,160,520,189"/>
+<area shape="rect" id="node21" href="$tests_8c.html" title="src/lib/tests.c" alt="" coords="544,160,645,189"/>
+<area shape="rect" id="node25" href="$encoder_8h.html" title="Interface for rotary encoders." alt="" coords="771,83,888,112"/>
+<area shape="rect" id="node27" href="$encoder_8c.html" title="Implementation of a 3&#45;phase rotary encoder with momentary switch." alt="" coords="745,160,863,189"/>
+<area shape="rect" id="node30" href="$gpio_8c.html" title="GPIO configuration and service functions." alt="" coords="912,83,1008,112"/>
+<area shape="rect" id="node33" href="$program_8c.html" title="Program storage module implementation." alt="" coords="1032,83,1149,112"/>
+<area shape="rect" id="node5" href="$adc_8c.html" title="ADC configuration and service functions." alt="" coords="29,160,123,189"/>
+<area shape="rect" id="node7" href="$math_8h.html" title="API for a small collection of mathematical functions." alt="" coords="248,160,349,189"/>
+<area shape="rect" id="node9" href="$math_8c.html" title="Implementation of mathematical functions." alt="" coords="97,237,199,267"/>
+<area shape="rect" id="node13" href="$wave_8h.html" title="Waveform function generator." alt="" coords="223,237,324,267"/>
+<area shape="rect" id="node15" href="$wave_8c.html" title="Waveform function generator." alt="" coords="81,315,183,344"/>
+</map>

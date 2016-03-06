@@ -1,0 +1,7 @@
+<map id="src/lib/pwm.c" name="src/lib/pwm.c">
+<area shape="rect" id="node11" href="$gpio_8h.html" title="GPIO configuration and service functions." alt="" coords="105,237,161,267"/>
+<area shape="rect" id="node16" href="$lookup__tables_8h.html" title="Lookup tables for the uMIDI firmware." alt="" coords="439,160,551,189"/>
+<area shape="rect" id="node19" href="$math_8h.html" title="API for a small collection of mathematical functions." alt="" coords="133,83,195,112"/>
+<area shape="rect" id="node23" href="$midi_8h.html" title="MIDI message transceiver." alt="" coords="153,160,209,189"/>
+<area shape="rect" id="node30" href="$pwm_8h.html" title="PWM configuration and service functions." alt="" coords="489,83,551,112"/>
+</map>
