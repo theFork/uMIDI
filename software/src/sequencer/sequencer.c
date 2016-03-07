@@ -161,6 +161,11 @@ void update_sequencer(void)
     }
 }
 
+void poll_inputs(void)
+{
+    poll_encoder(&encoder);
+}
+
 void encoder_cw_callback(void)
 {
     // Add one BPM to the current wave speed as long as we are below 300 BPM

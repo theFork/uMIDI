@@ -46,9 +46,6 @@
 
 //---------------- GPIO ----------------//
 struct gpio_mapping gpio_mappings[] = {
-    { .pin = &gpio.header1.pin2, .type = GPIO_INPUT_PULLUP },
-    { .pin = &gpio.header1.pin3, .type = GPIO_INPUT_PULLUP },
-    { .pin = &gpio.header1.pin4, .type = GPIO_INPUT_PULLUP },
     { .pin = &gpio.header1.pin6, .type = GPIO_OUTPUT       },
     { .pin = &gpio.header1.pin7, .type = GPIO_OUTPUT       },
     { .pin = &gpio.header1.pin8, .type = GPIO_OUTPUT       },
@@ -57,14 +54,16 @@ struct gpio_mapping gpio_mappings[] = {
 uint8_t gpio_mappings_size = sizeof(gpio_mappings)/sizeof(struct gpio_mapping);
 
 //---------------- Encoder ----------------//
-struct encoder_config encoder_config = {
-    .inputA = &gpio.header1.pin3,
-    .inputB = &gpio.header1.pin2,
-    .inputSwitch = &gpio.header1.pin4,
+struct encoder encoder = {
+    .config = {
+        .inputA = &gpio.header1.pin3,
+        .inputB = &gpio.header1.pin2,
+        .inputSwitch = &gpio.header1.pin4,
 
-    .cw_callback = &encoder_cw_callback,
-    .ccw_callback = &encoder_ccw_callback,
-    .push_callback = &encoder_push_callback,
+        .cw_callback = &encoder_cw_callback,
+        .ccw_callback = &encoder_ccw_callback,
+        .push_callback = &encoder_push_callback,
+    },
 };
 
 //---------------- MIDI ----------------//
@@ -98,7 +97,7 @@ uint8_t sequencer_leds_size = sizeof(sequencer_leds)/sizeof(struct gpio_pin*);
 background_task_t high_frequency_tasks[] = {
     &serial_communication_task,
     &update_sequencer,
-    (void (*)(void)) &poll_encoder,
+    &poll_inputs,
 };
 uint8_t high_frequency_tasks_size = sizeof(high_frequency_tasks)/sizeof(background_task_t);
 

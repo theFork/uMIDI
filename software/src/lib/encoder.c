@@ -24,104 +24,89 @@
 #include <util/delay.h>
 #include "encoder.h"
 #include "gpio.h"
-#include "leds.h"
 
 
 ////////////////////////////////////////////////////////////////
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-/// \brief      Internal state used by poll_encoder
-static struct encoder_state state = {
-    false,
-    false,
-    0
-};
+#define ENC_INPUT_A     gpio_get(*encoder->config.inputA)
+#define ENC_INPUT_B     gpio_get(*encoder->config.inputB)
+#define ENC_STATE_A     encoder->state.inputA
+#define ENC_STATE_B     encoder->state.inputB
 
-/// \brief      The GPIO pin that output A of the encoder is connected to
-static const struct gpio_pin* inputA;
-
-/// \brief      The GPIO pin that output B of the encoder is connected to
-static const struct gpio_pin* inputB;
-
-/// \brief      The GPIO pin that the momentary switch is connected to
-static const struct gpio_pin* inputSwitch;
-
-/// \brief      Callback for clockwise rotation
-static void (*cw_callback)(void);
-
-/// \brief      Callback for counter-clockwise rotation
-static void (*ccw_callback)(void);
-
-/// \brief      Callback for button press
-static void (*push_callback)(void);
 
 
 ////////////////////////////////////////////////////////////////
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void init_encoder_module(const struct encoder_config* const config)
+void init_encoder(struct encoder* const encoder)
 {
-    inputA = config->inputA;
-    inputB = config->inputB;
-    inputSwitch = config->inputSwitch;
-    cw_callback = config->cw_callback;
-    ccw_callback = config->ccw_callback;
-    push_callback = config->push_callback;
+    // Configure GPIO pins
+    configure_gpio_pin(encoder->config.inputA, GPIO_INPUT_PULLUP);
+    configure_gpio_pin(encoder->config.inputB, GPIO_INPUT_PULLUP);
+    configure_gpio_pin(encoder->config.inputSwitch, GPIO_INPUT_PULLUP);
+
+    // Initialize encoder state
+    encoder->state.inputA = false;
+    encoder->state.inputB = false;
+    encoder->state.counter = 0;
 }
 
-enum encoder_action poll_encoder(void)
+enum encoder_action poll_encoder(struct encoder* const encoder)
 {
     // Poll switch
-    if (!gpio_get(*inputSwitch) && push_callback != NULL) {
+    if (!gpio_get(*encoder->config.inputSwitch)) {
         // De-bounce
         _delay_ms( 25 );
-        while (!gpio_get(*inputSwitch));
-        push_callback();
+        while (!gpio_get(*encoder->config.inputSwitch));
+        if (encoder->config.push_callback != NULL) {
+            encoder->config.push_callback();
+        }
         return ENCODER_ACTION_PUSH;
     }
 
     // Abort if the position is unchanged
-    if (state.inputA == gpio_get(*inputA) && state.inputB == gpio_get(*inputB)) {
+    if (ENC_STATE_A == ENC_INPUT_A && ENC_STATE_B == ENC_INPUT_B) {
         return ENCODER_ACTION_NONE;
     }
 
     enum encoder_action action = ENCODER_ACTION_NONE;
 
     // Direction: clockwise
-    if ( (!state.inputA && !state.inputB && !gpio_get(*inputA) &&  gpio_get(*inputB)) ||
-              (!state.inputA &&  state.inputB &&  gpio_get(*inputA) &&  gpio_get(*inputA)) ||
-              ( state.inputA &&  state.inputB && !gpio_get(*inputA) && !gpio_get(*inputB)) )
+    if ( (!ENC_STATE_A && !ENC_STATE_B && !ENC_INPUT_A &&  ENC_INPUT_B) ||
+         (!ENC_STATE_A &&  ENC_STATE_B &&  ENC_INPUT_A &&  ENC_INPUT_B) ||
+         ( ENC_STATE_A &&  ENC_STATE_B && !ENC_INPUT_A && !ENC_INPUT_B) )
     {
         action = ENCODER_ACTION_CW;
-        ++state.counter;
+        ++encoder->state.counter;
     }
 
     // Direction: counter-clockwise
-    else if ( ( state.inputA &&  state.inputB && !gpio_get(*inputA) &&  gpio_get(*inputB)) ||
-         (!state.inputA &&  state.inputB && !gpio_get(*inputA) && !gpio_get(*inputB)) ||
-         (!state.inputA && !state.inputB &&  gpio_get(*inputA) &&  gpio_get(*inputB)) )
+    else if ( ( ENC_STATE_A &&  ENC_STATE_B && !ENC_INPUT_A &&  ENC_INPUT_B) ||
+              (!ENC_STATE_A &&  ENC_STATE_B && !ENC_INPUT_A && !ENC_INPUT_B) ||
+              (!ENC_STATE_A && !ENC_STATE_B &&  ENC_INPUT_A &&  ENC_INPUT_B) )
     {
         action = ENCODER_ACTION_CCW;
-        --state.counter;
+        --encoder->state.counter;
     }
 
-    // Update input state variables
-    state.inputA = gpio_get(*inputA);
-    state.inputB = gpio_get(*inputB);
+    // Update input encoder->state variables
+    ENC_STATE_A = ENC_INPUT_A;
+    ENC_STATE_B = ENC_INPUT_B;
 
     // On reception of the third pulse in the same direction
-    if (state.counter <= -3 || state.counter >= 3) {
+    if (encoder->state.counter <= -3 || encoder->state.counter >= 3) {
         // Reset counter
-        state.counter = 0;
+        encoder->state.counter = 0;
 
         // Call back
-        if (action == ENCODER_ACTION_CW && cw_callback != NULL) {
-            cw_callback();
+        if (action == ENCODER_ACTION_CW && encoder->config.cw_callback != NULL) {
+            encoder->config.cw_callback();
         }
-        else if (action == ENCODER_ACTION_CCW && ccw_callback != NULL) {
-            ccw_callback();
+        else if (action == ENCODER_ACTION_CCW && encoder->config.ccw_callback != NULL) {
+            encoder->config.ccw_callback();
         }
 
         return action;
