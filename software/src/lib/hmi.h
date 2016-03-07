@@ -1,5 +1,11 @@
 /// \file
-/// \brief  TODO
+/// \brief      API of the [uMIDI-HMI](https://github.com/haggl/uMIDI-hmi) module
+/// \details    To use the uMIDI HMI, please follow these steps:
+///             1. Connect uMIDI to the HMI board.
+///             2. Define event handlers for the HMI inputs.
+///             3. Define a #hmi_config and map your event handlers to the callbacks.
+///             4. Call #init_hmi providing it with your #hmi_config.
+///             5. Register #poll_hmi as a mid-frequency background task.
 
 /*
  * Copyright 2016 Sebastian Neuser
@@ -35,33 +41,40 @@
 
 
 //---------------- data types ----------------//
-/// \brief      TODO
+/// \brief      A bitmask that specifies an LED pattern to display
+/// \details    Counting from LSB to MSB: 1 &rarr; LED on; 0 &rarr; LED off
 typedef uint8_t hmi_led_pattern_t;
 
-/// \brief      TODO
+/// \brief      Enumeration for the available LEDs on the HMI board
+/// \details    Provides a pin mapping to the GPIO header. The values can be
+///             used to get a pointer to a specific LED output pin "by name":
+///             \code
+///                 const struct gpio_pin * const pin_pointer = &hmi_config->output_header->pin2 + HMI_LED3;
+///             \endcode
 enum hmi_led
 {
-    HMI_LED1,               ///< TODO
-    HMI_LED2,               ///< TODO
-    HMI_LED3,               ///< TODO
-    HMI_LED4,               ///< TODO
-    HMI_LED5,               ///< TODO
-    HMI_LED6,               ///< TODO
-    HMI_LED7,               ///< TODO
-    HMI_LED8                ///< TODO
+    HMI_LED1 = 1,           ///< LED1
+    HMI_LED2 = 3,           ///< LED2
+    HMI_LED3 = 5,           ///< LED3
+    HMI_LED4 = 7,           ///< LED4
+    HMI_LED5 = 6,           ///< LED5
+    HMI_LED6 = 4,           ///< LED6
+    HMI_LED7 = 2,           ///< LED7
+    HMI_LED8 = 0            ///< LED8
 };
 
-/// \brief      TODO
+/// \brief      Enumeration for possible percentages to display
 enum hmi_bar_graph_percentage
 {
-    HMI_BAR_000_PERCENT,    ///< TODO
-    HMI_BAR_013_PERCENT,    ///< TODO
-    HMI_BAR_025_PERCENT,    ///< TODO
-    HMI_BAR_038_PERCENT,    ///< TODO
-    HMI_BAR_050_PERCENT,    ///< TODO
-    HMI_BAR_063_PERCENT,    ///< TODO
-    HMI_BAR_075_PERCENT,    ///< TODO
-    HMI_BAR_100_PERCENT     ///< TODO
+    HMI_BAR_000_PERCENT,    ///< the bar graph is empty
+    HMI_BAR_013_PERCENT,    ///< the bar graph shows 1/8
+    HMI_BAR_025_PERCENT,    ///< the bar graph shows 2/8
+    HMI_BAR_038_PERCENT,    ///< the bar graph shows 3/8
+    HMI_BAR_050_PERCENT,    ///< the bar graph shows 4/8
+    HMI_BAR_063_PERCENT,    ///< the bar graph shows 5/8
+    HMI_BAR_075_PERCENT,    ///< the bar graph shows 6/8
+    HMI_BAR_088_PERCENT,    ///< the bar graph shows 7/8
+    HMI_BAR_100_PERCENT     ///< the bar graph is full
 };
 
 /// \brief      Configuration structure for the HMI module
@@ -83,7 +96,7 @@ struct hmi_config
 //---------------- functions and procedures ----------------//
 
 /// \brief      Initializes the HMI module according to the provided configuration
-/// \details    TODO
+/// \details    Registers event callbacks and configures GPIO ports used by the HMI module.
 /// \param      config
 ///                 the HMI module configuration
 void init_hmi_module(const struct hmi_config* config);
@@ -95,17 +108,20 @@ void show_bar_graph(enum hmi_bar_graph_percentage percentage);
 
 /// \brief      Displays the specified pattern on the HMI's LEDs
 /// \param      pattern
-///                 the pattern to show TODO
-/// \see        TODO
+///                 the pattern to show
+/// \see        hmi_led_pattern_t
 void show_led_pattern(hmi_led_pattern_t pattern);
 
-/// \brief      Uses the HMI's LEDs to display a nice "bar graph"
-/// \param      percentage
-///                 the percentage to display
+/// \brief      Turns a specific LED on or off
+/// \param      led
+///                 the LED to control
+/// \param      value
+///                 true &rarr; LED on; `false` &rarr; LED off
 void set_hmi_led(enum hmi_led led, bool value);
 
 /// \brief      Polls the HMI inputs and executes registered callbacks if an event occurred
-/// \details    TODO
+/// \details    This procedure must be called in a slow background task to be able to process input
+///             events from the HMI board.
 void poll_hmi(void);
 
 
