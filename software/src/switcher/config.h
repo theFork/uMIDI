@@ -36,31 +36,32 @@
 //--------- application specific gpio defines --------//
 
 // Hard-wired relays/leds
-#define GPIO_OUT_TUNE_MUTE  gpio_config.header1.pin2
-#define GPIO_OUT_LOOP1      gpio_config.header1.pin3
-#define GPIO_OUT_LOOP2      gpio_config.header1.pin4
-#define GPIO_OUT_LOOP3      gpio_config.header1.pin5
-#define GPIO_OUT_LOOP4      gpio_config.header1.pin6
-#define GPIO_OUT_LOOP5      gpio_config.header1.pin7
-#define GPIO_OUT_SWITCH1    gpio_config.header1.pin8
-#define GPIO_OUT_SWITCH2    gpio_config.header1.pin9
+#define GPIO_OUT_TUNE_MUTE  gpio.header1.pin2
+#define GPIO_OUT_LOOP1      gpio.header1.pin3
+#define GPIO_OUT_LOOP2      gpio.header1.pin4
+#define GPIO_OUT_LOOP3      gpio.header1.pin5
+#define GPIO_OUT_LOOP4      gpio.header1.pin6
+#define GPIO_OUT_LOOP5      gpio.header1.pin7
+#define GPIO_OUT_SWITCH1    gpio.header1.pin8
+#define GPIO_OUT_SWITCH2    gpio.header1.pin9
 
 // Toggle switches
-#define GPIO_IN_TUNE_MUTE   gpio_config.header2.pin2
-#define GPIO_IN_LOOP1       gpio_config.header2.pin3
-#define GPIO_IN_LOOP3       gpio_config.header2.pin4
-#define GPIO_IN_LOOP4       gpio_config.header2.pin5
-#define GPIO_IN_LOOP5       gpio_config.header2.pin6
-#define GPIO_IN_LOOP6       gpio_config.header2.pin7
-#define GPIO_IN_SWITCH1     gpio_config.header2.pin8
-#define GPIO_IN_SWITCH2     gpio_config.header2.pin9
+#define GPIO_IN_TUNE_MUTE   gpio.header2.pin2
+#define GPIO_IN_LOOP1       gpio.header2.pin3
+#define GPIO_IN_LOOP3       gpio.header2.pin4
+#define GPIO_IN_LOOP4       gpio.header2.pin5
+#define GPIO_IN_LOOP5       gpio.header2.pin6
+#define GPIO_IN_LOOP6       gpio.header2.pin7
+#define GPIO_IN_SWITCH1     gpio.header2.pin8
+#define GPIO_IN_SWITCH2     gpio.header2.pin9
 
 // Save button (with led)
-#define GPIO_OUT_SAVE_LED   gpio_config.header3.pin2
-#define GPIO_IN_SAVE_SWITCH gpio_config.header2.pin3
+#define GPIO_OUT_SAVE_LED   gpio.header3.pin2
+#define GPIO_IN_SAVE_SWITCH gpio.header2.pin3
 
 //---------------- constant declarations ----------------//
-extern struct gpio_config gpio_config;
+extern struct gpio_mapping gpio_mappings[];
+extern uint8_t gpio_mappings_size;
 
 extern struct midi_config midi_config;
 
