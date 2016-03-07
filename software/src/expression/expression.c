@@ -77,19 +77,19 @@ void handle_enable_switch(void)
     // Only save switch state on first run
     static bool first_run = true;
     if (first_run) {
-        switch_state = gpio_get(gpio_config.header3.pin9);
+        switch_state = gpio_get(gpio.header3.pin9);
         first_run = false;
         return;
     }
 
     // Poll switch
-    bool current_switch_state = gpio_get(gpio_config.header3.pin9);
+    bool current_switch_state = gpio_get(gpio.header3.pin9);
     if (switch_state != current_switch_state) {
         switch_state = current_switch_state;
 
         // Broadcast change over MIDI and toggle LED
         enable_state = !enable_state;
-        gpio_set(gpio_config.header3.pin6, enable_state);
+        gpio_set(gpio.header3.pin6, enable_state);
         send_enable_message(enable_state);
     }
 }

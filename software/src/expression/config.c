@@ -51,44 +51,12 @@ const struct adc_conversion_config expression_conversion = {
 };
 
 //---------------- GPIO ----------------//
-struct gpio_config gpio_config = {
-    .header1 = {
-        .pin2 = { &PORTA, 0, GPIO_UNUSED },
-        .pin3 = { &PORTA, 1, GPIO_UNUSED },
-        .pin4 = { &PORTA, 2, GPIO_UNUSED },
-        .pin5 = { &PORTA, 3, GPIO_UNUSED },
-        .pin6 = { &PORTA, 4, GPIO_INPUT },  // ADC input
-        .pin7 = { &PORTA, 5, GPIO_UNUSED },
-        .pin8 = { &PORTA, 6, GPIO_UNUSED },
-        .pin9 = { &PORTA, 7, GPIO_UNUSED }
-    },
-    .header2 = {
-        .pin2 = { &PORTB, 0, GPIO_UNUSED },
-        .pin3 = { &PORTB, 1, GPIO_UNUSED },
-        .pin4 = { &PORTB, 2, GPIO_UNUSED },
-        .pin5 = { &PORTB, 3, GPIO_UNUSED },
-        .pin6 = { &PORTC, 0, GPIO_UNUSED },
-        .pin7 = { &PORTC, 1, GPIO_UNUSED },
-        .pin8 = { &PORTC, 2, GPIO_UNUSED },
-        .pin9 = { &PORTC, 3, GPIO_UNUSED }
-    },
-    .header3 = {
-        .pin2 = { &PORTC, 4, GPIO_UNUSED },
-        .pin3 = { &PORTC, 5, GPIO_UNUSED },
-        .pin4 = { &PORTC, 6, GPIO_OUTPUT }, // Enable LED
-        .pin5 = { &PORTC, 7, GPIO_UNUSED },
-        .pin6 = { &PORTD, 0, GPIO_UNUSED },
-        .pin7 = { &PORTD, 1, GPIO_UNUSED },
-        .pin8 = { &PORTD, 2, GPIO_UNUSED },
-        .pin9 = { &PORTD, 3, GPIO_INPUT_PULLUP } // Enable switch
-    },
-    .jumpers = {
-        .jp2 =  { &PORTR, 0, GPIO_INPUT_PULLUP },
-        .jp3 =  { &PORTR, 1, GPIO_INPUT_PULLUP },
-        .jp4 =  { &PORTD, 4, GPIO_INPUT_PULLUP },
-        .jp5 =  { &PORTD, 5, GPIO_INPUT_PULLUP }
-    }
+struct gpio_mapping gpio_mappings[] = {
+    { .pin = &gpio.header1.pin6, .type = GPIO_INPUT },          // ADC input
+    { .pin = &gpio.header3.pin4, .type = GPIO_OUTPUT },         // Enable LED
+    { .pin = &gpio.header3.pin9, .type = GPIO_INPUT_PULLUP },   // Enable switch
 };
+uint8_t gpio_mappings_size = sizeof(gpio_mappings)/sizeof(struct gpio_mapping);
 
 //---------------- MIDI ----------------//
 struct midi_config midi_config = {
