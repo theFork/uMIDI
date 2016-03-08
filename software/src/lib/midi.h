@@ -52,6 +52,7 @@
 
 //---------------- data types ----------------//
 
+/// \brief      Type for valid MIDI values [0..127]
 typedef uint8_t midi_value_t;
 
 /// \brief      MIDI status byte values (second nibble)
