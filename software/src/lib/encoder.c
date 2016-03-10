@@ -21,7 +21,6 @@
  */
 
 #include <stddef.h>
-#include <util/delay.h>
 #include "encoder.h"
 #include "gpio.h"
 
@@ -57,10 +56,7 @@ void init_encoder(struct encoder* const encoder)
 enum encoder_action poll_encoder(struct encoder* const encoder)
 {
     // Poll switch
-    if (!gpio_get(*encoder->config.inputSwitch)) {
-        // De-bounce
-        _delay_ms( 25 );
-        while (!gpio_get(*encoder->config.inputSwitch));
+    if (poll_gpio_input(encoder->config.inputSwitch, GPIO_INPUT_PULLUP)) {
         if (encoder->config.push_callback != NULL) {
             encoder->config.push_callback();
         }
