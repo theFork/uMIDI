@@ -38,43 +38,32 @@
 ////////////////////////////////////////////////////////////////
 
 //---------------- GPIO ----------------//
-struct gpio_config gpio_config = {
+struct gpio_mapping gpio_mappings[] = {
     // GPIO1: Relais hard-wired to status LEDs
-    .header1 = {
-        .pin2 = { &PORTA, 0, GPIO_OUTPUT }, // Tune and mute
-        .pin3 = { &PORTA, 1, GPIO_OUTPUT }, // Loop 1
-        .pin4 = { &PORTA, 2, GPIO_OUTPUT }, // Loop 2
-        .pin5 = { &PORTA, 3, GPIO_OUTPUT }, // Loop 3
-        .pin6 = { &PORTA, 4, GPIO_OUTPUT }, // Loop 4
-        .pin7 = { &PORTA, 5, GPIO_OUTPUT }, // Loop 5
-        .pin8 = { &PORTA, 6, GPIO_OUTPUT }, // Switch 1
-        .pin9 = { &PORTA, 7, GPIO_OUTPUT }  // Switch 2
-    },
+    { .pin = &gpio.header1.pin2, .type = GPIO_OUTPUT       },   // Tune and mute
+    { .pin = &gpio.header1.pin3, .type = GPIO_OUTPUT       },   // Loop 1
+    { .pin = &gpio.header1.pin4, .type = GPIO_OUTPUT       },   // Loop 2
+    { .pin = &gpio.header1.pin5, .type = GPIO_OUTPUT       },   // Loop 3
+    { .pin = &gpio.header1.pin6, .type = GPIO_OUTPUT       },   // Loop 4
+    { .pin = &gpio.header1.pin7, .type = GPIO_OUTPUT       },   // Loop 5
+    { .pin = &gpio.header1.pin8, .type = GPIO_OUTPUT       },   // Switch 1
+    { .pin = &gpio.header1.pin9, .type = GPIO_OUTPUT       },   // Switch 2
 
     // GPIO2: Toggle switches (all low-active)
-    .header2 = {
-        .pin2 = { &PORTB, 0, GPIO_INPUT_PULLUP }, // Toggle Tune and mute
-        .pin3 = { &PORTB, 1, GPIO_INPUT_PULLUP }, // Toggle Loop 1
-        .pin4 = { &PORTB, 2, GPIO_INPUT_PULLUP }, // Toggle Loop 2
-        .pin5 = { &PORTB, 3, GPIO_INPUT_PULLUP }, // Toggle Loop 3
-        .pin6 = { &PORTC, 0, GPIO_INPUT_PULLUP }, // Toggle Loop 4
-        .pin7 = { &PORTC, 1, GPIO_INPUT_PULLUP }, // Toggle Loop 5
-        .pin8 = { &PORTC, 2, GPIO_INPUT_PULLUP }, // Toggle Switch 1
-        .pin9 = { &PORTC, 3, GPIO_INPUT_PULLUP }  // Toggle Switch 2
-    },
+    { .pin = &gpio.header2.pin2, .type = GPIO_INPUT_PULLUP },   // Toggle Tune and mute
+    { .pin = &gpio.header2.pin3, .type = GPIO_INPUT_PULLUP },   // Toggle Loop 1
+    { .pin = &gpio.header2.pin4, .type = GPIO_INPUT_PULLUP },   // Toggle Loop 2
+    { .pin = &gpio.header2.pin5, .type = GPIO_INPUT_PULLUP },   // Toggle Loop 3
+    { .pin = &gpio.header2.pin6, .type = GPIO_INPUT_PULLUP },   // Toggle Loop 4
+    { .pin = &gpio.header2.pin7, .type = GPIO_INPUT_PULLUP },   // Toggle Loop 5
+    { .pin = &gpio.header2.pin8, .type = GPIO_INPUT_PULLUP },   // Toggle Switch 1
+    { .pin = &gpio.header2.pin9, .type = GPIO_INPUT_PULLUP },   // Toggle Switch 2
 
     // GPIO3: "Save" toggle switch and LED
-    .header3 = {
-        .pin2 = { &PORTC, 4, GPIO_OUTPUT },         // "Save" LED
-        .pin3 = { &PORTC, 5, GPIO_INPUT_PULLUP },   // "Save" toggle switch
-        .pin4 = { &PORTC, 6, GPIO_UNUSED },
-        .pin5 = { &PORTC, 7, GPIO_UNUSED },
-        .pin6 = { &PORTD, 0, GPIO_UNUSED },
-        .pin7 = { &PORTD, 1, GPIO_UNUSED },
-        .pin8 = { &PORTD, 2, GPIO_UNUSED },
-        .pin9 = { &PORTD, 3, GPIO_UNUSED }
-    }
+    { .pin = &gpio.header3.pin2, .type = GPIO_OUTPUT       },   // "Save" LED
+    { .pin = &gpio.header3.pin3, .type = GPIO_INPUT_PULLUP },   // "Save" toggle switch
 };
+uint8_t gpio_mappings_size = sizeof(gpio_mappings)/sizeof(struct gpio_mapping);
 
 //---------------- MIDI ----------------//
 struct midi_config midi_config = {

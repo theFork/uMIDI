@@ -38,13 +38,14 @@
 
 
 //---------------- constant declarations ----------------//
-extern struct gpio_config gpio_config;
+extern struct gpio_mapping gpio_mappings[];
+extern uint8_t gpio_mappings_size;
 
 extern struct midi_config midi_config;
 
 extern struct encoder_config encoder_config;
 extern struct sequencer_config sequencer_config;
-extern struct gpio_pin* sequencer_leds[];
+extern const struct gpio_pin* sequencer_leds[];
 extern uint8_t sequencer_leds_size;
 
 extern background_task_t high_frequency_tasks[];

@@ -47,9 +47,9 @@ enum encoder_action
 /// \brief      Configuration of an encoder
 struct encoder_config
 {
-    struct gpio_pin*    inputA;         ///< Input A
-    struct gpio_pin*    inputB;         ///< Input B
-    struct gpio_pin*    inputSwitch;    ///< Push button
+    const struct gpio_pin* inputA;      ///< Input A
+    const struct gpio_pin* inputB;      ///< Input B
+    const struct gpio_pin* inputSwitch; ///< Push button
 
     void (*cw_callback  )(void);        ///< Callback for clockwise rotation
     void (*ccw_callback )(void);        ///< Callback for counter-clockwise rotation

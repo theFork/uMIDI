@@ -39,13 +39,13 @@ static struct encoder_state state = {
 };
 
 /// \brief      The GPIO pin that output A of the encoder is connected to
-static struct gpio_pin* inputA;
+static const struct gpio_pin* inputA;
 
 /// \brief      The GPIO pin that output B of the encoder is connected to
-static struct gpio_pin* inputB;
+static const struct gpio_pin* inputB;
 
 /// \brief      The GPIO pin that the momentary switch is connected to
-static struct gpio_pin* inputSwitch;
+static const struct gpio_pin* inputSwitch;
 
 /// \brief      Callback for clockwise rotation
 static void (*cw_callback)(void);

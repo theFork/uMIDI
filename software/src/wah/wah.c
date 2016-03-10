@@ -62,8 +62,8 @@ static inline uint16_t linear_function(uint8_t midi_value)
 
 void enable_wah(bool enable)
 {
-    gpio_set(gpio_config.header3.pin4, enable);
-    gpio_set(gpio_config.header3.pin8, enable);
+    gpio_set(gpio.header3.pin4, enable);
+    gpio_set(gpio.header3.pin8, enable);
 }
 
 bool exec_enable(const char* command)
@@ -141,11 +141,11 @@ void handle_midi_cc(uint8_t controller, uint8_t value)
 
 void handle_switch(void)
 {
-    if (!gpio_get(gpio_config.header3.pin6)) {
+    if (!gpio_get(gpio.header3.pin6)) {
         enable_state = !enable_state;
         enable_wah(enable_state);
         _delay_ms(50);
-        while (!gpio_get(gpio_config.header3.pin6)) {
+        while (!gpio_get(gpio.header3.pin6)) {
             wdt_reset();
         }
     }

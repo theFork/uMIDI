@@ -54,7 +54,7 @@ int main( void )
     enable_usb_pll();
 
     // Initialize modules
-    init_gpio_module(&gpio_config);
+    init_gpio_module(gpio_mappings, gpio_mappings_size);
     init_leds_module();
     init_midi_module(&midi_config);
     init_encoder_module(&encoder_config);
