@@ -78,7 +78,7 @@ const struct gpio gpio = {
 void init_gpio_module(const struct gpio_mapping * const mappings, const uint8_t mappings_size)
 {
     // Iterate pins in GPIO config and initialize default configuration
-    const struct gpio_pin *pin_pointer = &gpio.header1.pin2;
+    const struct gpio_pin* pin_pointer = &gpio.header1.pin2;
     for (uint8_t i=0; i<sizeof(struct gpio)/sizeof(struct gpio_pin); ++i) {
         if (i >= 24) {
             // Configure solder jumpers as inputs
