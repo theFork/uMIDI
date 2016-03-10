@@ -38,7 +38,7 @@
 /// \brief      An encoder action
 enum encoder_action
 {
-    ENCODER_ACTION_NONE,                ///< Nothing happened :-(
+    ENCODER_ACTION_NONE,                ///< :-( Nothing happened
     ENCODER_ACTION_PUSH,                ///< Encoder was pushed
     ENCODER_ACTION_CW,                  ///< Encoder was rotated clockwise
     ENCODER_ACTION_CCW,                 ///< Encoder was rotated counter-clockwise
@@ -54,14 +54,17 @@ enum encoder_type
 /// \brief      Configuration of an encoder
 struct encoder_config
 {
-    const struct gpio_pin* inputA;      ///< Input A
-    const struct gpio_pin* inputB;      ///< Input B
-    const struct gpio_pin* inputSwitch; ///< Push button
+    const struct gpio_pin* inputA;      ///< The GPIO pin that input A is connected to
+    const struct gpio_pin* inputB;      ///< The GPIO pin that input A is connected to
+    const struct gpio_pin* inputSwitch; ///< The GPIO pin that the push button is connected to.
+                                        ///< Set this to `NULL` if your encoder does not have a
+                                        ///< momentary switch.
+
     const enum encoder_type type;       ///< Encoder type (# of phases)
 
-    void (*cw_callback  )(void);        ///< Callback for clockwise rotation
-    void (*ccw_callback )(void);        ///< Callback for counter-clockwise rotation
-    void (*push_callback)(void);        ///< Callback for the push button
+    void (*cw_callback  )(void);        ///< Callback for clockwise rotation or `NULL`
+    void (*ccw_callback )(void);        ///< Callback for counter-clockwise rotation or `NULL`
+    void (*push_callback)(void);        ///< Callback for the push button or `NULL`
 };
 
 /// \brief      Internal state of an encoder

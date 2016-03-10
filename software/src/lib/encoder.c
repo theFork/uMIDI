@@ -1,5 +1,5 @@
 /// \file
-/// \brief  Implementation of a 3-phase rotary encoder with momentary switch
+/// \brief  Implementation of a 3- or 4-phase rotary encoder with (optional) momentary switch
 
 /*
  * Copyright 2015 Sebastian Neuser
@@ -68,7 +68,7 @@ static void advance_3phase_encoder(struct encoder_state* const state, const bool
 }
 
 /// \brief      Interprets encoder inputs and updates the supplied encoder state
-/// \details    This helper function implements a 3-phase rotary encoder "protocol".
+/// \details    This helper function implements a 4-phase rotary encoder "protocol".
 /// \param      state
 ///                 the state of the encoder
 /// \param      inputA
@@ -105,7 +105,9 @@ void init_encoder(struct encoder* const encoder)
     // Configure GPIO pins
     configure_gpio_pin(encoder->config.inputA, GPIO_INPUT_PULLUP);
     configure_gpio_pin(encoder->config.inputB, GPIO_INPUT_PULLUP);
-    configure_gpio_pin(encoder->config.inputSwitch, GPIO_INPUT_PULLUP);
+    if (encoder->config.inputSwitch != NULL) {
+        configure_gpio_pin(encoder->config.inputSwitch, GPIO_INPUT_PULLUP);
+    }
 
     // Initialize encoder state
     encoder->state.inputA = false;
