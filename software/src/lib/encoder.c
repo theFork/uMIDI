@@ -21,6 +21,7 @@
  */
 
 #include <stddef.h>
+
 #include "encoder.h"
 #include "gpio.h"
 
@@ -29,16 +30,48 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-#define ENC_INPUT_A     gpio_get(*encoder->config.inputA)
-#define ENC_INPUT_B     gpio_get(*encoder->config.inputB)
-#define ENC_STATE_A     encoder->state.inputA
-#define ENC_STATE_B     encoder->state.inputB
-
 
 
 ////////////////////////////////////////////////////////////////
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
+
+/// \brief      Interprets encoder inputs and updates the supplied encoder state
+/// \details    This helper function implements a 3-phase rotary encoder "protocol".
+/// \param      state
+///                 the state of the encoder
+/// \param      inputA
+///                 the current input on the encoder's A terminal
+/// \param      inputB
+///                 the current input on the encoder's B terminal
+/// \returns    the direction the encoder was rotated in or ENCODER_ACTION_NONE
+static enum encoder_action advance_3phase_encoder(struct encoder_state* const state, const bool inputA, const bool inputB)
+{
+    enum encoder_action action = ENCODER_ACTION_NONE;
+    // Direction: clockwise
+    if ( (!state->inputA && !state->inputB && !inputA &&  inputB) ||
+         (!state->inputA &&  state->inputB &&  inputA &&  inputB) ||
+         ( state->inputA &&  state->inputB && !inputA && !inputB) )
+    {
+        action = ENCODER_ACTION_CW;
+        ++state->counter;
+    }
+
+    // Direction: counter-clockwise
+    else if ( ( state->inputA &&  state->inputB && !inputA &&  inputB) ||
+              (!state->inputA &&  state->inputB && !inputA && !inputB) ||
+              (!state->inputA && !state->inputB &&  inputA &&  inputB) )
+    {
+        action = ENCODER_ACTION_CCW;
+        --state->counter;
+    }
+
+    // Update input encoder->state variables
+    state->inputA = inputA;
+    state->inputB = inputB;
+
+    return action;
+}
 
 void init_encoder(struct encoder* const encoder)
 {
@@ -63,34 +96,15 @@ enum encoder_action poll_encoder(struct encoder* const encoder)
         return ENCODER_ACTION_PUSH;
     }
 
-    // Abort if the position is unchanged
-    if (ENC_STATE_A == ENC_INPUT_A && ENC_STATE_B == ENC_INPUT_B) {
+    // Abort if encoder position is unchanged
+    bool inputA = gpio_get(*encoder->config.inputA);
+    bool inputB = gpio_get(*encoder->config.inputB);
+    if (encoder->state.inputA == inputA && encoder->state.inputB == inputB) {
         return ENCODER_ACTION_NONE;
     }
 
-    enum encoder_action action = ENCODER_ACTION_NONE;
-
-    // Direction: clockwise
-    if ( (!ENC_STATE_A && !ENC_STATE_B && !ENC_INPUT_A &&  ENC_INPUT_B) ||
-         (!ENC_STATE_A &&  ENC_STATE_B &&  ENC_INPUT_A &&  ENC_INPUT_B) ||
-         ( ENC_STATE_A &&  ENC_STATE_B && !ENC_INPUT_A && !ENC_INPUT_B) )
-    {
-        action = ENCODER_ACTION_CW;
-        ++encoder->state.counter;
-    }
-
-    // Direction: counter-clockwise
-    else if ( ( ENC_STATE_A &&  ENC_STATE_B && !ENC_INPUT_A &&  ENC_INPUT_B) ||
-              (!ENC_STATE_A &&  ENC_STATE_B && !ENC_INPUT_A && !ENC_INPUT_B) ||
-              (!ENC_STATE_A && !ENC_STATE_B &&  ENC_INPUT_A &&  ENC_INPUT_B) )
-    {
-        action = ENCODER_ACTION_CCW;
-        --encoder->state.counter;
-    }
-
-    // Update input encoder->state variables
-    ENC_STATE_A = ENC_INPUT_A;
-    ENC_STATE_B = ENC_INPUT_B;
+    enum encoder_action action;
+    action = advance_3phase_encoder(&encoder->state, inputA, inputB);
 
     // On reception of the third pulse in the same direction
     if (encoder->state.counter <= -3 || encoder->state.counter >= 3) {
