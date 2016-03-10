@@ -44,12 +44,20 @@ enum encoder_action
     ENCODER_ACTION_CCW,                 ///< Encoder was rotated counter-clockwise
 };
 
+/// \brief      Valid encoder types
+enum encoder_type
+{
+    ENCODER_TYPE_3_PHASE = 3,           ///< 3-phase rotary encoder
+    ENCODER_TYPE_4_PHASE = 4,           ///< 4-phase rotary encoder
+};
+
 /// \brief      Configuration of an encoder
 struct encoder_config
 {
     const struct gpio_pin* inputA;      ///< Input A
     const struct gpio_pin* inputB;      ///< Input B
     const struct gpio_pin* inputSwitch; ///< Push button
+    const enum encoder_type type;       ///< Encoder type (# of phases)
 
     void (*cw_callback  )(void);        ///< Callback for clockwise rotation
     void (*ccw_callback )(void);        ///< Callback for counter-clockwise rotation

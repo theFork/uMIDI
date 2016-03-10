@@ -60,6 +60,8 @@ struct encoder encoder = {
         .inputB = &gpio.header1.pin2,
         .inputSwitch = &gpio.header1.pin4,
 
+        .type = ENCODER_TYPE_3_PHASE,
+
         .cw_callback = &encoder_cw_callback,
         .ccw_callback = &encoder_ccw_callback,
         .push_callback = &encoder_push_callback,

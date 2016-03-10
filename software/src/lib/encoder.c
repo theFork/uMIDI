@@ -44,16 +44,13 @@
 ///                 the current input on the encoder's A terminal
 /// \param      inputB
 ///                 the current input on the encoder's B terminal
-/// \returns    the direction the encoder was rotated in or ENCODER_ACTION_NONE
-static enum encoder_action advance_3phase_encoder(struct encoder_state* const state, const bool inputA, const bool inputB)
+static void advance_3phase_encoder(struct encoder_state* const state, const bool inputA, const bool inputB)
 {
-    enum encoder_action action = ENCODER_ACTION_NONE;
     // Direction: clockwise
     if ( (!state->inputA && !state->inputB && !inputA &&  inputB) ||
          (!state->inputA &&  state->inputB &&  inputA &&  inputB) ||
          ( state->inputA &&  state->inputB && !inputA && !inputB) )
     {
-        action = ENCODER_ACTION_CW;
         ++state->counter;
     }
 
@@ -62,15 +59,45 @@ static enum encoder_action advance_3phase_encoder(struct encoder_state* const st
               (!state->inputA &&  state->inputB && !inputA && !inputB) ||
               (!state->inputA && !state->inputB &&  inputA &&  inputB) )
     {
-        action = ENCODER_ACTION_CCW;
         --state->counter;
     }
 
     // Update input encoder->state variables
     state->inputA = inputA;
     state->inputB = inputB;
+}
 
-    return action;
+/// \brief      Interprets encoder inputs and updates the supplied encoder state
+/// \details    This helper function implements a 3-phase rotary encoder "protocol".
+/// \param      state
+///                 the state of the encoder
+/// \param      inputA
+///                 the current input on the encoder's A terminal
+/// \param      inputB
+///                 the current input on the encoder's B terminal
+static void advance_4phase_encoder(struct encoder_state* const state, const bool inputA, const bool inputB)
+{
+    // Direction: clockwise
+    if ( (!state->inputA && !state->inputB &&  inputA && !inputB) ||
+         ( state->inputA && !state->inputB &&  inputA &&  inputB) ||
+         ( state->inputA &&  state->inputB && !inputA &&  inputB) ||
+         (!state->inputA &&  state->inputB && !inputA && !inputB) )
+    {
+        ++state->counter;
+    }
+
+    // Direction: counter-clockwise
+    else if ( (!state->inputA && !state->inputB && !inputA &&  inputB) ||
+              (!state->inputA &&  state->inputB &&  inputA &&  inputB) ||
+              ( state->inputA &&  state->inputB &&  inputA && !inputB) ||
+              ( state->inputA && !state->inputB && !inputA && !inputB) )
+    {
+        --state->counter;
+    }
+
+    // Update input encoder->state variables
+    state->inputA = inputA;
+    state->inputB = inputB;
 }
 
 void init_encoder(struct encoder* const encoder)
@@ -103,24 +130,33 @@ enum encoder_action poll_encoder(struct encoder* const encoder)
         return ENCODER_ACTION_NONE;
     }
 
-    enum encoder_action action;
-    action = advance_3phase_encoder(&encoder->state, inputA, inputB);
+    // Prepare default return value
+    enum encoder_action action = ENCODER_ACTION_NONE;
 
-    // On reception of the third pulse in the same direction
-    if (encoder->state.counter <= -3 || encoder->state.counter >= 3) {
-        // Reset counter
-        encoder->state.counter = 0;
-
-        // Call back
-        if (action == ENCODER_ACTION_CW && encoder->config.cw_callback != NULL) {
-            encoder->config.cw_callback();
-        }
-        else if (action == ENCODER_ACTION_CCW && encoder->config.ccw_callback != NULL) {
-            encoder->config.ccw_callback();
-        }
-
-        return action;
+    // Interpret inputs based on the encoder type
+    if (encoder->config.type == ENCODER_TYPE_3_PHASE) {
+        advance_3phase_encoder(&encoder->state, inputA, inputB);
+    }
+    else {
+        advance_4phase_encoder(&encoder->state, inputA, inputB);
     }
 
-    return ENCODER_ACTION_NONE;
+    // On reception of the n-th pulse in the same direction, invoke callback and return direction
+    if (encoder->state.counter <= -encoder->config.type) {
+        encoder->state.counter = 0;
+        action = ENCODER_ACTION_CCW;
+        if (encoder->config.ccw_callback != NULL) {
+            encoder->config.ccw_callback();
+        }
+    }
+
+    if (encoder->state.counter >= encoder->config.type) {
+        encoder->state.counter = 0;
+        action = ENCODER_ACTION_CW;
+        if (encoder->config.cw_callback != NULL) {
+            encoder->config.cw_callback();
+        }
+    }
+
+    return action;
 }
