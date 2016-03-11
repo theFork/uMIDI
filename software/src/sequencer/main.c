@@ -24,8 +24,8 @@
 #include <avr/wdt.h>
 
 #include "lib/background_tasks.h"
-#include "lib/encoder.h"
 #include "lib/gpio.h"
+#include "lib/hmi.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
 #include "lib/serial_communication.h"
@@ -57,7 +57,7 @@ int main( void )
     init_gpio_module(gpio_mappings, gpio_mappings_size);
     init_leds_module();
     init_midi_module(&midi_config);
-    init_encoder(&encoder);
+    init_hmi_module(&hmi_config);
     init_sequencer_module(&sequencer_config, sequencer_leds, sequencer_leds_size);
     init_background_tasks(high_frequency_tasks, high_frequency_tasks_size,
                                 mid_frequency_tasks, mid_frequency_tasks_size,

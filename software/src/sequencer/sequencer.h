@@ -42,15 +42,14 @@ struct sequencer_config {
 
 
 //---------------- functions and procedures ----------------//
-void encoder_cw_callback(void);
-void encoder_ccw_callback(void);
-void encoder_push_callback(void);
+void increase_speed(void);
+void decrease_speed(void);
+void tap_tempo(void);
 bool exec_speed(const char* command);
 bool exec_tap(const char* command);
 bool exec_pattern(const char* command);
 void handle_control_change(uint8_t current_controller, uint8_t value);
 void init_sequencer_module(struct sequencer_config* config, const struct gpio_pin* leds[], uint8_t leds_size);
-void poll_inputs(void);
 void update_sequencer(void);
 
 //---------------- EOF ----------------//

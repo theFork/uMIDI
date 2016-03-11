@@ -28,8 +28,8 @@
 #include <stddef.h>
 
 #include "lib/background_tasks.h"
-#include "lib/encoder.h"
 #include "lib/gpio.h"
+#include "lib/hmi.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
 #include "lib/serial_communication.h"
@@ -46,26 +46,21 @@
 
 //---------------- GPIO ----------------//
 struct gpio_mapping gpio_mappings[] = {
-    { .pin = &gpio.header1.pin6, .type = GPIO_OUTPUT       },
-    { .pin = &gpio.header1.pin7, .type = GPIO_OUTPUT       },
-    { .pin = &gpio.header1.pin8, .type = GPIO_OUTPUT       },
-    { .pin = &gpio.header1.pin9, .type = GPIO_OUTPUT       },
 };
 uint8_t gpio_mappings_size = sizeof(gpio_mappings)/sizeof(struct gpio_mapping);
 
-//---------------- Encoder ----------------//
-struct encoder encoder = {
-    .config = {
-        .inputA = &gpio.header1.pin3,
-        .inputB = &gpio.header1.pin2,
-        .inputSwitch = &gpio.header1.pin4,
-
-        .type = ENCODER_TYPE_3_PHASE,
-
-        .cw_callback = &encoder_cw_callback,
-        .ccw_callback = &encoder_ccw_callback,
-        .push_callback = &encoder_push_callback,
-    },
+//---------------- HMI ----------------//
+struct hmi_config hmi_config = {
+    .input_header = &gpio.header2,
+    .output_header = &gpio.header1,
+    .button1_handler = NULL,
+    .button2_handler = NULL,
+    .encoder1cw_handler = &increase_speed,
+    .encoder1ccw_handler = &decrease_speed,
+    .encoder1push_handler = &tap_tempo,
+    .encoder2cw_handler = NULL,
+    .encoder2ccw_handler = NULL,
+    .encoder2push_handler = NULL
 };
 
 //---------------- MIDI ----------------//
@@ -99,7 +94,7 @@ uint8_t sequencer_leds_size = sizeof(sequencer_leds)/sizeof(struct gpio_pin*);
 background_task_t high_frequency_tasks[] = {
     &serial_communication_task,
     &update_sequencer,
-    &poll_inputs,
+    &poll_hmi,
 };
 uint8_t high_frequency_tasks_size = sizeof(high_frequency_tasks)/sizeof(background_task_t);
 

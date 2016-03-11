@@ -30,6 +30,7 @@
 #include "lib/background_tasks.h"
 #include "lib/encoder.h"
 #include "lib/gpio.h"
+#include "lib/hmi.h"
 #include "lib/midi.h"
 #include "lib/serial_communication.h"
 
@@ -40,6 +41,8 @@
 //---------------- constant declarations ----------------//
 extern struct gpio_mapping gpio_mappings[];
 extern uint8_t gpio_mappings_size;
+
+extern struct hmi_config hmi_config;
 
 extern struct midi_config midi_config;
 

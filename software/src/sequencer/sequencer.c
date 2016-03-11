@@ -24,6 +24,7 @@
 
 #include <util/delay.h>
 #include "lib/gpio.h"
+#include "lib/hmi.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
 #include "lib/wave.h"
@@ -159,14 +160,12 @@ void update_sequencer(void)
         send_control_change(controller_number, new_value);
         step_sequencer_leds();
     }
+
+    show_led_pattern(new_value);
+    usb_printf("value: %x", new_value);
 }
 
-void poll_inputs(void)
-{
-    poll_encoder(&encoder);
-}
-
-void encoder_cw_callback(void)
+void increase_speed(void)
 {
     // Add one BPM to the current wave speed as long as we are below 300 BPM
     fixed_t bpm = wave.settings.frequency * 60;
@@ -177,7 +176,7 @@ void encoder_cw_callback(void)
     }
 }
 
-void encoder_ccw_callback(void)
+void decrease_speed(void)
 {
     // Subtract one BPM from the current wave speed as long as we are above 15 BPM
     fixed_t bpm = wave.settings.frequency * 60;
@@ -188,7 +187,7 @@ void encoder_ccw_callback(void)
     }
 }
 
-void encoder_push_callback(void)
+void tap_tempo(void)
 {
     register_tap();
 }
