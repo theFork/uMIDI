@@ -47,11 +47,10 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
+static uint8_t                  step_counter        = 0;
+
 static uint8_t                  controller_number;
 static struct wave              wave;
-
-static const struct gpio_pin**  status_leds;
-static uint8_t                  status_leds_size;
 
 
 
@@ -61,10 +60,9 @@ static uint8_t                  status_leds_size;
 
 static void step_sequencer_leds(void)
 {
-    static uint8_t led_index = 0;
-    gpio_toggle(*status_leds[led_index]);
-    ++led_index;
-    led_index %= status_leds_size;
+    show_led_pattern(0x80 >> step_counter);
+    ++step_counter;
+    step_counter %= 8;
 }
 
 
@@ -142,10 +140,8 @@ void handle_control_change(uint8_t controller_number, uint8_t value)
     }
 }
 
-void init_sequencer_module(struct sequencer_config* config, const struct gpio_pin* leds[], uint8_t leds_size)
+void init_sequencer_module(struct sequencer_config* config)
 {
-    status_leds = leds;
-    status_leds_size = leds_size;
     controller_number = config->controller_number;
     init_wave(&wave, config->waveform, config->speed, MIDI_MAX_VALUE, 0);
     configure_tap_tempo_wave(&wave);
@@ -160,9 +156,6 @@ void update_sequencer(void)
         send_control_change(controller_number, new_value);
         step_sequencer_leds();
     }
-
-    show_led_pattern(new_value);
-    usb_printf("value: %x", new_value);
 }
 
 void increase_speed(void)

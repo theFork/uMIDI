@@ -185,6 +185,12 @@ void init_wave(struct wave* wave, enum waveform waveform, midi_value_t speed,
 /// \see        tap_tempo_task
 void register_tap(void);
 
+/// \brief      Resets a wave
+/// \details    Re-initializes all internal counters and states of the supplied wave
+/// \param      wave
+///                 the wave to reset
+void reset_wave(struct wave * const wave);
+
 /// \brief      Updates the frequency of a wave
 /// \param      wave
 ///                 the wave to update

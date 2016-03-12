@@ -299,6 +299,13 @@ void register_tap(void)
     tap_arrived = true;
 }
 
+void reset_wave(struct wave * const wave)
+{
+    wave->state.speed_counter = 0;
+    wave->state.step_counter = 0;
+    wave->state.step_direction = DIRECTION_UP;
+}
+
 void set_frequency(struct wave * const wave, fixed_t frequency)
 {
     wave->settings.frequency = frequency;
@@ -322,9 +329,7 @@ void set_waveform(struct wave * const wave, enum waveform waveform)
     wave->settings.waveform = waveform;
 
     // Reset state
-    wave->state.speed_counter = 0;
-    wave->state.step_counter = 0;
-    wave->state.step_direction = DIRECTION_UP;
+    reset_wave(wave);
 }
 
 void tap_tempo_task(void)
