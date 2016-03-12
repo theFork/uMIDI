@@ -38,22 +38,33 @@
 /// \brief      An encoder action
 enum encoder_action
 {
-    ENCODER_ACTION_NONE,                ///< Nothing happened :-(
+    ENCODER_ACTION_NONE,                ///< :-( Nothing happened
     ENCODER_ACTION_PUSH,                ///< Encoder was pushed
     ENCODER_ACTION_CW,                  ///< Encoder was rotated clockwise
     ENCODER_ACTION_CCW,                 ///< Encoder was rotated counter-clockwise
 };
 
+/// \brief      Valid encoder types
+enum encoder_type
+{
+    ENCODER_TYPE_3_PHASE = 3,           ///< 3-phase rotary encoder
+    ENCODER_TYPE_4_PHASE = 4,           ///< 4-phase rotary encoder
+};
+
 /// \brief      Configuration of an encoder
 struct encoder_config
 {
-    const struct gpio_pin* inputA;      ///< Input A
-    const struct gpio_pin* inputB;      ///< Input B
-    const struct gpio_pin* inputSwitch; ///< Push button
+    const struct gpio_pin* inputA;      ///< The GPIO pin that input A is connected to
+    const struct gpio_pin* inputB;      ///< The GPIO pin that input A is connected to
+    const struct gpio_pin* inputSwitch; ///< The GPIO pin that the push button is connected to.
+                                        ///< Set this to `NULL` if your encoder does not have a
+                                        ///< momentary switch.
 
-    void (*cw_callback  )(void);        ///< Callback for clockwise rotation
-    void (*ccw_callback )(void);        ///< Callback for counter-clockwise rotation
-    void (*push_callback)(void);        ///< Callback for the push button
+    const enum encoder_type type;       ///< Encoder type (# of phases)
+
+    void (*cw_callback  )(void);        ///< Callback for clockwise rotation or `NULL`
+    void (*ccw_callback )(void);        ///< Callback for counter-clockwise rotation or `NULL`
+    void (*push_callback)(void);        ///< Callback for the push button or `NULL`
 };
 
 /// \brief      Internal state of an encoder
@@ -66,20 +77,32 @@ struct encoder_state
     int8_t              counter;        ///< Pulse counter
 };
 
+/// \brief      An encoder instance
+struct encoder
+{
+    struct encoder_config   config;     ///< Encoder configuration
+    struct encoder_state    state;      ///< Encoder state
+};
+
 
 //---------------- functions and procedures ----------------//
 
 /// \brief      Initializes the encoder
-/// \details    Saves the GPIO pins and registers the callbacks.
-/// \param      config
-///                 the encoder configuration
+/// \details    Configures GPIO pins and registers the callbacks.
+/// \param      encoder
+///                 the encoder instance to initialize
 /// \see        encoder_config
-void init_encoder_module(const struct encoder_config* config);
+void init_encoder(struct encoder* encoder);
 
-/// \brief      Polls the encoder
-/// \details    Checks if the encoder was rotated or pushed and updates the saved state.
+/// \brief      Polls the encoder inputs
+/// \details    Checks if the encoder was rotated or pushed and updates the saved state. This
+///             function also executes registered callbacks, so you can define those in the
+///             encoder configuration passed to #init_encoder and register this function in a
+///             background task, discarding its return value.
+/// \param      encoder
+///                 the encoder to poll
 /// \return     the detected action or ENCODER_ACTION_NONE
-enum encoder_action poll_encoder(void);
+enum encoder_action poll_encoder(struct encoder* encoder);
 
 
 //---------------- EOF ----------------//
