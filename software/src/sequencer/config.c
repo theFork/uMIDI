@@ -58,9 +58,9 @@ struct hmi_config hmi_config = {
     .encoder1cw_handler = &increase_speed,
     .encoder1ccw_handler = &decrease_speed,
     .encoder1push_handler = &tap_tempo,
-    .encoder2cw_handler = NULL,
-    .encoder2ccw_handler = NULL,
-    .encoder2push_handler = NULL
+    .encoder2cw_handler = &select_next_pattern,
+    .encoder2ccw_handler = &select_previous_pattern,
+    .encoder2push_handler = &start_or_stop_sequencer
 };
 
 //---------------- MIDI ----------------//

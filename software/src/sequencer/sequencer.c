@@ -47,6 +47,7 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
+static bool                     running             = false;
 static uint8_t                  step_counter        = 0;
 
 static uint8_t                  controller_number;
@@ -98,29 +99,39 @@ bool exec_pattern(const char* command)
         return false;
     }
 
-    enum waveform waveform = wave.settings.waveform;
     if (strncmp(STRING_NEXT, command+8, sizeof(STRING_NEXT)) == 0) {
-        ++waveform;
-        waveform %= WAVE_PATTERN_08+1;
-        usb_printf("Switching to next pattern (%u)" USB_NEWLINE, waveform-WAVE_PATTERN_01);
-        goto exec;
+        select_next_pattern();
+        return true;
     }
     if (strncmp(STRING_PREV, command+8, sizeof(STRING_PREV)) == 0) {
-        if (wave.settings.waveform == WAVE_PATTERN_01) {
-            waveform = WAVE_PATTERN_08;
-        }
-        else {
-            --waveform;
-        }
-        usb_printf("Switching to previous pattern (%u)" USB_NEWLINE, waveform-WAVE_PATTERN_01);
-        goto exec;
+        select_previous_pattern();
+        return true;
     }
+
     usb_puts("Unknown parameter" USB_NEWLINE);
     return false;
+}
 
-exec:
+void select_next_pattern(void)
+{
+    enum waveform waveform = wave.settings.waveform;
+    ++waveform;
+    waveform %= WAVE_PATTERN_08+1;
+    usb_printf("Switching to next pattern (%u)" USB_NEWLINE, waveform-WAVE_PATTERN_01);
     set_waveform(&wave, waveform);
-    return true;
+}
+
+void select_previous_pattern(void)
+{
+    enum waveform waveform = wave.settings.waveform;
+    if (waveform == WAVE_PATTERN_01) {
+        waveform = WAVE_PATTERN_08;
+    }
+    else {
+        --waveform;
+    }
+    usb_printf("Switching to previous pattern (%u)" USB_NEWLINE, waveform-WAVE_PATTERN_01);
+    set_waveform(&wave, waveform);
 }
 
 void handle_control_change(uint8_t controller_number, uint8_t value)
@@ -147,8 +158,29 @@ void init_sequencer_module(struct sequencer_config* config)
     configure_tap_tempo_wave(&wave);
 }
 
+void start_or_stop_sequencer(void)
+{
+    // If stopped, just set the "running?" flag
+    if (!running) {
+        running = true;
+        return;
+    }
+
+    // Otherwise, reset the sequencer
+    running = false;
+    step_counter = 0;
+    show_bar_graph(step_counter);
+    reset_wave(&wave);
+}
+
 void update_sequencer(void)
 {
+    // Abort if the 'running?' flag is not set
+    if (!running) {
+        return;
+    }
+
+    // Compute new output value and if it changed, update LEDs
     static uint8_t old_value = 0;
     uint8_t new_value = update_wave(&wave);
     if (new_value != old_value) {
