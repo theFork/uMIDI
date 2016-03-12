@@ -129,7 +129,7 @@ void init_gpio_module(const struct gpio_mapping mappings[], uint8_t mappings_siz
 /// \param      type
 ///                 the GPIO input type (pull-up or pull-down)
 /// \returns    `true`  if the input pin reads logical 1
-bool poll_gpio_input(const struct gpio_pin* pin, enum gpio_type type);
+bool poll_gpio_input(const struct gpio_pin pin, enum gpio_type type);
 
 
 //---------------- inline functions and procedures ----------------//

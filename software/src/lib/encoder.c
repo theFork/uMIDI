@@ -118,7 +118,7 @@ void init_encoder(struct encoder* const encoder)
 enum encoder_action poll_encoder(struct encoder* const encoder)
 {
     // Poll switch
-    if (poll_gpio_input(encoder->config.inputSwitch, GPIO_INPUT_PULLUP)) {
+    if (poll_gpio_input(*encoder->config.inputSwitch, GPIO_INPUT_PULLUP)) {
         if (encoder->config.push_callback != NULL) {
             encoder->config.push_callback();
         }
