@@ -73,6 +73,7 @@ struct gpio_header
     const struct gpio_pin     pin9;     ///< Pin 9 in the pin header on the PCB
 };
 
+/// \brief      This struct represents the four solder jumpers on the bottom side of the PCB.
 struct jumpers
 {
     const struct gpio_pin     jp2;      ///< JP2 on the bottom side of the PCB
