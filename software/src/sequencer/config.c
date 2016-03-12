@@ -94,12 +94,12 @@ uint8_t sequencer_leds_size = sizeof(sequencer_leds)/sizeof(struct gpio_pin*);
 background_task_t high_frequency_tasks[] = {
     &serial_communication_task,
     &update_sequencer,
-    &poll_hmi,
 };
 uint8_t high_frequency_tasks_size = sizeof(high_frequency_tasks)/sizeof(background_task_t);
 
 background_task_t mid_frequency_tasks[] = {
     &usb_main_task,
+    &poll_hmi,
 };
 uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background_task_t);
 
