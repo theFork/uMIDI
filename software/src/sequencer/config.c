@@ -58,8 +58,8 @@ struct hmi_config hmi_config = {
     .encoder1cw_handler = &increase_speed,
     .encoder1ccw_handler = &decrease_speed,
     .encoder1push_handler = &tap_tempo,
-    .encoder2cw_handler = &select_next_pattern,
-    .encoder2ccw_handler = &select_previous_pattern,
+    .encoder2cw_handler = &select_next_waveform,
+    .encoder2ccw_handler = &select_previous_waveform,
     .encoder2push_handler = &start_or_stop_sequencer
 };
 
@@ -124,13 +124,13 @@ struct serial_command serial_commands[] = {
         .handler = &exec_tap
     },
     {
-        .cmd_string = "pattern",
+        .cmd_string = "waveform",
         .help_string = "<p>\n"
-            "Select sequencer pattern:\n"
+            "Select sequencer waveform:\n"
             "<p> : pattern\n"
-            "      \"next\" = switch to next pattern\n"
-            "      \"prev\" = switch to previous pattern\n",
-        .handler = &exec_pattern
+            "      \"next\" = switch to next waveform\n"
+            "      \"prev\" = switch to previous waveform\n",
+        .handler = &exec_waveform
     },
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);

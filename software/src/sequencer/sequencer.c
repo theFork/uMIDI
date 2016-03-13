@@ -92,19 +92,19 @@ bool exec_tap(const char* command)
     return true;
 }
 
-bool exec_pattern(const char* command)
+bool exec_waveform(const char* command)
 {
-    if (strlen(command) < 12 || command[7] != ' ') {
+    if (strlen(command) < 13 || command[8] != ' ') {
         usb_puts("Malformed command" USB_NEWLINE);
         return false;
     }
 
-    if (strncmp(STRING_NEXT, command+8, sizeof(STRING_NEXT)) == 0) {
-        select_next_pattern();
+    if (strncmp(STRING_NEXT, command+9, sizeof(STRING_NEXT)) == 0) {
+        select_next_waveform();
         return true;
     }
-    if (strncmp(STRING_PREV, command+8, sizeof(STRING_PREV)) == 0) {
-        select_previous_pattern();
+    if (strncmp(STRING_PREV, command+9, sizeof(STRING_PREV)) == 0) {
+        select_previous_waveform();
         return true;
     }
 
@@ -112,29 +112,66 @@ bool exec_pattern(const char* command)
     return false;
 }
 
-void select_next_pattern(void)
+/// \brief      Constructs and prints out a nice string announcing the selected waveform
+/// \param      waveform
+///                 the newly selected waveform
+static void echo_selected_waveform(enum waveform waveform)
+{
+    // Initialize string buffer
+    char waveform_string[16] = "";
+
+    switch (waveform) {
+    case WAVE_SINE:
+        snprintf(waveform_string, sizeof(waveform_string), "sine");
+        break;
+    case WAVE_TRIANGLE:
+        snprintf(waveform_string, sizeof(waveform_string), "triangle");
+        break;
+    case WAVE_SAW_UP:
+        snprintf(waveform_string, sizeof(waveform_string), "saw up");
+        break;
+    case WAVE_SAW_DOWN:
+        snprintf(waveform_string, sizeof(waveform_string), "saw down");
+        break;
+    case WAVE_SQUARE:
+        snprintf(waveform_string, sizeof(waveform_string), "square");
+        break;
+    case WAVE_STAIRS:
+        snprintf(waveform_string, sizeof(waveform_string), "stairs");
+        break;
+    case WAVE_RANDOM:
+        snprintf(waveform_string, sizeof(waveform_string), "random");
+        break;
+    default:
+        snprintf(waveform_string, sizeof(waveform_string), "pattern %u", waveform-WAVE_PATTERN_01+1);
+    }
+
+    usb_printf("Switching to waveform: %s" USB_NEWLINE, waveform_string);
+}
+
+void select_next_waveform(void)
 {
     enum waveform waveform = wave.settings.waveform;
     if (waveform == WAVE_PATTERN_20) {
-        waveform = WAVE_PATTERN_01;
+        waveform = WAVE_SINE;
     }
     else {
         ++waveform;
     }
-    usb_printf("Switching to next pattern (%u)" USB_NEWLINE, waveform-WAVE_PATTERN_01);
+    echo_selected_waveform(waveform);
     set_waveform(&wave, waveform);
 }
 
-void select_previous_pattern(void)
+void select_previous_waveform(void)
 {
     enum waveform waveform = wave.settings.waveform;
-    if (waveform == WAVE_PATTERN_01) {
+    if (waveform == WAVE_SINE) {
         waveform = WAVE_PATTERN_20;
     }
     else {
         --waveform;
     }
-    usb_printf("Switching to previous pattern (%u)" USB_NEWLINE, waveform-WAVE_PATTERN_01);
+    echo_selected_waveform(waveform);
     set_waveform(&wave, waveform);
 }
 

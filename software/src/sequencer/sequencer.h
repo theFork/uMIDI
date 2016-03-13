@@ -42,15 +42,15 @@ struct sequencer_config {
 
 
 //---------------- functions and procedures ----------------//
-bool exec_pattern(const char* command);
+bool exec_waveform(const char* command);
 bool exec_speed(const char* command);
 bool exec_tap(const char* command);
 void decrease_speed(void);
 void handle_control_change(uint8_t current_controller, uint8_t value);
 void increase_speed(void);
 void init_sequencer_module(struct sequencer_config* config);
-void select_next_pattern(void);
-void select_previous_pattern(void);
+void select_next_waveform(void);
+void select_previous_waveform(void);
 void start_or_stop_sequencer(void);
 void tap_tempo(void);
 void update_sequencer(void);
