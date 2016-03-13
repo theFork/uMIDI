@@ -115,8 +115,12 @@ bool exec_pattern(const char* command)
 void select_next_pattern(void)
 {
     enum waveform waveform = wave.settings.waveform;
-    ++waveform;
-    waveform %= WAVE_PATTERN_08+1;
+    if (waveform == WAVE_PATTERN_20) {
+        waveform = WAVE_PATTERN_01;
+    }
+    else {
+        ++waveform;
+    }
     usb_printf("Switching to next pattern (%u)" USB_NEWLINE, waveform-WAVE_PATTERN_01);
     set_waveform(&wave, waveform);
 }
@@ -125,7 +129,7 @@ void select_previous_pattern(void)
 {
     enum waveform waveform = wave.settings.waveform;
     if (waveform == WAVE_PATTERN_01) {
-        waveform = WAVE_PATTERN_08;
+        waveform = WAVE_PATTERN_20;
     }
     else {
         --waveform;

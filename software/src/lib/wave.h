@@ -122,6 +122,18 @@ enum waveform
     WAVE_PATTERN_06,                            ///< Wave pattern 06
     WAVE_PATTERN_07,                            ///< Wave pattern 07
     WAVE_PATTERN_08,                            ///< Wave pattern 08
+    WAVE_PATTERN_09,                            ///< Wave pattern 09
+    WAVE_PATTERN_10,                            ///< Wave pattern 10
+    WAVE_PATTERN_11,                            ///< Wave pattern 11
+    WAVE_PATTERN_12,                            ///< Wave pattern 12
+    WAVE_PATTERN_13,                            ///< Wave pattern 13
+    WAVE_PATTERN_14,                            ///< Wave pattern 14
+    WAVE_PATTERN_15,                            ///< Wave pattern 15
+    WAVE_PATTERN_16,                            ///< Wave pattern 16
+    WAVE_PATTERN_17,                            ///< Wave pattern 17
+    WAVE_PATTERN_18,                            ///< Wave pattern 18
+    WAVE_PATTERN_19,                            ///< Wave pattern 19
+    WAVE_PATTERN_20,                            ///< Wave pattern 20
 };
 
 /// \brief      Wave configuration
