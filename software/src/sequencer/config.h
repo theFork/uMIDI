@@ -27,23 +27,25 @@
 //---------------- includes ----------------//
 #include <stdint.h>
 
+#include "lib/background_tasks.h"
 #include "lib/encoder.h"
 #include "lib/gpio.h"
 #include "lib/midi.h"
-#include "lib/background_tasks.h"
+#include "lib/serial_communication.h"
 
 #include "sequencer.h"
 
 
 
 //---------------- constant declarations ----------------//
-extern struct gpio_config gpio_config;
+extern struct gpio_mapping gpio_mappings[];
+extern uint8_t gpio_mappings_size;
 
 extern struct midi_config midi_config;
 
-extern struct encoder_config encoder_config;
+extern struct encoder encoder;
 extern struct sequencer_config sequencer_config;
-extern struct gpio_pin* sequencer_leds[];
+extern const struct gpio_pin* sequencer_leds[];
 extern uint8_t sequencer_leds_size;
 
 extern background_task_t high_frequency_tasks[];
@@ -52,6 +54,9 @@ extern background_task_t mid_frequency_tasks[];
 extern uint8_t mid_frequency_tasks_size;
 extern background_task_t low_frequency_tasks[];
 extern uint8_t low_frequency_tasks_size;
+
+extern struct serial_command serial_commands[];
+extern uint8_t serial_commands_size;
 
 //---------------- EOF ----------------//
 #endif // _CONFIG_H

@@ -35,7 +35,8 @@
 
 
 //---------------- constant declarations ----------------//
-extern struct gpio_config gpio_config;
+extern struct gpio_mapping gpio_mappings[];
+extern uint8_t gpio_mappings_size;
 
 extern struct midi_config midi_config;
 

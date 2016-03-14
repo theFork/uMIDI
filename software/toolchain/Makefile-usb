@@ -24,7 +24,8 @@ TARGET = main
 # Output directory.
 DIR = .
 
-# Fuse bits
+# Fuse bytes
+FUSE0 = 0xff
 FUSE1 = 0x00
 FUSE2 = 0xbf
 FUSE4 = 0xfe
@@ -35,7 +36,7 @@ FUSE5 = 0xff
 OPT = s
 
 # Programmer configuration for avrdude
-AVRDUDE_PROGRAMMER_CONFIG = -c atmelice_pdi
+AVRDUDE_PROGRAMMER ?= atmelice_pdi
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
@@ -87,14 +88,15 @@ CFLAGS += -I$(LUFA_PATH)
 XBOOT_PATH = lib/xboot
 
 # Avrdude settings and variables.
-AVRDUDE_FLAGS = $(AVRDUDE_PROGRAMMER_CONFIG)
+AVRDUDE_FLAGS  = -c $(AVRDUDE_PROGRAMMER)
 AVRDUDE_FLAGS += -p x128a4u
 
 AVRDUDE_WRITE_FLASH = -U flash:w:$(DIR)/$(TARGET).hex
 AVRDUDE_VERIFY_FLASH = -U flash:v:$(DIR)/$(TARGET).hex
 AVRDUDE_READ_EEPROM = -U eeprom:r:$(DIR)/eeprom.eep:i
 AVRDUDE_WRITE_EEPROM = -U eeprom:w:$(DIR)/eeprom.eep:i
-AVRDUDE_WRITE_FUSES = -U fuse1:w:$(FUSE1):m
+AVRDUDE_WRITE_FUSES  = -U fuse0:w:$(FUSE0):m
+AVRDUDE_WRITE_FUSES += -U fuse1:w:$(FUSE1):m
 AVRDUDE_WRITE_FUSES += -U fuse2:w:$(FUSE2):m
 AVRDUDE_WRITE_FUSES += -U fuse4:w:$(FUSE4):m
 AVRDUDE_WRITE_FUSES += -U fuse5:w:$(FUSE5):m
@@ -245,7 +247,7 @@ fwupdate: $(TARGET).bin
 	$(info $(MSG_UPDATE))
 	echo -n "fwupdate `du -b $(TARGET).bin | sed 's/\s.*//'`\r" > $(CDC_DEVICE)
 	sleep 2
-	cat main.bin > $(CDC_DEVICE)
+	cat main.bin > $(CDC_DEVICE) & cat $(CDC_DEVICE)
 
 # Target:
 # Set fuse bits.

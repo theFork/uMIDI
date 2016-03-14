@@ -1,5 +1,5 @@
 /// \file
-/// \brief      Header for the application specific module
+/// \brief      An application specific module
 /// \details    Place your application specific code here.
 
 /*

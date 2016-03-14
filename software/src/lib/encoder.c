@@ -1,5 +1,5 @@
 /// \file
-/// \brief  Implementation of a 3-phase rotary encoder with momentary switch
+/// \brief  Implementation of a 3- or 4-phase rotary encoder with (optional) momentary switch
 
 /*
  * Copyright 2015 Sebastian Neuser
@@ -21,111 +21,144 @@
  */
 
 #include <stddef.h>
-#include <util/delay.h>
+
 #include "encoder.h"
 #include "gpio.h"
-#include "leds.h"
 
 
 ////////////////////////////////////////////////////////////////
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-/// \brief      Internal state used by poll_encoder
-static struct encoder_state state = {
-    false,
-    false,
-    0
-};
-
-/// \brief      The GPIO pin that output A of the encoder is connected to
-static struct gpio_pin* inputA;
-
-/// \brief      The GPIO pin that output B of the encoder is connected to
-static struct gpio_pin* inputB;
-
-/// \brief      The GPIO pin that the momentary switch is connected to
-static struct gpio_pin* inputSwitch;
-
-/// \brief      Callback for clockwise rotation
-static void (*cw_callback)(void);
-
-/// \brief      Callback for counter-clockwise rotation
-static void (*ccw_callback)(void);
-
-/// \brief      Callback for button press
-static void (*push_callback)(void);
 
 
 ////////////////////////////////////////////////////////////////
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void init_encoder_module(const struct encoder_config* const config)
+/// \brief      Interprets encoder inputs and updates the supplied encoder state
+/// \details    This helper function implements a 3-phase rotary encoder "protocol".
+/// \param      state
+///                 the state of the encoder
+/// \param      inputA
+///                 the current input on the encoder's A terminal
+/// \param      inputB
+///                 the current input on the encoder's B terminal
+static void advance_3phase_encoder(struct encoder_state* const state, const bool inputA, const bool inputB)
 {
-    inputA = config->inputA;
-    inputB = config->inputB;
-    inputSwitch = config->inputSwitch;
-    cw_callback = config->cw_callback;
-    ccw_callback = config->ccw_callback;
-    push_callback = config->push_callback;
-}
-
-enum encoder_action poll_encoder(void)
-{
-    // Poll switch
-    if (!gpio_get(*inputSwitch) && push_callback != NULL) {
-        // De-bounce
-        _delay_ms( 25 );
-        while (!gpio_get(*inputSwitch));
-        push_callback();
-        return ENCODER_ACTION_PUSH;
-    }
-
-    // Abort if the position is unchanged
-    if (state.inputA == gpio_get(*inputA) && state.inputB == gpio_get(*inputB)) {
-        return ENCODER_ACTION_NONE;
-    }
-
-    enum encoder_action action = ENCODER_ACTION_NONE;
-
     // Direction: clockwise
-    if ( (!state.inputA && !state.inputB && !gpio_get(*inputA) &&  gpio_get(*inputB)) ||
-              (!state.inputA &&  state.inputB &&  gpio_get(*inputA) &&  gpio_get(*inputA)) ||
-              ( state.inputA &&  state.inputB && !gpio_get(*inputA) && !gpio_get(*inputB)) )
+    if ( (!state->inputA && !state->inputB && !inputA &&  inputB) ||
+         (!state->inputA &&  state->inputB &&  inputA &&  inputB) ||
+         ( state->inputA &&  state->inputB && !inputA && !inputB) )
     {
-        action = ENCODER_ACTION_CW;
-        ++state.counter;
+        ++state->counter;
     }
 
     // Direction: counter-clockwise
-    else if ( ( state.inputA &&  state.inputB && !gpio_get(*inputA) &&  gpio_get(*inputB)) ||
-         (!state.inputA &&  state.inputB && !gpio_get(*inputA) && !gpio_get(*inputB)) ||
-         (!state.inputA && !state.inputB &&  gpio_get(*inputA) &&  gpio_get(*inputB)) )
+    else if ( ( state->inputA &&  state->inputB && !inputA &&  inputB) ||
+              (!state->inputA &&  state->inputB && !inputA && !inputB) ||
+              (!state->inputA && !state->inputB &&  inputA &&  inputB) )
     {
+        --state->counter;
+    }
+
+    // Update input encoder->state variables
+    state->inputA = inputA;
+    state->inputB = inputB;
+}
+
+/// \brief      Interprets encoder inputs and updates the supplied encoder state
+/// \details    This helper function implements a 4-phase rotary encoder "protocol".
+/// \param      state
+///                 the state of the encoder
+/// \param      inputA
+///                 the current input on the encoder's A terminal
+/// \param      inputB
+///                 the current input on the encoder's B terminal
+static void advance_4phase_encoder(struct encoder_state* const state, const bool inputA, const bool inputB)
+{
+    // Direction: clockwise
+    if ( (!state->inputA && !state->inputB &&  inputA && !inputB) ||
+         ( state->inputA && !state->inputB &&  inputA &&  inputB) ||
+         ( state->inputA &&  state->inputB && !inputA &&  inputB) ||
+         (!state->inputA &&  state->inputB && !inputA && !inputB) )
+    {
+        ++state->counter;
+    }
+
+    // Direction: counter-clockwise
+    else if ( (!state->inputA && !state->inputB && !inputA &&  inputB) ||
+              (!state->inputA &&  state->inputB &&  inputA &&  inputB) ||
+              ( state->inputA &&  state->inputB &&  inputA && !inputB) ||
+              ( state->inputA && !state->inputB && !inputA && !inputB) )
+    {
+        --state->counter;
+    }
+
+    // Update input encoder->state variables
+    state->inputA = inputA;
+    state->inputB = inputB;
+}
+
+void init_encoder(struct encoder* const encoder)
+{
+    // Configure GPIO pins
+    configure_gpio_pin(encoder->config.inputA, GPIO_INPUT_PULLUP);
+    configure_gpio_pin(encoder->config.inputB, GPIO_INPUT_PULLUP);
+    if (encoder->config.inputSwitch != NULL) {
+        configure_gpio_pin(encoder->config.inputSwitch, GPIO_INPUT_PULLUP);
+    }
+
+    // Initialize encoder state
+    encoder->state.inputA = false;
+    encoder->state.inputB = false;
+    encoder->state.counter = 0;
+}
+
+enum encoder_action poll_encoder(struct encoder* const encoder)
+{
+    // Poll switch
+    if (poll_gpio_input(*encoder->config.inputSwitch, GPIO_INPUT_PULLUP)) {
+        if (encoder->config.push_callback != NULL) {
+            encoder->config.push_callback();
+        }
+        return ENCODER_ACTION_PUSH;
+    }
+
+    // Abort if encoder position is unchanged
+    bool inputA = gpio_get(*encoder->config.inputA);
+    bool inputB = gpio_get(*encoder->config.inputB);
+    if (encoder->state.inputA == inputA && encoder->state.inputB == inputB) {
+        return ENCODER_ACTION_NONE;
+    }
+
+    // Prepare default return value
+    enum encoder_action action = ENCODER_ACTION_NONE;
+
+    // Interpret inputs based on the encoder type
+    if (encoder->config.type == ENCODER_TYPE_3_PHASE) {
+        advance_3phase_encoder(&encoder->state, inputA, inputB);
+    }
+    else {
+        advance_4phase_encoder(&encoder->state, inputA, inputB);
+    }
+
+    // On reception of the n-th pulse in the same direction, invoke callback and return direction
+    if (encoder->state.counter <= -encoder->config.type) {
+        encoder->state.counter = 0;
         action = ENCODER_ACTION_CCW;
-        --state.counter;
+        if (encoder->config.ccw_callback != NULL) {
+            encoder->config.ccw_callback();
+        }
     }
 
-    // Update input state variables
-    state.inputA = gpio_get(*inputA);
-    state.inputB = gpio_get(*inputB);
-
-    // On reception of the third pulse in the same direction
-    if (state.counter <= -3 || state.counter >= 3) {
-        // Reset counter
-        state.counter = 0;
-
-        // Call back
-        if (action == ENCODER_ACTION_CW && cw_callback != NULL) {
-            cw_callback();
+    if (encoder->state.counter >= encoder->config.type) {
+        encoder->state.counter = 0;
+        action = ENCODER_ACTION_CW;
+        if (encoder->config.cw_callback != NULL) {
+            encoder->config.cw_callback();
         }
-        else if (action == ENCODER_ACTION_CCW && ccw_callback != NULL) {
-            ccw_callback();
-        }
-
-        return action;
     }
 
-    return ENCODER_ACTION_NONE;
+    return action;
 }

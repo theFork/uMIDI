@@ -8,6 +8,7 @@
 
 # Doxygen output
 software/doc/html
+software/doc/doxygen_sqlite3.db
 
 # PlantUML output
 software/doc/uml/*.png
