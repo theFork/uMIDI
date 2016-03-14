@@ -191,6 +191,42 @@ void handle_program_change(uint8_t program)
 void poll_switches(void)
 {
     // TODO: Handle save switch
+    if (poll_gpio_input(GPIO_IN_SAVE_SWITCH, GPIO_INPUT_PULLUP)) {
+        usb_puts("Save pressed" USB_NEWLINE);
+        gpio_toggle(GPIO_OUT_SAVE_LED);
+    }
+    else if (poll_gpio_input(GPIO_IN_TUNE_MUTE, GPIO_INPUT_PULLUP)) {
+        usb_puts("Tune-Mute pressed" USB_NEWLINE);
+        gpio_toggle(GPIO_OUT_TUNE_MUTE);
+    }
+    else if (poll_gpio_input(GPIO_IN_LOOP1, GPIO_INPUT_PULLUP)) {
+        usb_puts("Loop1 pressed" USB_NEWLINE);
+        gpio_toggle(GPIO_OUT_LOOP1);
+    }
+    else if (poll_gpio_input(GPIO_IN_LOOP2, GPIO_INPUT_PULLUP)) {
+        usb_puts("Loop2 pressed" USB_NEWLINE);
+        gpio_toggle(GPIO_OUT_LOOP2);
+    }
+    else if (poll_gpio_input(GPIO_IN_LOOP3, GPIO_INPUT_PULLUP)) {
+        usb_puts("Loop3 pressed" USB_NEWLINE);
+        gpio_toggle(GPIO_OUT_LOOP3);
+    }
+    else if (poll_gpio_input(GPIO_IN_LOOP4, GPIO_INPUT_PULLUP)) {
+        usb_puts("Loop4 pressed" USB_NEWLINE);
+        gpio_toggle(GPIO_OUT_LOOP4);
+    }
+    else if (poll_gpio_input(GPIO_IN_LOOP5, GPIO_INPUT_PULLUP)) {
+        usb_puts("Loop5 pressed" USB_NEWLINE);
+        gpio_toggle(GPIO_OUT_LOOP5);
+    }
+    else if (poll_gpio_input(GPIO_IN_SWITCH1, GPIO_INPUT_PULLUP)) {
+        usb_puts("Switch1 pressed" USB_NEWLINE);
+        gpio_toggle(GPIO_OUT_SWITCH1);
+    }
+    else if (poll_gpio_input(GPIO_IN_SWITCH2, GPIO_INPUT_PULLUP)) {
+        usb_puts("Switch1 pressed" USB_NEWLINE);
+        gpio_toggle(GPIO_OUT_SWITCH2);
+    }
 
     // Return if no switch pressed
 
