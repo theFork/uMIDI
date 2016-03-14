@@ -21,75 +21,20 @@
  */
 
 #include <stdlib.h>
+#include <avr/pgmspace.h>
 
 #include "background_tasks.h"
 #include "leds.h"
 #include "lookup_tables.h"
 #include "midi.h"
+#include "program.h"
 #include "wave.h"
+#include "whammy.h"
 
 
 ////////////////////////////////////////////////////////////////
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
-
-/// \brief      Internal array of amplitudes for the WAVE_PATTERN_nn waveforms
-static uint8_t wave_patterns[16][16] = {
-    { // WAVE_PATTERN_01
-        WHAMMY_AMPLITUDE_UNISON,
-        WHAMMY_AMPLITUDE_MINOR_SECOND,
-        WHAMMY_AMPLITUDE_MAJOR_SECOND,
-        WHAMMY_AMPLITUDE_MINOR_THIRD,
-        WHAMMY_AMPLITUDE_MAJOR_THIRD,
-        WHAMMY_AMPLITUDE_PERFECT_FOURTH,
-        WHAMMY_AMPLITUDE_TRITONE,
-        WHAMMY_AMPLITUDE_PERFECT_FIFTH,
-        WHAMMY_AMPLITUDE_MINOR_SIXTH,
-        WHAMMY_AMPLITUDE_MAJOR_SIXTH,
-        WHAMMY_AMPLITUDE_MINOR_SEVENTH,
-        WHAMMY_AMPLITUDE_MAJOR_SEVENTH,
-        WHAMMY_AMPLITUDE_OCTAVE,
-        WHAMMY_AMPLITUDE_OCTAVE,
-        WHAMMY_AMPLITUDE_OCTAVE,
-        WHAMMY_AMPLITUDE_OCTAVE,
-    },
-    { // WAVE_PATTERN_02
-        WHAMMY_AMPLITUDE_UNISON,
-        WHAMMY_AMPLITUDE_MINOR_THIRD,
-        WHAMMY_AMPLITUDE_PERFECT_FOURTH,
-        WHAMMY_AMPLITUDE_TRITONE,
-        WHAMMY_AMPLITUDE_PERFECT_FIFTH,
-        WHAMMY_AMPLITUDE_MINOR_SEVENTH,
-        WHAMMY_AMPLITUDE_OCTAVE,
-        WHAMMY_AMPLITUDE_MINOR_SEVENTH,
-        WHAMMY_AMPLITUDE_OCTAVE,
-        WHAMMY_AMPLITUDE_MINOR_SEVENTH,
-        WHAMMY_AMPLITUDE_PERFECT_FIFTH,
-        WHAMMY_AMPLITUDE_TRITONE,
-        WHAMMY_AMPLITUDE_PERFECT_FOURTH,
-        WHAMMY_AMPLITUDE_MINOR_THIRD,
-        WHAMMY_AMPLITUDE_UNISON,
-        WHAMMY_AMPLITUDE_MINOR_THIRD,
-    },
-    { // WAVE_PATTERN_03
-        WHAMMY_AMPLITUDE_UNISON,
-        WHAMMY_AMPLITUDE_1ST_MINOR_THIRD,
-        WHAMMY_AMPLITUDE_1ST_PERFECT_FIFTH,
-        WHAMMY_AMPLITUDE_1ST_MINOR_SEVENTH,
-        WHAMMY_AMPLITUDE_1ST_OCTAVE,
-        WHAMMY_AMPLITUDE_2ND_MINOR_THIRD,
-        WHAMMY_AMPLITUDE_2ND_PERFECT_FIFTH,
-        WHAMMY_AMPLITUDE_2ND_MINOR_SEVENTH,
-        WHAMMY_AMPLITUDE_2ND_OCTAVE,
-        WHAMMY_AMPLITUDE_2ND_MINOR_SEVENTH,
-        WHAMMY_AMPLITUDE_2ND_PERFECT_FIFTH,
-        WHAMMY_AMPLITUDE_2ND_MINOR_THIRD,
-        WHAMMY_AMPLITUDE_1ST_OCTAVE,
-        WHAMMY_AMPLITUDE_1ST_MINOR_SEVENTH,
-        WHAMMY_AMPLITUDE_1ST_PERFECT_FIFTH,
-        WHAMMY_AMPLITUDE_1ST_MINOR_THIRD,
-    },
-};
 
 /// \brief      This flag indicates if a tempo tap occurred
 static bool tap_arrived = false;
@@ -254,27 +199,6 @@ static midi_value_t compute_triangle_wave(struct wave* wave)
     return ((uint16_t) wave->state.step_counter) * MIDI_MAX_VALUE / WAVE_STEPS;
 }
 
-/// \brief      Computes a wave according to the specified pattern
-/// \param      wave
-///                 the wave
-/// \return     the wave output
-static midi_value_t compute_wave_pattern(struct wave* wave)
-{
-    // Compute sample coordinates
-    static uint8_t sample_index = 0;
-    switch (wave->state.step_counter) {
-    case 0:
-    case WAVE_STEPS/2:
-    case WAVE_STEPS:
-        ++sample_index;
-        sample_index %= 16;
-    }
-
-    // Read and return sample
-    uint8_t pattern_number = wave->settings.waveform - WAVE_PATTERN_01;
-    return wave_patterns[pattern_number][sample_index];
-}
-
 
 
 ////////////////////////////////////////////////////////////////
@@ -297,6 +221,13 @@ void init_wave(struct wave * const wave, enum waveform waveform, midi_value_t sp
 void register_tap(void)
 {
     tap_arrived = true;
+}
+
+void reset_wave(struct wave * const wave)
+{
+    wave->state.speed_counter = 0;
+    wave->state.step_counter = 0;
+    wave->state.step_direction = DIRECTION_UP;
 }
 
 void set_frequency(struct wave * const wave, fixed_t frequency)
@@ -322,9 +253,7 @@ void set_waveform(struct wave * const wave, enum waveform waveform)
     wave->settings.waveform = waveform;
 
     // Reset state
-    wave->state.speed_counter = 0;
-    wave->state.step_counter = 0;
-    wave->state.step_direction = DIRECTION_UP;
+    reset_wave(wave);
 }
 
 void tap_tempo_task(void)
