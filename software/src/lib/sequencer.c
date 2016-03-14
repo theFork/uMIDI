@@ -22,30 +22,58 @@
 
 #include <stdlib.h>
 
-#include <util/delay.h>
-#include "lib/gpio.h"
-#include "lib/hmi.h"
-#include "lib/leds.h"
-#include "lib/midi.h"
-#include "lib/wave.h"
-#include "lib/usb.h"
-
-#include "config.h"
+#include "gpio.h"
+#include "leds.h"
+#include "midi.h"
+#include "wave.h"
+#include "usb.h"
 #include "sequencer.h"
+#include "whammy.h"
 
 
 ////////////////////////////////////////////////////////////////
 //               P R I V A T E   D E F I N E S                //
 ////////////////////////////////////////////////////////////////
 
-#define     STRING_NEXT     "next"
-#define     STRING_PREV     "prev"
-
 
 
 ////////////////////////////////////////////////////////////////
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
+
+/// \brief      Internal array of amplitudes for the WAVE_PATTERN_nn waveforms
+static const uint8_t wave_patterns[20][8] PROGMEM = {
+    { // WAVE_PATTERN_01
+        WHAMMY_NOTE_UNISON,
+        WHAMMY_NOTE_OCTAVE,
+        WHAMMY_NOTE_UNISON,
+        WHAMMY_NOTE_OCTAVE,
+        WHAMMY_NOTE_UNISON,
+        WHAMMY_NOTE_OCTAVE,
+        WHAMMY_NOTE_UNISON,
+        WHAMMY_NOTE_OCTAVE,
+    },
+    { // WAVE_PATTERN_02
+        WHAMMY_NOTE_UNISON,
+        WHAMMY_NOTE_1ST_PERFECT_FIFTH,
+        WHAMMY_NOTE_1ST_OCTAVE,
+        WHAMMY_NOTE_2ND_PERFECT_FIFTH,
+        WHAMMY_NOTE_2ND_OCTAVE,
+        WHAMMY_NOTE_2ND_PERFECT_FIFTH,
+        WHAMMY_NOTE_1ST_OCTAVE,
+        WHAMMY_NOTE_1ST_PERFECT_FIFTH,
+    },
+    { // WAVE_PATTERN_03
+        WHAMMY_NOTE_UNISON,
+        WHAMMY_NOTE_OCTAVE,
+        WHAMMY_NOTE_OCTAVE,
+        WHAMMY_NOTE_UNISON,
+        WHAMMY_NOTE_OCTAVE,
+        WHAMMY_NOTE_OCTAVE,
+        WHAMMY_NOTE_UNISON,
+        WHAMMY_NOTE_OCTAVE,
+    },
+};
 
 static bool                     running             = false;
 static uint8_t                  step_counter        = 0;
@@ -59,57 +87,25 @@ static struct wave              wave;
 // S T A T I C   F U N C T I O N S   A N D   P R O C E D U R E S //
 ///////////////////////////////////////////////////////////////////
 
-static void step_sequencer_leds(void)
+/// \brief      Computes a wave according to the specified pattern
+/// \param      wave
+///                 the wave
+/// \return     the wave output
+static midi_value_t compute_wave_pattern(struct wave* wave)
 {
-    show_led_pattern(0x80 >> step_counter);
-    ++step_counter;
-    step_counter %= 8;
-}
-
-
-
-////////////////////////////////////////////////////////////////
-//      F U N C T I O N S   A N D   P R O C E D U R E S       //
-////////////////////////////////////////////////////////////////
-
-bool exec_speed(const char* command)
-{
-    if (strlen(command) < 7 || command[5] != ' ') {
-        usb_puts("Malformed command" USB_NEWLINE);
-        return false;
+    // Compute sample coordinates
+    static uint8_t sample_index = 0;
+    switch (wave->state.step_counter) {
+    case 0:
+    case WAVE_STEPS/2:
+    case WAVE_STEPS:
+        ++sample_index;
+        sample_index %= 8;
     }
 
-    midi_value_t speed = atoi(command+6);
-    speed %= MIDI_MAX_VALUE + 1;
-    usb_printf("Setting waveform speed to %u" USB_NEWLINE, speed);
-    set_speed(&wave, speed);
-    return true;
-}
-
-bool exec_tap(const char* command)
-{
-    register_tap();
-    return true;
-}
-
-bool exec_waveform(const char* command)
-{
-    if (strlen(command) < 13 || command[8] != ' ') {
-        usb_puts("Malformed command" USB_NEWLINE);
-        return false;
-    }
-
-    if (strncmp(STRING_NEXT, command+9, sizeof(STRING_NEXT)) == 0) {
-        select_next_waveform();
-        return true;
-    }
-    if (strncmp(STRING_PREV, command+9, sizeof(STRING_PREV)) == 0) {
-        select_previous_waveform();
-        return true;
-    }
-
-    usb_puts("Unknown parameter" USB_NEWLINE);
-    return false;
+    // Read and return sample
+    uint8_t pattern_number = wave->settings.waveform - SEQUENCER_PATTERN_01;
+    return pgm_read_byte(&(wave_patterns[pattern_number][sample_index]));
 }
 
 /// \brief      Constructs and prints out a nice string announcing the selected waveform
@@ -143,16 +139,22 @@ static void echo_selected_waveform(enum waveform waveform)
         snprintf(waveform_string, sizeof(waveform_string), "random");
         break;
     default:
-        snprintf(waveform_string, sizeof(waveform_string), "pattern %u", waveform-WAVE_PATTERN_01+1);
+        snprintf(waveform_string, sizeof(waveform_string), "pattern %u", waveform-SEQUENCER_PATTERN_01+1);
     }
 
     usb_printf("Switching to waveform: %s" USB_NEWLINE, waveform_string);
 }
 
+
+
+////////////////////////////////////////////////////////////////
+//      F U N C T I O N S   A N D   P R O C E D U R E S       //
+////////////////////////////////////////////////////////////////
+
 void select_next_waveform(void)
 {
     enum waveform waveform = wave.settings.waveform;
-    if (waveform == WAVE_PATTERN_20) {
+    if (waveform == SEQUENCER_PATTERN_20) {
         waveform = WAVE_SINE;
     }
     else {
@@ -166,7 +168,7 @@ void select_previous_waveform(void)
 {
     enum waveform waveform = wave.settings.waveform;
     if (waveform == WAVE_SINE) {
-        waveform = WAVE_PATTERN_20;
+        waveform = SEQUENCER_PATTERN_20;
     }
     else {
         --waveform;
@@ -175,24 +177,7 @@ void select_previous_waveform(void)
     set_waveform(&wave, waveform);
 }
 
-void handle_control_change(uint8_t controller_number, uint8_t value)
-{
-    //send_control_change(controller_number, value);
-    if (controller_number == 69) {
-        set_waveform(&wave, value % WAVE_PATTERN_03);
-    }
-    else if (controller_number == 70) {
-        set_speed(&wave, value);
-    }
-    else if (controller_number == 80) {
-        wave.settings.amplitude = value;
-    }
-    else if (controller_number == 81) {
-        wave.settings.offset = value;
-    }
-}
-
-void init_sequencer_module(struct sequencer_config* config)
+void init_sequencer_module(struct sequencer_config* config, const struct gpio_pin* leds[], uint8_t leds_size)
 {
     controller_number = config->controller_number;
     init_wave(&wave, config->waveform, config->speed, MIDI_MAX_VALUE, 0);
@@ -212,23 +197,6 @@ void start_or_stop_sequencer(void)
     step_counter = 0;
     show_bar_graph(step_counter);
     reset_wave(&wave);
-}
-
-void update_sequencer(void)
-{
-    // Abort if the 'running?' flag is not set
-    if (!running) {
-        return;
-    }
-
-    // Compute new output value and if it changed, update LEDs
-    static uint8_t old_value = 0;
-    uint8_t new_value = update_wave(&wave);
-    if (new_value != old_value) {
-        old_value = new_value;
-        send_control_change(controller_number, new_value);
-        step_sequencer_leds();
-    }
 }
 
 void increase_speed(void)
@@ -253,7 +221,12 @@ void decrease_speed(void)
     }
 }
 
-void tap_tempo(void)
+void update_sequencer(void)
 {
-    register_tap();
+    static uint8_t old_value = 0;
+    uint8_t new_value = update_wave(&wave);
+    if (new_value != old_value) {
+        old_value = new_value;
+        send_control_change(controller_number, new_value);
+    }
 }

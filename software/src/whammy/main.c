@@ -33,7 +33,7 @@
 #include "lib/usb.h"
 
 #include "config.h"
-#include "sequencer.h"
+#include "whammy.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -58,7 +58,6 @@ int main( void )
     init_leds_module();
     init_midi_module(&midi_config);
     init_hmi_module(&hmi_config);
-    init_sequencer_module(&sequencer_config);
     init_background_tasks(high_frequency_tasks, high_frequency_tasks_size,
                                 mid_frequency_tasks, mid_frequency_tasks_size,
                                 low_frequency_tasks, low_frequency_tasks_size);

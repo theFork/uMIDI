@@ -34,7 +34,7 @@
 #include "lib/midi.h"
 #include "lib/serial_communication.h"
 
-#include "sequencer.h"
+#include "whammy.h"
 
 
 
@@ -45,11 +45,6 @@ extern uint8_t gpio_mappings_size;
 extern struct hmi_config hmi_config;
 
 extern struct midi_config midi_config;
-
-extern struct encoder encoder;
-extern struct sequencer_config sequencer_config;
-extern const struct gpio_pin* sequencer_leds[];
-extern uint8_t sequencer_leds_size;
 
 extern background_task_t high_frequency_tasks[];
 extern uint8_t high_frequency_tasks_size;

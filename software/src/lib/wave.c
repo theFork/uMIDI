@@ -36,40 +36,6 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-/// \brief      Internal array of amplitudes for the WAVE_PATTERN_nn waveforms
-static const uint8_t wave_patterns[PROGRAM_COUNT][8] PROGMEM = {
-    { // WAVE_PATTERN_01
-        WHAMMY_NOTE_UNISON,
-        WHAMMY_NOTE_OCTAVE,
-        WHAMMY_NOTE_UNISON,
-        WHAMMY_NOTE_OCTAVE,
-        WHAMMY_NOTE_UNISON,
-        WHAMMY_NOTE_OCTAVE,
-        WHAMMY_NOTE_UNISON,
-        WHAMMY_NOTE_OCTAVE,
-    },
-    { // WAVE_PATTERN_02
-        WHAMMY_NOTE_UNISON,
-        WHAMMY_NOTE_1ST_PERFECT_FIFTH,
-        WHAMMY_NOTE_1ST_OCTAVE,
-        WHAMMY_NOTE_2ND_PERFECT_FIFTH,
-        WHAMMY_NOTE_2ND_OCTAVE,
-        WHAMMY_NOTE_2ND_PERFECT_FIFTH,
-        WHAMMY_NOTE_1ST_OCTAVE,
-        WHAMMY_NOTE_1ST_PERFECT_FIFTH,
-    },
-    { // WAVE_PATTERN_03
-        WHAMMY_NOTE_UNISON,
-        WHAMMY_NOTE_OCTAVE,
-        WHAMMY_NOTE_OCTAVE,
-        WHAMMY_NOTE_UNISON,
-        WHAMMY_NOTE_OCTAVE,
-        WHAMMY_NOTE_OCTAVE,
-        WHAMMY_NOTE_UNISON,
-        WHAMMY_NOTE_OCTAVE,
-    },
-};
-
 /// \brief      This flag indicates if a tempo tap occurred
 static bool tap_arrived = false;
 
@@ -231,27 +197,6 @@ static midi_value_t compute_stairs_wave(struct wave* wave)
 static midi_value_t compute_triangle_wave(struct wave* wave)
 {
     return ((uint16_t) wave->state.step_counter) * MIDI_MAX_VALUE / WAVE_STEPS;
-}
-
-/// \brief      Computes a wave according to the specified pattern
-/// \param      wave
-///                 the wave
-/// \return     the wave output
-static midi_value_t compute_wave_pattern(struct wave* wave)
-{
-    // Compute sample coordinates
-    static uint8_t sample_index = 0;
-    switch (wave->state.step_counter) {
-    case 0:
-    case WAVE_STEPS/2:
-    case WAVE_STEPS:
-        ++sample_index;
-        sample_index %= 8;
-    }
-
-    // Read and return sample
-    uint8_t pattern_number = wave->settings.waveform - WAVE_PATTERN_01;
-    return pgm_read_byte(&(wave_patterns[pattern_number][sample_index]));
 }
 
 

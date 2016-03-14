@@ -1,5 +1,5 @@
 /// \file
-/// \brief      Sequencer module API
+/// \brief      Whammy module API
 
 /*
  * Copyright 2015 Sebastian Neuser
@@ -20,8 +20,8 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _SEQUENCER_H
-#define _SEQUENCER_H
+#ifndef _WHAMMY_APP_H
+#define _WHAMMY_APP_H
 
 
 //---------------- includes ----------------//
@@ -34,27 +34,15 @@
 
 
 //---------------- data types ----------------//
-struct sequencer_config {
-    uint8_t         controller_number;
-    enum waveform   waveform;
-    uint8_t         speed;
-};
 
 
 //---------------- functions and procedures ----------------//
 bool exec_waveform(const char* command);
 bool exec_speed(const char* command);
 bool exec_tap(const char* command);
-void decrease_speed(void);
 void handle_control_change(uint8_t current_controller, uint8_t value);
-void increase_speed(void);
-void init_sequencer_module(struct sequencer_config* config);
-void select_next_waveform(void);
-void select_previous_waveform(void);
-void start_or_stop_sequencer(void);
 void tap_tempo(void);
-void update_sequencer(void);
 
 //---------------- EOF ----------------//
-#endif // _SEQUENCER_H
+#endif // _WHAMMY_APP_H
 

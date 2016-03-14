@@ -37,7 +37,7 @@
 #include "lib/wave.h"
 
 #include "config.h"
-#include "sequencer.h"
+#include "whammy.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -55,12 +55,12 @@ struct hmi_config hmi_config = {
     .output_header = &gpio.header1,
     .button1_handler = NULL,
     .button2_handler = NULL,
-    .encoder1cw_handler = &increase_speed,
-    .encoder1ccw_handler = &decrease_speed,
-    .encoder1push_handler = &tap_tempo,
-    .encoder2cw_handler = &select_next_waveform,
-    .encoder2ccw_handler = &select_previous_waveform,
-    .encoder2push_handler = &start_or_stop_sequencer
+    .encoder1cw_handler = NULL,
+    .encoder1ccw_handler = NULL,
+    .encoder1push_handler = NULL,
+    .encoder2cw_handler = NULL,
+    .encoder2ccw_handler = NULL,
+    .encoder2push_handler = NULL,
 };
 
 //---------------- MIDI ----------------//
@@ -75,25 +75,9 @@ struct midi_config midi_config = {
     .tx_channel = 1,
 };
 
-//---------------- Sequencers ----------------//
-struct sequencer_config sequencer_config = {
-    .controller_number = 11,
-    .waveform   = WAVE_PATTERN_01,
-    .speed      = 60
-};
-
-const struct gpio_pin* sequencer_leds[] = {
-    &gpio.header1.pin6,
-    &gpio.header1.pin7,
-    &gpio.header1.pin8,
-    &gpio.header1.pin9,
-};
-uint8_t sequencer_leds_size = sizeof(sequencer_leds)/sizeof(struct gpio_pin*);
-
 //---------------- State machine ----------------//
 background_task_t high_frequency_tasks[] = {
     &serial_communication_task,
-    &update_sequencer,
 };
 uint8_t high_frequency_tasks_size = sizeof(high_frequency_tasks)/sizeof(background_task_t);
 
