@@ -142,6 +142,12 @@ SRC += $(filter-out $(LOOKUP_TABLES_FILE),$(wildcard lib/*.c)) $(wildcard *.c)
 SRC += $(XBOOT_PATH)/xbootapi.c
 SRC += $(LUFA_SRC_USB_DEVICE) $(LUFA_PATH)/LUFA/Drivers/USB/Class/Device/CDCClassDevice.c
 
+# Generate software ID string and predefine it for the preprocessor
+SOFTWARE_ID  = $(shell date +%F)
+SOFTWARE_ID += $(shell pwd | sed 's:.*/::')
+SOFTWARE_ID += $(shell git describe --all --long --dirty --always | sed 's:heads/::; s:-0-g:-:')
+CFLAGS += -D UMIDI_SOFTWARE_ID="\"$(SOFTWARE_ID)\""
+
 # Default target.
 help:
 	@echo "#------------------------------------------------------------------------------#"
