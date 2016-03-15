@@ -199,33 +199,21 @@ void poll_switches(void)
     // Handle save switch
     if (poll_gpio_input(GPIO_IN_SAVE_SWITCH, GPIO_INPUT_PULLUP)) {
         // Has the program been changed? If so - save.
-    }
-    // Handle program-related switches
-    else if (GPIO_IN_LOOP1.port->IN != 0xFF) { // Is one of them pressed? Assumes they use an entire port!
-
-        // Remember bit index of pressed switch
-        for (switch_index=0; switch_index<=8; ++switch_index) {
-            if (switch_index == 8) {
-                usb_puts("poll_switches: Somewhere, something went terribly wrong..." USB_NEWLINE);
-                return;
-            }
-            else if (GPIO_IN_LOOP1.port->IN & _BV(switch_index)) {
-                break;
-            }
-        }
-
-        // Debounce
-        _delay_ms(25);
-        while(GPIO_IN_LOOP1.port->IN != 0xFF) { // Same assumption!
-            wdt_reset();
-        }
-
-    }
-    else { // No switch pressed
         return;
     }
 
-    // Update current program
-    current_program.word ^= _BV(switch_index);
+    // Handle program-related switches
+    for (switch_index=0; switch_index<8; ++switch_index) {
+        if (poll_gpio_input(*gpio_mappings[8+switch_index].pin, GPIO_INPUT_PULLUP)) {
+            usb_printf("Switch #%u was pressed" USB_NEWLINE, switch_index);
+
+            // Update current program
+            current_program.word ^= _BV(switch_index);
+
+            // Toggle relais
+            gpio_toggle(*gpio_mappings[switch_index].pin);
+        }
+    }
+
     //TODO.....
 }
