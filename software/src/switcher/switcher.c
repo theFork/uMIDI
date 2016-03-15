@@ -24,6 +24,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <avr/io.h>
+#include <avr/wdt.h>
+#include <util/delay.h>
+
 #include "lib/gpio.h"
 #include "lib/leds.h"
 #include "lib/program.h"
@@ -190,47 +194,38 @@ void handle_program_change(uint8_t program)
 
 void poll_switches(void)
 {
-    // TODO: Handle save switch
+    uint8_t switch_index;
+
+    // Handle save switch
     if (poll_gpio_input(GPIO_IN_SAVE_SWITCH, GPIO_INPUT_PULLUP)) {
-        usb_puts("Save pressed" USB_NEWLINE);
-        gpio_toggle(GPIO_OUT_SAVE_LED);
+        // Has the program been changed? If so - save.
     }
-    else if (poll_gpio_input(GPIO_IN_TUNE_MUTE, GPIO_INPUT_PULLUP)) {
-        usb_puts("Tune-Mute pressed" USB_NEWLINE);
-        gpio_toggle(GPIO_OUT_TUNE_MUTE);
-    }
-    else if (poll_gpio_input(GPIO_IN_LOOP1, GPIO_INPUT_PULLUP)) {
-        usb_puts("Loop1 pressed" USB_NEWLINE);
-        gpio_toggle(GPIO_OUT_LOOP1);
-    }
-    else if (poll_gpio_input(GPIO_IN_LOOP2, GPIO_INPUT_PULLUP)) {
-        usb_puts("Loop2 pressed" USB_NEWLINE);
-        gpio_toggle(GPIO_OUT_LOOP2);
-    }
-    else if (poll_gpio_input(GPIO_IN_LOOP3, GPIO_INPUT_PULLUP)) {
-        usb_puts("Loop3 pressed" USB_NEWLINE);
-        gpio_toggle(GPIO_OUT_LOOP3);
-    }
-    else if (poll_gpio_input(GPIO_IN_LOOP4, GPIO_INPUT_PULLUP)) {
-        usb_puts("Loop4 pressed" USB_NEWLINE);
-        gpio_toggle(GPIO_OUT_LOOP4);
-    }
-    else if (poll_gpio_input(GPIO_IN_LOOP5, GPIO_INPUT_PULLUP)) {
-        usb_puts("Loop5 pressed" USB_NEWLINE);
-        gpio_toggle(GPIO_OUT_LOOP5);
-    }
-    else if (poll_gpio_input(GPIO_IN_SWITCH1, GPIO_INPUT_PULLUP)) {
-        usb_puts("Switch1 pressed" USB_NEWLINE);
-        gpio_toggle(GPIO_OUT_SWITCH1);
-    }
-    else if (poll_gpio_input(GPIO_IN_SWITCH2, GPIO_INPUT_PULLUP)) {
-        usb_puts("Switch1 pressed" USB_NEWLINE);
-        gpio_toggle(GPIO_OUT_SWITCH2);
-    }
+    // Handle program-related switches
+    else if (GPIO_IN_LOOP1.port->IN != 0xFF) { // Is one of them pressed? Assumes they use an entire port!
 
-    // Return if no switch pressed
+        // Remember bit index of pressed switch
+        for (switch_index=0; switch_index<=8; ++switch_index) {
+            if (switch_index == 8) {
+                usb_puts("poll_switches: Somewhere, something went terribly wrong..." USB_NEWLINE);
+                return;
+            }
+            else if (GPIO_IN_LOOP1.port->IN & _BV(switch_index)) {
+                break;
+            }
+        }
 
-    // Debounce
+        // Debounce
+        _delay_ms(25);
+        while(GPIO_IN_LOOP1.port->IN != 0xFF) { // Same assumption!
+            wdt_reset();
+        }
+
+    }
+    else { // No switch pressed
+        return;
+    }
 
     // Update current program
+    current_program.word ^= _BV(switch_index);
+    //TODO.....
 }
