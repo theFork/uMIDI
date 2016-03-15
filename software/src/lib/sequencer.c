@@ -21,12 +21,12 @@
  */
 
 #include <stdlib.h>
+#include <avr/pgmspace.h>
 
 #include "gpio.h"
 #include "leds.h"
 #include "midi.h"
 #include "wave.h"
-#include "usb.h"
 #include "sequencer.h"
 #include "whammy.h"
 
@@ -78,7 +78,6 @@ static const uint8_t wave_patterns[20][8] PROGMEM = {
 static bool                     running             = false;
 static uint8_t                  step_counter        = 0;
 
-static uint8_t                  controller_number;
 static struct wave              wave;
 
 
@@ -91,6 +90,7 @@ static struct wave              wave;
 /// \param      wave
 ///                 the wave
 /// \return     the wave output
+/*
 static midi_value_t compute_wave_pattern(struct wave* wave)
 {
     // Compute sample coordinates
@@ -107,43 +107,7 @@ static midi_value_t compute_wave_pattern(struct wave* wave)
     uint8_t pattern_number = wave->settings.waveform - SEQUENCER_PATTERN_01;
     return pgm_read_byte(&(wave_patterns[pattern_number][sample_index]));
 }
-
-/// \brief      Constructs and prints out a nice string announcing the selected waveform
-/// \param      waveform
-///                 the newly selected waveform
-static void echo_selected_waveform(enum waveform waveform)
-{
-    // Initialize string buffer
-    char waveform_string[16] = "";
-
-    switch (waveform) {
-    case WAVE_SINE:
-        snprintf(waveform_string, sizeof(waveform_string), "sine");
-        break;
-    case WAVE_TRIANGLE:
-        snprintf(waveform_string, sizeof(waveform_string), "triangle");
-        break;
-    case WAVE_SAW_UP:
-        snprintf(waveform_string, sizeof(waveform_string), "saw up");
-        break;
-    case WAVE_SAW_DOWN:
-        snprintf(waveform_string, sizeof(waveform_string), "saw down");
-        break;
-    case WAVE_SQUARE:
-        snprintf(waveform_string, sizeof(waveform_string), "square");
-        break;
-    case WAVE_STAIRS:
-        snprintf(waveform_string, sizeof(waveform_string), "stairs");
-        break;
-    case WAVE_RANDOM:
-        snprintf(waveform_string, sizeof(waveform_string), "random");
-        break;
-    default:
-        snprintf(waveform_string, sizeof(waveform_string), "pattern %u", waveform-SEQUENCER_PATTERN_01+1);
-    }
-
-    usb_printf("Switching to waveform: %s" USB_NEWLINE, waveform_string);
-}
+*/
 
 
 
@@ -151,40 +115,14 @@ static void echo_selected_waveform(enum waveform waveform)
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void select_next_waveform(void)
+void init_sequencer_module(void)
 {
-    enum waveform waveform = wave.settings.waveform;
-    if (waveform == SEQUENCER_PATTERN_20) {
-        waveform = WAVE_SINE;
-    }
-    else {
-        ++waveform;
-    }
-    echo_selected_waveform(waveform);
-    set_waveform(&wave, waveform);
-}
-
-void select_previous_waveform(void)
-{
-    enum waveform waveform = wave.settings.waveform;
-    if (waveform == WAVE_SINE) {
-        waveform = SEQUENCER_PATTERN_20;
-    }
-    else {
-        --waveform;
-    }
-    echo_selected_waveform(waveform);
-    set_waveform(&wave, waveform);
-}
-
-void init_sequencer_module(struct sequencer_config* config, const struct gpio_pin* leds[], uint8_t leds_size)
-{
-    controller_number = config->controller_number;
-    init_wave(&wave, config->waveform, config->speed, MIDI_MAX_VALUE, 0);
+    // Configure square wave for use as sequencer clock
+    init_wave(&wave, WAVE_SQUARE, 0, 1, 0);
     configure_tap_tempo_wave(&wave);
 }
 
-void start_or_stop_sequencer(void)
+void toggle_sequencer(void)
 {
     // If stopped, just set the "running?" flag
     if (!running) {
@@ -195,38 +133,16 @@ void start_or_stop_sequencer(void)
     // Otherwise, reset the sequencer
     running = false;
     step_counter = 0;
-    show_bar_graph(step_counter);
     reset_wave(&wave);
-}
-
-void increase_speed(void)
-{
-    // Add one BPM to the current wave speed as long as we are below 300 BPM
-    fixed_t bpm = wave.settings.frequency * 60;
-    if (bpm <= fixed_from_int(300)) {
-        bpm += fixed_from_int(1);
-        set_frequency(&wave, bpm/60);
-        usb_printf("Setting wave speed to %u BPM" USB_NEWLINE, fixed_to_int(bpm));
-    }
-}
-
-void decrease_speed(void)
-{
-    // Subtract one BPM from the current wave speed as long as we are above 15 BPM
-    fixed_t bpm = wave.settings.frequency * 60;
-    if (bpm >= fixed_from_int(15)) {
-        bpm -= fixed_from_int(1);
-        set_frequency(&wave, bpm/60);
-        usb_printf("Setting wave speed to %u BPM" USB_NEWLINE, fixed_to_int(bpm));
-    }
 }
 
 void update_sequencer(void)
 {
-    static uint8_t old_value = 0;
-    uint8_t new_value = update_wave(&wave);
-    if (new_value != old_value) {
-        old_value = new_value;
-        send_control_change(controller_number, new_value);
+    static bool old_clock_state = false;
+    bool new_clock_state = update_wave(&wave);
+    if (new_clock_state != old_clock_state) {
+        old_clock_state = new_clock_state;
+
+        // TODO: Send MIDI message
     }
 }

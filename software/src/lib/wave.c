@@ -359,9 +359,6 @@ midi_value_t update_wave(struct wave* const wave)
         case WAVE_TRIANGLE:
             output = compute_triangle_wave(wave);
             break;
-
-        default:
-            output = compute_wave_pattern(wave);
     }
 
     // Amplify and add offset

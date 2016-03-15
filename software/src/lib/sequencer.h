@@ -61,20 +61,12 @@ enum sequencer_pattern
     SEQUENCER_PATTERN_20,   ///< Sequencer pattern 20
 };
 
-struct sequencer_config {
-    uint8_t         controller_number;
-    enum waveform   waveform;
-    uint8_t         speed;
-};
-
 
 //---------------- functions and procedures ----------------//
-void decrease_speed(void);
-void increase_speed(void);
-void select_next_waveform(void);
-void select_previous_waveform(void);
-void start_or_stop_sequencer(void);
-void init_sequencer_module(struct sequencer_config* config, const struct gpio_pin* leds[], uint8_t leds_size);
+void init_sequencer_module(void);
+
+void toggle_sequencer(void);
+
 void update_sequencer(void);
 
 //---------------- EOF ----------------//
