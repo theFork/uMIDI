@@ -28,6 +28,7 @@
 #include "lib/hmi.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
+#include "lib/sequencer.h"
 #include "lib/serial_communication.h"
 #include "lib/system.h"
 #include "lib/usb.h"
@@ -57,6 +58,7 @@ int main( void )
     init_gpio_module(gpio_mappings, gpio_mappings_size);
     init_leds_module();
     init_midi_module(&midi_config);
+    init_sequencer_module();
     init_hmi_module(&hmi_config);
     init_background_tasks(high_frequency_tasks, high_frequency_tasks_size,
                                 mid_frequency_tasks, mid_frequency_tasks_size,

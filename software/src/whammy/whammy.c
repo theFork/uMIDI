@@ -47,9 +47,6 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-static uint8_t                  controller_number;
-static struct wave              wave;
-
 
 
 ///////////////////////////////////////////////////////////////////
@@ -81,7 +78,7 @@ bool exec_speed(const char* command)
     midi_value_t speed = atoi(command+6);
     speed %= MIDI_MAX_VALUE + 1;
     usb_printf("Setting waveform speed to %u" USB_NEWLINE, speed);
-    set_speed(&wave, speed);
+    //set_speed(&wave, speed);
     return true;
 }
 

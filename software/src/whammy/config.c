@@ -32,6 +32,7 @@
 #include "lib/hmi.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
+#include "lib/sequencer.h"
 #include "lib/serial_communication.h"
 #include "lib/usb.h"
 #include "lib/wave.h"
@@ -78,6 +79,7 @@ struct midi_config midi_config = {
 //---------------- State machine ----------------//
 background_task_t high_frequency_tasks[] = {
     &serial_communication_task,
+    &update_sequencer,
 };
 uint8_t high_frequency_tasks_size = sizeof(high_frequency_tasks)/sizeof(background_task_t);
 
