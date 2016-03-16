@@ -28,16 +28,21 @@
 #include <stdint.h>
 
 #include "gpio.h"
+#include "math.h"
+#include "midi.h"
 #include "wave.h"
 
 
 //---------------- constants ----------------//
 
+/// \brief      Number of steps in a sequencer pattern
+#define SEQUENCER_STEPS_PER_PATTERN     32
+
 
 //---------------- data types ----------------//
 
 /// \brief      Enumeration of available sequencer patterns
-enum sequencer_pattern
+enum pattern
 {
     SEQUENCER_PATTERN_01,   ///< Sequencer pattern 01
     SEQUENCER_PATTERN_02,   ///< Sequencer pattern 02
@@ -59,6 +64,40 @@ enum sequencer_pattern
     SEQUENCER_PATTERN_18,   ///< Sequencer pattern 18
     SEQUENCER_PATTERN_19,   ///< Sequencer pattern 19
     SEQUENCER_PATTERN_20,   ///< Sequencer pattern 20
+};
+
+/// \brief      Pattern type
+enum pattern_type
+{
+    PATTERN_ONE_SHOT,
+    PATTERN_CONTINUOUS
+};
+
+/// \brief      A sequencer step
+/// \details    TODO
+struct sequencer_step
+{
+    enum midi_channel       channel;    ///< MIDI channel
+    enum midi_message_type  type;       ///< MIDI message type
+    midi_value_t            data0;      ///< Data byte 0
+    midi_value_t            data1;      ///< Data byte 1 (optional, depending on the message type)
+};
+
+/// \brief      A sequencer pattern
+/// \details    TODO
+struct sequencer_pattern
+{
+    fixed_t                 frequency;                          ///< Speed of the wave in [Hz]
+    enum pattern_type       type;                               ///< Pattern type
+    uint8_t                 length;                             ///< Number of sequencer steps
+    struct sequencer_step   steps[SEQUENCER_STEPS_PER_PATTERN]; ///< Sequencer steps
+};
+
+struct sequencer_config
+{
+    uint8_t         controller_number;
+    enum waveform   waveform;
+    uint8_t         speed;
 };
 
 

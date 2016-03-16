@@ -24,7 +24,7 @@
 #include <avr/pgmspace.h>
 
 #include "gpio.h"
-#include "leds.h"
+#include "math.h"
 #include "midi.h"
 #include "wave.h"
 #include "sequencer.h"
@@ -41,42 +41,179 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-/// \brief      Internal array of amplitudes for the WAVE_PATTERN_nn waveforms
-static const uint8_t wave_patterns[20][8] PROGMEM = {
-    { // WAVE_PATTERN_01
-        WHAMMY_NOTE_UNISON,
-        WHAMMY_NOTE_OCTAVE,
-        WHAMMY_NOTE_UNISON,
-        WHAMMY_NOTE_OCTAVE,
-        WHAMMY_NOTE_UNISON,
-        WHAMMY_NOTE_OCTAVE,
-        WHAMMY_NOTE_UNISON,
-        WHAMMY_NOTE_OCTAVE,
+/// \brief      Internal array of amplitudes for the SEQUENCER_PATTERN_nn waveforms
+static const struct sequencer_pattern patterns[20] PROGMEM = {
+    { // SEQUENCER_PATTERN_01
+        .frequency  = 1L<<15,
+        .type       = PATTERN_CONTINUOUS,
+        .length     = 8,
+        .steps      = {
+            {
+                .channel = MIDI_CHANNEL_01,
+                .type = MIDI_MSG_TYPE_CONTROL_CHANGE,
+                .data0 = 11,
+                .data1 = WHAMMY_NOTE_UNISON,
+            },
+            {
+                .channel = MIDI_CHANNEL_01,
+                .type = MIDI_MSG_TYPE_CONTROL_CHANGE,
+                .data0 = 11,
+                .data1 = WHAMMY_NOTE_OCTAVE,
+            },
+            {
+                .channel = MIDI_CHANNEL_01,
+                .type = MIDI_MSG_TYPE_CONTROL_CHANGE,
+                .data0 = 11,
+                .data1 = WHAMMY_NOTE_UNISON,
+            },
+            {
+                .channel = MIDI_CHANNEL_01,
+                .type = MIDI_MSG_TYPE_CONTROL_CHANGE,
+                .data0 = 11,
+                .data1 = WHAMMY_NOTE_OCTAVE,
+            },
+            {
+                .channel = MIDI_CHANNEL_01,
+                .type = MIDI_MSG_TYPE_CONTROL_CHANGE,
+                .data0 = 11,
+                .data1 = WHAMMY_NOTE_UNISON,
+            },
+            {
+                .channel = MIDI_CHANNEL_01,
+                .type = MIDI_MSG_TYPE_CONTROL_CHANGE,
+                .data0 = 11,
+                .data1 = WHAMMY_NOTE_OCTAVE,
+            },
+            {
+                .channel = MIDI_CHANNEL_01,
+                .type = MIDI_MSG_TYPE_CONTROL_CHANGE,
+                .data0 = 11,
+                .data1 = WHAMMY_NOTE_UNISON,
+            },
+            {
+                .channel = MIDI_CHANNEL_01,
+                .type = MIDI_MSG_TYPE_CONTROL_CHANGE,
+                .data0 = 11,
+                .data1 = WHAMMY_NOTE_OCTAVE,
+            },
+        }
     },
-    { // WAVE_PATTERN_02
-        WHAMMY_NOTE_UNISON,
-        WHAMMY_NOTE_1ST_PERFECT_FIFTH,
-        WHAMMY_NOTE_1ST_OCTAVE,
-        WHAMMY_NOTE_2ND_PERFECT_FIFTH,
-        WHAMMY_NOTE_2ND_OCTAVE,
-        WHAMMY_NOTE_2ND_PERFECT_FIFTH,
-        WHAMMY_NOTE_1ST_OCTAVE,
-        WHAMMY_NOTE_1ST_PERFECT_FIFTH,
+
+    { // SEQUENCER_PATTERN_02
+        .frequency  = 1L<<16,
+        .type       = PATTERN_CONTINUOUS,
+        .length     = 8,
+        .steps      = {
+            {
+                .channel = MIDI_CHANNEL_01,
+                .type = MIDI_MSG_TYPE_CONTROL_CHANGE,
+                .data0 = 11,
+                .data1 = WHAMMY_NOTE_UNISON,
+            },
+            {
+                .channel = MIDI_CHANNEL_01,
+                .type = MIDI_MSG_TYPE_CONTROL_CHANGE,
+                .data0 = 11,
+                .data1 = WHAMMY_NOTE_1ST_PERFECT_FIFTH,
+            },
+            {
+                .channel = MIDI_CHANNEL_01,
+                .type = MIDI_MSG_TYPE_CONTROL_CHANGE,
+                .data0 = 11,
+                .data1 = WHAMMY_NOTE_1ST_OCTAVE,
+            },
+            {
+                .channel = MIDI_CHANNEL_01,
+                .type = MIDI_MSG_TYPE_CONTROL_CHANGE,
+                .data0 = 11,
+                .data1 = WHAMMY_NOTE_2ND_PERFECT_FIFTH,
+            },
+            {
+                .channel = MIDI_CHANNEL_01,
+                .type = MIDI_MSG_TYPE_CONTROL_CHANGE,
+                .data0 = 11,
+                .data1 = WHAMMY_NOTE_2ND_OCTAVE,
+            },
+            {
+                .channel = MIDI_CHANNEL_01,
+                .type = MIDI_MSG_TYPE_CONTROL_CHANGE,
+                .data0 = 11,
+                .data1 = WHAMMY_NOTE_2ND_PERFECT_FIFTH,
+            },
+            {
+                .channel = MIDI_CHANNEL_01,
+                .type = MIDI_MSG_TYPE_CONTROL_CHANGE,
+                .data0 = 11,
+                .data1 = WHAMMY_NOTE_1ST_OCTAVE,
+            },
+            {
+                .channel = MIDI_CHANNEL_01,
+                .type = MIDI_MSG_TYPE_CONTROL_CHANGE,
+                .data0 = 11,
+                .data1 = WHAMMY_NOTE_1ST_PERFECT_FIFTH,
+            },
+        }
     },
-    { // WAVE_PATTERN_03
-        WHAMMY_NOTE_UNISON,
-        WHAMMY_NOTE_OCTAVE,
-        WHAMMY_NOTE_OCTAVE,
-        WHAMMY_NOTE_UNISON,
-        WHAMMY_NOTE_OCTAVE,
-        WHAMMY_NOTE_OCTAVE,
-        WHAMMY_NOTE_UNISON,
-        WHAMMY_NOTE_OCTAVE,
+    { // SEQUENCER_PATTERN_03
+        .frequency  = 1L<<16,
+        .type       = PATTERN_CONTINUOUS,
+        .length     = 8,
+        .steps      = {
+            {
+                .channel = MIDI_CHANNEL_01,
+                .type = MIDI_MSG_TYPE_CONTROL_CHANGE,
+                .data0 = 11,
+                .data1 = WHAMMY_NOTE_UNISON,
+            },
+            {
+                .channel = MIDI_CHANNEL_01,
+                .type = MIDI_MSG_TYPE_CONTROL_CHANGE,
+                .data0 = 11,
+                .data1 = WHAMMY_NOTE_OCTAVE,
+            },
+            {
+                .channel = MIDI_CHANNEL_01,
+                .type = MIDI_MSG_TYPE_CONTROL_CHANGE,
+                .data0 = 11,
+                .data1 = WHAMMY_NOTE_OCTAVE,
+            },
+            {
+                .channel = MIDI_CHANNEL_01,
+                .type = MIDI_MSG_TYPE_CONTROL_CHANGE,
+                .data0 = 11,
+                .data1 = WHAMMY_NOTE_UNISON,
+            },
+            {
+                .channel = MIDI_CHANNEL_01,
+                .type = MIDI_MSG_TYPE_CONTROL_CHANGE,
+                .data0 = 11,
+                .data1 = WHAMMY_NOTE_OCTAVE,
+            },
+            {
+                .channel = MIDI_CHANNEL_01,
+                .type = MIDI_MSG_TYPE_CONTROL_CHANGE,
+                .data0 = 11,
+                .data1 = WHAMMY_NOTE_OCTAVE,
+            },
+            {
+                .channel = MIDI_CHANNEL_01,
+                .type = MIDI_MSG_TYPE_CONTROL_CHANGE,
+                .data0 = 11,
+                .data1 = WHAMMY_NOTE_UNISON,
+            },
+            {
+                .channel = MIDI_CHANNEL_01,
+                .type = MIDI_MSG_TYPE_CONTROL_CHANGE,
+                .data0 = 11,
+                .data1 = WHAMMY_NOTE_OCTAVE,
+            },
+        }
     },
 };
 
 static bool                     running             = false;
-static uint8_t                  step_counter        = 0;
+static uint8_t                  step_index          = 0;
+static enum pattern             active_pattern      = SEQUENCER_PATTERN_02;
 
 static struct wave              wave;
 
@@ -86,11 +223,11 @@ static struct wave              wave;
 // S T A T I C   F U N C T I O N S   A N D   P R O C E D U R E S //
 ///////////////////////////////////////////////////////////////////
 
+/*
 /// \brief      Computes a wave according to the specified pattern
 /// \param      wave
 ///                 the wave
 /// \return     the wave output
-/*
 static midi_value_t compute_wave_pattern(struct wave* wave)
 {
     // Compute sample coordinates
@@ -119,6 +256,7 @@ void init_sequencer_module(void)
 {
     // Configure square wave for use as sequencer clock
     init_wave(&wave, WAVE_SQUARE, 0, 1, 0);
+    set_frequency(&wave, pgm_read_dword(&patterns[1].frequency));
     configure_tap_tempo_wave(&wave);
 }
 
@@ -132,17 +270,32 @@ void toggle_sequencer(void)
 
     // Otherwise, reset the sequencer
     running = false;
-    step_counter = 0;
+    step_index = 0;
     reset_wave(&wave);
 }
 
 void update_sequencer(void)
 {
-    static bool old_clock_state = false;
+    static bool old_clock_state = true;
     bool new_clock_state = update_wave(&wave);
     if (new_clock_state != old_clock_state) {
         old_clock_state = new_clock_state;
 
-        // TODO: Send MIDI message
+        // Skip low->high transition
+        if (new_clock_state) {
+            return;
+        }
+
+        // Send MIDI message
+        midi_value_t data0 = pgm_read_byte(&patterns[active_pattern].steps[step_index].data0);
+        midi_value_t data1 = pgm_read_byte(&patterns[active_pattern].steps[step_index].data1);
+        switch (pgm_read_byte(&patterns[active_pattern].steps[step_index].type)) {
+        default:
+            send_control_change(data0, data1);
+        }
+
+        // Cyclically implement step index
+        ++step_index;
+        step_index %= patterns[active_pattern].length;
     }
 }
