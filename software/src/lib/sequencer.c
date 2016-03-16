@@ -41,7 +41,8 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-/// \brief      Internal array of amplitudes for the SEQUENCER_PATTERN_nn waveforms
+/// \brief      Internal array of sequencer patterns
+/// \details    Predefines some "factory"-programmed patterns.
 static const struct sequencer_pattern patterns[20] PROGMEM = {
     { // SEQUENCER_PATTERN_01
         .frequency  = 1L<<15,
@@ -211,40 +212,24 @@ static const struct sequencer_pattern patterns[20] PROGMEM = {
     },
 };
 
-static bool                     running             = false;
-static uint8_t                  step_index          = 0;
-static enum pattern             active_pattern      = SEQUENCER_PATTERN_02;
+/// \brief      This flag indicates if the sequencer is currently running
+/// \see        toggle_sequencer
+static bool             running             = false;
 
-static struct wave              wave;
+/// \brief      This counter points to the next sequencer step in the pattern
+static uint8_t          step_index          = 0;
+
+/// \brief      Stores the sequencer pattern index
+static enum pattern     active_pattern      = SEQUENCER_PATTERN_02;
+
+/// \brief      An internal waveform used as a clock source for the sequencer
+static struct wave      wave;
 
 
 
 ///////////////////////////////////////////////////////////////////
 // S T A T I C   F U N C T I O N S   A N D   P R O C E D U R E S //
 ///////////////////////////////////////////////////////////////////
-
-/*
-/// \brief      Computes a wave according to the specified pattern
-/// \param      wave
-///                 the wave
-/// \return     the wave output
-static midi_value_t compute_wave_pattern(struct wave* wave)
-{
-    // Compute sample coordinates
-    static uint8_t sample_index = 0;
-    switch (wave->state.step_counter) {
-    case 0:
-    case WAVE_STEPS/2:
-    case WAVE_STEPS:
-        ++sample_index;
-        sample_index %= 8;
-    }
-
-    // Read and return sample
-    uint8_t pattern_number = wave->settings.waveform - SEQUENCER_PATTERN_01;
-    return pgm_read_byte(&(wave_patterns[pattern_number][sample_index]));
-}
-*/
 
 
 
@@ -276,6 +261,7 @@ void toggle_sequencer(void)
 
 void update_sequencer(void)
 {
+    // See if the sequencer clock ticked
     static bool old_clock_state = true;
     bool new_clock_state = update_wave(&wave);
     if (new_clock_state != old_clock_state) {
@@ -286,13 +272,11 @@ void update_sequencer(void)
             return;
         }
 
-        // Send MIDI message
-        midi_value_t data0 = pgm_read_byte(&patterns[active_pattern].steps[step_index].data0);
-        midi_value_t data1 = pgm_read_byte(&patterns[active_pattern].steps[step_index].data1);
-        switch (pgm_read_byte(&patterns[active_pattern].steps[step_index].type)) {
-        default:
-            send_control_change(data0, data1);
-        }
+        // Read MIDI message from program space and send it
+        send_midi_message(pgm_read_byte(&patterns[active_pattern].steps[step_index].channel),
+                          pgm_read_byte(&patterns[active_pattern].steps[step_index].type),
+                          pgm_read_byte(&patterns[active_pattern].steps[step_index].data0),
+                          pgm_read_byte(&patterns[active_pattern].steps[step_index].data1));
 
         // Cyclically implement step index
         ++step_index;
