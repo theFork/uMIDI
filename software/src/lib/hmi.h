@@ -4,7 +4,7 @@
 ///             1. Connect uMIDI to the HMI board.
 ///             2. Define event handlers for the HMI inputs.
 ///             3. Define a #hmi_config and map your event handlers to the callbacks.
-///             4. Call #init_hmi providing it with your #hmi_config.
+///             4. Call #init_hmi_module providing it with your #hmi_config.
 ///             5. Register #poll_hmi as a mid-frequency background task.
 
 /*

@@ -122,7 +122,7 @@ Furthermore, the library contains modules for several peripheral devices:
 \section start Getting started
 This repository contains the source code for several (example) applications:
 - \ref src/expression       "An expression pedal"
-- \ref src/sequencer        "A simple sequencer for MIDI messages"
+- \ref src/whammy           "A special sequencer for the DigiTech Whammy pedal"
 - \ref src/switcher         "A guitar effects switcher"
 - \ref src/wah              "A MIDI controllable Wah-Wah"
 
