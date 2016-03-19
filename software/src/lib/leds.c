@@ -66,18 +66,11 @@ const struct led led_green = {
 ///                 `true` enables the LED; `false` disables it
 static inline void apply_led(struct led * const led , bool value)
 {
-    /* TODO
     // Update state varable
-    leds[pin]->active = value;
+    led->state.active = value;
 
     // Write GPIO output register
-    if (value) {
-        LED_PORT.OUTSET = _BV(pin);
-    }
-    else {
-        LED_PORT.OUTCLR = _BV(pin);
-    }
-    */
+    gpio_set(led->pin, value);
 }
 
 /// \brief      Initializes or updates an LED's blinking mode
@@ -88,17 +81,15 @@ static inline void apply_led(struct led * const led , bool value)
 ///                 Prescaler for the blinking frequency
 static void set_or_update_blinking_led_state(struct led_state * const led, uint8_t prescaler)
 {
-    /* TODO
     // Abort if neither mode nor prescaler have changed
     if (led->mode == LED_BLINK && led->prescaler == prescaler) {
         return;
     }
 
     // Update mode and prescaler and restart counter
-    l   ed->mode = LED_BLINK;
+    led->mode = LED_BLINK;
     led->prescaler = prescaler;
     led->counter = 0;
-    */
 }
 
 void init_leds_module(void)
@@ -110,33 +101,24 @@ void init_leds_module(void)
 void blink_led(struct led* const led, const uint8_t prescaler)
 {
     // Set blink mode and update prescaler
-    /*
-    if (led == LED_ALL) {
-        set_or_update_blinking_led_state(&red_led, prescaler);
-        set_or_update_blinking_led_state(&green_led, prescaler);
-    }
-    else {
-        set_or_update_blinking_led_state(leds[led], prescaler);
-    }
-    */
+    set_or_update_blinking_led_state(&led->state, prescaler);
 }
 
 void flash_led(struct led* const led)
 {
-    // TODO
-    // leds[led]->mode = LED_FLASH;
+    led->state.mode = LED_FLASH;
 }
 
 void set_led(struct led* const led, const bool value)
 {
-    // leds[led]->mode = LED_STATIC;
-    // apply_led(led, value);
+    led->state.mode = LED_STATIC;
+    apply_led(led, value);
 }
 
 void toggle_led(struct led* const led)
 {
-    // leds[led]->mode = LED_STATIC;
-    // apply_led(led, !leds[led]->active);
+    led->state.mode = LED_STATIC;
+    apply_led(led, !led->state.active);
 }
 
 void update_leds(void)
