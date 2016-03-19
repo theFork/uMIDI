@@ -210,7 +210,14 @@ void poll_switches(void)
 
     // Handle save switch
     if (poll_gpio_input(GPIO_IN_SAVE_SWITCH, GPIO_INPUT_PULLUP)) {
-        // Has the program been changed? If so - save.
+        // Abort if the program is unchanged
+        if (current_program.word == effective_program.word) {
+            return;
+        }
+
+        current_program.word = effective_program.word;
+        update_current_program(current_program.word);
+        flash_led_multiple(&save_led, 3);
         return;
     }
 
@@ -227,10 +234,11 @@ void poll_switches(void)
         }
     }
 
+    // Indicate modified program
     if (current_program.word != effective_program.word) {
         blink_led(&save_led, F_TASK_SLOW/4);
     }
-    else {
+    else if (save_led.state.mode != LED_FLASH) {
         set_led(&save_led, false);
     }
 }
