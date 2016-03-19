@@ -28,8 +28,8 @@
 #include <stddef.h>
 
 #include "lib/background_tasks.h"
-#include "lib/encoder.h"
 #include "lib/gpio.h"
+#include "lib/hmi.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
 #include "lib/serial_communication.h"
@@ -37,7 +37,7 @@
 #include "lib/wave.h"
 
 #include "config.h"
-#include "sequencer.h"
+#include "whammy.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -46,26 +46,21 @@
 
 //---------------- GPIO ----------------//
 struct gpio_mapping gpio_mappings[] = {
-    { .pin = &gpio.header1.pin6, .type = GPIO_OUTPUT       },
-    { .pin = &gpio.header1.pin7, .type = GPIO_OUTPUT       },
-    { .pin = &gpio.header1.pin8, .type = GPIO_OUTPUT       },
-    { .pin = &gpio.header1.pin9, .type = GPIO_OUTPUT       },
 };
 uint8_t gpio_mappings_size = sizeof(gpio_mappings)/sizeof(struct gpio_mapping);
 
-//---------------- Encoder ----------------//
-struct encoder encoder = {
-    .config = {
-        .inputA = &gpio.header1.pin3,
-        .inputB = &gpio.header1.pin2,
-        .inputSwitch = &gpio.header1.pin4,
-
-        .type = ENCODER_TYPE_3_PHASE,
-
-        .cw_callback = &encoder_cw_callback,
-        .ccw_callback = &encoder_ccw_callback,
-        .push_callback = &encoder_push_callback,
-    },
+//---------------- HMI ----------------//
+struct hmi_config hmi_config = {
+    .input_header = &gpio.header2,
+    .output_header = &gpio.header1,
+    .button1_handler = NULL,
+    .button2_handler = NULL,
+    .encoder1cw_handler = NULL,
+    .encoder1ccw_handler = NULL,
+    .encoder1push_handler = NULL,
+    .encoder2cw_handler = NULL,
+    .encoder2ccw_handler = NULL,
+    .encoder2push_handler = NULL,
 };
 
 //---------------- MIDI ----------------//
@@ -80,31 +75,15 @@ struct midi_config midi_config = {
     .tx_channel = 1,
 };
 
-//---------------- Sequencers ----------------//
-struct sequencer_config sequencer_config = {
-    .controller_number = 11,
-    .waveform   = WAVE_PATTERN_01,
-    .speed      = 60
-};
-
-const struct gpio_pin* sequencer_leds[] = {
-    &gpio.header1.pin6,
-    &gpio.header1.pin7,
-    &gpio.header1.pin8,
-    &gpio.header1.pin9,
-};
-uint8_t sequencer_leds_size = sizeof(sequencer_leds)/sizeof(struct gpio_pin*);
-
 //---------------- State machine ----------------//
 background_task_t high_frequency_tasks[] = {
     &serial_communication_task,
-    &update_sequencer,
-    &poll_inputs,
 };
 uint8_t high_frequency_tasks_size = sizeof(high_frequency_tasks)/sizeof(background_task_t);
 
 background_task_t mid_frequency_tasks[] = {
     &usb_main_task,
+    &poll_hmi,
 };
 uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background_task_t);
 
@@ -129,13 +108,13 @@ struct serial_command serial_commands[] = {
         .handler = &exec_tap
     },
     {
-        .cmd_string = "pattern",
+        .cmd_string = "waveform",
         .help_string = "<p>\n"
-            "Select sequencer pattern:\n"
+            "Select sequencer waveform:\n"
             "<p> : pattern\n"
-            "      \"next\" = switch to next pattern\n"
-            "      \"prev\" = switch to previous pattern\n",
-        .handler = &exec_pattern
+            "      \"next\" = switch to next waveform\n"
+            "      \"prev\" = switch to previous waveform\n",
+        .handler = &exec_waveform
     },
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);

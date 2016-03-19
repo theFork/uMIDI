@@ -99,6 +99,7 @@ static inline bool exec_help(void)
 {
     usb_puts("");
     usb_puts("Welcome to the uMIDI serial interface!");
+    usb_printf("Software ID: %s" USB_NEWLINE, UMIDI_SOFTWARE_ID);
     usb_puts("Built-in commands:");
     usb_puts("    clear             :  Clears the console by printing CR/LFs.");
     usb_puts("    fwupdate <s>      :  Initiates a firmware update:");
