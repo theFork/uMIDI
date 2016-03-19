@@ -28,6 +28,7 @@
 #include <avr/wdt.h>
 #include <util/delay.h>
 
+#include "lib/background_tasks.h"
 #include "lib/gpio.h"
 #include "lib/leds.h"
 #include "lib/program.h"
@@ -59,7 +60,11 @@ union program_data
     } bit;
 };
 
+/// \brief  Switch configuration of the current program
 static union program_data current_program;
+
+/// \brief  The current switch configuration
+static union program_data effective_program;
 
 
 ////////////////////////////////////////////////////////////////
@@ -69,6 +74,7 @@ static union program_data current_program;
 void execute_program(uint16_t program_data)
 {
     current_program.word = program_data;
+    effective_program.word = program_data;
 
     usb_printf("Applying relays configuration: %04x" USB_NEWLINE, current_program.word);
 
@@ -166,10 +172,10 @@ bool exec_relay(const char* command)
     bool action = false;
     if (command[7] == 'a') {
         action = true;
-        current_program.word |= _BV(program_bit_index);
+        effective_program.word |= _BV(program_bit_index);
     }
     else {
-        current_program.word &=~ _BV(program_bit_index);
+        effective_program.word &=~ _BV(program_bit_index);
     }
     gpio_set(selected_gpio, action);
     return true;
@@ -183,7 +189,7 @@ bool exec_save(const char* command)
         return false;
     }
 
-    update_current_program(current_program.word);
+    update_current_program(effective_program.word);
     return true;
 }
 
@@ -214,12 +220,17 @@ void poll_switches(void)
             usb_printf("Switch #%u was pressed" USB_NEWLINE, switch_index);
 
             // Update current program
-            current_program.word ^= _BV(switch_index);
+            effective_program.word ^= _BV(switch_index);
 
-            // Toggle relais
+            // Toggle relays
             gpio_toggle(*gpio_mappings[switch_index].pin);
         }
     }
 
-    //TODO.....
+    if (current_program.word != effective_program.word) {
+        blink_led(&save_led, F_TASK_SLOW/4);
+    }
+    else {
+        set_led(&save_led, false);
+    }
 }
