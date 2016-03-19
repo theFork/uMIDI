@@ -133,34 +133,33 @@ void toggle_led(struct led* const led)
 
 void update_leds(void)
 {
-    /* TODO
-    // Iterate LEDs TODO
+    // Iterate LEDs
     uint8_t i;
-    for (i=0; i<LED_COUNT; i++) {
-        switch (leds[i]->mode) {
+    for (i=0; i<=last_registered_led_index; ++i) {
+        switch (leds[i]->state.mode) {
         case LED_FLASH:
             // Enable the LED in the first call
-            if (!leds[i]->active) {
-                apply_led(i, true);
+            if (!leds[i]->state.active) {
+                apply_led(leds[i], true);
             }
             // Disable the LED in the second call
             else {
-                leds[i]->mode = LED_STATIC;
-                apply_led(i, false);
+                leds[i]->state.mode = LED_STATIC;
+                apply_led(leds[i], false);
             }
             break;
 
         case LED_BLINK:
             // Increment counter
-            ++leds[i]->counter;
+            ++leds[i]->state.counter;
 
             // When the counter reaches the prescaler value
-            if (leds[i]->counter >= leds[i]->prescaler) {
+            if (leds[i]->state.counter >= leds[i]->state.prescaler) {
                 // Reset the counter
-                leds[i]->counter = 0;
+                leds[i]->state.counter = 0;
 
                 // Toggle LED
-                apply_led(i, !leds[i]->active);
+                apply_led(leds[i], !leds[i]->state.active);
             }
             break;
 
@@ -168,5 +167,4 @@ void update_leds(void)
             break;
         }
     }
-    */
 }
