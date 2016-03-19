@@ -152,7 +152,7 @@ static void update_flashing_led(uint8_t index)
     // Divide call frequency by 5
     static uint8_t prescaler = 0;
     ++prescaler;
-    if (prescaler < 5) {
+    if (prescaler < 8) {
         return;
     }
     prescaler = 0;

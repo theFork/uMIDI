@@ -193,6 +193,11 @@ void handle_program_change(uint8_t program)
     flash_led_multiple(&save_led, 1);
 }
 
+void unknown_midi_message_handler(uint8_t program)
+{
+    flash_led_multiple(&save_led, 2);
+}
+
 void poll_switches(void)
 {
     uint8_t switch_index;

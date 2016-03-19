@@ -32,9 +32,9 @@ There are two modes, the
 ### Event: MIDI packet received
 - If it is a program change:
     - Load corresponding program
-    - Flash save LED twice
-- Else:
     - Flash save LED once
+- Else:
+    - Flash save LED twice
 
 ### Event: Hard-Wired-Switch pressed
 - Toggle corresponding output

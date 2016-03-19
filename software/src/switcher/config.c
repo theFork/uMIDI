@@ -73,11 +73,9 @@ struct led save_led = {
 struct midi_config midi_config = {
     .event_handlers = {
         .program_change = handle_program_change,
-        /*
-        .control_change = default_midi_handler,
-        .note_on = default_midi_handler,
-        .note_off = default_midi_handler,
-        */
+        .control_change = unknown_midi_message_handler,
+        .note_on = unknown_midi_message_handler,
+        .note_off = unknown_midi_message_handler,
     },
     .tx_channel = 1,
 };
