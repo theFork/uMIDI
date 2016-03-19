@@ -190,6 +190,7 @@ bool exec_save(const char* command)
 void handle_program_change(uint8_t program)
 {
     enter_program(program);
+    flash_led_multiple(&save_led, 1);
 }
 
 void poll_switches(void)

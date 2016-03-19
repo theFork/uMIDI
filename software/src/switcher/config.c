@@ -60,15 +60,24 @@ struct gpio_mapping gpio_mappings[] = {
     { .pin = &gpio.header2.pin9, .type = GPIO_INPUT_PULLUP },   // Toggle Switch 2
 
     // GPIO3: "Save" toggle switch and LED
-    { .pin = &gpio.header3.pin2, .type = GPIO_OUTPUT       },   // "Save" LED
     { .pin = &gpio.header3.pin3, .type = GPIO_INPUT_PULLUP },   // "Save" toggle switch
 };
 uint8_t gpio_mappings_size = sizeof(gpio_mappings)/sizeof(struct gpio_mapping);
 
+//---------------- LEDs ----------------//
+struct led save_led = {
+    .pin = &gpio.header3.pin2,
+};
+
 //---------------- MIDI ----------------//
 struct midi_config midi_config = {
     .event_handlers = {
-        .program_change = handle_program_change
+        .program_change = handle_program_change,
+        /*
+        .control_change = default_midi_handler,
+        .note_on = default_midi_handler,
+        .note_off = default_midi_handler,
+        */
     },
     .tx_channel = 1,
 };

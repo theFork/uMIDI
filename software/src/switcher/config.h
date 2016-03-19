@@ -63,6 +63,8 @@
 extern struct gpio_mapping gpio_mappings[];
 extern uint8_t gpio_mappings_size;
 
+struct led save_led;
+
 extern struct midi_config midi_config;
 
 extern background_task_t high_frequency_tasks[];
