@@ -100,9 +100,17 @@ void blink_led(struct led* led, uint8_t prescaler);
 
 /// \brief      Briefly flashes an LED
 /// \param      led
-///                 the LED that should blink
+///                 the LED that should flash
 /// \see        led
 void flash_led(struct led* led);
+
+/// \brief      Briefly flashes an LED
+/// \param      led
+///                 the LED that should flash
+/// \param      count
+///                 the LED will flash this many times
+/// \see        led
+void flash_led_multiple(struct led* led, uint8_t count);
 
 /// \brief      Enables or disables an LED
 /// \param      led

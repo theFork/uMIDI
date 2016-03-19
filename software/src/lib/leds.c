@@ -126,6 +126,13 @@ void blink_led(struct led* const led, const uint8_t prescaler)
 void flash_led(struct led* const led)
 {
     led->state.mode = LED_FLASH;
+    led->state.counter = 1;
+}
+
+void flash_led_multiple(struct led * const led, const uint8_t count)
+{
+    led->state.mode = LED_FLASH;
+    led->state.counter = count;
 }
 
 void set_led(struct led* const led, const bool value)
@@ -140,6 +147,32 @@ void toggle_led(struct led* const led)
     apply_led(led, !led->state.active);
 }
 
+static void update_flashing_led(uint8_t index)
+{
+    // Divide call frequency by 5
+    static uint8_t prescaler = 0;
+    ++prescaler;
+    if (prescaler < 5) {
+        return;
+    }
+    prescaler = 0;
+
+    // Enable the LED in even calls
+    if (!leds[index]->state.active) {
+        apply_led(leds[index], true);
+    }
+    // Disable the LED in odd calls
+    else {
+        --leds[index]->state.counter;
+        apply_led(leds[index], false);
+
+        // Reset if the required blink count was reached
+        if (leds[index]->state.counter == 0) {
+            leds[index]->state.mode = LED_STATIC;
+        }
+    }
+}
+
 void update_leds(void)
 {
     // Iterate LEDs
@@ -147,15 +180,7 @@ void update_leds(void)
     for (i=0; i<registered_leds_count; ++i) {
         switch (leds[i]->state.mode) {
         case LED_FLASH:
-            // Enable the LED in the first call
-            if (!leds[i]->state.active) {
-                apply_led(leds[i], true);
-            }
-            // Disable the LED in the second call
-            else {
-                leds[i]->state.mode = LED_STATIC;
-                apply_led(leds[i], false);
-            }
+            update_flashing_led(i);
             break;
 
         case LED_BLINK:
