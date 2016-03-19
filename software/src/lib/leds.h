@@ -34,16 +34,16 @@
 //---------------- constants ----------------//
 
 /// \brief  The green onboard LED
-extern struct led led_red;
+extern struct led* led_red;
 
 /// \brief  The green onboard LED
-extern struct led led_green;
+extern struct led* led_green;
 
 /// \brief  TODO: This macro is only for compatibility and should be removed in the future.
-#define LED_GREEN   &led_green
+#define LED_GREEN   led_green
 
 /// \brief  TODO: This macro is only for compatibility and should be removed in the future.
-#define LED_RED     &led_red
+#define LED_RED     led_red
 
 
 //---------------- data types ----------------//
@@ -71,8 +71,8 @@ struct led_state
 /// \details    This enumeration is used to select the LED(s) to switch on/off in the service procedures.
 struct led
 {
-    const struct gpio_pin pin;      ///< Gpio pin connected to an LED
-    struct led_state state;         ///< Current state of the LED
+    const struct gpio_pin* const pin;   ///< Gpio pin connected to an LED
+    struct led_state state;             ///< Current state of the LED
 };
 
 
