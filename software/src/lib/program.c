@@ -24,11 +24,11 @@
  * EEPROM program storage service functions.
 */
 
-#include "gpio.h"
-#include "program.h"
-
 #include <avr/eeprom.h>
 #include <util/delay.h>
+
+#include "gpio.h"
+#include "program.h"
 
 
 

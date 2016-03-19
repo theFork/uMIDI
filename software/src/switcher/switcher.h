@@ -50,7 +50,7 @@ void execute_program(uint16_t program_data);
 void handle_program_change(uint8_t program);
 
 ///< \brief     Callback for unimplemented midi messages
-void unknown_midi_message_handler(uint8_t program);
+void unknown_midi_message_handler(void);
 
 ///< \brief     Task for polling all switches and update current program
 void poll_switches(void);
