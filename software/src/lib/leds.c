@@ -19,6 +19,7 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "gpio.h"
 #include "leds.h"
 
 #include <avr/interrupt.h>
@@ -28,31 +29,27 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-const struct led led_red = {
+struct led led_red = {
        .pin = { .port = &PORTE, .bit = 0 },
        .state = { 0, } // Static, off
 };
 
-const struct led led_green = {
+struct led led_green = {
        .pin = { .port = &PORTE, .bit = 1 },
        .state = { 0, } // Static, off
 };
+
+///< Internal array of pointers to known leds
+static struct led * leds[32] = {&led_red, &led_green, };
+
+///< Number of registered LEDs -1
+static uint8_t last_registered_led_index = 1;
 
 
 
 ////////////////////////////////////////////////////////////////
 //                    PRIVATE DEFINES                         //
 ////////////////////////////////////////////////////////////////
-
-/// \brief  The AVR port the LEDs are connected to
-#define     LED_PORT                PORTE
-
-/// \brief  The bit number in GPIO registers controlling the red LED
-#define     RED_LED_BIT             0
-
-/// \brief  The bit number in GPIO registers controlling the green LED
-#define     GREEN_LED_BIT           1
-
 
 
 ////////////////////////////////////////////////////////////////
@@ -92,10 +89,23 @@ static void set_or_update_blinking_led_state(struct led_state * const led, uint8
     led->counter = 0;
 }
 
+
+
 void init_leds_module(void)
 {
-    // Configure AVR ports
-    LED_PORT.DIRSET = _BV(RED_LED_BIT) | _BV(GREEN_LED_BIT);
+    // Configure AVR ports for the onboard LEDs
+    configure_gpio_pin(&led_red.pin, GPIO_OUTPUT);
+    configure_gpio_pin(&led_green.pin, GPIO_OUTPUT);
+}
+
+void register_led(struct led * const led)
+{
+    // Configure AVR port
+    configure_gpio_pin(&led->pin, GPIO_OUTPUT);
+
+    // Add to leds array
+    ++last_registered_led_index;
+    leds[last_registered_led_index] = led;
 }
 
 void blink_led(struct led* const led, const uint8_t prescaler)

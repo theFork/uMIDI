@@ -34,10 +34,10 @@
 //---------------- constants ----------------//
 
 /// \brief  The green onboard LED
-extern const struct led led_red;
+extern struct led led_red;
 
 /// \brief  The green onboard LED
-extern const struct led led_green;
+extern struct led led_green;
 
 /// \brief  TODO: This macro is only for compatibility and should be removed in the future.
 #define LED_GREEN   &led_green
@@ -80,6 +80,12 @@ struct led
 /// \brief      Module initialization procedure
 /// \details    Writes relevant AVR GPIO configuration for the onboard LEDs
 void init_leds_module(void);
+
+
+/// \brief      Add an LED to the cyclic processed LEDs
+/// \details    Writes relevant AVR GPIO configuration for the given LEDs and
+///             adds the given pointer that contains the corresponding #gpio_pin
+void register_led(struct led * const);
 
 /// \brief      Lets an LED blink in a fixed interval
 /// \details    The prescaler parameter controls the blinking frequency: Every \p prescaler th time
