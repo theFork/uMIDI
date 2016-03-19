@@ -28,35 +28,25 @@
 #include <stdbool.h>
 #include <avr/io.h>
 
+#include "gpio.h"
+
 
 //---------------- constants ----------------//
-/// \brief  Number of LEDs
-#define     LED_COUNT               2
 
+/// \brief  The green onboard LED
+extern const struct led led_red;
 
-//---------------- AVR PORT mapping ----------------//
-/// \brief  The AVR port the LEDs are connected to
-#define     LED_PORT                PORTE
+/// \brief  The green onboard LED
+extern const struct led led_green;
 
+/// \brief  TODO: This macro is only for compatibility and should be removed in the future.
+#define LED_GREEN   &led_green
 
-//---------------- AVR bit numbers ----------------//
-/// \brief  The bit number in GPIO registers controlling the red LED
-#define     RED_LED_BIT             0
-
-/// \brief  The bit number in GPIO registers controlling the green LED
-#define     GREEN_LED_BIT           1
+/// \brief  TODO: This macro is only for compatibility and should be removed in the future.
+#define LED_RED     &led_red
 
 
 //---------------- data types ----------------//
-/// \brief      Enumeration for the on-board LEDs
-/// \details    This enumeration is used to select the LED(s) to switch on/off in the service procedures.
-enum led
-{
-    LED_ALL     = -1,               ///< Select all LEDs
-    LED_GREEN   = GREEN_LED_BIT,    ///< Select the green LED
-    LED_RED     = RED_LED_BIT,      ///< Select the red LED
-};
-
 /// \brief      Enumeration for the LED mode
 /// \details    Depending on the mode, an LED can be turned on/off automatically or manually.
 enum led_mode
@@ -77,10 +67,18 @@ struct led_state
     uint8_t         counter;        ///< Counter for the blinking interval
 };
 
+/// \brief      Enumeration for the on-board LEDs
+/// \details    This enumeration is used to select the LED(s) to switch on/off in the service procedures.
+struct led
+{
+    const struct gpio_pin pin;      ///< Gpio pin connected to an LED
+    struct led_state state;         ///< Current state of the LED
+};
+
 
 //---------------- functions and procedures ----------------//
 /// \brief      Module initialization procedure
-/// \details    Writes relevant AVR GPIO configuration
+/// \details    Writes relevant AVR GPIO configuration for the onboard LEDs
 void init_leds_module(void);
 
 /// \brief      Lets an LED blink in a fixed interval
@@ -92,13 +90,13 @@ void init_leds_module(void);
 ///                 controls the blinking frequency
 /// \see        led
 /// \see        update_leds
-void blink_led(enum led, uint8_t prescaler);
+void blink_led(struct led* led, uint8_t prescaler);
 
 /// \brief      Briefly flashes an LED
 /// \param      led
 ///                 the LED that should blink
 /// \see        led
-void flash_led(enum led);
+void flash_led(struct led* led);
 
 /// \brief      Enables or disables an LED
 /// \param      led
@@ -106,13 +104,13 @@ void flash_led(enum led);
 /// \param      enable
 ///                 `true` switches the LED on; `false` swithes off
 /// \see        led
-void set_led(enum led, bool enable);
+void set_led(struct led* led, bool enable);
 
 /// \brief      Toggles an LED
 /// \param      led
 ///                 the LED that should be toggled
 /// \see        led
-void toggle_led(enum led);
+void toggle_led(struct led* led);
 
 /// \brief      State machine task that updates the LEDs
 /// \details    This task must be included in the state machine tasks for the blink and flash modes

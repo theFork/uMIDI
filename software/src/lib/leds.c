@@ -1,5 +1,4 @@
-/// \file
-/// \brief  Handling of the on-board LEDs
+/// \file /// \brief  Handling of the on-board LEDs
 
 /*
  * Copyright 2015 Sebastian Neuser
@@ -29,27 +28,30 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-/// \brief  State variable for the green LED
-static struct led_state green_led =
-{
-    .active     = false,
-    .mode       = LED_STATIC,
-    .prescaler  = 0,
-    .counter    = 0
+const struct led led_red = {
+       .pin = { .port = &PORTE, .bit = 0 },
+       .state = { 0, } // Static, off
 };
 
-/// \brief  State variable for the red LED
-static struct led_state red_led =
-{
-    .active     = false,
-    .mode       = LED_STATIC,
-    .prescaler  = 0,
-    .counter    = 0
+const struct led led_green = {
+       .pin = { .port = &PORTE, .bit = 1 },
+       .state = { 0, } // Static, off
 };
 
-/// \brief  This array holds pointers to all LED state variables
-/// \see    init_leds_module
-static struct led_state *leds[LED_COUNT];
+
+
+////////////////////////////////////////////////////////////////
+//                    PRIVATE DEFINES                         //
+////////////////////////////////////////////////////////////////
+
+/// \brief  The AVR port the LEDs are connected to
+#define     LED_PORT                PORTE
+
+/// \brief  The bit number in GPIO registers controlling the red LED
+#define     RED_LED_BIT             0
+
+/// \brief  The bit number in GPIO registers controlling the green LED
+#define     GREEN_LED_BIT           1
 
 
 
@@ -62,8 +64,9 @@ static struct led_state *leds[LED_COUNT];
 ///                 the LED to enable / disable
 /// \param      value
 ///                 `true` enables the LED; `false` disables it
-static inline void apply_led(enum led pin, bool value)
+static inline void apply_led(struct led * const led , bool value)
 {
+    /* TODO
     // Update state varable
     leds[pin]->active = value;
 
@@ -74,6 +77,7 @@ static inline void apply_led(enum led pin, bool value)
     else {
         LED_PORT.OUTCLR = _BV(pin);
     }
+    */
 }
 
 /// \brief      Initializes or updates an LED's blinking mode
@@ -82,35 +86,31 @@ static inline void apply_led(enum led pin, bool value)
 ///                 state variable of the led
 /// \param      prescaler
 ///                 Prescaler for the blinking frequency
-static void set_or_update_blinking_led_state(struct led_state *led, uint8_t prescaler)
+static void set_or_update_blinking_led_state(struct led_state * const led, uint8_t prescaler)
 {
+    /* TODO
     // Abort if neither mode nor prescaler have changed
     if (led->mode == LED_BLINK && led->prescaler == prescaler) {
         return;
     }
 
     // Update mode and prescaler and restart counter
-    led->mode = LED_BLINK;
+    l   ed->mode = LED_BLINK;
     led->prescaler = prescaler;
     led->counter = 0;
+    */
 }
 
 void init_leds_module(void)
 {
     // Configure AVR ports
     LED_PORT.DIRSET = _BV(RED_LED_BIT) | _BV(GREEN_LED_BIT);
-
-    // Populate led map
-    leds[RED_LED_BIT] = &red_led;
-    leds[GREEN_LED_BIT] = &green_led;
-
-    // Turn all LEDs off
-    set_led(LED_ALL, false);
 }
 
-void blink_led(enum led led, uint8_t prescaler)
+void blink_led(struct led* const led, const uint8_t prescaler)
 {
     // Set blink mode and update prescaler
+    /*
     if (led == LED_ALL) {
         set_or_update_blinking_led_state(&red_led, prescaler);
         set_or_update_blinking_led_state(&green_led, prescaler);
@@ -118,53 +118,31 @@ void blink_led(enum led led, uint8_t prescaler)
     else {
         set_or_update_blinking_led_state(leds[led], prescaler);
     }
+    */
 }
 
-void flash_led(enum led led)
+void flash_led(struct led* const led)
 {
-    // Set flash mode
-    if (led == LED_ALL) {
-        red_led.mode = LED_FLASH;
-        green_led.mode = LED_FLASH;
-    }
-    else {
-        leds[led]->mode = LED_FLASH;
-    }
+    // TODO
+    // leds[led]->mode = LED_FLASH;
 }
 
-void set_led(enum led led, bool value)
+void set_led(struct led* const led, const bool value)
 {
-    // Set static mode and enable / disable LED(s)
-    if (led == LED_ALL) {
-        green_led.mode = LED_STATIC;
-        apply_led(LED_GREEN, value);
-        red_led.mode = LED_STATIC;
-        apply_led(LED_RED, value);
-    }
-    else {
-        leds[led]->mode = LED_STATIC;
-        apply_led(led, value);
-    }
+    // leds[led]->mode = LED_STATIC;
+    // apply_led(led, value);
 }
 
-void toggle_led(enum led led)
+void toggle_led(struct led* const led)
 {
-    // Set static mode and toggle LED(s)
-    if (led == LED_ALL) {
-        green_led.mode = LED_STATIC;
-        apply_led(LED_GREEN, !green_led.active);
-        red_led.mode = LED_STATIC;
-        apply_led(LED_RED, !red_led.active);
-    }
-    else {
-        leds[led]->mode = LED_STATIC;
-        apply_led(led, !leds[led]->active);
-    }
+    // leds[led]->mode = LED_STATIC;
+    // apply_led(led, !leds[led]->active);
 }
 
 void update_leds(void)
 {
-    // Iterate LEDs
+    /* TODO
+    // Iterate LEDs TODO
     uint8_t i;
     for (i=0; i<LED_COUNT; i++) {
         switch (leds[i]->mode) {
@@ -198,4 +176,5 @@ void update_leds(void)
             break;
         }
     }
+    */
 }
