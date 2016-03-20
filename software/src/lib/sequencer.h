@@ -42,7 +42,7 @@
 //---------------- data types ----------------//
 
 /// \brief      Enumeration of available sequencer patterns
-enum pattern
+enum sequencer_pattern_number
 {
     SEQUENCER_PATTERN_01,   ///< Sequencer pattern 01
     SEQUENCER_PATTERN_02,   ///< Sequencer pattern 02
@@ -66,15 +66,25 @@ enum pattern
     SEQUENCER_PATTERN_20,   ///< Sequencer pattern 20
 };
 
-/// \brief      Pattern type
-enum pattern_type
+/// \brief      Enumeration of available sequencer channels
+enum sequencer_channel_number
 {
-    PATTERN_ONE_SHOT,
-    PATTERN_CONTINUOUS
+    SEQUENCER_CHANNEL_1,   ///< Sequencer channel 1
+    SEQUENCER_CHANNEL_2,   ///< Sequencer channel 2
+    SEQUENCER_CHANNEL_3,   ///< Sequencer channel 3
+    SEQUENCER_CHANNEL_4,   ///< Sequencer channel 4
+};
+
+/// \brief      Type
+enum sequencer_channel_mode
+{
+    SEQUENCER_CHANNEL_MODE_ONE_SHOT,    ///< The pattern is played only once on start of the sequencer channel
+    SEQUENCER_CHANNEL_MODE_CONTINUOUS   ///< The pattern is looped as long as the sequencer channel is active
 };
 
 /// \brief      A sequencer step
-/// \details    TODO
+/// \details    Exactly specifies the MIDI message that is sent when the step in the pattern is
+///             reached.
 struct sequencer_step
 {
     enum midi_channel       channel;    ///< MIDI channel
@@ -84,28 +94,96 @@ struct sequencer_step
 };
 
 /// \brief      A sequencer pattern
-/// \details    TODO
+/// \details    Contains a list of sequencer steps and the length of that list.
 struct sequencer_pattern
 {
-    fixed_t                 frequency;                          ///< Speed of the wave in [Hz]
-    enum pattern_type       type;                               ///< Pattern type
+    fixed_t                 frequency;                          ///< Speed of the wave in [Hz] TODO: Remove
     uint8_t                 length;                             ///< Number of sequencer steps
     struct sequencer_step   steps[SEQUENCER_STEPS_PER_PATTERN]; ///< Sequencer steps
 };
 
-struct sequencer_config
+/// \brief      State and configuration of a sequencer channel
+/// \details    A channel has three configuration parameters that have to be specified:
+///             * pattern
+///             * speed
+///             * channel mode
+///             Other members of this struct are internal state and should not be manipulated.
+struct sequencer_channel
 {
-    uint8_t         controller_number;
-    enum waveform   waveform;
-    uint8_t         speed;
+    enum sequencer_pattern_number   pattern;        ///< Stores the sequencer channel's pattern index
+    uint8_t                         speed;          ///< Stores the sequencer channel's speed
+    enum sequencer_channel_mode     mode;           ///< Channel mode (one-shot or continuous)
+    bool                            running;        ///< This flag indicates if the sequencer channel is currently running
+    uint8_t                         step_index;     ///< This counter points to the next sequencer step in the channel's pattern
+    struct wave                     wave;           ///< An internal waveform used as a clock source for the sequencer channel
 };
 
 
 //---------------- functions and procedures ----------------//
+/// \brief      Increments or decrements a sequencer channel's pattern index
+/// \details    Rotates the pattern index, for example: If the resulting pattern index is greater
+///             than the number of patterns, counting restarts at the first pattern.
+/// \param      channel
+///                 the sequencer channel to adjust
+/// \param      difference
+///                 an offset from the currently stored pattern
+/// \returns    the set pattern
+enum sequencer_pattern_number adjust_sequencer_pattern(struct sequencer_channel* channel, int8_t difference);
+
+/// \brief      Increments or decrements a sequencer channel's speed
+/// \details    Cyclically rotates the speed in the range of a MIDI value [0 .. 127].
+/// \param      channel
+///                 the sequencer channel to adjust
+/// \param      difference
+///                 an offset from the current speed
+/// \returns    the newly set speed
+midi_value_t adjust_sequencer_speed(struct sequencer_channel* channel, int8_t difference);
+
+/// \brief      Configures and registers a sequencer channel
+/// \details    TODO
+/// \param      channel
+///                 the sequencer channel to configure
+/// \see        sequencer_channel
+void configure_sequencer_channel(enum sequencer_channel_number, struct sequencer_channel* channel);
+
+/// \brief      TODO
+/// \details    TODO
 void init_sequencer_module(void);
 
-void toggle_sequencer(void);
+/// \brief      Selects a sequencer channel's pattern
+/// \param      channel
+///                 the sequencer channel to adjust
+/// \param      pattern
+///                 the index of the new sequencer pattern
+void set_sequencer_pattern(struct sequencer_channel* channel, enum sequencer_pattern_number pattern);
 
+/// \brief      Sets a sequencer channel's speed
+/// \param      channel
+///                 the sequencer channel to adjust
+/// \param      speed
+///                 the new speed
+void set_sequencer_speed(struct sequencer_channel* channel, midi_value_t speed);
+
+/// \brief      Starts a sequencer channel
+/// \details    If the channel is already running, it is restarted.
+/// \param      channel
+///                 the sequencer channel to (re-)start
+void start_sequencer(struct sequencer_channel* channel);
+
+/// \brief      Stops a sequencer channel
+/// \param      channel
+///                 the sequencer channel to stop
+void stop_sequencer(struct sequencer_channel* channel);
+
+/// \brief      Starts or stops a sequencer channel
+/// \param      channel
+///                 the sequencer channel to toggle
+void toggle_sequencer(struct sequencer_channel* channel);
+
+/// \brief      Main background task for the sequencer module
+/// \details    This task plays active (-> started) sequencer channels. It uses the wave module as
+///             an internal clock source, so it must be registered as a fast background task.
+/// \see        update_wave
 void update_sequencer(void);
 
 //---------------- EOF ----------------//

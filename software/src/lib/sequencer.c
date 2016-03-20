@@ -46,7 +46,6 @@
 static const struct sequencer_pattern patterns[20] PROGMEM = {
     { // SEQUENCER_PATTERN_01
         .frequency  = 1L<<15,
-        .type       = PATTERN_CONTINUOUS,
         .length     = 8,
         .steps      = {
             {
@@ -102,7 +101,6 @@ static const struct sequencer_pattern patterns[20] PROGMEM = {
 
     { // SEQUENCER_PATTERN_02
         .frequency  = 1L<<16,
-        .type       = PATTERN_CONTINUOUS,
         .length     = 8,
         .steps      = {
             {
@@ -157,7 +155,6 @@ static const struct sequencer_pattern patterns[20] PROGMEM = {
     },
     { // SEQUENCER_PATTERN_03
         .frequency  = 1L<<16,
-        .type       = PATTERN_CONTINUOUS,
         .length     = 8,
         .steps      = {
             {
@@ -220,7 +217,7 @@ static bool             running             = false;
 static uint8_t          step_index          = 0;
 
 /// \brief      Stores the sequencer pattern index
-static enum pattern     active_pattern      = SEQUENCER_PATTERN_02;
+static enum sequencer_pattern_number active_pattern = SEQUENCER_PATTERN_02;
 
 /// \brief      An internal waveform used as a clock source for the sequencer
 static struct wave      wave;
@@ -237,6 +234,23 @@ static struct wave      wave;
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
+enum sequencer_pattern_number adjust_sequencer_pattern(struct sequencer_channel * const channel, const int8_t difference)
+{
+    // TODO: Implement
+    return 0;
+}
+
+midi_value_t adjust_sequencer_speed(struct sequencer_channel * const channel, const int8_t difference)
+{
+    // TODO: Implement
+    return 0;
+}
+
+void configure_sequencer_channel(const enum sequencer_channel_number number, struct sequencer_channel * const channel)
+{
+    // TODO: Implement
+}
+
 void init_sequencer_module(void)
 {
     // Configure square wave for use as sequencer clock
@@ -245,7 +259,27 @@ void init_sequencer_module(void)
     configure_tap_tempo_wave(&wave);
 }
 
-void toggle_sequencer(void)
+void set_sequencer_pattern(struct sequencer_channel * const channel, const enum sequencer_pattern_number pattern)
+{
+    // TODO: Implement
+}
+
+void set_sequencer_speed(struct sequencer_channel * const channel, const midi_value_t speed)
+{
+    // TODO: Implement
+}
+
+void start_sequencer(struct sequencer_channel * const channel)
+{
+    // TODO: Implement
+}
+
+void stop_sequencer(struct sequencer_channel * const channel)
+{
+    // TODO: Implement
+}
+
+void toggle_sequencer(struct sequencer_channel * const channel)
 {
     // If stopped, just set the "running?" flag
     if (!running) {
