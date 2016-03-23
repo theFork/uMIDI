@@ -131,7 +131,12 @@ void configure_gpio_pin(const struct gpio_pin* const pin, const enum gpio_type t
     }
 }
 
-bool poll_gpio_input(const struct gpio_pin pin, enum gpio_type type)
+bool poll_gpio_input(const struct gpio_pin pin, const enum gpio_type type)
+{
+    return poll_gpio_input_timeout(pin, type, 0);
+}
+
+enum gpio_input_event poll_gpio_input_timeout(const struct gpio_pin pin, const enum gpio_type type, uint8_t timeout)
 {
     // Use XOR bit"mask" to invert the read input for pull-up enabled inputs
     bool type_mask;
@@ -145,16 +150,27 @@ bool poll_gpio_input(const struct gpio_pin pin, enum gpio_type type)
         break;
 
     default:
-        return false;
+        return GPIO_INPUT_EVENT_NONE;
     }
 
-    if (gpio_get(pin) ^ type_mask) {
-        // De-bounce
-        _delay_ms(25);
-        while (gpio_get(pin) ^ type_mask) {
-            wdt_reset();
-        }
-        return true;
+    // Abort if the input is not set
+    if (!gpio_get(pin) ^ type_mask) {
+        return GPIO_INPUT_EVENT_NONE;
     }
-    return false;
+
+    // De-bounce
+    _delay_ms(25);
+
+    // Wait for timeout
+    uint8_t timeout_counter = 0;
+    while (gpio_get(pin) ^ type_mask) {
+        if (timeout != 0 && timeout_counter == timeout) {
+            return GPIO_INPUT_EVENT_LONG;
+        }
+
+        wdt_reset();
+        _delay_ms(100);
+        ++timeout_counter;
+    }
+    return GPIO_INPUT_EVENT_SHORT;
 }

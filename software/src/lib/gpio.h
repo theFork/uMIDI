@@ -32,6 +32,15 @@
 
 //---------------- data types ----------------//
 
+/// \brief      Possible GPIO input events
+/// \see        poll_gpio_input_timeout
+enum gpio_input_event
+{
+    GPIO_INPUT_EVENT_NONE,          ///< Nothing happened :-(
+    GPIO_INPUT_EVENT_SHORT,         ///< A GPIO input pin was seen logical "high" briefly
+    GPIO_INPUT_EVENT_LONG,          ///< A GPIO input pin was seen logical "high" for some time
+};
+
 /// \brief      Function / type of a GPIO pin
 enum gpio_type
 {
@@ -124,13 +133,33 @@ void configure_gpio_pin(const struct gpio_pin* pin, enum gpio_type type);
 void init_gpio_module(const struct gpio_mapping mappings[], uint8_t mappings_size);
 
 /// \brief      Polls a GPIO input pin
-/// \details    Automatically de-bounces the pin if it is detected as active.
+/// \details    Automatically de-bounces the pin if it is detected as active and returns as soon as
+///             the input returns to logical 0. Warning: Uses busy waiting!
 /// \param      pin
 ///                 the GPIO input pin to poll
 /// \param      type
 ///                 the GPIO input type (pull-up or pull-down)
-/// \returns    `true`  if the input pin reads logical 1
+/// \returns    `true` if the input pin reads logical 1
+/// \see        poll_gpio_input_timeout
 bool poll_gpio_input(const struct gpio_pin pin, enum gpio_type type);
+
+/// \brief      Polls a GPIO input pin with timeout
+/// \details    Reads and de-bounces an input pin and measures how long it is in logical high-state
+///             continuously. After a given amount of time the function announces the event by
+///             returning #GPIO_INPUT_EVENT_LONG. If the input pin returns to low before the timeout
+///             was reached, #GPIO_INPUT_EVENT_SHORT is returned.
+///             This function uses busy waiting, so all background tasks are stalled until the
+///             timeout is reached.
+///             When the timeout is set to zero, this function blocks until the input pin reads
+///             logical low again, which is what #poll_gpio_input does.
+/// \param      pin
+///                 the GPIO input pin to poll
+/// \param      type
+///                 the GPIO input type (pull-up or pull-down)
+/// \param      timeout
+///                 the timeout in [s/10], or 0 for infinity
+/// \returns    the detected input event or #GPIO_INPUT_EVENT_NONE
+enum gpio_input_event poll_gpio_input_timeout(const struct gpio_pin pin, enum gpio_type type, uint8_t timeout);
 
 
 //---------------- inline functions and procedures ----------------//
