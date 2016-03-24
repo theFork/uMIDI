@@ -316,6 +316,11 @@ void update_sequencer(void)
         send_midi_message(pgm_read_byte(&step->channel), pgm_read_byte(&step->type),
                           pgm_read_byte(&step->data0), pgm_read_byte(&step->data1));
 
+        // Call the clock tick handler if it is set
+        if (channel->tick_callback != NULL) {
+            channel->tick_callback();
+        }
+
         // Cyclically implement step index
         ++channel->step_index;
         channel->step_index %= pgm_read_byte(&patterns[channel->pattern].length);

@@ -119,6 +119,7 @@ struct sequencer_channel
     uint8_t                         step_index;     ///< This counter points to the next sequencer step in the channel's pattern
     struct wave                     wave;           ///< An internal waveform used as a clock source for the sequencer channel
     bool                            clock_state;    ///< Last known state of the channel's clock
+    void (*tick_callback)(void);                   ///< An event handler for sequencer clock ticks or `NULL`
 };
 
 
