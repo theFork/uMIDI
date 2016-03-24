@@ -206,15 +206,14 @@ void unknown_midi_message_handler(void)
 
 void poll_switches(void)
 {
-    uint8_t switch_index;
-
     // Handle save switch
-    if (poll_gpio_input(GPIO_IN_SAVE_SWITCH, GPIO_INPUT_PULLUP)) {
+    if (poll_gpio_input_timeout(GPIO_IN_SAVE_SWITCH, GPIO_INPUT_PULLUP, 10) == GPIO_INPUT_EVENT_LONG) {
         // Abort if the program is unchanged
         if (current_program.word == effective_program.word) {
             return;
         }
 
+        usb_puts("Saving program");
         current_program.word = effective_program.word;
         update_current_program(current_program.word);
         flash_led_multiple(&save_led, 3);
@@ -222,7 +221,7 @@ void poll_switches(void)
     }
 
     // Handle program-related switches
-    for (switch_index=0; switch_index<8; ++switch_index) {
+    for (uint8_t switch_index=0; switch_index<8; ++switch_index) {
         if (poll_gpio_input(*gpio_mappings[8+switch_index].pin, GPIO_INPUT_PULLUP)) {
             usb_printf("Switch #%u was pressed" USB_NEWLINE, switch_index);
 
