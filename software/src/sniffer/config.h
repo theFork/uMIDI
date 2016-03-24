@@ -29,14 +29,11 @@
 
 #include "lib/adc.h"
 #include "lib/background_tasks.h"
-#include "lib/gpio.h"
 #include "lib/midi.h"
 #include "lib/serial_communication.h"
 
 
 //---------------- constant declarations ----------------//
-extern struct gpio_config gpio_config;
-
 extern struct midi_config midi_config;
 
 extern background_task_t high_frequency_tasks[];
