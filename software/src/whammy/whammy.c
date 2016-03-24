@@ -21,14 +21,15 @@
  */
 
 #include <stdlib.h>
-
 #include <util/delay.h>
+
 #include "lib/gpio.h"
 #include "lib/hmi.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
-#include "lib/wave.h"
+#include "lib/sequencer.h"
 #include "lib/usb.h"
+#include "lib/wave.h"
 
 #include "config.h"
 #include "whammy.h"
@@ -46,6 +47,13 @@
 ////////////////////////////////////////////////////////////////
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
+
+struct sequencer_channel sequencer = {
+    .pattern        = SEQUENCER_PATTERN_01,
+    .speed          = 40,
+    .mode           = SEQUENCER_CHANNEL_MODE_CONTINUOUS,
+    .running        = true,
+};
 
 
 
@@ -78,7 +86,7 @@ bool exec_speed(const char* command)
     midi_value_t speed = atoi(command+6);
     speed %= MIDI_MAX_VALUE + 1;
     usb_printf("Setting waveform speed to %u" USB_NEWLINE, speed);
-    //set_speed(&wave, speed);
+    set_sequencer_speed(&sequencer, speed);
     return true;
 }
 
@@ -88,19 +96,19 @@ bool exec_tap(const char* command)
     return true;
 }
 
-bool exec_waveform(const char* command)
+bool exec_pattern(const char* command)
 {
-    if (strlen(command) < 13 || command[8] != ' ') {
+    if (strlen(command) < 12 || command[7] != ' ') {
         usb_puts("Malformed command" USB_NEWLINE);
         return false;
     }
 
-    if (strncmp(STRING_NEXT, command+9, sizeof(STRING_NEXT)) == 0) {
-        //select_next_waveform();
+    if (strncmp(STRING_NEXT, command+8, sizeof(STRING_NEXT)) == 0) {
+        select_next_pattern();
         return true;
     }
-    if (strncmp(STRING_PREV, command+9, sizeof(STRING_PREV)) == 0) {
-        //select_previous_waveform();
+    if (strncmp(STRING_PREV, command+8, sizeof(STRING_PREV)) == 0) {
+        select_previous_pattern();
         return true;
     }
 
@@ -108,11 +116,40 @@ bool exec_waveform(const char* command)
     return false;
 }
 
-void handle_control_change(uint8_t controller_number, uint8_t value)
+void decrease_speed(void)
 {
+    usb_printf("Set speed to %d" USB_NEWLINE, adjust_sequencer_speed(&sequencer, -1));
+}
+
+void increase_speed(void)
+{
+    usb_printf("Set speed to %d" USB_NEWLINE, adjust_sequencer_speed(&sequencer, 1));
+}
+
+void init_whammy_module(void)
+{
+    configure_sequencer_channel(SEQUENCER_CHANNEL_1, &sequencer);
+}
+
+void select_next_pattern(void)
+{
+    usb_printf("Selected pattern %d" USB_NEWLINE, adjust_sequencer_pattern(&sequencer, 1));
+}
+
+void select_previous_pattern(void)
+{
+    usb_printf("Selected pattern %d" USB_NEWLINE, adjust_sequencer_pattern(&sequencer, -1));
 }
 
 void tap_tempo(void)
 {
     register_tap();
+}
+
+void toggle_sequencing(void)
+{
+    toggle_sequencer(&sequencer);
+    if (!sequencer.running) {
+        show_led_pattern(0x00);
+    }
 }

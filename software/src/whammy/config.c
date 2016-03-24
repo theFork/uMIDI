@@ -45,6 +45,32 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
+//---------------- Commands ----------------//
+struct serial_command serial_commands[] = {
+    {
+        .cmd_string = "speed",
+        .help_string = "<s>\n"
+            "Adjust the speed of the sequencer:\n"
+            "<s> : wave speed\n",
+        .handler = &exec_speed
+    },
+    {
+        .cmd_string = "tap",
+        .help_string = "\nSend this command repeatedly to tap in a tempo\n",
+        .handler = &exec_tap
+    },
+    {
+        .cmd_string = "pattern",
+        .help_string = "<p>\n"
+            "Select sequencer pattern:\n"
+            "<p> : pattern\n"
+            "      \"next\" = switch to next pattern\n"
+            "      \"prev\" = switch to previous pattern\n",
+        .handler = &exec_pattern
+    },
+};
+uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);
+
 //---------------- GPIO ----------------//
 struct gpio_mapping gpio_mappings[] = {
 };
@@ -55,20 +81,19 @@ struct hmi_config hmi_config = {
     .input_header = &gpio.header2,
     .output_header = &gpio.header1,
     .button1_handler = NULL,
-    .button2_handler = NULL,
-    .encoder1cw_handler = NULL,
-    .encoder1ccw_handler = NULL,
+    .button2_handler = &toggle_sequencing,
+    .encoder1cw_handler = select_next_pattern,
+    .encoder1ccw_handler = select_previous_pattern,
     .encoder1push_handler = NULL,
-    .encoder2cw_handler = NULL,
-    .encoder2ccw_handler = NULL,
-    .encoder2push_handler = NULL,
+    .encoder2cw_handler = &increase_speed,
+    .encoder2ccw_handler = &decrease_speed,
+    .encoder2push_handler = &register_tap,
 };
 
 //---------------- MIDI ----------------//
 struct midi_config midi_config = {
     .event_handlers = {
-//        .control_change = NULL,
-        .control_change = &handle_control_change,
+        .control_change = NULL,
         .note_off       = NULL,
         .note_on        = NULL,
         .program_change = NULL
@@ -94,29 +119,3 @@ background_task_t low_frequency_tasks[] = {
     &update_leds,
 };
 uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);
-
-//---------------- Custom commands ----------------//
-struct serial_command serial_commands[] = {
-    {
-        .cmd_string = "speed",
-        .help_string = "<s>\n"
-            "Adjust the speed of the sequencer:\n"
-            "<s> : wave speed\n",
-        .handler = &exec_speed
-    },
-    {
-        .cmd_string = "tap",
-        .help_string = "\nSend this command repeatedly to tap in a tempo\n",
-        .handler = &exec_tap
-    },
-    {
-        .cmd_string = "waveform",
-        .help_string = "<p>\n"
-            "Select sequencer waveform:\n"
-            "<p> : pattern\n"
-            "      \"next\" = switch to next waveform\n"
-            "      \"prev\" = switch to previous waveform\n",
-        .handler = &exec_waveform
-    },
-};
-uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);

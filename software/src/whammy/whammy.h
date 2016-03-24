@@ -37,11 +37,16 @@
 
 
 //---------------- functions and procedures ----------------//
-bool exec_waveform(const char* command);
+bool exec_pattern(const char* command);
 bool exec_speed(const char* command);
 bool exec_tap(const char* command);
-void handle_control_change(uint8_t current_controller, uint8_t value);
+void decrease_speed(void);
+void increase_speed(void);
+void init_whammy_module(void);
+void select_next_pattern(void);
+void select_previous_pattern(void);
 void tap_tempo(void);
+void toggle_sequencing(void);
 
 //---------------- EOF ----------------//
 #endif // _WHAMMY_APP_H
