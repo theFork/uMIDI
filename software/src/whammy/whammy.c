@@ -45,6 +45,14 @@
 
 
 ////////////////////////////////////////////////////////////////
+//          F O R W A R D   D E C L A R A T I O N S           //
+////////////////////////////////////////////////////////////////
+
+static void sequencer_tick_handler(void);
+
+
+
+////////////////////////////////////////////////////////////////
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
@@ -53,6 +61,7 @@ struct sequencer_channel sequencer = {
     .speed          = 40,
     .mode           = SEQUENCER_CHANNEL_MODE_CONTINUOUS,
     .running        = true,
+    .tick_callback  = &sequencer_tick_handler,
 };
 
 
@@ -61,14 +70,10 @@ struct sequencer_channel sequencer = {
 // S T A T I C   F U N C T I O N S   A N D   P R O C E D U R E S //
 ///////////////////////////////////////////////////////////////////
 
-/*
-static void step_sequencer_leds(void)
+static void sequencer_tick_handler(void)
 {
-    show_led_pattern(0x80 >> step_counter);
-    ++step_counter;
-    step_counter %= 8;
+    show_led_pattern(0x80 >> sequencer.step_index);
 }
-*/
 
 
 
