@@ -25,6 +25,7 @@
 
 
 //---------------- includes ----------------//
+#include <stdbool.h>
 #include <stdint.h>
 
 #include "gpio.h"
@@ -64,15 +65,17 @@ enum sequencer_pattern_number
     SEQUENCER_PATTERN_18,   ///< Sequencer pattern 18
     SEQUENCER_PATTERN_19,   ///< Sequencer pattern 19
     SEQUENCER_PATTERN_20,   ///< Sequencer pattern 20
+    SEQUENCER_PATTERNS      ///< Number of available sequencer patterns
 };
 
 /// \brief      Enumeration of available sequencer channels
 enum sequencer_channel_number
 {
-    SEQUENCER_CHANNEL_1,   ///< Sequencer channel 1
-    SEQUENCER_CHANNEL_2,   ///< Sequencer channel 2
-    SEQUENCER_CHANNEL_3,   ///< Sequencer channel 3
-    SEQUENCER_CHANNEL_4,   ///< Sequencer channel 4
+    SEQUENCER_CHANNEL_1,    ///< Sequencer channel 1
+    SEQUENCER_CHANNEL_2,    ///< Sequencer channel 2
+    SEQUENCER_CHANNEL_3,    ///< Sequencer channel 3
+    SEQUENCER_CHANNEL_4,    ///< Sequencer channel 4
+    SEQUENCER_CHANNELS      ///< Number of available sequencer channels
 };
 
 /// \brief      Type
@@ -97,7 +100,6 @@ struct sequencer_step
 /// \details    Contains a list of sequencer steps and the length of that list.
 struct sequencer_pattern
 {
-    fixed_t                 frequency;                          ///< Speed of the wave in [Hz] TODO: Remove
     uint8_t                 length;                             ///< Number of sequencer steps
     struct sequencer_step   steps[SEQUENCER_STEPS_PER_PATTERN]; ///< Sequencer steps
 };
@@ -116,6 +118,7 @@ struct sequencer_channel
     bool                            running;        ///< This flag indicates if the sequencer channel is currently running
     uint8_t                         step_index;     ///< This counter points to the next sequencer step in the channel's pattern
     struct wave                     wave;           ///< An internal waveform used as a clock source for the sequencer channel
+    bool                            clock_state;    ///< Last known state of the channel's clock
 };
 
 
@@ -139,12 +142,15 @@ enum sequencer_pattern_number adjust_sequencer_pattern(struct sequencer_channel*
 /// \returns    the newly set speed
 midi_value_t adjust_sequencer_speed(struct sequencer_channel* channel, int8_t difference);
 
-/// \brief      Configures and registers a sequencer channel
-/// \details    TODO
+/// \brief      Configures a sequencer channel
+/// \details    This function also registers the channel's wave with the tap tempo function.
+/// \param      number
+///                 the sequencer channel slot to use
 /// \param      channel
-///                 the sequencer channel to configure
+///                 the sequencer channel
 /// \see        sequencer_channel
-void configure_sequencer_channel(enum sequencer_channel_number, struct sequencer_channel* channel);
+/// \see        register_tap
+void configure_sequencer_channel(enum sequencer_channel_number number, struct sequencer_channel* channel);
 
 /// \brief      TODO
 /// \details    TODO
@@ -178,7 +184,8 @@ void stop_sequencer(struct sequencer_channel* channel);
 /// \brief      Starts or stops a sequencer channel
 /// \param      channel
 ///                 the sequencer channel to toggle
-void toggle_sequencer(struct sequencer_channel* channel);
+/// \returns    `true` if the channel was activated; `false` if it was deactivated
+bool toggle_sequencer(struct sequencer_channel* channel);
 
 /// \brief      Main background task for the sequencer module
 /// \details    This task plays active (-> started) sequencer channels. It uses the wave module as
