@@ -22,7 +22,7 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
-#include <avr/pgmspace.h>
+#include <avr/eeprom.h>
 
 #include "gpio.h"
 #include "math.h"
@@ -41,7 +41,7 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-const struct sequencer_pattern patterns[SEQUENCER_PATTERNS] PROGMEM;
+static struct sequencer_pattern patterns[SEQUENCER_PATTERNS] EEMEM;
 
 /// \brief      Internal array of sequencer channels
 static struct sequencer_channel* channels[SEQUENCER_CHANNELS] = {0,};
@@ -86,9 +86,22 @@ void configure_sequencer_channel(const enum sequencer_channel_number number, str
     configure_tap_tempo_wave(&channel->wave);
 }
 
-void init_sequencer_module(void)
+void init_sequencer_patterns(const struct sequencer_pattern * const factory_patterns, const uint8_t number_of_patterns)
 {
-    // TODO: Remove?
+    for (uint8_t pattern_index=0; pattern_index < number_of_patterns; ++pattern_index) {
+        // Copy pattern length
+        eeprom_write_byte(&patterns[pattern_index].length, factory_patterns[pattern_index].length);
+
+        // Copy pattern steps
+        for (uint8_t step_index=0; step_index < factory_patterns[pattern_index].length; ++step_index) {
+            const struct sequencer_step* const step_source = &factory_patterns[pattern_index].steps[step_index];
+            struct sequencer_step* const step_destination = &patterns[pattern_index].steps[step_index];
+            eeprom_write_byte((uint8_t*) &step_destination->channel, step_source->channel);
+            eeprom_write_byte((uint8_t*) &step_destination->type,    step_source->type);
+            eeprom_write_byte(&step_destination->data0,   step_source->data0);
+            eeprom_write_byte(&step_destination->data1,   step_source->data1);
+        }
+    }
 }
 
 void set_sequencer_pattern(struct sequencer_channel * const channel, const enum sequencer_pattern_number pattern)
@@ -149,8 +162,8 @@ void update_sequencer(void)
 
         // Read MIDI message from program space and send it
         const struct sequencer_step * const step = &patterns[channel->pattern].steps[channel->step_index];
-        send_midi_message(pgm_read_byte(&step->channel), pgm_read_byte(&step->type),
-                          pgm_read_byte(&step->data0), pgm_read_byte(&step->data1));
+        send_midi_message(eeprom_read_byte((uint8_t*) &step->channel), eeprom_read_byte((uint8_t*) &step->type),
+                          eeprom_read_byte(&step->data0), eeprom_read_byte(&step->data1));
 
         // Call the clock tick handler if it is set
         if (channel->tick_callback != NULL) {
@@ -159,7 +172,7 @@ void update_sequencer(void)
 
         // Cyclically implement step index
         ++channel->step_index;
-        channel->step_index %= pgm_read_byte(&patterns[channel->pattern].length);
+        channel->step_index %= eeprom_read_byte(&patterns[channel->pattern].length);
 
         // Disable the channel if the end of a one-shot pattern was reached
         if (channel->mode == SEQUENCER_CHANNEL_MODE_ONE_SHOT && channel->step_index == 0) {

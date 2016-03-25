@@ -27,7 +27,6 @@
 //---------------- includes ----------------//
 #include <stdbool.h>
 #include <stdint.h>
-#include <avr/pgmspace.h>
 
 #include "gpio.h"
 #include "math.h"
@@ -38,7 +37,7 @@
 //---------------- constants ----------------//
 
 /// \brief      Number of steps in a sequencer pattern
-#define SEQUENCER_STEPS_PER_PATTERN     32
+#define SEQUENCER_STEPS_PER_PATTERN     16
 
 
 //---------------- data types ----------------//
@@ -124,12 +123,6 @@ struct sequencer_channel
 };
 
 
-//---------------- required external variables ----------------//
-/// \brief      Internal array of sequencer patterns
-/// \details    Predefines some "factory"-programmed patterns.
-extern const struct sequencer_pattern patterns[SEQUENCER_PATTERNS] PROGMEM;
-
-
 //---------------- functions and procedures ----------------//
 /// \brief      Increments or decrements a sequencer channel's pattern index
 /// \details    Rotates the pattern index, for example: If the resulting pattern index is greater
@@ -160,9 +153,13 @@ midi_value_t adjust_sequencer_speed(struct sequencer_channel* channel, int8_t di
 /// \see        register_tap
 void configure_sequencer_channel(enum sequencer_channel_number number, struct sequencer_channel* channel);
 
-/// \brief      TODO
-/// \details    TODO
-void init_sequencer_module(void);
+/// \brief      Initializes / Restores "factory-default" patterns
+/// \details    Copies a list of patterns to the start of the EEPROM pattern storage.
+/// \param      factory_patterns
+///                 a pointer to a list of "factory"-default patterns
+/// \param      number_of_patterns
+///                 number of "factory" patterns
+void init_sequencer_patterns(const struct sequencer_pattern* factory_patterns, uint8_t number_of_patterns);
 
 /// \brief      Selects a sequencer channel's pattern
 /// \param      channel

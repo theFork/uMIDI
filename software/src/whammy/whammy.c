@@ -56,15 +56,7 @@ static void sequencer_tick_handler(void);
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-struct sequencer_channel sequencer = {
-    .pattern        = SEQUENCER_PATTERN_01,
-    .speed          = 40,
-    .mode           = SEQUENCER_CHANNEL_MODE_CONTINUOUS,
-    .running        = true,
-    .tick_callback  = &sequencer_tick_handler,
-};
-
-const struct sequencer_pattern patterns[20] PROGMEM = {
+const struct sequencer_pattern factory_patterns[] = {
     { // SEQUENCER_PATTERN_01
         .length     = 8,
         .steps      = {
@@ -105,6 +97,15 @@ const struct sequencer_pattern patterns[20] PROGMEM = {
             { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_OCTAVE, },
         }
     },
+};
+const uint8_t factory_patterns_size = sizeof(factory_patterns) / sizeof(struct sequencer_pattern);
+
+struct sequencer_channel sequencer = {
+    .pattern        = SEQUENCER_PATTERN_01,
+    .speed          = 40,
+    .mode           = SEQUENCER_CHANNEL_MODE_CONTINUOUS,
+    .running        = true,
+    .tick_callback  = &sequencer_tick_handler,
 };
 
 
@@ -176,6 +177,7 @@ void increase_speed(void)
 
 void init_whammy_module(void)
 {
+    init_sequencer_patterns(factory_patterns, factory_patterns_size);
     configure_sequencer_channel(SEQUENCER_CHANNEL_1, &sequencer);
 }
 
