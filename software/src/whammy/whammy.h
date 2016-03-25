@@ -20,8 +20,8 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _WHAMMY_APP_H
-#define _WHAMMY_APP_H
+#ifndef _WHAMMY_H
+#define _WHAMMY_H
 
 
 //---------------- includes ----------------//
@@ -34,6 +34,48 @@
 
 
 //---------------- data types ----------------//
+
+/// \brief      Amplitudes that represent certain intervals on a DigiTech Whammy pedal
+enum whammy_note
+{
+    WHAMMY_NOTE_UNISON              = 0,    ///< Unison, valid in every mode
+    WHAMMY_NOTE_MINOR_SECOND        = 13,   ///< Minor second in 1oct mode
+    WHAMMY_NOTE_MAJOR_SECOND        = 24,   ///< Major second in 1oct mode
+    WHAMMY_NOTE_MINOR_THIRD         = 32,   ///< Minor third in 1oct mode
+    WHAMMY_NOTE_MAJOR_THIRD         = 42,   ///< Major third in 1oct mode
+    WHAMMY_NOTE_PERFECT_FOURTH      = 52,   ///< Perfect fourth in 1oct mode
+    WHAMMY_NOTE_TRITONE             = 63,   ///< Tritone in 1oct mode
+    WHAMMY_NOTE_PERFECT_FIFTH       = 74,   ///< Perfect fifth in 1oct mode
+    WHAMMY_NOTE_MINOR_SIXTH         = 84,   ///< Minor sixth in 1oct mode
+    WHAMMY_NOTE_MAJOR_SIXTH         = 95,   ///< Major sixth in 1oct mode
+    WHAMMY_NOTE_MINOR_SEVENTH       = 106,  ///< Minor seventh in 1oct mode
+    WHAMMY_NOTE_MAJOR_SEVENTH       = 116,  ///< Major seventh in 1oct mode
+    WHAMMY_NOTE_OCTAVE              = 127,  ///< Octave in 1oct mode
+    WHAMMY_NOTE_1ST_MINOR_SECOND    = 5,    ///< First minor second in 2oct mode
+    WHAMMY_NOTE_1ST_MAJOR_SECOND    = 10,   ///< First major second in 2oct mode
+    WHAMMY_NOTE_1ST_MINOR_THIRD     = 16,   ///< First minor third in 2oct mode
+    WHAMMY_NOTE_1ST_MAJOR_THIRD     = 21,   ///< First major third in 2oct mode
+    WHAMMY_NOTE_1ST_PERFECT_FOURTH  = 26,   ///< First perfect fourth in 2oct mode
+    WHAMMY_NOTE_1ST_TRITONE         = 32,   ///< First tritone in 2oct mode
+    WHAMMY_NOTE_1ST_PERFECT_FIFTH   = 37,   ///< First perfect fifth in 2oct mode
+    WHAMMY_NOTE_1ST_MINOR_SIXTH     = 42,   ///< First minor sixth in 2oct mode
+    WHAMMY_NOTE_1ST_MAJOR_SIXTH     = 48,   ///< First major sixth in 2oct mode
+    WHAMMY_NOTE_1ST_MINOR_SEVENTH   = 53,   ///< First minor seventh in 2oct mode
+    WHAMMY_NOTE_1ST_MAJOR_SEVENTH   = 58,   ///< First major seventh in 2oct mode
+    WHAMMY_NOTE_1ST_OCTAVE          = 63,   ///< First octave in 2oct mode
+    WHAMMY_NOTE_2ND_MINOR_SECOND    = 69,   ///< Second minor second in 2oct mode
+    WHAMMY_NOTE_2ND_MAJOR_SECOND    = 74,   ///< Second major second in 2oct mode
+    WHAMMY_NOTE_2ND_MINOR_THIRD     = 79,   ///< Second minor third in 2oct mode
+    WHAMMY_NOTE_2ND_MAJOR_THIRD     = 85,   ///< Second major third in 2oct mode
+    WHAMMY_NOTE_2ND_PERFECT_FOURTH  = 90,   ///< Second perfect fourth in 2oct mode
+    WHAMMY_NOTE_2ND_TRITONE         = 95,   ///< Second tritone in 2oct mode
+    WHAMMY_NOTE_2ND_PERFECT_FIFTH   = 100,  ///< Second perfect fifth in 2oct mode
+    WHAMMY_NOTE_2ND_MINOR_SIXTH     = 106,  ///< Second minor sixth in 2oct mode
+    WHAMMY_NOTE_2ND_MAJOR_SIXTH     = 111,  ///< Second major sixth in 2oct mode
+    WHAMMY_NOTE_2ND_MINOR_SEVENTH   = 117,  ///< Second minor seventh in 2oct mode
+    WHAMMY_NOTE_2ND_MAJOR_SEVENTH   = 122,  ///< Second major seventh in 2oct mode
+    WHAMMY_NOTE_2ND_OCTAVE          = 127,  ///< Second octave in 2oct mode
+};
 
 
 //---------------- functions and procedures ----------------//
@@ -49,5 +91,5 @@ void tap_tempo(void);
 void toggle_sequencing(void);
 
 //---------------- EOF ----------------//
-#endif // _WHAMMY_APP_H
+#endif // _WHAMMY_H
 

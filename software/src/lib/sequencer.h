@@ -27,6 +27,7 @@
 //---------------- includes ----------------//
 #include <stdbool.h>
 #include <stdint.h>
+#include <avr/pgmspace.h>
 
 #include "gpio.h"
 #include "math.h"
@@ -121,6 +122,12 @@ struct sequencer_channel
     bool                            clock_state;    ///< Last known state of the channel's clock
     void (*tick_callback)(void);                   ///< An event handler for sequencer clock ticks or `NULL`
 };
+
+
+//---------------- required external variables ----------------//
+/// \brief      Internal array of sequencer patterns
+/// \details    Predefines some "factory"-programmed patterns.
+extern const struct sequencer_pattern patterns[SEQUENCER_PATTERNS] PROGMEM;
 
 
 //---------------- functions and procedures ----------------//

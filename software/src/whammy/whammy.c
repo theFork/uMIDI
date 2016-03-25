@@ -64,6 +64,49 @@ struct sequencer_channel sequencer = {
     .tick_callback  = &sequencer_tick_handler,
 };
 
+const struct sequencer_pattern patterns[20] PROGMEM = {
+    { // SEQUENCER_PATTERN_01
+        .length     = 8,
+        .steps      = {
+            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_UNISON, },
+            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_OCTAVE, },
+            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_UNISON, },
+            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_OCTAVE, },
+            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_UNISON, },
+            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_OCTAVE, },
+            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_UNISON, },
+            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_OCTAVE, },
+        }
+    },
+
+    { // SEQUENCER_PATTERN_02
+        .length     = 8,
+        .steps      = {
+            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_UNISON, },
+            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_1ST_PERFECT_FIFTH, },
+            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_1ST_OCTAVE, },
+            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_2ND_PERFECT_FIFTH, },
+            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_2ND_OCTAVE, },
+            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_2ND_PERFECT_FIFTH, },
+            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_1ST_OCTAVE, },
+            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_1ST_PERFECT_FIFTH, },
+        }
+    },
+    { // SEQUENCER_PATTERN_03
+        .length     = 8,
+        .steps      = {
+            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_UNISON, },
+            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_OCTAVE, },
+            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_OCTAVE, },
+            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_UNISON, },
+            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_OCTAVE, },
+            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_OCTAVE, },
+            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_UNISON, },
+            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_OCTAVE, },
+        }
+    },
+};
+
 
 
 ///////////////////////////////////////////////////////////////////
