@@ -1,3 +1,4 @@
-<map id="src/lib/encoder.h" name="src/lib/encoder.h">
-<area shape="rect" id="node3" href="$encoder_8c.html" title="Implementation of a 3&#45;phase rotary encoder with momentary switch." alt="" coords="5,83,123,112"/>
+<map id="/home/haggl/repositories/uMIDI/software/src/lib/encoder.h" name="/home/haggl/repositories/uMIDI/software/src/lib/encoder.h">
+<area shape="rect" id="node3" href="$encoder_8c.html" title="Implementation of a 3&#45; or 4&#45;phase rotary encoder with (optional) momentary switch." alt="" coords="5,117,168,181"/>
+<area shape="rect" id="node5" href="$hmi_8c.html" title="Implementation of the uMIDI&#45;HMI module." alt="" coords="192,126,381,173"/>
 </map>

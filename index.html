@@ -37,6 +37,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li class="current"><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -63,7 +64,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Macros</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -78,7 +79,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><h1><a class="anchor" id="intro"></a>
-What is uMIDI?</h1>
+Introduction</h1>
 <p>uMIDI is a small general purpose micro-controller board built to receive, forward and send MIDI messages accompanied by a (soon to become ;-) quite sophisticated software library / framework. You can use uMIDI for virtually everything you can think of involving (but not limited to) MIDI:</p>
 <ul>
 <li>MIDI merging / splitting</li>
@@ -87,7 +88,11 @@ What is uMIDI?</h1>
 <li>and the list goes on...</li>
 </ul>
 <p>The board is also equipped with a mini USB port, which in conjunction with the serial communication module allows you to connect the board to your PC as a character device.</p>
-<h1><a class="anchor" id="features"></a>
+<div class="image">
+<img src="board.jpg" alt="board.jpg"/>
+<div class="caption">
+The uMIDI board</div></div>
+ <h1><a class="anchor" id="features"></a>
 Hardware features</h1>
 <ul>
 <li>receive / forward / send arbitrary MIDI messages</li>
@@ -103,9 +108,14 @@ Hardware features</h1>
 <li>4 GPIO ports connected to solder jumpers</li>
 <li>2 LEDs (red + green)</li>
 </ul>
+<p>See also:</p>
+<ul>
+<li><a class="el" href="pin_mapping.html">micro-controller pin mapping</a></li>
+<li><a class="el" href="midi_pinout.html">MIDI pinout and phantom-power specification</a></li>
+</ul>
 <h1><a class="anchor" id="software"></a>
 Software library</h1>
-<p>uMIDI comes with a quite sophisticated high-level software library and framework, which enables you to accomplish most basic tasks very quickly. You can find the documentation of the API at <a class="el" href="dir_c85d3e3c5052e9ad9ce18c6863244a25.html">src/lib</a> - if you intend to simply use the library as-is, looking at the header files should suffice.</p>
+<p>uMIDI comes with a quite sophisticated high-level software library and framework, which enables you to accomplish most basic tasks very quickly. You can find the documentation of the API at <a href="../../software/src/lib">software/src/lib</a> - if you intend to simply use the library as-is, looking at the header files should suffice.</p>
 <p>The framework features easy to use device initialization routines which provide an abstraction from the hardware. You just need to specify, which features (GPIO, ADC, PWM, ...) you want to use and how they should be set up with a set of configuration <code>struct</code>s and pass those to the initialization routines - no bit-masking / -shifting or other error-prone steps required. It is recommended to keep all your configuration structures in one file - this way you have one single place, where all hardware-related information can be found.</p>
 <p>Background tasks whose call-frequency may jitter to some extend can be implemented very comfortably using the <a class="el" href="background__tasks_8h.html">background tasks module</a>. The module uses "system ticks" from a CPU timer to schedule registered tasks at three different base frequencies. Of course you can use a counter to further divide down the call-frequency of a specific task.</p>
 <p>The two on-board LEDs can be controlled by the corresponding <a class="el" href="leds_8h.html">LEDs module</a>. The LEDs can be in one of three modes (static, blinking or flashing once), which are managed by a background task. You can set the mode and/or (in static mode) toggle LEDs manually via service functions. This can be done separately for each LED or for both LEDs at the same time.</p>
@@ -134,15 +144,15 @@ Software library</h1>
 Getting started</h1>
 <p>This repository contains the source code for several (example) applications:</p>
 <ul>
-<li><a class="el" href="dir_eacaf28dc2715349d1b93fdb7927a3cb.html">An expression pedal</a></li>
-<li><a class="el" href="dir_260dbcc9b6a505e2fcddf4a593202b7d.html">A simple sequencer for MIDI messages</a></li>
-<li><a class="el" href="dir_120de240b418b65bee6a79e386f7357c.html">A guitar effects switcher</a></li>
-<li><a class="el" href="dir_aef9f09d63b2c03b53906548cc3e1ab1.html">A MIDI controllable Wah-Wah</a></li>
+<li><a href="../../software/src/expression">An expression pedal</a></li>
+<li><a href="../../software/src/whammy">A special sequencer for the DigiTech Whammy pedal</a></li>
+<li><a href="../../software/src/switcher">A guitar effects switcher</a></li>
+<li><a href="../../software/src/wah">A MIDI controllable Wah-Wah</a></li>
 </ul>
 <p>You can look at those to get a general idea of how the API is designed and used. In addition, there are two project templates:</p>
 <ul>
-<li><a class="el" href="dir_4442412791393a132f2a5a0f5a77d37e.html">A very minimalistic project without USB support</a></li>
-<li><a class="el" href="dir_361790134dbbed2e60e9cbc699fc0e5d.html">An empty project with USB support</a></li>
+<li><a href="../../software/src/template-nousb">A very minimalistic project without USB support</a></li>
+<li><a href="../../software/src/template-usb">An empty project with USB support</a></li>
 </ul>
 <p>If you want to be able to use the serial communication module to talk to your board, you should start with the latter, as all necessary files are already included in the Makefile and mandatory steps to get the USB transceiver up and running are already implemented.</p>
 <h1><a class="anchor" id="building"></a>
@@ -175,11 +185,14 @@ Contributing</h1>
 <li>There is an additional global <a href="../../Makefile">Makefile</a>, which cleans and compiles the library, all projects and this documentation. Please make sure that all of this succeeds without errors or warnings (<code>make &gt;/dev/null</code> should print out nothing).</li>
 <li>If you are unsure about something, feel free to contact us via github.</li>
 </ul>
-<p>We also accept bugreports and feature requests on github. Should you find a bug or miss a feature, feel free to file an issue. </p>
+<p>We also accept bugreports and feature requests on github. Should you find a bug or miss a feature, feel free to file an issue.</p>
+<h2><a class="anchor" id="hardware_contribution"></a>
+Hardware</h2>
+<p>The board was orinially created using the open-source EDA tool KiCad (BZR 5122) and updated to also work with BZR 6188. Other versions of KiCad <em>might</em> work as well. </p>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Mar 6 2016 16:50:06 for uMIDI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Mar 26 2016 22:23:15 for uMIDI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.2
 </small></address>

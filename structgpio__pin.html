@@ -37,6 +37,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -69,7 +70,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Macros</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -95,8 +96,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Collaboration diagram for gpio_pin:</div>
 <div class="dyncontent">
 <div class="center"><img src="structgpio__pin__coll__graph.png" border="0" usemap="#gpio__pin_coll__map" alt="Collaboration graph"/></div>
-<map name="gpio__pin_coll__map" id="gpio__pin_coll__map">
-</map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="pub-attribs"></a>
@@ -104,8 +103,6 @@ Data Fields</h2></td></tr>
 <tr class="memitem:a89731d4b41ae76b9bb7350f94b1eed25"><td class="memItemLeft" align="right" valign="top">PORT_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgpio__pin.html#a89731d4b41ae76b9bb7350f94b1eed25">port</a></td></tr>
 <tr class="memitem:a93b3860e2ed49fc62ce9440810ba1a2d"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgpio__pin.html#a93b3860e2ed49fc62ce9440810ba1a2d">bit</a></td></tr>
 <tr class="memdesc:a93b3860e2ed49fc62ce9440810ba1a2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The corresponding bit index in the configuration registers.  <a href="#a93b3860e2ed49fc62ce9440810ba1a2d"></a><br/></td></tr>
-<tr class="memitem:aa0df9d7c94fddebe1f3354d40ddaf519"><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="gpio_8h.html#a891c93890ae66f2fe1812cc8c12ed6cf">gpio_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgpio__pin.html#aa0df9d7c94fddebe1f3354d40ddaf519">type</a></td></tr>
-<tr class="memdesc:aa0df9d7c94fddebe1f3354d40ddaf519"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function / type of the pin.  <a href="#aa0df9d7c94fddebe1f3354d40ddaf519"></a><br/></td></tr>
 </table>
 <a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Configuration of a single GPIO pin. </p>
@@ -138,27 +135,13 @@ Data Fields</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aa0df9d7c94fddebe1f3354d40ddaf519"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="gpio_8h.html#a891c93890ae66f2fe1812cc8c12ed6cf">gpio_type</a> gpio_pin::type</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Function / type of the pin. </p>
-
-</div>
-</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>src/lib/<a class="el" href="gpio_8h_source.html">gpio.h</a></li>
+<li>/home/haggl/repositories/uMIDI/software/src/lib/<a class="el" href="gpio_8h_source.html">gpio.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Mar 6 2016 16:50:06 for uMIDI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Mar 26 2016 22:23:15 for uMIDI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.2
 </small></address>

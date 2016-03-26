@@ -1,9 +1,11 @@
-<map id="src/lib/wave.c" name="src/lib/wave.c">
-<area shape="rect" id="node5" href="$background__tasks_8h.html" title="Background task scheduler." alt="" coords="144,160,283,189"/>
-<area shape="rect" id="node9" href="$leds_8h.html" title="Handling of the on&#45;board LEDs." alt="" coords="665,315,721,344"/>
-<area shape="rect" id="node15" href="$lookup__tables_8h.html" title="Lookup tables for the uMIDI firmware." alt="" coords="68,237,180,267"/>
-<area shape="rect" id="node18" href="$midi_8h.html" title="MIDI message transceiver." alt="" coords="469,237,525,267"/>
-<area shape="rect" id="node28" href="$wave_8h.html" title="Waveform function generator." alt="" coords="321,83,385,112"/>
-<area shape="rect" id="node23" href="$gpio_8h.html" title="GPIO configuration and service functions." alt="" coords="535,315,591,344"/>
-<area shape="rect" id="node31" href="$math_8h.html" title="API for a small collection of mathematical functions." alt="" coords="357,160,419,189"/>
+<map id="/home/haggl/repositories/uMIDI/software/src/lib/wave.c" name="/home/haggl/repositories/uMIDI/software/src/lib/wave.c">
+<area shape="rect" id="node7" href="$background__tasks_8h.html" title="Background task scheduler." alt="" coords="283,179,421,208"/>
+<area shape="rect" id="node11" href="$leds_8h.html" title="Handling of the on&#45;board LEDs." alt="" coords="844,333,900,363"/>
+<area shape="rect" id="node17" href="$lookup__tables_8h.html" title="Lookup tables for the uMIDI firmware." alt="" coords="211,256,323,285"/>
+<area shape="rect" id="node20" href="$midi_8h.html" title="MIDI message transceiver." alt="" coords="713,256,769,285"/>
+<area shape="rect" id="node30" href="$program_8h.html" title="Program storage API." alt="" coords="445,179,525,208"/>
+<area shape="rect" id="node33" href="$wave_8h.html" title="Waveform function generator." alt="" coords="564,101,628,131"/>
+<area shape="rect" id="node42" href="$lib_2whammy_8h.html" title="Definitions for the DigiTech Whammy pedal." alt="" coords="844,101,929,131"/>
+<area shape="rect" id="node25" href="$gpio_8h.html" title="GPIO configuration and service functions." alt="" coords="764,333,820,363"/>
+<area shape="rect" id="node36" href="$math_8h.html" title="API for a small collection of mathematical functions." alt="" coords="600,179,661,208"/>
 </map>

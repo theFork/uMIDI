@@ -1,10 +1,10 @@
-<map id="src/lib/leds.h" name="src/lib/leds.h">
-<area shape="rect" id="node3" href="$adc_8c.html" title="ADC configuration and service functions." alt="" coords="5,83,99,112"/>
-<area shape="rect" id="node5" href="$encoder_8c.html" title="Implementation of a 3&#45;phase rotary encoder with momentary switch." alt="" coords="123,83,240,112"/>
-<area shape="rect" id="node7" href="$leds_8c.html" title="Handling of the on&#45;board LEDs." alt="" coords="264,83,360,112"/>
-<area shape="rect" id="node9" href="$midi_8c.html" title="MIDI message transceiver." alt="" coords="384,83,480,112"/>
-<area shape="rect" id="node11" href="$system_8c.html" title="System configuration procedures." alt="" coords="504,83,619,112"/>
-<area shape="rect" id="node13" href="$tests_8c.html" title="src/lib/tests.c" alt="" coords="643,83,744,112"/>
-<area shape="rect" id="node15" href="$usb_8c.html" title="USB CDC device driver implementation." alt="" coords="768,83,861,112"/>
-<area shape="rect" id="node17" href="$wave_8c.html" title="Waveform function generator." alt="" coords="885,83,987,112"/>
+<map id="/home/haggl/repositories/uMIDI/software/src/lib/leds.h" name="/home/haggl/repositories/uMIDI/software/src/lib/leds.h">
+<area shape="rect" id="node3" href="$adc_8c.html" title="ADC configuration and service functions." alt="" coords="5,110,195,157"/>
+<area shape="rect" id="node5" href="$leds_8c.html" title="Handling of the on&#45;board LEDs." alt="" coords="219,110,413,157"/>
+<area shape="rect" id="node7" href="$midi_8c.html" title="MIDI message transceiver." alt="" coords="437,110,632,157"/>
+<area shape="rect" id="node9" href="$sequencer_8c.html" title="Sequencer module implementation." alt="" coords="656,101,819,165"/>
+<area shape="rect" id="node11" href="$system_8c.html" title="System configuration procedures." alt="" coords="843,101,1005,165"/>
+<area shape="rect" id="node13" href="$tests_8c.html" title="/home/haggl/repositories\l/uMIDI/software/src/lib\l/tests.c" alt="" coords="1029,101,1192,165"/>
+<area shape="rect" id="node15" href="$usb_8c.html" title="USB CDC device driver implementation." alt="" coords="1216,110,1405,157"/>
+<area shape="rect" id="node17" href="$wave_8c.html" title="Waveform function generator." alt="" coords="1429,110,1629,157"/>
 </map>

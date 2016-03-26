@@ -1,0 +1,5 @@
+<map id="encoder" name="encoder">
+<area shape="rect" id="node2" href="$structencoder__state.html" title="Internal state of an encoder." alt="" coords="5,245,109,365"/>
+<area shape="rect" id="node4" href="$structencoder__config.html" title="Configuration of an encoder." alt="" coords="133,211,251,400"/>
+<area shape="rect" id="node6" href="$structgpio__pin.html" title="Configuration of a single GPIO pin." alt="" coords="157,6,227,109"/>
+</map>

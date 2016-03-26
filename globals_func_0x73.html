@@ -37,6 +37,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -101,7 +102,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Macros</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -164,6 +165,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="tests_8c.html#a9981235b573c43b463f41b5004222c9e">tests.c</a>
 , <a class="el" href="tests_8h.html#a9981235b573c43b463f41b5004222c9e">tests.h</a>
 </li>
+<li>set_hmi_led()
+: <a class="el" href="hmi_8c.html#a0b76ecea5e12faa78359da8cfa4a5209">hmi.c</a>
+, <a class="el" href="hmi_8h.html#a0ee169b5091fcd046a6542f4b4589a54">hmi.h</a>
+</li>
 <li>set_led()
 : <a class="el" href="leds_8c.html#a04858cf45a8e431fd472bae414f9c86e">leds.c</a>
 , <a class="el" href="leds_8h.html#a810b2cf7b51b22f09035463e8512ed05">leds.h</a>
@@ -173,12 +178,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="tests_8h.html#aba5cbd49eb8b0bb95e54060f538e6b2c">tests.h</a>
 </li>
 <li>set_midi_rx_channel()
-: <a class="el" href="midi_8h.html#ace33586e2fb7bfb976424328e2a04377">midi.h</a>
-, <a class="el" href="midi_8c.html#ace33586e2fb7bfb976424328e2a04377">midi.c</a>
+: <a class="el" href="midi_8c.html#ace33586e2fb7bfb976424328e2a04377">midi.c</a>
+, <a class="el" href="midi_8h.html#ace33586e2fb7bfb976424328e2a04377">midi.h</a>
 </li>
 <li>set_midi_tx_channel()
-: <a class="el" href="midi_8h.html#abd61659f8ea80ca6752621faba3272c8">midi.h</a>
-, <a class="el" href="midi_8c.html#abd61659f8ea80ca6752621faba3272c8">midi.c</a>
+: <a class="el" href="midi_8c.html#abd61659f8ea80ca6752621faba3272c8">midi.c</a>
+, <a class="el" href="midi_8h.html#abd61659f8ea80ca6752621faba3272c8">midi.h</a>
 </li>
 <li>set_omni_mode()
 : <a class="el" href="midi_8h.html#ad20ae395ef016b51127f16f0521743c7">midi.h</a>
@@ -196,14 +201,22 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="wave_8c.html#a944183e6a1174bc1fcdb13df35fb7cb2">wave.c</a>
 </li>
 <li>set_waveform()
-: <a class="el" href="wave_8h.html#a3f2bcee46f47812c10f4f89e3f8389b8">wave.h</a>
-, <a class="el" href="wave_8c.html#a66bbaac051c3e8ae7328a90dc70ea8eb">wave.c</a>
+: <a class="el" href="wave_8c.html#a66bbaac051c3e8ae7328a90dc70ea8eb">wave.c</a>
+, <a class="el" href="wave_8h.html#a3f2bcee46f47812c10f4f89e3f8389b8">wave.h</a>
+</li>
+<li>show_bar_graph()
+: <a class="el" href="hmi_8c.html#a33cbd321a2add5f80fcfba30008bd074">hmi.c</a>
+, <a class="el" href="hmi_8h.html#a039921461b1172cf2cab3e96714c910d">hmi.h</a>
+</li>
+<li>show_led_pattern()
+: <a class="el" href="hmi_8h.html#acd34eed4ceed456b46454b2422622c4b">hmi.h</a>
+, <a class="el" href="hmi_8c.html#aaa16e51a1e2582a0d09903227aa961d8">hmi.c</a>
 </li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Mar 6 2016 16:50:06 for uMIDI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Mar 26 2016 22:23:15 for uMIDI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.2
 </small></address>

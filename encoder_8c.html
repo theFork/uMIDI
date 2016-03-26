@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>uMIDI: src/lib/encoder.c File Reference</title>
+<title>uMIDI: /home/haggl/repositories/uMIDI/software/src/lib/encoder.c File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -37,6 +37,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -68,7 +69,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Macros</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -79,79 +80,165 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_c85d3e3c5052e9ad9ce18c6863244a25.html">lib</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_0c220628bbfaf3735973080788410777.html">software</a></li><li class="navelem"><a class="el" href="dir_ddb5b8313525979f923a1027f5d71067.html">src</a></li><li class="navelem"><a class="el" href="dir_8127d9c81ca9341e0d8644565402ee47.html">lib</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#func-members">Functions</a> &#124;
-<a href="#var-members">Variables</a>  </div>
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">encoder.c File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Implementation of a 3-phase rotary encoder with momentary switch.  
+<p>Implementation of a 3- or 4-phase rotary encoder with (optional) momentary switch.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;stddef.h&gt;</code><br/>
-<code>#include &lt;util/delay.h&gt;</code><br/>
 <code>#include &quot;<a class="el" href="encoder_8h_source.html">encoder.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="gpio_8h_source.html">gpio.h</a>&quot;</code><br/>
-<code>#include &quot;<a class="el" href="leds_8h_source.html">leds.h</a>&quot;</code><br/>
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for encoder.c:</div>
 <div class="dyncontent">
-<div class="center"><img src="encoder_8c__incl.png" border="0" usemap="#src_2lib_2encoder_8c" alt=""/></div>
-<map name="src_2lib_2encoder_8c" id="src_2lib_2encoder_8c">
-<area shape="rect" id="node7" href="encoder_8h.html" title="Interface for rotary encoders." alt="" coords="259,83,336,112"/><area shape="rect" id="node11" href="gpio_8h.html" title="GPIO configuration and service functions." alt="" coords="329,160,385,189"/><area shape="rect" id="node19" href="leds_8h.html" title="Handling of the on&#45;board LEDs." alt="" coords="199,160,255,189"/></map>
+<div class="center"><img src="encoder_8c__incl.png" border="0" usemap="#_2home_2haggl_2repositories_2uMIDI_2software_2src_2lib_2encoder_8c" alt=""/></div>
+<map name="_2home_2haggl_2repositories_2uMIDI_2software_2src_2lib_2encoder_8c" id="_2home_2haggl_2repositories_2uMIDI_2software_2src_2lib_2encoder_8c">
+<area shape="rect" id="node5" href="encoder_8h.html" title="Interface for rotary encoders." alt="" coords="99,117,176,147"/><area shape="rect" id="node9" href="gpio_8h.html" title="GPIO configuration and service functions." alt="" coords="185,195,241,224"/></map>
 </div>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ade58bb1d77bc740de64dc13d19495bd4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="encoder_8c.html#ade58bb1d77bc740de64dc13d19495bd4">init_encoder_module</a> (const struct <a class="el" href="structencoder__config.html">encoder_config</a> *const config)</td></tr>
-<tr class="memdesc:ade58bb1d77bc740de64dc13d19495bd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the encoder.  <a href="#ade58bb1d77bc740de64dc13d19495bd4"></a><br/></td></tr>
-<tr class="memitem:a0880e8b6b9245b2f5eaf486f74c7d004"><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="encoder_8h.html#a1b10f995d3a401ee5444ce1740786698">encoder_action</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="encoder_8c.html#a0880e8b6b9245b2f5eaf486f74c7d004">poll_encoder</a> (void)</td></tr>
-<tr class="memdesc:a0880e8b6b9245b2f5eaf486f74c7d004"><td class="mdescLeft">&#160;</td><td class="mdescRight">Polls the encoder.  <a href="#a0880e8b6b9245b2f5eaf486f74c7d004"></a><br/></td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2><a name="var-members"></a>
-Variables</h2></td></tr>
-<tr class="memitem:a6807b6ec089e442c929a13b1e012e61c"><td class="memItemLeft" align="right" valign="top">static struct <a class="el" href="structencoder__state.html">encoder_state</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="encoder_8c.html#a6807b6ec089e442c929a13b1e012e61c">state</a></td></tr>
-<tr class="memdesc:a6807b6ec089e442c929a13b1e012e61c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal state used by poll_encoder.  <a href="#a6807b6ec089e442c929a13b1e012e61c"></a><br/></td></tr>
-<tr class="memitem:a99e5a71a195a3a2a8ecd9175579a3b42"><td class="memItemLeft" align="right" valign="top">static struct <a class="el" href="structgpio__pin.html">gpio_pin</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="encoder_8c.html#a99e5a71a195a3a2a8ecd9175579a3b42">inputA</a></td></tr>
-<tr class="memdesc:a99e5a71a195a3a2a8ecd9175579a3b42"><td class="mdescLeft">&#160;</td><td class="mdescRight">The GPIO pin that output A of the encoder is connected to.  <a href="#a99e5a71a195a3a2a8ecd9175579a3b42"></a><br/></td></tr>
-<tr class="memitem:a9937c3291d3ad2ce18d7b5fcf5b6f33d"><td class="memItemLeft" align="right" valign="top">static struct <a class="el" href="structgpio__pin.html">gpio_pin</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="encoder_8c.html#a9937c3291d3ad2ce18d7b5fcf5b6f33d">inputB</a></td></tr>
-<tr class="memdesc:a9937c3291d3ad2ce18d7b5fcf5b6f33d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The GPIO pin that output B of the encoder is connected to.  <a href="#a9937c3291d3ad2ce18d7b5fcf5b6f33d"></a><br/></td></tr>
-<tr class="memitem:a07bee2a0f6331b2efba0fe8280475c7e"><td class="memItemLeft" align="right" valign="top">static struct <a class="el" href="structgpio__pin.html">gpio_pin</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="encoder_8c.html#a07bee2a0f6331b2efba0fe8280475c7e">inputSwitch</a></td></tr>
-<tr class="memdesc:a07bee2a0f6331b2efba0fe8280475c7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The GPIO pin that the momentary switch is connected to.  <a href="#a07bee2a0f6331b2efba0fe8280475c7e"></a><br/></td></tr>
-<tr class="memitem:a6e2612aa800a71fa216f80e9cb5424b3"><td class="memItemLeft" align="right" valign="top">static void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="encoder_8c.html#a6e2612aa800a71fa216f80e9cb5424b3">cw_callback</a> )(void)</td></tr>
-<tr class="memdesc:a6e2612aa800a71fa216f80e9cb5424b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback for clockwise rotation.  <a href="#a6e2612aa800a71fa216f80e9cb5424b3"></a><br/></td></tr>
-<tr class="memitem:aab352596b8b9a1a6c3cfb512284c47ad"><td class="memItemLeft" align="right" valign="top">static void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="encoder_8c.html#aab352596b8b9a1a6c3cfb512284c47ad">ccw_callback</a> )(void)</td></tr>
-<tr class="memdesc:aab352596b8b9a1a6c3cfb512284c47ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback for counter-clockwise rotation.  <a href="#aab352596b8b9a1a6c3cfb512284c47ad"></a><br/></td></tr>
-<tr class="memitem:a06e976c3fb42586d639215ab5bf2748d"><td class="memItemLeft" align="right" valign="top">static void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="encoder_8c.html#a06e976c3fb42586d639215ab5bf2748d">push_callback</a> )(void)</td></tr>
-<tr class="memdesc:a06e976c3fb42586d639215ab5bf2748d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback for button press.  <a href="#a06e976c3fb42586d639215ab5bf2748d"></a><br/></td></tr>
+<tr class="memitem:a694acd2440d35a4fe66bb7c1f4a67392"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="encoder_8c.html#a694acd2440d35a4fe66bb7c1f4a67392">advance_3phase_encoder</a> (struct <a class="el" href="structencoder__state.html">encoder_state</a> *const state, const bool inputA, const bool inputB)</td></tr>
+<tr class="memdesc:a694acd2440d35a4fe66bb7c1f4a67392"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interprets encoder inputs and updates the supplied encoder state.  <a href="#a694acd2440d35a4fe66bb7c1f4a67392"></a><br/></td></tr>
+<tr class="memitem:ac943a0ba30cce4a9f45fe7053d996e24"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="encoder_8c.html#ac943a0ba30cce4a9f45fe7053d996e24">advance_4phase_encoder</a> (struct <a class="el" href="structencoder__state.html">encoder_state</a> *const state, const bool inputA, const bool inputB)</td></tr>
+<tr class="memdesc:ac943a0ba30cce4a9f45fe7053d996e24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interprets encoder inputs and updates the supplied encoder state.  <a href="#ac943a0ba30cce4a9f45fe7053d996e24"></a><br/></td></tr>
+<tr class="memitem:a446f526bef8abf2fe27696b85d9af183"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="encoder_8c.html#a446f526bef8abf2fe27696b85d9af183">init_encoder</a> (struct <a class="el" href="structencoder.html">encoder</a> *const <a class="el" href="structencoder.html">encoder</a>)</td></tr>
+<tr class="memdesc:a446f526bef8abf2fe27696b85d9af183"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the encoder.  <a href="#a446f526bef8abf2fe27696b85d9af183"></a><br/></td></tr>
+<tr class="memitem:a077df11c625842da2b83dd6d854abe6c"><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="encoder_8h.html#a1b10f995d3a401ee5444ce1740786698">encoder_action</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="encoder_8c.html#a077df11c625842da2b83dd6d854abe6c">poll_encoder</a> (struct <a class="el" href="structencoder.html">encoder</a> *const <a class="el" href="structencoder.html">encoder</a>)</td></tr>
+<tr class="memdesc:a077df11c625842da2b83dd6d854abe6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Polls the encoder inputs.  <a href="#a077df11c625842da2b83dd6d854abe6c"></a><br/></td></tr>
 </table>
 <a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>Implementation of a 3-phase rotary encoder with momentary switch. </p>
+<div class="textblock"><p>Implementation of a 3- or 4-phase rotary encoder with (optional) momentary switch. </p>
 </div><h2>Function Documentation</h2>
-<a class="anchor" id="ade58bb1d77bc740de64dc13d19495bd4"></a>
+<a class="anchor" id="a694acd2440d35a4fe66bb7c1f4a67392"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void advance_3phase_encoder </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structencoder__state.html">encoder_state</a> *const&#160;</td>
+          <td class="paramname"><em>state</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>inputA</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>inputB</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Interprets encoder inputs and updates the supplied encoder state. </p>
+<p>This helper function implements a 3-phase rotary encoder "protocol". </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">state</td><td>the state of the encoder </td></tr>
+    <tr><td class="paramname">inputA</td><td>the current input on the encoder's A terminal </td></tr>
+    <tr><td class="paramname">inputB</td><td>the current input on the encoder's B terminal </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="ac943a0ba30cce4a9f45fe7053d996e24"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void advance_4phase_encoder </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structencoder__state.html">encoder_state</a> *const&#160;</td>
+          <td class="paramname"><em>state</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>inputA</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>inputB</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Interprets encoder inputs and updates the supplied encoder state. </p>
+<p>This helper function implements a 4-phase rotary encoder "protocol". </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">state</td><td>the state of the encoder </td></tr>
+    <tr><td class="paramname">inputA</td><td>the current input on the encoder's A terminal </td></tr>
+    <tr><td class="paramname">inputB</td><td>the current input on the encoder's B terminal </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a446f526bef8abf2fe27696b85d9af183"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void init_encoder_module </td>
+          <td class="memname">void init_encoder </td>
           <td>(</td>
-          <td class="paramtype">const struct <a class="el" href="structencoder__config.html">encoder_config</a> *&#160;</td>
-          <td class="paramname"><em>config</em></td><td>)</td>
+          <td class="paramtype">struct <a class="el" href="structencoder.html">encoder</a> *&#160;</td>
+          <td class="paramname"><em>encoder</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Initializes the encoder. </p>
-<p>Saves the GPIO pins and registers the callbacks. </p>
+<p>Configures GPIO pins and registers the callbacks. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">config</td><td>the encoder configuration </td></tr>
+    <tr><td class="paramname">encoder</td><td>the encoder instance to initialize </td></tr>
   </table>
   </dd>
 </dl>
@@ -159,190 +246,36 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a0880e8b6b9245b2f5eaf486f74c7d004"></a>
+<a class="anchor" id="a077df11c625842da2b83dd6d854abe6c"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">enum <a class="el" href="encoder_8h.html#a1b10f995d3a401ee5444ce1740786698">encoder_action</a> poll_encoder </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">struct <a class="el" href="structencoder.html">encoder</a> *&#160;</td>
+          <td class="paramname"><em>encoder</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Polls the encoder. </p>
-<p>Checks if the encoder was rotated or pushed and updates the saved state. </p>
+<p>Polls the encoder inputs. </p>
+<p>Checks if the encoder was rotated or pushed and updates the saved state. This function also executes registered callbacks, so you can define those in the encoder configuration passed to <a class="el" href="encoder_8h.html#aa64f1b1c975f6a7b7b562673a36c3f15" title="Initializes the encoder.">init_encoder</a> and register this function in a background task, discarding its return value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">encoder</td><td>the encoder to poll </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>the detected action or ENCODER_ACTION_NONE </dd></dl>
-
-</div>
-</div>
-<h2>Variable Documentation</h2>
-<a class="anchor" id="aab352596b8b9a1a6c3cfb512284c47ad"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void(* ccw_callback)(void)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Callback for counter-clockwise rotation. </p>
-
-</div>
-</div>
-<a class="anchor" id="a6e2612aa800a71fa216f80e9cb5424b3"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void(* cw_callback)(void)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Callback for clockwise rotation. </p>
-
-</div>
-</div>
-<a class="anchor" id="a99e5a71a195a3a2a8ecd9175579a3b42"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">struct <a class="el" href="structgpio__pin.html">gpio_pin</a>* inputA</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The GPIO pin that output A of the encoder is connected to. </p>
-
-</div>
-</div>
-<a class="anchor" id="a9937c3291d3ad2ce18d7b5fcf5b6f33d"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">struct <a class="el" href="structgpio__pin.html">gpio_pin</a>* inputB</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The GPIO pin that output B of the encoder is connected to. </p>
-
-</div>
-</div>
-<a class="anchor" id="a07bee2a0f6331b2efba0fe8280475c7e"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">struct <a class="el" href="structgpio__pin.html">gpio_pin</a>* inputSwitch</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The GPIO pin that the momentary switch is connected to. </p>
-
-</div>
-</div>
-<a class="anchor" id="a06e976c3fb42586d639215ab5bf2748d"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void(* push_callback)(void)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Callback for button press. </p>
-
-</div>
-</div>
-<a class="anchor" id="a6807b6ec089e442c929a13b1e012e61c"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">struct <a class="el" href="structencoder__state.html">encoder_state</a> state</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line"> {</div>
-<div class="line">    <span class="keyword">false</span>,</div>
-<div class="line">    <span class="keyword">false</span>,</div>
-<div class="line">    0</div>
-<div class="line">}</div>
-</div><!-- fragment -->
-<p>Internal state used by poll_encoder. </p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Mar 6 2016 16:50:06 for uMIDI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Mar 26 2016 22:23:14 for uMIDI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.2
 </small></address>

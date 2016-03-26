@@ -37,6 +37,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -69,7 +70,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Macros</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -87,13 +88,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
+<p>This struct represents the four solder jumpers on the bottom side of the PCB.  
+ <a href="structjumpers.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="gpio_8h_source.html">gpio.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for jumpers:</div>
 <div class="dyncontent">
 <div class="center"><img src="structjumpers__coll__graph.png" border="0" usemap="#jumpers_coll__map" alt="Collaboration graph"/></div>
 <map name="jumpers_coll__map" id="jumpers_coll__map">
-<area shape="rect" id="node2" href="structgpio__pin.html" title="Configuration of a single GPIO pin." alt="" coords="5,5,75,125"/></map>
+<area shape="rect" id="node2" href="structgpio__pin.html" title="Configuration of a single GPIO pin." alt="" coords="5,6,75,109"/></map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="pub-attribs"></a>
@@ -107,7 +111,9 @@ Data Fields</h2></td></tr>
 <tr class="memitem:a30363113834d4acbfe1db8e4060cf39a"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structgpio__pin.html">gpio_pin</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjumpers.html#a30363113834d4acbfe1db8e4060cf39a">jp5</a></td></tr>
 <tr class="memdesc:a30363113834d4acbfe1db8e4060cf39a"><td class="mdescLeft">&#160;</td><td class="mdescRight">JP5 on the bottom side of the PCB.  <a href="#a30363113834d4acbfe1db8e4060cf39a"></a><br/></td></tr>
 </table>
-<h2>Field Documentation</h2>
+<a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>This struct represents the four solder jumpers on the bottom side of the PCB. </p>
+</div><h2>Field Documentation</h2>
 <a class="anchor" id="a3114fa752c24648a087be7b3825a5edc"></a>
 <div class="memitem">
 <div class="memproto">
@@ -165,12 +171,12 @@ Data Fields</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>src/lib/<a class="el" href="gpio_8h_source.html">gpio.h</a></li>
+<li>/home/haggl/repositories/uMIDI/software/src/lib/<a class="el" href="gpio_8h_source.html">gpio.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Mar 6 2016 16:50:06 for uMIDI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Mar 26 2016 22:23:15 for uMIDI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.2
 </small></address>

@@ -8,7 +8,6 @@ var searchData=
   ['update_5fin_5fprogress',['update_in_progress',['../serial__communication_8c.html#acfccd4d90a3c71bf5622fe5a41696e4c',1,'serial_communication.c']]],
   ['update_5fleds',['update_leds',['../leds_8c.html#ab0d1d0f0b7d8252e14de08c61a32b941',1,'update_leds(void):&#160;leds.c'],['../leds_8h.html#ab0d1d0f0b7d8252e14de08c61a32b941',1,'update_leds(void):&#160;leds.c']]],
   ['update_5fsequencer',['update_sequencer',['../sequencer_8c.html#afe20784a7bed689e78b01b4d866e992c',1,'update_sequencer(void):&#160;sequencer.c'],['../sequencer_8h.html#afe20784a7bed689e78b01b4d866e992c',1,'update_sequencer(void):&#160;sequencer.c']]],
-  ['update_5fsequencer_5fleds',['update_sequencer_leds',['../sequencer_8c.html#a21fc83477fcb88d1dfb3b2af815f04bd',1,'update_sequencer_leds(void):&#160;sequencer.c'],['../sequencer_8h.html#a21fc83477fcb88d1dfb3b2af815f04bd',1,'update_sequencer_leds(void):&#160;sequencer.c']]],
   ['update_5fwah_5fpwm',['update_wah_pwm',['../wah_8c.html#a2d25051d7fe5e0d145126816527807d1',1,'update_wah_pwm(void):&#160;wah.c'],['../wah_8h.html#a2d25051d7fe5e0d145126816527807d1',1,'update_wah_pwm(void):&#160;wah.c']]],
   ['update_5fwave',['update_wave',['../wave_8c.html#a5e908726cc1f88ffd3915001cc263353',1,'update_wave(struct wave *const wave):&#160;wave.c'],['../wave_8h.html#ac106b7b370dd0835f732e76d8230f54e',1,'update_wave(struct wave *wave):&#160;wave.c']]],
   ['usb_2ec',['usb.c',['../usb_8c.html',1,'']]],

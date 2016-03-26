@@ -1,5 +1,5 @@
-<map id="src/template&#45;nousb/app.h" name="src/template&#45;nousb/app.h">
-<area shape="rect" id="node3" href="$template-nousb_2app_8c.html" title="Implementation of an application specific module." alt="" coords="5,102,139,149"/>
-<area shape="rect" id="node5" href="$template-nousb_2config_8c.html" title="Device configuration." alt="" coords="163,102,296,149"/>
-<area shape="rect" id="node7" href="$template-nousb_2main_8c.html" title="Entry point and main loop of the uMIDI firmware." alt="" coords="320,102,453,149"/>
+<map id="/home/haggl/repositories/uMIDI/software/src/template&#45;nousb/app.h" name="/home/haggl/repositories/uMIDI/software/src/template&#45;nousb/app.h">
+<area shape="rect" id="node3" href="$template-nousb_2app_8c.html" title="Implementation of an application specific module." alt="" coords="5,117,197,181"/>
+<area shape="rect" id="node5" href="$template-nousb_2config_8c.html" title="Device configuration." alt="" coords="221,117,413,181"/>
+<area shape="rect" id="node7" href="$template-nousb_2main_8c.html" title="Entry point and main loop of the uMIDI firmware." alt="" coords="437,117,629,181"/>
 </map>

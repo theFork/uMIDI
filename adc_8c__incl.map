@@ -1,6 +1,6 @@
-<map id="src/lib/adc.c" name="src/lib/adc.c">
-<area shape="rect" id="node9" href="$adc_8h.html" title="ADC configuration and service functions." alt="" coords="267,160,320,189"/>
-<area shape="rect" id="node15" href="$midi_8h.html" title="MIDI message transceiver." alt="" coords="413,83,469,112"/>
-<area shape="rect" id="node26" href="$leds_8h.html" title="Handling of the on&#45;board LEDs." alt="" coords="576,160,632,189"/>
-<area shape="rect" id="node21" href="$gpio_8h.html" title="GPIO configuration and service functions." alt="" coords="445,160,501,189"/>
+<map id="/home/haggl/repositories/uMIDI/software/src/lib/adc.c" name="/home/haggl/repositories/uMIDI/software/src/lib/adc.c">
+<area shape="rect" id="node9" href="$adc_8h.html" title="ADC configuration and service functions." alt="" coords="267,179,320,208"/>
+<area shape="rect" id="node15" href="$midi_8h.html" title="MIDI message transceiver." alt="" coords="413,101,469,131"/>
+<area shape="rect" id="node26" href="$leds_8h.html" title="Handling of the on&#45;board LEDs." alt="" coords="576,179,632,208"/>
+<area shape="rect" id="node21" href="$gpio_8h.html" title="GPIO configuration and service functions." alt="" coords="445,179,501,208"/>
 </map>

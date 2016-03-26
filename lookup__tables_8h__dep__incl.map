@@ -1,6 +1,6 @@
-<map id="src/lib/lookup_tables.h" name="src/lib/lookup_tables.h">
-<area shape="rect" id="node3" href="$pwm_8c.html" title="PWM configuration and service functions." alt="" coords="5,160,104,189"/>
-<area shape="rect" id="node5" href="$pwm_8h.html" title="PWM configuration and service functions." alt="" coords="92,83,191,112"/>
-<area shape="rect" id="node10" href="$wave_8c.html" title="Waveform function generator." alt="" coords="215,83,316,112"/>
-<area shape="rect" id="node8" href="$tests_8c.html" title="src/lib/tests.c" alt="" coords="128,160,229,189"/>
+<map id="/home/haggl/repositories/uMIDI/software/src/lib/lookup_tables.h" name="/home/haggl/repositories/uMIDI/software/src/lib/lookup_tables.h">
+<area shape="rect" id="node3" href="$pwm_8c.html" title="PWM configuration and service functions." alt="" coords="5,222,203,269"/>
+<area shape="rect" id="node5" href="$pwm_8h.html" title="PWM configuration and service functions." alt="" coords="141,118,339,165"/>
+<area shape="rect" id="node10" href="$wave_8c.html" title="Waveform function generator." alt="" coords="363,118,563,165"/>
+<area shape="rect" id="node8" href="$tests_8c.html" title="/home/haggl/repositories\l/uMIDI/software/src/lib\l/tests.c" alt="" coords="227,213,389,277"/>
 </map>

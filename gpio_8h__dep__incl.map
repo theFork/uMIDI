@@ -1,15 +1,19 @@
-<map id="src/lib/gpio.h" name="src/lib/gpio.h">
-<area shape="rect" id="node3" href="$midi_8h.html" title="MIDI message transceiver." alt="" coords="251,83,347,112"/>
-<area shape="rect" id="node11" href="$pwm_8c.html" title="PWM configuration and service functions." alt="" coords="348,237,447,267"/>
-<area shape="rect" id="node18" href="$midi_8c.html" title="MIDI message transceiver." alt="" coords="424,160,520,189"/>
-<area shape="rect" id="node21" href="$tests_8c.html" title="src/lib/tests.c" alt="" coords="544,160,645,189"/>
-<area shape="rect" id="node25" href="$encoder_8h.html" title="Interface for rotary encoders." alt="" coords="771,83,888,112"/>
-<area shape="rect" id="node27" href="$encoder_8c.html" title="Implementation of a 3&#45;phase rotary encoder with momentary switch." alt="" coords="745,160,863,189"/>
-<area shape="rect" id="node30" href="$gpio_8c.html" title="GPIO configuration and service functions." alt="" coords="912,83,1008,112"/>
-<area shape="rect" id="node33" href="$program_8c.html" title="Program storage module implementation." alt="" coords="1032,83,1149,112"/>
-<area shape="rect" id="node5" href="$adc_8c.html" title="ADC configuration and service functions." alt="" coords="29,160,123,189"/>
-<area shape="rect" id="node7" href="$math_8h.html" title="API for a small collection of mathematical functions." alt="" coords="248,160,349,189"/>
-<area shape="rect" id="node9" href="$math_8c.html" title="Implementation of mathematical functions." alt="" coords="97,237,199,267"/>
-<area shape="rect" id="node13" href="$wave_8h.html" title="Waveform function generator." alt="" coords="223,237,324,267"/>
-<area shape="rect" id="node15" href="$wave_8c.html" title="Waveform function generator." alt="" coords="81,315,183,344"/>
+<map id="/home/haggl/repositories/uMIDI/software/src/lib/gpio.h" name="/home/haggl/repositories/uMIDI/software/src/lib/gpio.h">
+<area shape="rect" id="node3" href="$midi_8h.html" title="MIDI message transceiver." alt="" coords="475,110,669,157"/>
+<area shape="rect" id="node11" href="$pwm_8c.html" title="PWM configuration and service functions." alt="" coords="31,326,228,373"/>
+<area shape="rect" id="node15" href="$sequencer_8c.html" title="Sequencer module implementation." alt="" coords="569,533,732,597"/>
+<area shape="rect" id="node17" href="$sequencer_8h.html" title="Sequencer module API." alt="" coords="511,421,673,485"/>
+<area shape="rect" id="node23" href="$midi_8c.html" title="MIDI message transceiver." alt="" coords="725,222,920,269"/>
+<area shape="rect" id="node28" href="$tests_8c.html" title="/home/haggl/repositories\l/uMIDI/software/src/lib\l/tests.c" alt="" coords="944,213,1107,277"/>
+<area shape="rect" id="node31" href="$encoder_8h.html" title="Interface for rotary encoders." alt="" coords="1283,101,1445,165"/>
+<area shape="rect" id="node33" href="$encoder_8c.html" title="Implementation of a 3&#45; or 4&#45;phase rotary encoder with (optional) momentary switch." alt="" coords="1232,213,1395,277"/>
+<area shape="rect" id="node35" href="$hmi_8c.html" title="Implementation of the uMIDI&#45;HMI module." alt="" coords="1419,222,1608,269"/>
+<area shape="rect" id="node38" href="$gpio_8c.html" title="GPIO configuration and service functions." alt="" coords="1733,110,1928,157"/>
+<area shape="rect" id="node41" href="$hmi_8h.html" title="API of the uMIDI&#45;HMI module." alt="" coords="1520,110,1709,157"/>
+<area shape="rect" id="node45" href="$program_8c.html" title="Program storage module implementation." alt="" coords="1952,101,2115,165"/>
+<area shape="rect" id="node5" href="$adc_8c.html" title="ADC configuration and service functions." alt="" coords="411,222,600,269"/>
+<area shape="rect" id="node7" href="$math_8h.html" title="API for a small collection of mathematical functions." alt="" coords="139,222,336,269"/>
+<area shape="rect" id="node9" href="$math_8c.html" title="Implementation of mathematical functions." alt="" coords="476,326,673,373"/>
+<area shape="rect" id="node13" href="$wave_8h.html" title="Waveform function generator." alt="" coords="252,326,452,373"/>
+<area shape="rect" id="node20" href="$wave_8c.html" title="Waveform function generator." alt="" coords="5,430,205,477"/>
 </map>

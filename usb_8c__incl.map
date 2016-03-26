@@ -1,6 +1,6 @@
-<map id="src/lib/usb.c" name="src/lib/usb.c">
-<area shape="rect" id="node11" href="$leds_8h.html" title="Handling of the on&#45;board LEDs." alt="" coords="481,83,537,112"/>
-<area shape="rect" id="node17" href="$usb_8h.html" title="USB CDC device API." alt="" coords="404,83,457,112"/>
-<area shape="rect" id="node24" href="$usb__descriptors_8h.html" title="USB CDC device descriptors." alt="" coords="153,83,279,112"/>
-<area shape="rect" id="node29" href="$system_8h.html" title="System configuration procedures." alt="" coords="647,83,721,112"/>
+<map id="/home/haggl/repositories/uMIDI/software/src/lib/usb.c" name="/home/haggl/repositories/uMIDI/software/src/lib/usb.c">
+<area shape="rect" id="node11" href="$leds_8h.html" title="Handling of the on&#45;board LEDs." alt="" coords="481,101,537,131"/>
+<area shape="rect" id="node17" href="$usb_8h.html" title="USB CDC device API." alt="" coords="404,101,457,131"/>
+<area shape="rect" id="node24" href="$usb__descriptors_8h.html" title="USB CDC device descriptors." alt="" coords="153,101,279,131"/>
+<area shape="rect" id="node29" href="$system_8h.html" title="System configuration procedures." alt="" coords="647,101,721,131"/>
 </map>

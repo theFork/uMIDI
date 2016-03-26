@@ -6,5 +6,5 @@ var searchData=
   ['to',['to',['../structlinear__range.html#acfa53f1f731ca94944efc996ecacc98b',1,'linear_range']]],
   ['tuner',['tuner',['../unionprogram__data.html#a420d110c3e2a04168aa5ad7b2dcecbfa',1,'program_data']]],
   ['tx_5fchannel',['tx_channel',['../structmidi__config.html#a61f506196319eeb0ae656be1895e71aa',1,'midi_config::tx_channel()'],['../midi_8c.html#a6e065659fb7c095b6d422c824fbd098e',1,'tx_channel():&#160;midi.c']]],
-  ['type',['type',['../structgpio__pin.html#aa0df9d7c94fddebe1f3354d40ddaf519',1,'gpio_pin']]]
+  ['type',['type',['../structencoder__config.html#ae0665462aa4dc292f3481a0451a68930',1,'encoder_config::type()'],['../structgpio__mapping.html#ae60b5945a803dd8060ddfef9c44187e0',1,'gpio_mapping::type()']]]
 ];

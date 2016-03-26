@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>uMIDI: src/switcher/config.h Source File</title>
+<title>uMIDI: /home/haggl/repositories/uMIDI/software/src/switcher/config.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -37,6 +37,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -68,7 +69,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Macros</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -79,7 +80,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_120de240b418b65bee6a79e386f7357c.html">switcher</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_0c220628bbfaf3735973080788410777.html">software</a></li><li class="navelem"><a class="el" href="dir_ddb5b8313525979f923a1027f5d71067.html">src</a></li><li class="navelem"><a class="el" href="dir_8b8527f22282d53b8947b1f051172225.html">switcher</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -125,51 +126,52 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="comment">//--------- application specific gpio defines --------//</span></div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment">// Hard-wired relays/leds</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#aaf6fbb15ac239846be81168c8fdc8dbd">   39</a></span>&#160;<span class="preprocessor">#define GPIO_OUT_TUNE_MUTE  gpio_config.header1.pin2</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#a26c582a418695c8064a332d8c48caf5b">   40</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_OUT_LOOP1      gpio_config.header1.pin3</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#a634e755f7ea92a3820f4a06b4c2b9bde">   41</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_OUT_LOOP2      gpio_config.header1.pin4</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#ac17a752bdb4f04f080aaafc1efce829d">   42</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_OUT_LOOP3      gpio_config.header1.pin5</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#a77f89513131c386573bbd52143c8eeea">   43</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_OUT_LOOP4      gpio_config.header1.pin6</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#a4a93f562065e7807db5798bcc5340d99">   44</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_OUT_LOOP5      gpio_config.header1.pin7</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#a6d983c0ff25573b0187c728cc16afd51">   45</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_OUT_SWITCH1    gpio_config.header1.pin8</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#a3457485ad6a2847c0629390ed5717807">   46</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_OUT_SWITCH2    gpio_config.header1.pin9</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#aaf6fbb15ac239846be81168c8fdc8dbd">   39</a></span>&#160;<span class="preprocessor">#define GPIO_OUT_TUNE_MUTE  gpio.header1.pin2</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#a26c582a418695c8064a332d8c48caf5b">   40</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_OUT_LOOP1      gpio.header1.pin3</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#a634e755f7ea92a3820f4a06b4c2b9bde">   41</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_OUT_LOOP2      gpio.header1.pin4</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#ac17a752bdb4f04f080aaafc1efce829d">   42</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_OUT_LOOP3      gpio.header1.pin5</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#a77f89513131c386573bbd52143c8eeea">   43</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_OUT_LOOP4      gpio.header1.pin6</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#a4a93f562065e7807db5798bcc5340d99">   44</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_OUT_LOOP5      gpio.header1.pin7</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#a6d983c0ff25573b0187c728cc16afd51">   45</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_OUT_SWITCH1    gpio.header1.pin8</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#a3457485ad6a2847c0629390ed5717807">   46</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_OUT_SWITCH2    gpio.header1.pin9</span></div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="comment">// Toggle switches</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#aeffacc744d1f4dcfac4047caac146e43">   49</a></span>&#160;<span class="preprocessor">#define GPIO_IN_TUNE_MUTE   gpio_config.header2.pin2</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#a410cacd6ac785ea9f0751c33ac1a58c7">   50</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_IN_LOOP1       gpio_config.header2.pin3</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#a24970b4e103398f1342a42679dd34c52">   51</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_IN_LOOP3       gpio_config.header2.pin4</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#abcec2be8016fa2e6a7cdb0cf81bfccb0">   52</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_IN_LOOP4       gpio_config.header2.pin5</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#ad1070d1ed8f75134ba9467bf43f33b01">   53</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_IN_LOOP5       gpio_config.header2.pin6</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#a69f27d6c41407952320364bc7dfc6a81">   54</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_IN_LOOP6       gpio_config.header2.pin7</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#a8b4842a2eb7b54922c24aa6b604f7465">   55</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_IN_SWITCH1     gpio_config.header2.pin8</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#a3b4156fc58387fed249436aac0a3e033">   56</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_IN_SWITCH2     gpio_config.header2.pin9</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#aeffacc744d1f4dcfac4047caac146e43">   49</a></span>&#160;<span class="preprocessor">#define GPIO_IN_TUNE_MUTE   gpio.header2.pin2</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#a410cacd6ac785ea9f0751c33ac1a58c7">   50</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_IN_LOOP1       gpio.header2.pin3</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#a24970b4e103398f1342a42679dd34c52">   51</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_IN_LOOP3       gpio.header2.pin4</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#abcec2be8016fa2e6a7cdb0cf81bfccb0">   52</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_IN_LOOP4       gpio.header2.pin5</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#ad1070d1ed8f75134ba9467bf43f33b01">   53</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_IN_LOOP5       gpio.header2.pin6</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#a69f27d6c41407952320364bc7dfc6a81">   54</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_IN_LOOP6       gpio.header2.pin7</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#a8b4842a2eb7b54922c24aa6b604f7465">   55</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_IN_SWITCH1     gpio.header2.pin8</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#a3b4156fc58387fed249436aac0a3e033">   56</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_IN_SWITCH2     gpio.header2.pin9</span></div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment">// Save button (with led)</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#a4bf9aea57e6e626f37577025f5e1fb8a">   59</a></span>&#160;<span class="preprocessor">#define GPIO_OUT_SAVE_LED   gpio_config.header3.pin2</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#ab63fe803dc706b03e44eb500f7f9c221">   60</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_IN_SAVE_SWITCH gpio_config.header2.pin3</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#a4bf9aea57e6e626f37577025f5e1fb8a">   59</a></span>&#160;<span class="preprocessor">#define GPIO_OUT_SAVE_LED   gpio.header3.pin2</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno"><a class="code" href="switcher_2config_8h.html#ab63fe803dc706b03e44eb500f7f9c221">   60</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GPIO_IN_SAVE_SWITCH gpio.header2.pin3</span></div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment">//---------------- constant declarations ----------------//</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="keyword">extern</span> <span class="keyword">struct </span><a class="code" href="structgpio__config.html" title="Configurations for all available GPIO pins.">gpio_config</a> <a class="code" href="structgpio__config.html" title="Configurations for all available GPIO pins.">gpio_config</a>;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="keyword">extern</span> <span class="keyword">struct </span><a class="code" href="structmidi__config.html" title="MIDI transceiver module configuration.">midi_config</a> <a class="code" href="structmidi__config.html" title="MIDI transceiver module configuration.">midi_config</a>;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="keyword">extern</span> <a class="code" href="background__tasks_8h.html#a8f9495d3b765304a694cc67caf1cebaa" title="Data type for background task pointers.">background_task_t</a> <a class="code" href="expression_2config_8c.html#aba2fd6b889d27dc3ff3ae095beca9a0d">high_frequency_tasks</a>[];</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="keyword">extern</span> uint8_t <a class="code" href="expression_2config_8c.html#a260f7da0c8185334158babe85284ad34">high_frequency_tasks_size</a>;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="keyword">extern</span> <a class="code" href="background__tasks_8h.html#a8f9495d3b765304a694cc67caf1cebaa" title="Data type for background task pointers.">background_task_t</a> <a class="code" href="expression_2config_8c.html#ab8a4a15563c2add96c3308ffe1013d62">mid_frequency_tasks</a>[];</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="keyword">extern</span> uint8_t <a class="code" href="expression_2config_8c.html#a4b2e9ad2a877a25fd73333fcee52e8e6">mid_frequency_tasks_size</a>;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="keyword">extern</span> <a class="code" href="background__tasks_8h.html#a8f9495d3b765304a694cc67caf1cebaa" title="Data type for background task pointers.">background_task_t</a> <a class="code" href="expression_2config_8c.html#a03ddbf46c0062e39f8d43badb057bbcd">low_frequency_tasks</a>[];</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="keyword">extern</span> uint8_t <a class="code" href="expression_2config_8c.html#ad91f9546cff1b7cf8cf429e2565d9f97">low_frequency_tasks_size</a>;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="keyword">extern</span> <span class="keyword">struct </span><a class="code" href="structserial__command.html" title="Command specification.">serial_command</a> <a class="code" href="switcher_2config_8c.html#aa437cfa836cc1a7a60adf661b0a76344">serial_commands</a>[];</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="keyword">extern</span> uint8_t <a class="code" href="switcher_2config_8c.html#a6fe59b02acadfc36edd467d5a8b4f3cb">serial_commands_size</a>;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="comment">//---------------- EOF ----------------//</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="preprocessor">#endif // _CONFIG_H</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="keyword">extern</span> <span class="keyword">struct </span><a class="code" href="structgpio__mapping.html" title="Maps a GPIO pin to its designated type / function.">gpio_mapping</a> <a class="code" href="expression_2config_8c.html#a656a5797ee89ec80bdc0768875b09287">gpio_mappings</a>[];</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="keyword">extern</span> uint8_t <a class="code" href="expression_2config_8c.html#a466bc1e94822ca8838f597a59e527e38">gpio_mappings_size</a>;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="keyword">extern</span> <span class="keyword">struct </span><a class="code" href="structmidi__config.html" title="MIDI transceiver module configuration.">midi_config</a> <a class="code" href="structmidi__config.html" title="MIDI transceiver module configuration.">midi_config</a>;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="keyword">extern</span> <a class="code" href="background__tasks_8h.html#a8f9495d3b765304a694cc67caf1cebaa" title="Data type for background task pointers.">background_task_t</a> <a class="code" href="expression_2config_8c.html#aba2fd6b889d27dc3ff3ae095beca9a0d">high_frequency_tasks</a>[];</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="keyword">extern</span> uint8_t <a class="code" href="expression_2config_8c.html#a260f7da0c8185334158babe85284ad34">high_frequency_tasks_size</a>;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="keyword">extern</span> <a class="code" href="background__tasks_8h.html#a8f9495d3b765304a694cc67caf1cebaa" title="Data type for background task pointers.">background_task_t</a> <a class="code" href="expression_2config_8c.html#ab8a4a15563c2add96c3308ffe1013d62">mid_frequency_tasks</a>[];</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="keyword">extern</span> uint8_t <a class="code" href="expression_2config_8c.html#a4b2e9ad2a877a25fd73333fcee52e8e6">mid_frequency_tasks_size</a>;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="keyword">extern</span> <a class="code" href="background__tasks_8h.html#a8f9495d3b765304a694cc67caf1cebaa" title="Data type for background task pointers.">background_task_t</a> <a class="code" href="expression_2config_8c.html#a03ddbf46c0062e39f8d43badb057bbcd">low_frequency_tasks</a>[];</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="keyword">extern</span> uint8_t <a class="code" href="expression_2config_8c.html#ad91f9546cff1b7cf8cf429e2565d9f97">low_frequency_tasks_size</a>;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="keyword">extern</span> <span class="keyword">struct </span><a class="code" href="structserial__command.html" title="Command specification.">serial_command</a> <a class="code" href="switcher_2config_8c.html#aa437cfa836cc1a7a60adf661b0a76344">serial_commands</a>[];</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="keyword">extern</span> uint8_t <a class="code" href="switcher_2config_8c.html#a6fe59b02acadfc36edd467d5a8b4f3cb">serial_commands_size</a>;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="comment">//---------------- EOF ----------------//</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="preprocessor">#endif // _CONFIG_H</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="preprocessor"></span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Mar 6 2016 16:50:06 for uMIDI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Mar 26 2016 22:23:14 for uMIDI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.2
 </small></address>

@@ -4,7 +4,7 @@ var searchData=
   ['callback_5funsigned',['callback_unsigned',['../structadc__conversion__config.html#a9ab734faee9669803a188459c6e67fa3',1,'adc_conversion_config']]],
   ['callbacks_5fsigned',['callbacks_signed',['../adc_8c.html#aa4347863893460a6bc05d20f1e940703',1,'adc.c']]],
   ['callbacks_5funsigned',['callbacks_unsigned',['../adc_8c.html#a4420135f464fde856f06c01b84d1b55f',1,'adc.c']]],
-  ['ccw_5fcallback',['ccw_callback',['../structencoder__config.html#ad31f398910c0e8fee838d4291c055811',1,'encoder_config::ccw_callback()'],['../encoder_8c.html#aab352596b8b9a1a6c3cfb512284c47ad',1,'ccw_callback():&#160;encoder.c']]],
+  ['ccw_5fcallback',['ccw_callback',['../structencoder__config.html#ad31f398910c0e8fee838d4291c055811',1,'encoder_config']]],
   ['cdc_5fcci_5finterface',['CDC_CCI_Interface',['../structUSB__Descriptor__Configuration__t.html#a060d2ef462bcf50647a4b7e5b479d072',1,'USB_Descriptor_Configuration_t']]],
   ['cdc_5fdatainendpoint',['CDC_DataInEndpoint',['../structUSB__Descriptor__Configuration__t.html#ab1d92b7547a106f85d8be7b0c769d8ad',1,'USB_Descriptor_Configuration_t']]],
   ['cdc_5fdataoutendpoint',['CDC_DataOutEndpoint',['../structUSB__Descriptor__Configuration__t.html#abb55a2cd238494dc44983cc46b60ad83',1,'USB_Descriptor_Configuration_t']]],
@@ -19,14 +19,14 @@ var searchData=
   ['cmd_5fhistory',['cmd_history',['../serial__communication_8c.html#a93864e2869565395f705762be776fd59',1,'serial_communication.c']]],
   ['cmd_5fhistory_5findex',['cmd_history_index',['../serial__communication_8c.html#a39aed4ba82d44bccbec76f8fe0d057a5',1,'serial_communication.c']]],
   ['cmd_5fstring',['cmd_string',['../structserial__command.html#a1af0e00cdcf2d8aaa8ef57e5ab174f8e',1,'serial_command']]],
-  ['config',['Config',['../structUSB__Descriptor__Configuration__t.html#a19776357dd07e9e13999216afe193191',1,'USB_Descriptor_Configuration_t']]],
+  ['config',['Config',['../structUSB__Descriptor__Configuration__t.html#a19776357dd07e9e13999216afe193191',1,'USB_Descriptor_Configuration_t::Config()'],['../structencoder.html#a192ab64234b2df378f4eac08523e29fc',1,'encoder::config()']]],
   ['configurationdescriptor',['ConfigurationDescriptor',['../usb__descriptors_8c.html#a59d882a5961a04a054fab63be98c3b80',1,'usb_descriptors.c']]],
   ['control_5fchange',['control_change',['../structmidi__event__handlers.html#af3f9ddfa1c8c0815025ab2d217111028',1,'midi_event_handlers']]],
   ['control_5fregister',['control_register',['../structadc__channel__regs.html#a7b53e5d521f8b23a218cfee03e49e2e0',1,'adc_channel_regs']]],
-  ['controller_5fnumber',['controller_number',['../structsequencer__config.html#a1f8f5bc6d9a1a211ae2102765e152eaf',1,'sequencer_config::controller_number()'],['../sequencer_8c.html#ac33390676138c11dd6d1d8cbaaf9e103',1,'controller_number():&#160;sequencer.c']]],
+  ['controller_5fnumber',['controller_number',['../whammy_8c.html#ac33390676138c11dd6d1d8cbaaf9e103',1,'whammy.c']]],
   ['convert_5fpwm_5frange',['convert_pwm_range',['../pwm_8c.html#afa5a35ee8471cd684438d0e576fd442f',1,'pwm.c']]],
   ['counter',['counter',['../structencoder__state.html#ab4a8c12d1d8a52c7471b4f86c8fa64cb',1,'encoder_state::counter()'],['../structled__state.html#aca7aab71f27056f8aa98ddd0ca949aa6',1,'led_state::counter()']]],
   ['current_5fprogram',['current_program',['../program_8c.html#a939aaeea5bd33f58879a47a05f840240',1,'current_program():&#160;program.c'],['../switcher_8c.html#afe5c407cc6bef15e186fbbdd5df33196',1,'current_program():&#160;switcher.c']]],
   ['current_5fvalue',['current_value',['../expression_8c.html#a264760716a600fd3c89116f609362bf2',1,'expression.c']]],
-  ['cw_5fcallback',['cw_callback',['../structencoder__config.html#ab1f469da24c7347808cfb97bed249b8a',1,'encoder_config::cw_callback()'],['../encoder_8c.html#a6e2612aa800a71fa216f80e9cb5424b3',1,'cw_callback():&#160;encoder.c']]]
+  ['cw_5fcallback',['cw_callback',['../structencoder__config.html#ab1f469da24c7347808cfb97bed249b8a',1,'encoder_config']]]
 ];

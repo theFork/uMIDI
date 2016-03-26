@@ -1,4 +1,9 @@
-<map id="src/sequencer/sequencer.c" name="src/sequencer/sequencer.c">
-<area shape="rect" id="node3" href="$sequencer_2config_8h.html" title="Device configuration header." alt="" coords="263,83,329,112"/>
-<area shape="rect" id="node15" href="$sequencer_8h.html" title="Sequencer module API." alt="" coords="80,160,173,189"/>
+<map id="/home/haggl/repositories/uMIDI/software/src/lib/sequencer.c" name="/home/haggl/repositories/uMIDI/software/src/lib/sequencer.c">
+<area shape="rect" id="node7" href="$gpio_8h.html" title="GPIO configuration and service functions." alt="" coords="319,427,375,456"/>
+<area shape="rect" id="node15" href="$leds_8h.html" title="Handling of the on&#45;board LEDs." alt="" coords="239,427,295,456"/>
+<area shape="rect" id="node19" href="$midi_8h.html" title="MIDI message transceiver." alt="" coords="420,349,476,379"/>
+<area shape="rect" id="node25" href="$wave_8h.html" title="Waveform function generator." alt="" coords="449,195,513,224"/>
+<area shape="rect" id="node34" href="$sequencer_8h.html" title="Sequencer module API." alt="" coords="435,117,528,147"/>
+<area shape="rect" id="node39" href="$lib_2whammy_8h.html" title="Definitions for the DigiTech Whammy pedal." alt="" coords="552,117,637,147"/>
+<area shape="rect" id="node28" href="$math_8h.html" title="API for a small collection of mathematical functions." alt="" coords="485,272,547,301"/>
 </map>

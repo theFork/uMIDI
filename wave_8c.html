@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>uMIDI: src/lib/wave.c File Reference</title>
+<title>uMIDI: /home/haggl/repositories/uMIDI/software/src/lib/wave.c File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -37,6 +37,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -68,7 +69,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Macros</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -79,7 +80,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_c85d3e3c5052e9ad9ce18c6863244a25.html">lib</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_0c220628bbfaf3735973080788410777.html">software</a></li><li class="navelem"><a class="el" href="dir_ddb5b8313525979f923a1027f5d71067.html">src</a></li><li class="navelem"><a class="el" href="dir_8127d9c81ca9341e0d8644565402ee47.html">lib</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -94,17 +95,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>Waveform function generator.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;stdlib.h&gt;</code><br/>
+<code>#include &lt;avr/pgmspace.h&gt;</code><br/>
 <code>#include &quot;<a class="el" href="background__tasks_8h_source.html">background_tasks.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="leds_8h_source.html">leds.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="lookup__tables_8h_source.html">lookup_tables.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="midi_8h_source.html">midi.h</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="program_8h_source.html">program.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="wave_8h_source.html">wave.h</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="lib_2whammy_8h_source.html">whammy.h</a>&quot;</code><br/>
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for wave.c:</div>
 <div class="dyncontent">
-<div class="center"><img src="wave_8c__incl.png" border="0" usemap="#src_2lib_2wave_8c" alt=""/></div>
-<map name="src_2lib_2wave_8c" id="src_2lib_2wave_8c">
-<area shape="rect" id="node5" href="background__tasks_8h.html" title="Background task scheduler." alt="" coords="144,160,283,189"/><area shape="rect" id="node9" href="leds_8h.html" title="Handling of the on&#45;board LEDs." alt="" coords="665,315,721,344"/><area shape="rect" id="node15" href="lookup__tables_8h.html" title="Lookup tables for the uMIDI firmware." alt="" coords="68,237,180,267"/><area shape="rect" id="node18" href="midi_8h.html" title="MIDI message transceiver." alt="" coords="469,237,525,267"/><area shape="rect" id="node28" href="wave_8h.html" title="Waveform function generator." alt="" coords="321,83,385,112"/><area shape="rect" id="node23" href="gpio_8h.html" title="GPIO configuration and service functions." alt="" coords="535,315,591,344"/><area shape="rect" id="node31" href="math_8h.html" title="API for a small collection of mathematical functions." alt="" coords="357,160,419,189"/></map>
+<div class="center"><img src="wave_8c__incl.png" border="0" usemap="#_2home_2haggl_2repositories_2uMIDI_2software_2src_2lib_2wave_8c" alt=""/></div>
+<map name="_2home_2haggl_2repositories_2uMIDI_2software_2src_2lib_2wave_8c" id="_2home_2haggl_2repositories_2uMIDI_2software_2src_2lib_2wave_8c">
+<area shape="rect" id="node7" href="background__tasks_8h.html" title="Background task scheduler." alt="" coords="283,179,421,208"/><area shape="rect" id="node11" href="leds_8h.html" title="Handling of the on&#45;board LEDs." alt="" coords="844,333,900,363"/><area shape="rect" id="node17" href="lookup__tables_8h.html" title="Lookup tables for the uMIDI firmware." alt="" coords="211,256,323,285"/><area shape="rect" id="node20" href="midi_8h.html" title="MIDI message transceiver." alt="" coords="713,256,769,285"/><area shape="rect" id="node30" href="program_8h.html" title="Program storage API." alt="" coords="445,179,525,208"/><area shape="rect" id="node33" href="wave_8h.html" title="Waveform function generator." alt="" coords="564,101,628,131"/><area shape="rect" id="node42" href="lib_2whammy_8h.html" title="Definitions for the DigiTech Whammy pedal." alt="" coords="844,101,929,131"/><area shape="rect" id="node25" href="gpio_8h.html" title="GPIO configuration and service functions." alt="" coords="764,333,820,363"/><area shape="rect" id="node36" href="math_8h.html" title="API for a small collection of mathematical functions." alt="" coords="600,179,661,208"/></map>
 </div>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="func-members"></a>
@@ -127,14 +131,14 @@ Functions</h2></td></tr>
 <tr class="memdesc:a5ab3bfa809473a1be5bd2f7cc1cae244"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes a stairs wave.  <a href="#a5ab3bfa809473a1be5bd2f7cc1cae244"></a><br/></td></tr>
 <tr class="memitem:a480a4c3ab93a8fd86c6dafabefe89e32"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="midi_8h.html#a855fab3ea354d116fdd2cbff9c806180">midi_value_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="wave_8c.html#a480a4c3ab93a8fd86c6dafabefe89e32">compute_triangle_wave</a> (struct <a class="el" href="structwave.html">wave</a> *<a class="el" href="structwave.html">wave</a>)</td></tr>
 <tr class="memdesc:a480a4c3ab93a8fd86c6dafabefe89e32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes a triangle wave.  <a href="#a480a4c3ab93a8fd86c6dafabefe89e32"></a><br/></td></tr>
-<tr class="memitem:a636a66c5b999d50348a1ff198bbe758a"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="midi_8h.html#a855fab3ea354d116fdd2cbff9c806180">midi_value_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="wave_8c.html#a636a66c5b999d50348a1ff198bbe758a">compute_wave_pattern</a> (struct <a class="el" href="structwave.html">wave</a> *<a class="el" href="structwave.html">wave</a>)</td></tr>
-<tr class="memdesc:a636a66c5b999d50348a1ff198bbe758a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes a wave according to the specified pattern.  <a href="#a636a66c5b999d50348a1ff198bbe758a"></a><br/></td></tr>
 <tr class="memitem:a22e54f1fa104695b0b085fe3e216a4e3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="wave_8c.html#a22e54f1fa104695b0b085fe3e216a4e3">configure_tap_tempo_wave</a> (struct <a class="el" href="structwave.html">wave</a> *const <a class="el" href="structwave.html">wave</a>)</td></tr>
 <tr class="memdesc:a22e54f1fa104695b0b085fe3e216a4e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configures a wave for tap tempo functionality.  <a href="#a22e54f1fa104695b0b085fe3e216a4e3"></a><br/></td></tr>
 <tr class="memitem:a8a93df975c5b062d9644a054c1182a93"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="wave_8c.html#a8a93df975c5b062d9644a054c1182a93">init_wave</a> (struct <a class="el" href="structwave.html">wave</a> *const <a class="el" href="structwave.html">wave</a>, enum <a class="el" href="wave_8h.html#a74dc1a4252ee238414baacbe75ec3664">waveform</a> <a class="el" href="wave_8h.html#a74dc1a4252ee238414baacbe75ec3664">waveform</a>, <a class="el" href="midi_8h.html#a855fab3ea354d116fdd2cbff9c806180">midi_value_t</a> speed, <a class="el" href="midi_8h.html#a855fab3ea354d116fdd2cbff9c806180">midi_value_t</a> amplitude, <a class="el" href="midi_8h.html#a855fab3ea354d116fdd2cbff9c806180">midi_value_t</a> <a class="el" href="adc_8c.html#ac681806181c80437cfab37335f62ff39">offset</a>)</td></tr>
 <tr class="memdesc:a8a93df975c5b062d9644a054c1182a93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a wave.  <a href="#a8a93df975c5b062d9644a054c1182a93"></a><br/></td></tr>
 <tr class="memitem:a98659b5f2756c620099d4231f209fc13"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="wave_8c.html#a98659b5f2756c620099d4231f209fc13">register_tap</a> (void)</td></tr>
 <tr class="memdesc:a98659b5f2756c620099d4231f209fc13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers a tempo tap event.  <a href="#a98659b5f2756c620099d4231f209fc13"></a><br/></td></tr>
+<tr class="memitem:a9b3efc80d1645341dce59d9f5cbbb572"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="wave_8c.html#a9b3efc80d1645341dce59d9f5cbbb572">reset_wave</a> (struct <a class="el" href="structwave.html">wave</a> *const <a class="el" href="structwave.html">wave</a>)</td></tr>
+<tr class="memdesc:a9b3efc80d1645341dce59d9f5cbbb572"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets a wave.  <a href="#a9b3efc80d1645341dce59d9f5cbbb572"></a><br/></td></tr>
 <tr class="memitem:a38fdfd97fd3abdc432fdc033ccc9d3f7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="wave_8c.html#a38fdfd97fd3abdc432fdc033ccc9d3f7">set_frequency</a> (struct <a class="el" href="structwave.html">wave</a> *const <a class="el" href="structwave.html">wave</a>, <a class="el" href="math_8h.html#a5a9516644b9f20e82f043111b1f89058">fixed_t</a> frequency)</td></tr>
 <tr class="memdesc:a38fdfd97fd3abdc432fdc033ccc9d3f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the frequency of a wave.  <a href="#a38fdfd97fd3abdc432fdc033ccc9d3f7"></a><br/></td></tr>
 <tr class="memitem:a944183e6a1174bc1fcdb13df35fb7cb2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="wave_8c.html#a944183e6a1174bc1fcdb13df35fb7cb2">set_speed</a> (struct <a class="el" href="structwave.html">wave</a> *const <a class="el" href="structwave.html">wave</a>, <a class="el" href="midi_8h.html#a855fab3ea354d116fdd2cbff9c806180">midi_value_t</a> speed)</td></tr>
@@ -148,8 +152,6 @@ Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a458ba8f78875c0b18ebc16c2e263f3d8"><td class="memItemLeft" align="right" valign="top">static uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="wave_8c.html#a458ba8f78875c0b18ebc16c2e263f3d8">wave_patterns</a> [16][16]</td></tr>
-<tr class="memdesc:a458ba8f78875c0b18ebc16c2e263f3d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal array of amplitudes for the WAVE_PATTERN_nn waveforms.  <a href="#a458ba8f78875c0b18ebc16c2e263f3d8"></a><br/></td></tr>
 <tr class="memitem:ac3fd6d0431b70a27eca3364aece0a439"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="wave_8c.html#ac3fd6d0431b70a27eca3364aece0a439">tap_arrived</a> = false</td></tr>
 <tr class="memdesc:ac3fd6d0431b70a27eca3364aece0a439"><td class="mdescLeft">&#160;</td><td class="mdescRight">This flag indicates if a tempo tap occurred.  <a href="#ac3fd6d0431b70a27eca3364aece0a439"></a><br/></td></tr>
 <tr class="memitem:a99c866edf700e2af1de63e7f329042ca"><td class="memItemLeft" align="right" valign="top">static struct <a class="el" href="structwave.html">wave</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="wave_8c.html#a99c866edf700e2af1de63e7f329042ca">tap_tempo_wave</a> = NULL</td></tr>
@@ -456,39 +458,6 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a636a66c5b999d50348a1ff198bbe758a"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static <a class="el" href="midi_8h.html#a855fab3ea354d116fdd2cbff9c806180">midi_value_t</a> compute_wave_pattern </td>
-          <td>(</td>
-          <td class="paramtype">struct <a class="el" href="structwave.html">wave</a> *&#160;</td>
-          <td class="paramname"><em>wave</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Computes a wave according to the specified pattern. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">wave</td><td>the wave </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>the wave output </dd></dl>
-
-</div>
-</div>
 <a class="anchor" id="a22e54f1fa104695b0b085fe3e216a4e3"></a>
 <div class="memitem">
 <div class="memproto">
@@ -590,6 +559,31 @@ Variables</h2></td></tr>
 <p>Registers a tempo tap event. </p>
 <p>This function must be called whenever a tempo tap event occurrs. It sets an internal flag to inform the background task about the event. </p>
 <dl class="section see"><dt>See Also</dt><dd><a class="el" href="wave_8h.html#a0706f236f4558c90c590071e9097660b" title="Background task for the tap tempo function.">tap_tempo_task</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a9b3efc80d1645341dce59d9f5cbbb572"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void reset_wave </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structwave.html">wave</a> *const&#160;</td>
+          <td class="paramname"><em>wave</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Resets a wave. </p>
+<p>Re-initializes all internal counters and states of the supplied wave </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">wave</td><td>the wave to reset </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -794,32 +788,10 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a458ba8f78875c0b18ebc16c2e263f3d8"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint8_t wave_patterns[16][16]</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Internal array of amplitudes for the WAVE_PATTERN_nn waveforms. </p>
-
-</div>
-</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Mar 6 2016 16:50:06 for uMIDI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Mar 26 2016 22:23:15 for uMIDI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.2
 </small></address>

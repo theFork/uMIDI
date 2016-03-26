@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>uMIDI: src/sequencer/sequencer.c File Reference</title>
+<title>uMIDI: /home/haggl/repositories/uMIDI/software/src/lib/sequencer.c File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -37,6 +37,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -68,7 +69,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Macros</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -79,7 +80,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_260dbcc9b6a505e2fcddf4a593202b7d.html">sequencer</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_0c220628bbfaf3735973080788410777.html">software</a></li><li class="navelem"><a class="el" href="dir_ddb5b8313525979f923a1027f5d71067.html">src</a></li><li class="navelem"><a class="el" href="dir_8127d9c81ca9341e0d8644565402ee47.html">lib</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -93,89 +94,76 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <p>Sequencer module implementation.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &quot;<a class="el" href="sequencer_2config_8h_source.html">config.h</a>&quot;</code><br/>
-<code>#include &quot;lib/gpio.h&quot;</code><br/>
-<code>#include &quot;lib/leds.h&quot;</code><br/>
-<code>#include &quot;lib/midi.h&quot;</code><br/>
-<code>#include &quot;lib/wave.h&quot;</code><br/>
+<div class="textblock"><code>#include &lt;stdlib.h&gt;</code><br/>
+<code>#include &lt;avr/pgmspace.h&gt;</code><br/>
+<code>#include &quot;<a class="el" href="gpio_8h_source.html">gpio.h</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="leds_8h_source.html">leds.h</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="midi_8h_source.html">midi.h</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="wave_8h_source.html">wave.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="sequencer_8h_source.html">sequencer.h</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="lib_2whammy_8h_source.html">whammy.h</a>&quot;</code><br/>
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for sequencer.c:</div>
 <div class="dyncontent">
-<div class="center"><img src="sequencer_8c__incl.png" border="0" usemap="#src_2sequencer_2sequencer_8c" alt=""/></div>
-<map name="src_2sequencer_2sequencer_8c" id="src_2sequencer_2sequencer_8c">
-<area shape="rect" id="node3" href="sequencer_2config_8h.html" title="Device configuration header." alt="" coords="263,83,329,112"/><area shape="rect" id="node15" href="sequencer_8h.html" title="Sequencer module API." alt="" coords="80,160,173,189"/></map>
+<div class="center"><img src="sequencer_8c__incl.png" border="0" usemap="#_2home_2haggl_2repositories_2uMIDI_2software_2src_2lib_2sequencer_8c" alt=""/></div>
+<map name="_2home_2haggl_2repositories_2uMIDI_2software_2src_2lib_2sequencer_8c" id="_2home_2haggl_2repositories_2uMIDI_2software_2src_2lib_2sequencer_8c">
+<area shape="rect" id="node7" href="gpio_8h.html" title="GPIO configuration and service functions." alt="" coords="319,427,375,456"/><area shape="rect" id="node15" href="leds_8h.html" title="Handling of the on&#45;board LEDs." alt="" coords="239,427,295,456"/><area shape="rect" id="node19" href="midi_8h.html" title="MIDI message transceiver." alt="" coords="420,349,476,379"/><area shape="rect" id="node25" href="wave_8h.html" title="Waveform function generator." alt="" coords="449,195,513,224"/><area shape="rect" id="node34" href="sequencer_8h.html" title="Sequencer module API." alt="" coords="435,117,528,147"/><area shape="rect" id="node39" href="lib_2whammy_8h.html" title="Definitions for the DigiTech Whammy pedal." alt="" coords="552,117,637,147"/><area shape="rect" id="node28" href="math_8h.html" title="API for a small collection of mathematical functions." alt="" coords="485,272,547,301"/></map>
 </div>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a49dcb22a40c7d0c0b385e73fd848a847"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sequencer_8c.html#a49dcb22a40c7d0c0b385e73fd848a847">handle_control_change</a> (uint8_t <a class="el" href="sequencer_8c.html#ac33390676138c11dd6d1d8cbaaf9e103">controller_number</a>, uint8_t value)</td></tr>
-<tr class="memitem:a5b5983da3dd8eb2ca2dee8739fe6edf7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sequencer_8c.html#a5b5983da3dd8eb2ca2dee8739fe6edf7">init_sequencer_module</a> (struct <a class="el" href="structsequencer__config.html">sequencer_config</a> *config, struct <a class="el" href="structgpio__pin.html">gpio_pin</a> *<a class="el" href="leds_8c.html#a29100e863027572c3d0a3362bd1f390e">leds</a>[], uint8_t leds_size)</td></tr>
+<tr class="memitem:abe0299d1173e4fe64296cba4b10b0328"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sequencer_8c.html#abe0299d1173e4fe64296cba4b10b0328">init_sequencer_module</a> (void)</td></tr>
+<tr class="memdesc:abe0299d1173e4fe64296cba4b10b0328"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes a wave according to the specified pattern.  <a href="#abe0299d1173e4fe64296cba4b10b0328"></a><br/></td></tr>
+<tr class="memitem:ae212f4f3acd50102843c84148e27c072"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sequencer_8c.html#ae212f4f3acd50102843c84148e27c072">toggle_sequencer</a> (void)</td></tr>
 <tr class="memitem:afe20784a7bed689e78b01b4d866e992c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sequencer_8c.html#afe20784a7bed689e78b01b4d866e992c">update_sequencer</a> (void)</td></tr>
-<tr class="memitem:a21fc83477fcb88d1dfb3b2af815f04bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sequencer_8c.html#a21fc83477fcb88d1dfb3b2af815f04bd">update_sequencer_leds</a> (void)</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:ac33390676138c11dd6d1d8cbaaf9e103"><td class="memItemLeft" align="right" valign="top">static uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sequencer_8c.html#ac33390676138c11dd6d1d8cbaaf9e103">controller_number</a></td></tr>
+<tr class="memitem:a91da0be528b5acea5eb540544b0ce80b"><td class="memItemLeft" align="right" valign="top">static const uint8_t <br class="typebreak"/>
+wave_patterns[20][8]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sequencer_8c.html#a91da0be528b5acea5eb540544b0ce80b">PROGMEM</a></td></tr>
+<tr class="memdesc:a91da0be528b5acea5eb540544b0ce80b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal array of amplitudes for the WAVE_PATTERN_nn waveforms.  <a href="#a91da0be528b5acea5eb540544b0ce80b"></a><br/></td></tr>
+<tr class="memitem:a36f7b6be7108281af77939ceaec42fd6"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sequencer_8c.html#a36f7b6be7108281af77939ceaec42fd6">running</a> = false</td></tr>
+<tr class="memitem:a64736852e41c580f2e4a1f37f2c9881e"><td class="memItemLeft" align="right" valign="top">static uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sequencer_8c.html#a64736852e41c580f2e4a1f37f2c9881e">step_counter</a> = 0</td></tr>
 <tr class="memitem:af5861cc492cbdef269f4809edc62030f"><td class="memItemLeft" align="right" valign="top">static struct <a class="el" href="structwave.html">wave</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sequencer_8c.html#af5861cc492cbdef269f4809edc62030f">wave</a></td></tr>
-<tr class="memitem:ab55f05460929374e21ce82b4faf84e33"><td class="memItemLeft" align="right" valign="top">static struct <a class="el" href="structgpio__pin.html">gpio_pin</a> **&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sequencer_8c.html#ab55f05460929374e21ce82b4faf84e33">status_leds</a></td></tr>
-<tr class="memitem:ae4db0f769da7bbc069bbfe01f00dc92c"><td class="memItemLeft" align="right" valign="top">static uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sequencer_8c.html#ae4db0f769da7bbc069bbfe01f00dc92c">status_leds_size</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Sequencer module implementation. </p>
 </div><h2>Function Documentation</h2>
-<a class="anchor" id="a49dcb22a40c7d0c0b385e73fd848a847"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void handle_control_change </td>
-          <td>(</td>
-          <td class="paramtype">uint8_t&#160;</td>
-          <td class="paramname"><em>controller_number</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t&#160;</td>
-          <td class="paramname"><em>value</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a5b5983da3dd8eb2ca2dee8739fe6edf7"></a>
+<a class="anchor" id="abe0299d1173e4fe64296cba4b10b0328"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void init_sequencer_module </td>
           <td>(</td>
-          <td class="paramtype">struct <a class="el" href="structsequencer__config.html">sequencer_config</a> *&#160;</td>
-          <td class="paramname"><em>config</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
-          <td class="paramtype">struct <a class="el" href="structgpio__pin.html">gpio_pin</a> *&#160;</td>
-          <td class="paramname"><em>leds</em>[], </td>
         </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes a wave according to the specified pattern. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">wave</td><td>the wave </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the wave output </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ae212f4f3acd50102843c84148e27c072"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
         <tr>
-          <td class="paramkey"></td>
+          <td class="memname">void toggle_sequencer </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
-          <td class="paramtype">uint8_t&#160;</td>
-          <td class="paramname"><em>leds_size</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -198,24 +186,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a21fc83477fcb88d1dfb3b2af815f04bd"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void update_sequencer_leds </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <h2>Variable Documentation</h2>
-<a class="anchor" id="ac33390676138c11dd6d1d8cbaaf9e103"></a>
+<a class="anchor" id="a91da0be528b5acea5eb540544b0ce80b"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -223,7 +195,29 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t controller_number</td>
+          <td class="memname">const uint8_t wave_patterns [20][8] PROGMEM</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Internal array of amplitudes for the WAVE_PATTERN_nn waveforms. </p>
+
+</div>
+</div>
+<a class="anchor" id="a36f7b6be7108281af77939ceaec42fd6"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool running = false</td>
         </tr>
       </table>
   </td>
@@ -235,7 +229,7 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ab55f05460929374e21ce82b4faf84e33"></a>
+<a class="anchor" id="a64736852e41c580f2e4a1f37f2c9881e"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -243,27 +237,7 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">struct <a class="el" href="structgpio__pin.html">gpio_pin</a>** status_leds</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ae4db0f769da7bbc069bbfe01f00dc92c"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint8_t status_leds_size</td>
+          <td class="memname">uint8_t step_counter = 0</td>
         </tr>
       </table>
   </td>
@@ -298,7 +272,7 @@ Variables</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Mar 6 2016 16:50:06 for uMIDI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Mar 26 2016 22:23:14 for uMIDI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.2
 </small></address>

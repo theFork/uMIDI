@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>uMIDI: src/sequencer/sequencer.h Source File</title>
+<title>uMIDI: /home/haggl/repositories/uMIDI/software/src/lib/sequencer.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -37,6 +37,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -68,7 +69,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Macros</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -79,7 +80,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_260dbcc9b6a505e2fcddf4a593202b7d.html">sequencer</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_0c220628bbfaf3735973080788410777.html">software</a></li><li class="navelem"><a class="el" href="dir_ddb5b8313525979f923a1027f5d71067.html">src</a></li><li class="navelem"><a class="el" href="dir_8127d9c81ca9341e0d8644565402ee47.html">lib</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -115,35 +116,55 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment">//---------------- includes ----------------//</span></div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &lt;stdint.h&gt;</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="gpio_8h.html" title="GPIO configuration and service functions.">lib/gpio.h</a>&quot;</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="wave_8h.html" title="Waveform function generator.">lib/wave.h</a>&quot;</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="gpio_8h.html" title="GPIO configuration and service functions.">gpio.h</a>&quot;</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="wave_8h.html" title="Waveform function generator.">wave.h</a>&quot;</span></div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment">//---------------- constants ----------------//</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment">//---------------- constants ----------------//</span></div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="comment">//---------------- data types ----------------//</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno"><a class="code" href="structsequencer__config.html">   37</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structsequencer__config.html">sequencer_config</a> {</div>
-<div class="line"><a name="l00038"></a><span class="lineno"><a class="code" href="structsequencer__config.html#a1f8f5bc6d9a1a211ae2102765e152eaf">   38</a></span>&#160;    uint8_t         <a class="code" href="structsequencer__config.html#a1f8f5bc6d9a1a211ae2102765e152eaf">controller_number</a>;</div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="code" href="structsequencer__config.html#a6c4db7f6d0934a97e86f024a8e5b3fc7">   39</a></span>&#160;    <span class="keyword">enum</span> <a class="code" href="wave_8h.html#a74dc1a4252ee238414baacbe75ec3664" title="Enumeration of available waveforms.">waveform</a>   <a class="code" href="structsequencer__config.html#a6c4db7f6d0934a97e86f024a8e5b3fc7">waveform</a>;</div>
-<div class="line"><a name="l00040"></a><span class="lineno"><a class="code" href="structsequencer__config.html#ac915373a1f89e95b7b1d560c1c8830e0">   40</a></span>&#160;    uint8_t         <a class="code" href="structsequencer__config.html#ac915373a1f89e95b7b1d560c1c8830e0">speed</a>;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;};</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment">//---------------- functions and procedures ----------------//</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keywordtype">void</span> <a class="code" href="sequencer_8c.html#a49dcb22a40c7d0c0b385e73fd848a847">handle_control_change</a>(uint8_t current_controller, uint8_t value);</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keywordtype">void</span> <a class="code" href="sequencer_8c.html#a5b5983da3dd8eb2ca2dee8739fe6edf7">init_sequencer_module</a>(<span class="keyword">struct</span> <a class="code" href="structsequencer__config.html">sequencer_config</a>* config, <span class="keyword">struct</span> <a class="code" href="structgpio__pin.html" title="Configuration of a single GPIO pin.">gpio_pin</a>* <a class="code" href="leds_8c.html#a29100e863027572c3d0a3362bd1f390e" title="This array holds pointers to all LED state variables.">leds</a>[], uint8_t leds_size);</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="keywordtype">void</span> <a class="code" href="sequencer_8c.html#afe20784a7bed689e78b01b4d866e992c">update_sequencer</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="keywordtype">void</span> <a class="code" href="sequencer_8c.html#a21fc83477fcb88d1dfb3b2af815f04bd">update_sequencer_leds</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment">//---------------- EOF ----------------//</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor">#endif // _SEQUENCER_H</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment">//---------------- data types ----------------//</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5a">   40</a></span>&#160;<span class="keyword">enum</span> <a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5a" title="Enumeration of available sequencer patterns.">sequencer_pattern</a></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;{</div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aaa298385c79f832cb6c6f3d3eee2f908e">   42</a></span>&#160;    <a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aaa298385c79f832cb6c6f3d3eee2f908e" title="Sequencer pattern 01.">SEQUENCER_PATTERN_01</a>,   </div>
+<div class="line"><a name="l00043"></a><span class="lineno"><a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aa566d0b995a7c2a47dd7bc23842950e7b">   43</a></span>&#160;    <a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aa566d0b995a7c2a47dd7bc23842950e7b" title="Sequencer pattern 02.">SEQUENCER_PATTERN_02</a>,   </div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aa3dc75fd3c63adc4ab7537386c2865f1a">   44</a></span>&#160;    <a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aa3dc75fd3c63adc4ab7537386c2865f1a" title="Sequencer pattern 03.">SEQUENCER_PATTERN_03</a>,   </div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aadc080b59460f53fcbde7c3466f7f93a0">   45</a></span>&#160;    <a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aadc080b59460f53fcbde7c3466f7f93a0" title="Sequencer pattern 04.">SEQUENCER_PATTERN_04</a>,   </div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aa6a360c8e94a287b5063f3a99e418166b">   46</a></span>&#160;    <a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aa6a360c8e94a287b5063f3a99e418166b" title="Sequencer pattern 05.">SEQUENCER_PATTERN_05</a>,   </div>
+<div class="line"><a name="l00047"></a><span class="lineno"><a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aad8ed6c10fb83cd53678f488cc906664d">   47</a></span>&#160;    <a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aad8ed6c10fb83cd53678f488cc906664d" title="Sequencer pattern 06.">SEQUENCER_PATTERN_06</a>,   </div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aa57a945ddff7d7e6ce090aab53b17bc15">   48</a></span>&#160;    <a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aa57a945ddff7d7e6ce090aab53b17bc15" title="Sequencer pattern 07.">SEQUENCER_PATTERN_07</a>,   </div>
+<div class="line"><a name="l00049"></a><span class="lineno"><a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aa13af1770413157f438f3812c82990c14">   49</a></span>&#160;    <a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aa13af1770413157f438f3812c82990c14" title="Sequencer pattern 08.">SEQUENCER_PATTERN_08</a>,   </div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aa95471987dee0a8f56d979858297a8723">   50</a></span>&#160;    <a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aa95471987dee0a8f56d979858297a8723" title="Sequencer pattern 09.">SEQUENCER_PATTERN_09</a>,   </div>
+<div class="line"><a name="l00051"></a><span class="lineno"><a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aa92817af7320a3740f6ccad53eca03dd3">   51</a></span>&#160;    <a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aa92817af7320a3740f6ccad53eca03dd3" title="Sequencer pattern 10.">SEQUENCER_PATTERN_10</a>,   </div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aacdbc1429853f695e6ccb948e5006618a">   52</a></span>&#160;    <a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aacdbc1429853f695e6ccb948e5006618a" title="Sequencer pattern 11.">SEQUENCER_PATTERN_11</a>,   </div>
+<div class="line"><a name="l00053"></a><span class="lineno"><a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aa924af900f1a98f8f290161c814044ca7">   53</a></span>&#160;    <a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aa924af900f1a98f8f290161c814044ca7" title="Sequencer pattern 12.">SEQUENCER_PATTERN_12</a>,   </div>
+<div class="line"><a name="l00054"></a><span class="lineno"><a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aa59a78225ce55e530779aca533b7bad6e">   54</a></span>&#160;    <a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aa59a78225ce55e530779aca533b7bad6e" title="Sequencer pattern 13.">SEQUENCER_PATTERN_13</a>,   </div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aaee5a9bb76b4f0eccfb88e0a6f7188623">   55</a></span>&#160;    <a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aaee5a9bb76b4f0eccfb88e0a6f7188623" title="Sequencer pattern 14.">SEQUENCER_PATTERN_14</a>,   </div>
+<div class="line"><a name="l00056"></a><span class="lineno"><a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aa7090e157b532d53df37b72c1b3b8ee5c">   56</a></span>&#160;    <a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aa7090e157b532d53df37b72c1b3b8ee5c" title="Sequencer pattern 15.">SEQUENCER_PATTERN_15</a>,   </div>
+<div class="line"><a name="l00057"></a><span class="lineno"><a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aa20d3ee26ee0f052878a6d913895689e1">   57</a></span>&#160;    <a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aa20d3ee26ee0f052878a6d913895689e1" title="Sequencer pattern 16.">SEQUENCER_PATTERN_16</a>,   </div>
+<div class="line"><a name="l00058"></a><span class="lineno"><a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aa6842a6515d4eedcabae071f19e25b218">   58</a></span>&#160;    <a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aa6842a6515d4eedcabae071f19e25b218" title="Sequencer pattern 17.">SEQUENCER_PATTERN_17</a>,   </div>
+<div class="line"><a name="l00059"></a><span class="lineno"><a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aa1bb04d7827f19d67505d1a790ff9cf5f">   59</a></span>&#160;    <a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aa1bb04d7827f19d67505d1a790ff9cf5f" title="Sequencer pattern 18.">SEQUENCER_PATTERN_18</a>,   </div>
+<div class="line"><a name="l00060"></a><span class="lineno"><a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aaeb4aeb2f3eceda86dfe6444fdc0cc751">   60</a></span>&#160;    <a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aaeb4aeb2f3eceda86dfe6444fdc0cc751" title="Sequencer pattern 19.">SEQUENCER_PATTERN_19</a>,   </div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aa0eec9a0ce3a7e515a2c91d46dfdef47a">   61</a></span>&#160;    <a class="code" href="sequencer_8h.html#af3876dc887c52947dcc68426a0ca3d5aa0eec9a0ce3a7e515a2c91d46dfdef47a" title="Sequencer pattern 20.">SEQUENCER_PATTERN_20</a>,   </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;};</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment">//---------------- functions and procedures ----------------//</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="keywordtype">void</span> <a class="code" href="sequencer_8c.html#abe0299d1173e4fe64296cba4b10b0328" title="Computes a wave according to the specified pattern.">init_sequencer_module</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="keywordtype">void</span> <a class="code" href="sequencer_8c.html#ae212f4f3acd50102843c84148e27c072">toggle_sequencer</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="keywordtype">void</span> <a class="code" href="sequencer_8c.html#afe20784a7bed689e78b01b4d866e992c">update_sequencer</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="comment">//---------------- EOF ----------------//</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="preprocessor">#endif // _SEQUENCER_H</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="preprocessor"></span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Mar 6 2016 16:50:06 for uMIDI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Mar 26 2016 22:23:14 for uMIDI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.2
 </small></address>

@@ -1,5 +1,5 @@
-<map id="src/switcher/config.h" name="src/switcher/config.h">
-<area shape="rect" id="node3" href="$switcher_2config_8c.html" title="Device configuration." alt="" coords="5,83,147,112"/>
-<area shape="rect" id="node5" href="$switcher_2main_8c.html" title="Entry point and main loop of the uMIDI firmware." alt="" coords="171,83,307,112"/>
-<area shape="rect" id="node7" href="$switcher_8c.html" title="Implementation of the MIDI switcher module." alt="" coords="331,83,488,112"/>
+<map id="/home/haggl/repositories/uMIDI/software/src/switcher/config.h" name="/home/haggl/repositories/uMIDI/software/src/switcher/config.h">
+<area shape="rect" id="node3" href="$switcher_2config_8c.html" title="Device configuration." alt="" coords="5,117,195,181"/>
+<area shape="rect" id="node5" href="$switcher_2main_8c.html" title="Entry point and main loop of the uMIDI firmware." alt="" coords="219,126,453,173"/>
+<area shape="rect" id="node7" href="$switcher_8c.html" title="Implementation of the MIDI switcher module." alt="" coords="477,117,667,181"/>
 </map>

@@ -8,9 +8,11 @@ var searchData=
   ['register_5ftap',['register_tap',['../wave_8c.html#a98659b5f2756c620099d4231f209fc13',1,'register_tap(void):&#160;wave.c'],['../wave_8h.html#a98659b5f2756c620099d4231f209fc13',1,'register_tap(void):&#160;wave.c']]],
   ['reset',['reset',['../serial__communication_8c.html#a8409a0d351d4fba2eeef26a7dcc585a8',1,'serial_communication.c']]],
   ['reset_5ftimeout',['RESET_TIMEOUT',['../serial__communication_8h.html#a51bf649eb4bb2e62b4373eb1ffe22538',1,'serial_communication.h']]],
+  ['reset_5fwave',['reset_wave',['../wave_8c.html#a9b3efc80d1645341dce59d9f5cbbb572',1,'reset_wave(struct wave *const wave):&#160;wave.c'],['../wave_8h.html#a9b3efc80d1645341dce59d9f5cbbb572',1,'reset_wave(struct wave *const wave):&#160;wave.c']]],
   ['result_5fregister',['result_register',['../structadc__channel__regs.html#a91dd7e9f4878b92f7eec691efcb03495',1,'adc_channel_regs']]],
   ['run_5ftest',['run_test',['../tests_8c.html#a47ab8e6367084bc4d369dd44afadaab6',1,'run_test(void(*function_p)(void)):&#160;tests.c'],['../tests_8h.html#a4429eb1f7d936aa4c299fe4b2e6aeff4',1,'run_test(void(*)(void)):&#160;tests.c']]],
   ['run_5ftest_5fsuite',['run_test_suite',['../tests_8c.html#af0b750b12580800fbf9deb63c2d2b56d',1,'run_test_suite(void):&#160;tests.c'],['../tests_8h.html#af0b750b12580800fbf9deb63c2d2b56d',1,'run_test_suite(void):&#160;tests.c']]],
   ['run_5ftest_5fwith_5fparameter',['run_test_with_parameter',['../tests_8c.html#a0ea32f9f08c2f3b7586df173c7e29a53',1,'run_test_with_parameter(void(*function_p)(void *), void *parameter):&#160;tests.c'],['../tests_8h.html#acf79c69bb476b31201ff56d8e95f4415',1,'run_test_with_parameter(void(*)(void *), void *):&#160;tests.c']]],
+  ['running',['running',['../sequencer_8c.html#a36f7b6be7108281af77939ceaec42fd6',1,'sequencer.c']]],
   ['rx_5fchannel',['rx_channel',['../structmidi__config.html#a9cc21d538b02ed3b47bd3456ece9e9af',1,'midi_config::rx_channel()'],['../midi_8c.html#a88a6663e547fb284b7e4460231cc2338',1,'rx_channel():&#160;midi.c']]]
 ];
