@@ -168,6 +168,22 @@ char* dump_pattern(enum sequencer_pattern_number number);
 ///                 number of "factory" patterns
 void init_sequencer_patterns(const struct sequencer_pattern* factory_patterns, uint8_t number_of_patterns);
 
+/// \brief      Stores a given pattern at the specified location
+/// \details    Overwrites stored data!
+/// \param      number
+///                 number of the pattern to overwrite
+/// \param      pattern
+///                 the new pattern to store
+void overwrite_pattern(enum sequencer_pattern_number number, const struct sequencer_pattern* pattern);
+
+/// \brief      Stores a pattern given as a hex-string at the specified location
+/// \details    Overwrites stored data!
+/// \param      number
+///                 number of the pattern to overwrite
+/// \param      data
+///                 the new pattern to store as a string of hexadecimal digits
+void restore_pattern(const enum sequencer_pattern_number number, const char* data);
+
 /// \brief      Selects a sequencer channel's pattern
 /// \param      channel
 ///                 the sequencer channel to adjust
