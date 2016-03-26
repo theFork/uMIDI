@@ -211,4 +211,5 @@ you would like to submit patches, here is a quick checklist of requirements:
 We also accept bugreports and feature requests on github. Should you find a bug or miss a feature,
 feel free to file an issue.
 
-*/
+\subsection hardware_contribution Hardware
+The board was orinially created using the open-source EDA tool KiCad (BZR 5122) and updated to also work with BZR 6188. Other versions of KiCad *might* work as well.
