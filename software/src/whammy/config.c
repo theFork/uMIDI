@@ -46,6 +46,8 @@
 ////////////////////////////////////////////////////////////////
 
 //---------------- Commands ----------------//
+static const char cmd_string_reset[] PROGMEM = "factoryreset";
+static const char help_string_reset[] PROGMEM = "Restores all patterns to factory settings";
 static const char cmd_string_speed[] PROGMEM = "speed";
 static const char help_string_speed[] PROGMEM = "<s>\n"
     "Adjust the speed of the sequencer:\n"
@@ -60,9 +62,10 @@ static const char help_string_pattern[] PROGMEM = "<p>\n"
     "      \"prev\" = switch to previous pattern\n";
 
 struct serial_command serial_commands[] = {
-    { .cmd_string = cmd_string_speed,   .help_string = help_string_speed,   .handler = &exec_speed   },
-    { .cmd_string = cmd_string_tap,     .help_string = help_string_tap,     .handler = &exec_tap     },
-    { .cmd_string = cmd_string_pattern, .help_string = help_string_pattern, .handler = &exec_pattern },
+    { .cmd_string = cmd_string_reset,   .help_string = help_string_reset,   .handler = &exec_factory_reset },
+    { .cmd_string = cmd_string_pattern, .help_string = help_string_pattern, .handler = &exec_pattern       },
+    { .cmd_string = cmd_string_speed,   .help_string = help_string_speed,   .handler = &exec_speed         },
+    { .cmd_string = cmd_string_tap,     .help_string = help_string_tap,     .handler = &exec_tap           },
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);
 

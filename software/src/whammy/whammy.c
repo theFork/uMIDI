@@ -125,6 +125,18 @@ static void sequencer_tick_handler(void)
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
+bool exec_factory_reset(const char* command)
+{
+    // Abort if the command is malformed
+    if (strlen(command) != 12) {
+        usb_puts(PSTR("Malformed command" USB_NEWLINE));
+        return false;
+    }
+
+    init_sequencer_patterns(factory_patterns, factory_patterns_size);
+    return true;
+}
+
 bool exec_speed(const char* command)
 {
     if (strlen(command) < 7 || command[5] != ' ') {
@@ -177,7 +189,6 @@ void increase_speed(void)
 
 void init_whammy_module(void)
 {
-    init_sequencer_patterns(factory_patterns, factory_patterns_size);
     configure_sequencer_channel(SEQUENCER_CHANNEL_1, &sequencer);
 }
 
