@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Kicad BOM</title>
+	<style media="screen" type="text/css">
+		body { font-family: monospace; }
+		h1 { text-decoration: underline }
+		table { border-collapse: collapse; width: 100%; }
+		th { border: 1px solid darkgrey; padding: 1em; background-color: lightgreen; }
+		td { border: 1px solid darkgrey; padding: 1em; }
+		a:link, a:visited { font-weight: bold; text-decoration: none;color: white; background-color: yellowgreen; }
+		a:active, a:hover { font-weigth: bold;  text-decoration: none;color: yellowgreen; background-color: black; }
+	</style>
+</head>
+<body>
+	<table>
+		<tr>
+			<th colspan="10"><h1>uMidi</h1></th>
+		</tr>
+		<tr>
+			<th rowspan="2">Designators</th>
+			<th rowspan="2">Quantity</th>
+			<th rowspan="2">Value</th>
+			<th rowspan="2">Footprint</th>
+			<th rowspan="2">Datasheet</th>
+			<th colspan="3">Supplier</th>
+			<th colspan="2">Manufacturer</th>
+		</tr>
+		<tr>
+			<th>Name</th>
+			<th>Part Number</th>
+			<th>Link</th>
+			<th>Name</th>
+			<th>Part Number</th>
+		</tr>
+		<tr>
+			<td>C1 C4 C11 C12 C13 </td>
+			<td>5</td>
+			<td>10u</td>
+			<td>Capacitors_SMD:C_0603</td>
+			<td><a href="">[>]</a></td>
+			<td>Digikey</td>
+			<td>399-5504-1-ND</td>
+			<td><a href="https://www.digikey.de/product-detail/de/C0603C106M9PACTU/399-5504-1-ND/1950682">[>]</a></td>
+			<td>Kemet</td>
+			<td>C0603C106M9PACTU</td>
+		</tr>
+		<tr>
+			<td>C2 C3 C5 C7 C8 C9 C10 C14 C15 C16 </td>
+			<td>10</td>
+			<td>100n</td>
+			<td>Capacitors_SMD:C_0603</td>
+			<td><a href="">[>]</a></td>
+			<td>Digikey</td>
+			<td>1276-1000-1-ND</td>
+			<td><a href="https://www.digikey.de/product-detail/de/CL10B104KB8NNNC/1276-1000-1-ND/3889086">[>]</a></td>
+			<td>Samsung</td>
+			<td>CL10B104KB8NNNC</td>
+		</tr>
+		<tr>
+			<td>C6 </td>
+			<td>1</td>
+			<td>4.7n</td>
+			<td></td>
+			<td><a href="">[>]</a></td>
+			<td>Digikey</td>
+			<td>490-1506-1-ND</td>
+			<td><a href="https://www.digikey.de/product-detail/de/GRM188R71H472KA01D/490-1506-1-ND/587880">[>]</a></td>
+			<td>Murata</td>
+			<td>GRM188R71H472KA01D</td>
+		</tr>
+		<tr>
+			<td>CON1 </td>
+			<td>1</td>
+			<td>USB-MINI-B</td>
+			<td></td>
+			<td><a href="https://www.hirose.com/product/en/download_file/key_name/UX60SC%2DMB%2D5ST%2801%29/category/Specification%20Sheet/doc_file_id/36416/?file_category_id=9&item_id=02400016601&is_series=">[>]</a></td>
+			<td>Digikey</td>
+			<td>H2959CT-ND</td>
+			<td><a href="https://www.digikey.de/product-detail/de/UX60-MB-5ST/H2959CT-ND/597538">[>]</a></td>
+			<td>Hirose</td>
+			<td>UX60-MB-5ST</td>
+		</tr>
+		<tr>
+			<td>D1 D2 D3 </td>
+			<td>3</td>
+			<td>B160-13-F</td>
+			<td>SMD:DI-214-AC_SMA</td>
+			<td><a href="http://www.diodes.com/_files/datasheets/ds13002.pdf">[>]</a></td>
+			<td>Digikey</td>
+			<td>B160-FDICT-ND</td>
+			<td><a href="https://www.digikey.de/product-detail/de/B160-13-F/B160-FDICT-ND/806561">[>]</a></td>
+			<td>Diodes Incorporated</td>
+			<td>B160-13-F</td>
+		</tr>
+		<tr>
+			<td>D4 D5 D6 </td>
+			<td>3</td>
+			<td>TVS 5V</td>
+			<td>Capacitors_SMD:C_0603</td>
+			<td><a href="http://www.comchiptech.com/cms/UserFiles/CPDU-Series-RevD.pdf">[>]</a></td>
+			<td>Digikey</td>
+			<td>641-1088-1-ND</td>
+			<td><a href="https://www.digikey.de/product-detail/de/CPDU5V0/641-1088-1-ND/1121210">[>]</a></td>
+			<td>Comchip Technology</td>
+			<td>CPDU5V0</td>
+		</tr>
+		<tr>
+			<td>D7 </td>
+			<td>1</td>
+			<td>LED Green</td>
+			<td></td>
+			<td><a href="http://optoelectronics.liteon.com/upload/download/DS22-2000-228/S_110_LTST-C191KGKT.pdf">[>]</a></td>
+			<td>Digikey</td>
+			<td>160-1446-1-ND</td>
+			<td><a href="https://www.digikey.de/product-detail/de/LTST-C191KGKT/160-1446-1-ND/386834">[>]</a></td>
+			<td>Lite-On Inc.</td>
+			<td>LTST-C191KGKT</td>
+		</tr>
+		<tr>
+			<td>D8 </td>
+			<td>1</td>
+			<td>LED Red</td>
+			<td></td>
+			<td><a href="http://optoelectronics.liteon.com/upload/download/DS22-2000-223/S_110_LTST-C191KRKT.pdf">[>]</a></td>
+			<td>Digikey</td>
+			<td>160-1447-1-ND</td>
+			<td><a href="https://www.digikey.de/product-detail/de/LTST-C191KRKT/160-1447-1-ND/386836">[>]</a></td>
+			<td>Lite-On Inc.</td>
+			<td>LTST-C191KRKT</td>
+		</tr>
+		<tr>
+			<td>IC1 </td>
+			<td>1</td>
+			<td>ATXMEGA128A4U-M</td>
+			<td>Atmel:QFN-44-1EP</td>
+			<td><a href="http://www.atmel.com/images/Atmel-8387-8-and16-bit-AVR-Microcontroller-XMEGA-A4U_Datasheet.pdf">[>]</a></td>
+			<td>Digikey</td>
+			<td>ATXMEGA128A4U-MH-ND</td>
+			<td><a href="https://www.digikey.de/product-detail/de/ATXMEGA128A4U-MH/ATXMEGA128A4U-MH-ND/3441470">[>]</a></td>
+			<td>Atmel</td>
+			<td>ATXMEGA128A4U-MH</td>
+		</tr>
+		<tr>
+			<td>IC2 </td>
+			<td>1</td>
+			<td>74LS14</td>
+			<td></td>
+			<td><a href="http://www.nxp.com/documents/data_sheet/74LVT14.pdf">[>]</a></td>
+			<td>Digikey</td>
+			<td>568-8193-1-ND</td>
+			<td><a href="https://www.digikey.de/product-detail/de/74LVT14D,118/568-8193-1-ND/2762883">[>]</a></td>
+			<td>NXP</td>
+			<td>74LVT14D,118</td>
+		</tr>
+		<tr>
+			<td>IC3 </td>
+			<td>1</td>
+			<td>LT1129CST-3.3</td>
+			<td>SOT223:SOT-223</td>
+			<td><a href="http://cds.linear.com/docs/en/datasheet/112935ff.pdf">[>]</a></td>
+			<td>Digikey</td>
+			<td>LT1129CST-3.3#PBF-ND</td>
+			<td><a href="https://www.digikey.de/product-detail/de/LT1129CST-3.3%23PBF/LT1129CST-3.3%23PBF-ND/889181">[>]</a></td>
+			<td>Linear Technology</td>
+			<td>LT1129CST-3.3#PBF</td>
+		</tr>
+		<tr>
+			<td>IC4 </td>
+			<td>1</td>
+			<td>6N138</td>
+			<td>Opto:Optocoupler_DIP8_SMD</td>
+			<td><a href="">[>]</a></td>
+			<td>Digikey</td>
+			<td>160-1798-1-ND</td>
+			<td><a href="https://www.digikey.de/product-detail/de/6N138S-TA1/160-1798-1-ND/1969190">[>]</a></td>
+			<td>Lite-On Inc.</td>
+			<td>6N138S-TA1</td>
+		</tr>
+		<tr>
+			<td>JP1 </td>
+			<td>1</td>
+			<td>JUMPER3</td>
+			<td></td>
+			<td><a href="">[>]</a></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>JP2 JP3 JP4 JP5 </td>
+			<td>4</td>
+			<td>JUMPER</td>
+			<td></td>
+			<td><a href="">[>]</a></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>L1 </td>
+			<td>1</td>
+			<td>Bead 1k@100MHz</td>
+			<td>Capacitors_SMD:C_0603</td>
+			<td><a href="http://www.murata.com/en-us/products/productdata/ENFA0003.pdf?context=bWFzdGVyfE0wM1h8MjI3NzI3fGFwcGxpY2F0aW9uL3BkZnxzeXMtbWFzdGVyL00wM1gvaGQ3L2gzMy84Nzk3Mjg4ODI0ODYyL0VORkEwMDAzLnBkZnxhZTUzOGY3Y2U5MmM5NmYxMmViMDFiMWVmMzYwM2VhNjhkNjA2NTlhYzYzZDEyYzdhMzYwZjc5MDNlZjRhOGEy">[>]</a></td>
+			<td>Digikey</td>
+			<td>490-5228-1-ND</td>
+			<td><a href="https://www.digikey.de/product-detail/de/BLM18RK102SN1D/490-5228-1-ND/1948404">[>]</a></td>
+			<td>Murata</td>
+			<td>BLM18RK102SN1D</td>
+		</tr>
+		<tr>
+			<td>L2 L3 </td>
+			<td>2</td>
+			<td>10u</td>
+			<td>Capacitors_SMD:C_0603</td>
+			<td><a href="">[>]</a></td>
+			<td>Digikey</td>
+			<td>445-3608-1-ND</td>
+			<td><a href="https://www.digikey.de/product-detail/de/GLFR1608T100M-LR/445-3608-1-ND/1856576">[>]</a></td>
+			<td>TDK</td>
+			<td>GLFR1608T100M-LR</td>
+		</tr>
+		<tr>
+			<td>P1 </td>
+			<td>1</td>
+			<td>MIDI In</td>
+			<td></td>
+			<td><a href="">[>]</a></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>P2 </td>
+			<td>1</td>
+			<td>MIDI Thru</td>
+			<td></td>
+			<td><a href="">[>]</a></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>P3 </td>
+			<td>1</td>
+			<td>MIDI T/O</td>
+			<td></td>
+			<td><a href="">[>]</a></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>P4 </td>
+			<td>1</td>
+			<td>MIDI Out</td>
+			<td></td>
+			<td><a href="">[>]</a></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>P5 </td>
+			<td>1</td>
+			<td>5..12 V</td>
+			<td></td>
+			<td><a href="">[>]</a></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>P6 </td>
+			<td>1</td>
+			<td>PDI</td>
+			<td></td>
+			<td><a href="http://portal.fciconnect.com/Comergent//fci/drawing/67996.pdf">[>]</a></td>
+			<td>Digikey</td>
+			<td>609-3210-ND</td>
+			<td><a href="https://www.digikey.de/product-detail/de/67996-206HLF/609-3210-ND/1878485">[>]</a></td>
+			<td>FCI</td>
+			<td>67996-206HLF</td>
+		</tr>
+		<tr>
+			<td>P7 </td>
+			<td>1</td>
+			<td>GPIO1</td>
+			<td>Connect:VASCH5x2</td>
+			<td><a href="http://multimedia.3m.com/mws/media/22504O/3mtm-100-in-loprof-hdr-100x-100strt-ra-4-wall-ts0818.pdf">[>]</a></td>
+			<td>Digikey</td>
+			<td>30310-6002HB-ND</td>
+			<td><a href="https://www.digikey.de/product-detail/de/30310-6002HB/30310-6002HB-ND/1237393">[>]</a></td>
+			<td>3M</td>
+			<td>30310-6002HB</td>
+		</tr>
+		<tr>
+			<td>P8 </td>
+			<td>1</td>
+			<td>GPIO2</td>
+			<td>Connect:VASCH5x2</td>
+			<td><a href="http://multimedia.3m.com/mws/media/22504O/3mtm-100-in-loprof-hdr-100x-100strt-ra-4-wall-ts0818.pdf">[>]</a></td>
+			<td>Digikey</td>
+			<td>30310-6002HB-ND</td>
+			<td><a href="https://www.digikey.de/product-detail/de/30310-6002HB/30310-6002HB-ND/1237393">[>]</a></td>
+			<td>3M</td>
+			<td>30310-6002HB</td>
+		</tr>
+		<tr>
+			<td>P9 </td>
+			<td>1</td>
+			<td>GPIO3</td>
+			<td>Connect:VASCH5x2</td>
+			<td><a href="http://multimedia.3m.com/mws/media/22504O/3mtm-100-in-loprof-hdr-100x-100strt-ra-4-wall-ts0818.pdf">[>]</a></td>
+			<td>Digikey</td>
+			<td>30310-6002HB-ND</td>
+			<td><a href="https://www.digikey.de/product-detail/de/30310-6002HB/30310-6002HB-ND/1237393">[>]</a></td>
+			<td>3M</td>
+			<td>30310-6002HB</td>
+		</tr>
+		<tr>
+			<td>R1 R2 R3 R4 R5 R6 R11 R12 </td>
+			<td>8</td>
+			<td>120</td>
+			<td>Resistors_SMD:R_0603</td>
+			<td><a href="">[>]</a></td>
+			<td>Digikey</td>
+			<td>P120GCT-ND</td>
+			<td><a href="https://www.digikey.de/product-detail/de/ERJ-3GEYJ121V/P120GCT-ND/134727">[>]</a></td>
+			<td>Panasonic</td>
+			<td>ERJ-3GEYJ121V</td>
+		</tr>
+		<tr>
+			<td>R10 </td>
+			<td>1</td>
+			<td>1M</td>
+			<td>Resistors_SMD:R_0603</td>
+			<td><a href="">[>]</a></td>
+			<td>Digikey</td>
+			<td>P1.0MGCT-ND</td>
+			<td><a href="https://www.digikey.de/product-detail/de/ERJ-3GEYJ105V/P1.0MGCT-ND/134885">[>]</a></td>
+			<td>Panasonic</td>
+			<td>ERJ-3GEYJ105V</td>
+		</tr>
+		<tr>
+			<td>R13 </td>
+			<td>1</td>
+			<td>4.7k</td>
+			<td>Resistors_SMD:R_0603</td>
+			<td><a href="">[>]</a></td>
+			<td>Digikey</td>
+			<td>P4.7KGCT-ND</td>
+			<td><a href="https://www.digikey.de/product-detail/de/ERJ-3GEYJ472V/P4.7KGCT-ND/135199">[>]</a></td>
+			<td>Panasonic</td>
+			<td>ERJ-3GEYJ472V</td>
+		</tr>
+		<tr>
+			<td>R7 </td>
+			<td>1</td>
+			<td>220</td>
+			<td>Resistors_SMD:R_0603</td>
+			<td><a href="">[>]</a></td>
+			<td>Digikey</td>
+			<td>P220GCT-ND</td>
+			<td><a href="https://www.digikey.de/product-detail/de/ERJ-3GEYJ221V/P220GCT-ND/134754">[>]</a></td>
+			<td>Panasonic</td>
+			<td>ERJ-3GEYJ221V</td>
+		</tr>
+		<tr>
+			<td>R8 </td>
+			<td>1</td>
+			<td>270</td>
+			<td>Resistors_SMD:R_0603</td>
+			<td><a href="">[>]</a></td>
+			<td>Digikey</td>
+			<td>P270GCT-ND</td>
+			<td><a href="https://www.digikey.de/product-detail/de/ERJ-3GEYJ271V/P270GCT-ND/134766">[>]</a></td>
+			<td>Panasonic</td>
+			<td>ERJ-3GEYJ271V</td>
+		</tr>
+		<tr>
+			<td>R9 R14 R15 </td>
+			<td>3</td>
+			<td>10k</td>
+			<td>Resistors_SMD:R_0603</td>
+			<td><a href="">[>]</a></td>
+			<td>Digikey</td>
+			<td>P10KGCT-ND</td>
+			<td><a href="https://www.digikey.de/product-detail/de/ERJ-3GEYJ103V/P10KGCT-ND/134717">[>]</a></td>
+			<td>Panasonic</td>
+			<td>ERJ-3GEYJ103V</td>
+		</tr>
+	</table>
+<p>Created with bom-converter.py, see https://github.com/theFork/kicad-utils</p>
+</body>
+</html>

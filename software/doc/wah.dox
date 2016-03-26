@@ -1,5 +1,0 @@
-/**
-\dir        src/wah
-\brief      A MIDI controllable Wah-Wah
-\details    The software dims an LED by modulating the duty cycle of a PWM.
-*/

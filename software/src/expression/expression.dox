@@ -1,0 +1,6 @@
+/**
+\dir
+\brief      An expression pedal that emits MIDI CC messages
+\details    The software samples an analog voltage, converts it to a valid MIDI value and sends
+            MIDI CC messages for a defined controller.
+*/

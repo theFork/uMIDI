@@ -1,5 +1,0 @@
-/**
-\dir        src/template-nousb
-\brief      A very minimalistic project without USB support
-\details    Start with this template if you do not want or need USB support in your project.
-*/
