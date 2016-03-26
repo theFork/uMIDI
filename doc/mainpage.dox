@@ -14,6 +14,8 @@ You can use uMIDI for virtually everything you can think of involving (but not l
 The board is also equipped with a mini USB port, which in conjunction with the serial communication
 module allows you to connect the board to your PC as a character device.
 
+\image html board.jpg "The uMIDI board"
+
 \section features Hardware features
 - receive / forward / send arbitrary MIDI messages
 - control interface via USB character device
@@ -26,12 +28,17 @@ module allows you to connect the board to your PC as a character device.
 - 4 GPIO ports connected to solder jumpers
 - 2 LEDs (red + green)
 
+See also:
+- \ref pin_mapping "micro-controller pin mapping"
+- \ref midi_pinout "MIDI pinout and phantom-power specification"
+
 
 
 \section software Software library
 uMIDI comes with a quite sophisticated high-level software library and framework, which enables you
-to accomplish most basic tasks very quickly. You can find the documentation of the API at \ref
-src/lib - if you intend to simply use the library as-is, looking at the header files should suffice.
+to accomplish most basic tasks very quickly. You can find the documentation of the API at
+[software/src/lib](../../software/src/lib) - if you intend to simply use the library as-is,
+looking at the header files should suffice.
 
 The framework features easy to use device initialization routines which provide an abstraction from
 the hardware. You just need to specify, which features (GPIO, ADC, PWM, ...) you want to use and how
@@ -121,15 +128,15 @@ Furthermore, the library contains modules for several peripheral devices:
 
 \section start Getting started
 This repository contains the source code for several (example) applications:
-- \ref src/expression       "An expression pedal"
-- \ref src/whammy           "A special sequencer for the DigiTech Whammy pedal"
-- \ref src/switcher         "A guitar effects switcher"
-- \ref src/wah              "A MIDI controllable Wah-Wah"
+- [An expression pedal](../../software/src/expression)
+- [A special sequencer for the DigiTech Whammy pedal](../../software/src/whammy)
+- [A guitar effects switcher](../../software/src/switcher)
+- [A MIDI controllable Wah-Wah](../../software/src/wah)
 
 You can look at those to get a general idea of how the API is designed and used. In addition,
 there are two project templates:
-- \ref src/template-nousb   "A very minimalistic project without USB support"
-- \ref src/template-usb     "An empty project with USB support"
+- [A very minimalistic project without USB support](../../software/src/template-nousb)
+- [An empty project with USB support](../../software/src/template-usb)
 
 If you want to be able to use the serial communication module to talk to your board, you should
 start with the latter, as all necessary files are already included in the Makefile and mandatory

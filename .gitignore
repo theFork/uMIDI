@@ -7,11 +7,11 @@
 *.s
 
 # Doxygen output
-software/doc/html
-software/doc/doxygen_sqlite3.db
+doc/html
+doc/doxygen_sqlite3.db
 
 # PlantUML output
-software/doc/uml/*.png
+doc/uml/*.png
 
 # PCB plots
 hardware/plots

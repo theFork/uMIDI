@@ -1,5 +1,5 @@
 /**
-\dir        src/whammy
+\dir
 \brief      A special MIDI sequencer for the DigiTech Whammy pedal
 \details    The software sends MIDI messages and remote-controls the pedal.
 */

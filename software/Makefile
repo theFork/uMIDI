@@ -9,7 +9,7 @@ MAKE=make
 all: $(PROJECTS) doc
 
 doc:
-	$(DOXYGEN)
+	cd ../doc; $(DOXYGEN)
 
 $(PROJECTS):
 	$(info $(PROJECTS))

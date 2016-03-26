@@ -1,13 +1,14 @@
-# Pin Map
+/**
+\page pin_mapping Pin mapping
 
-## MIDI
+\section midi MIDI
 | Pin           | Value             |
 |---------------|-------------------|
 | PE2 (RXD0)    | MIDI in           |
 | PE3 (TXD0)    | MIDI out          |
 
 
-## General Purpose Connectors
+\section gpio General purpose connectors
 All GPIO connectors are standard 2.54 mm (100 mil) 10-pin boxed headers commonly used to connect ribbon cables.
 The voltage across pins 1 and 10 (VGPIO) amounts to 3.3 V. Keep in mind the maximum load of the onboard LDO!
 
@@ -58,14 +59,7 @@ The TWI / I2C interface is accessible here.
 | PD3 (TCD0::OC0D) | 9                 |
 | GND              | 10                |
 
-## Onboard LEDs
-
-| Pin           | LED               |
-|---------------|-------------------|
-| PE0           | D7 (red)          |
-| PE1           | D8 (green)        |
-
-## Solder Jumpers
+### Solder Jumpers
 The residual pins of the MCU were connected to four jumpers on the bottom layer of the PCB.
 Closing a jumper results in a connection of the corresponding MCU pin to GND.
 
@@ -78,4 +72,13 @@ Closing a jumper results in a connection of the corresponding MCU pin to GND.
 
 Since sometimes there is no silkscreen, the jumper designators on the bottom layer are depicted below. Mind the **mirrored** top-layer silkscreen.
 
-![Solder Jumpers](solder_jumpers.gif)
+\image html solder_jumpers.gif "Solder jumpers"
+
+\section leds Onboard LEDs
+
+| Pin           | LED               |
+|---------------|-------------------|
+| PE0           | D7 (red)          |
+| PE1           | D8 (green)        |
+
+*/
