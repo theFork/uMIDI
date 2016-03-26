@@ -213,3 +213,5 @@ feel free to file an issue.
 
 \subsection hardware_contribution Hardware
 The board was orinially created using the open-source EDA tool KiCad (BZR 5122) and updated to also work with BZR 6188. Other versions of KiCad *might* work as well.
+
+*/
