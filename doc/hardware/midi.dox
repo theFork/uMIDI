@@ -1,0 +1,17 @@
+/**
+\section intro Introduction
+Purpose of this document is
+    - to provide the standard MIDI connector and cable pinout and also
+    - define electrical characteristics and a pinout power over MIDI.
+This document uses key words defined in RFC 2119.
+
+\section classes Device classes
+- Transmitter
+- Receiver
+- Coupler
+
+\section connectors Connector Pin-Out
+
+\section power Power Over MIDI
+
+*/
