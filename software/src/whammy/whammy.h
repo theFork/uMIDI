@@ -79,6 +79,7 @@ enum whammy_note
 
 
 //---------------- functions and procedures ----------------//
+bool exec_backup(const char* command);
 bool exec_factory_reset(const char* command);
 bool exec_pattern(const char* command);
 bool exec_speed(const char* command);

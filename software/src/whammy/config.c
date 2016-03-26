@@ -46,6 +46,8 @@
 ////////////////////////////////////////////////////////////////
 
 //---------------- Commands ----------------//
+static const char cmd_string_backup[] PROGMEM = "backup";
+static const char help_string_backup[] PROGMEM = "Dumps all data stored in EEPROM";
 static const char cmd_string_reset[] PROGMEM = "factoryreset";
 static const char help_string_reset[] PROGMEM = "Restores all patterns to factory settings";
 static const char cmd_string_speed[] PROGMEM = "speed";
@@ -62,6 +64,7 @@ static const char help_string_pattern[] PROGMEM = "<p>\n"
     "      \"prev\" = switch to previous pattern\n";
 
 struct serial_command serial_commands[] = {
+    { .cmd_string = cmd_string_backup,  .help_string = help_string_backup,  .handler = &exec_backup        },
     { .cmd_string = cmd_string_reset,   .help_string = help_string_reset,   .handler = &exec_factory_reset },
     { .cmd_string = cmd_string_pattern, .help_string = help_string_pattern, .handler = &exec_pattern       },
     { .cmd_string = cmd_string_speed,   .help_string = help_string_speed,   .handler = &exec_speed         },

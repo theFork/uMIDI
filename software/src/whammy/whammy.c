@@ -125,6 +125,20 @@ static void sequencer_tick_handler(void)
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
+bool exec_backup(const char* command)
+{
+    // Abort if the command is malformed
+    if (strlen(command) != 6) {
+        usb_puts(PSTR("Malformed command" USB_NEWLINE));
+        return false;
+    }
+
+    for (uint8_t i=0; i<SEQUENCER_PATTERNS; ++i) {
+        usb_puts_S(export_pattern(i));
+    }
+    return true;
+}
+
 bool exec_factory_reset(const char* command)
 {
     // Abort if the command is malformed
@@ -134,26 +148,6 @@ bool exec_factory_reset(const char* command)
     }
 
     init_sequencer_patterns(factory_patterns, factory_patterns_size);
-    return true;
-}
-
-bool exec_speed(const char* command)
-{
-    if (strlen(command) < 7 || command[5] != ' ') {
-        usb_puts(PSTR("Malformed command" USB_NEWLINE));
-        return false;
-    }
-
-    midi_value_t speed = atoi(command+6);
-    speed %= MIDI_MAX_VALUE + 1;
-    usb_printf(PSTR("Setting waveform speed to %u" USB_NEWLINE), speed);
-    set_sequencer_speed(&sequencer, speed);
-    return true;
-}
-
-bool exec_tap(const char* command)
-{
-    register_tap();
     return true;
 }
 
@@ -175,6 +169,26 @@ bool exec_pattern(const char* command)
 
     usb_puts(PSTR("Unknown parameter" USB_NEWLINE));
     return false;
+}
+
+bool exec_speed(const char* command)
+{
+    if (strlen(command) < 7 || command[5] != ' ') {
+        usb_puts(PSTR("Malformed command" USB_NEWLINE));
+        return false;
+    }
+
+    midi_value_t speed = atoi(command+6);
+    speed %= MIDI_MAX_VALUE + 1;
+    usb_printf(PSTR("Setting waveform speed to %u" USB_NEWLINE), speed);
+    set_sequencer_speed(&sequencer, speed);
+    return true;
+}
+
+bool exec_tap(const char* command)
+{
+    register_tap();
+    return true;
 }
 
 void decrease_speed(void)
