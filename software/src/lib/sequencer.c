@@ -21,6 +21,7 @@
  */
 
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <avr/eeprom.h>
 
@@ -84,6 +85,29 @@ void configure_sequencer_channel(const enum sequencer_channel_number number, str
     init_wave(&channel->wave, WAVE_SQUARE, 0, 1, 0);
     set_speed(&channel->wave, channel->speed);
     configure_tap_tempo_wave(&channel->wave);
+}
+
+char* dump_pattern(const enum sequencer_pattern_number pattern_index)
+{
+    // Allocate static (!) string buffer:
+    // 2 characters for hexadecimal encoding of each byte of the pattern plus string termination
+    static char result_string[2*sizeof(struct sequencer_pattern)+1] = "";
+
+    // Format pattern length
+    char* write_pointer = result_string;
+    snprintf(write_pointer, 3, "%02x", eeprom_read_byte(&patterns[pattern_index].length));
+    write_pointer += 2;
+
+    // Format pattern steps
+    for (uint8_t step_index=0; step_index < SEQUENCER_STEPS_PER_PATTERN; ++step_index) {
+        snprintf(write_pointer, 9, "%02x%02x%02x%02x",
+                 eeprom_read_byte((uint8_t*) &patterns[pattern_index].steps[step_index].channel),
+                 eeprom_read_byte((uint8_t*) &patterns[pattern_index].steps[step_index].type),
+                 eeprom_read_byte(&patterns[pattern_index].steps[step_index].data0),
+                 eeprom_read_byte(&patterns[pattern_index].steps[step_index].data1));
+        write_pointer += 8;
+    }
+    return result_string;
 }
 
 void init_sequencer_patterns(const struct sequencer_pattern * const factory_patterns, const uint8_t number_of_patterns)
