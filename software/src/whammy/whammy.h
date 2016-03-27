@@ -90,6 +90,7 @@ void init_whammy_module(void);
 void select_next_pattern(void);
 void select_previous_pattern(void);
 void tap_tempo(void);
+void toggle_sequencer_mode(void);
 void toggle_sequencing(void);
 
 //---------------- EOF ----------------//

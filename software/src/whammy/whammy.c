@@ -221,6 +221,17 @@ void tap_tempo(void)
     register_tap();
 }
 
+void toggle_sequencer_mode(void)
+{
+    if (sequencer.mode == SEQUENCER_CHANNEL_MODE_CONTINUOUS) {
+        sequencer.mode = SEQUENCER_CHANNEL_MODE_ONE_SHOT;
+    }
+    else {
+        sequencer.mode = SEQUENCER_CHANNEL_MODE_CONTINUOUS;
+    }
+    usb_printf(PSTR("Setting sequencer mode %d" USB_NEWLINE), sequencer.mode);
+}
+
 void toggle_sequencing(void)
 {
     toggle_sequencer(&sequencer);
