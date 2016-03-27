@@ -119,15 +119,39 @@ void set_hmi_led(const enum hmi_led led, const bool value)
 void poll_hmi(void)
 {
     // Poll switches
-    if (hmi_config->button1_handler != NULL) {
-        if (poll_gpio_input(hmi_config->input_header->pin9, GPIO_INPUT_PULLUP)) {
-            hmi_config->button1_handler();
+    if (hmi_config->button1_short_handler != NULL || hmi_config->button1_long_handler != NULL) {
+        switch (poll_gpio_input_timeout(hmi_config->input_header->pin9, GPIO_INPUT_PULLUP,
+                                        hmi_config->long_input_threashold)) {
+        case GPIO_INPUT_EVENT_SHORT:
+            if (hmi_config->button1_short_handler) {
+                hmi_config->button1_short_handler();
+            }
+            break;
+        case GPIO_INPUT_EVENT_LONG:
+            if (hmi_config->button1_long_handler != NULL) {
+                hmi_config->button1_long_handler();
+            }
+            break;
+        default:
+            break;
         }
     }
 
-    if (hmi_config->button2_handler != NULL) {
-        if (poll_gpio_input(hmi_config->input_header->pin8, GPIO_INPUT_PULLUP)) {
-            hmi_config->button2_handler();
+    if (hmi_config->button2_short_handler != NULL || hmi_config->button2_long_handler != NULL) {
+        switch (poll_gpio_input_timeout(hmi_config->input_header->pin8, GPIO_INPUT_PULLUP,
+                                        hmi_config->long_input_threashold)) {
+        case GPIO_INPUT_EVENT_SHORT:
+            if (hmi_config->button2_short_handler) {
+                hmi_config->button2_short_handler();
+            }
+            break;
+        case GPIO_INPUT_EVENT_LONG:
+            if (hmi_config->button2_long_handler != NULL) {
+                hmi_config->button2_long_handler();
+            }
+            break;
+        default:
+            break;
         }
     }
 
