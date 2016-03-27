@@ -32,6 +32,7 @@
 #include "lib/hmi.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
+#include "lib/sequencer.h"
 #include "lib/serial_communication.h"
 #include "lib/usb.h"
 #include "lib/wave.h"
@@ -44,56 +45,7 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-//---------------- GPIO ----------------//
-struct gpio_mapping gpio_mappings[] = {
-};
-uint8_t gpio_mappings_size = sizeof(gpio_mappings)/sizeof(struct gpio_mapping);
-
-//---------------- HMI ----------------//
-struct hmi_config hmi_config = {
-    .input_header = &gpio.header2,
-    .output_header = &gpio.header1,
-    .button1_handler = NULL,
-    .button2_handler = NULL,
-    .encoder1cw_handler = NULL,
-    .encoder1ccw_handler = NULL,
-    .encoder1push_handler = NULL,
-    .encoder2cw_handler = NULL,
-    .encoder2ccw_handler = NULL,
-    .encoder2push_handler = NULL,
-};
-
-//---------------- MIDI ----------------//
-struct midi_config midi_config = {
-    .event_handlers = {
-//        .control_change = NULL,
-        .control_change = &handle_control_change,
-        .note_off       = NULL,
-        .note_on        = NULL,
-        .program_change = NULL
-    },
-    .tx_channel = 1,
-};
-
-//---------------- State machine ----------------//
-background_task_t high_frequency_tasks[] = {
-    &serial_communication_task,
-};
-uint8_t high_frequency_tasks_size = sizeof(high_frequency_tasks)/sizeof(background_task_t);
-
-background_task_t mid_frequency_tasks[] = {
-    &usb_main_task,
-    &poll_hmi,
-};
-uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background_task_t);
-
-background_task_t low_frequency_tasks[] = {
-    &tap_tempo_task,
-    &update_leds,
-};
-uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);
-
-//---------------- Custom commands ----------------//
+//---------------- Commands ----------------//
 struct serial_command serial_commands[] = {
     {
         .cmd_string = "speed",
@@ -108,13 +60,62 @@ struct serial_command serial_commands[] = {
         .handler = &exec_tap
     },
     {
-        .cmd_string = "waveform",
+        .cmd_string = "pattern",
         .help_string = "<p>\n"
-            "Select sequencer waveform:\n"
+            "Select sequencer pattern:\n"
             "<p> : pattern\n"
-            "      \"next\" = switch to next waveform\n"
-            "      \"prev\" = switch to previous waveform\n",
-        .handler = &exec_waveform
+            "      \"next\" = switch to next pattern\n"
+            "      \"prev\" = switch to previous pattern\n",
+        .handler = &exec_pattern
     },
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);
+
+//---------------- GPIO ----------------//
+struct gpio_mapping gpio_mappings[] = {
+};
+uint8_t gpio_mappings_size = sizeof(gpio_mappings)/sizeof(struct gpio_mapping);
+
+//---------------- HMI ----------------//
+struct hmi_config hmi_config = {
+    .input_header = &gpio.header2,
+    .output_header = &gpio.header1,
+    .button1_handler = NULL,
+    .button2_handler = &toggle_sequencing,
+    .encoder1cw_handler = select_next_pattern,
+    .encoder1ccw_handler = select_previous_pattern,
+    .encoder1push_handler = NULL,
+    .encoder2cw_handler = &increase_speed,
+    .encoder2ccw_handler = &decrease_speed,
+    .encoder2push_handler = &register_tap,
+};
+
+//---------------- MIDI ----------------//
+struct midi_config midi_config = {
+    .event_handlers = {
+        .control_change = NULL,
+        .note_off       = NULL,
+        .note_on        = NULL,
+        .program_change = NULL
+    },
+    .tx_channel = 1,
+};
+
+//---------------- State machine ----------------//
+background_task_t high_frequency_tasks[] = {
+    &serial_communication_task,
+    &update_sequencer,
+};
+uint8_t high_frequency_tasks_size = sizeof(high_frequency_tasks)/sizeof(background_task_t);
+
+background_task_t mid_frequency_tasks[] = {
+    &usb_main_task,
+    &poll_hmi,
+};
+uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background_task_t);
+
+background_task_t low_frequency_tasks[] = {
+    &tap_tempo_task,
+    &update_leds,
+};
+uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);

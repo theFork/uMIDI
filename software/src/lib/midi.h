@@ -168,6 +168,19 @@ enum midi_channel read_midi_channel_from_jumpers(const struct jumpers * jumpers)
 ///                 the new value for the controller
 void send_control_change(midi_value_t controller, midi_value_t value);
 
+/// \brief      Sends an arbitrary MIDI message
+/// \details    If the second data byte is not required for the specified message type, the
+///             parameter is simply ignored.
+/// \param      channel
+///                 the MIDI channel to send on
+/// \param      type
+///                 the type of the MIDI message to send
+/// \param      data0
+///                 the first data byte (e.g. MIDI controller number for a control change)
+/// \param      data1
+///                 the second data byte (optional, e.g. value for a control change)
+void send_midi_message(enum midi_channel channel, enum midi_message_type type, midi_value_t data0, midi_value_t data1);
+
 /// \brief      Sends a note off message
 /// \param      note
 ///                 the MIDI note number

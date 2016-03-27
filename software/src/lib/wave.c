@@ -29,7 +29,6 @@
 #include "midi.h"
 #include "program.h"
 #include "wave.h"
-#include "whammy.h"
 
 
 ////////////////////////////////////////////////////////////////

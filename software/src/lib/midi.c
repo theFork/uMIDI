@@ -91,47 +91,38 @@ enum midi_channel read_midi_channel_from_jumpers(const struct jumpers * jumpers)
 
 void send_control_change(midi_value_t controller, midi_value_t value)
 {
-    // Send control change status byte
-    uart_write((uint8_t) MIDI_MSG_TYPE_CONTROL_CHANGE | (tx_channel & 0x7f));
+    send_midi_message(MIDI_MSG_TYPE_CONTROL_CHANGE, tx_channel, controller & 0x7f, value & 0x7f);
+}
 
-    // Send controller number
-    uart_write(controller & 0x7f);
+void send_midi_message(enum midi_channel channel, enum midi_message_type type, midi_value_t data0, midi_value_t data1)
+{
+    // Send status byte
+    uart_write(type | channel);
 
-    // Send value
-    uart_write(value & 0x7f);
+    // Send data byte0
+    uart_write(data0 & 0x7f);
+
+    // Send data byte1 only if required
+    if (type != MIDI_MSG_TYPE_PROGRAM_CHANGE) {
+        uart_write(data1 & 0x7f);
+    }
 }
 
 void send_note_off(midi_value_t note)
 {
-    // Send note off status byte
-    uart_write((uint8_t) MIDI_MSG_TYPE_NOTE_OFF | (tx_channel & 0x7f));
-
-    // Send note number
-    uart_write(note & 0x7f);
-
-    // Send maximum velocity
-    uart_write(MIDI_MAX_VALUE);
+    // Send note off message with maximum velocity
+    send_midi_message(MIDI_MSG_TYPE_NOTE_OFF, tx_channel, note & 0x7f, MIDI_MAX_VALUE);
 }
 
 void send_note_on(midi_value_t note)
 {
-    // Send note on status byte
-    uart_write((uint8_t) MIDI_MSG_TYPE_NOTE_ON | (tx_channel & 0x7f));
-
-    // Send note number
-    uart_write(note & 0x7f);
-
-    // Send maximum velocity
-    uart_write(MIDI_MAX_VALUE);
+    // Send note on message with maximum velocity
+    send_midi_message(MIDI_MSG_TYPE_NOTE_ON, tx_channel, note & 0x7f, MIDI_MAX_VALUE);
 }
 
 void send_program_change(midi_value_t pnum)
 {
-    // Send program change status byte
-    uart_write((uint8_t) MIDI_MSG_TYPE_PROGRAM_CHANGE | (tx_channel & 0x7f));
-
-    // Send program number
-    uart_write(pnum & 0x7f);
+    send_midi_message(MIDI_MSG_TYPE_PROGRAM_CHANGE, tx_channel, pnum & 0x7f, 0);
 }
 
 void set_midi_rx_channel(enum midi_channel channel)

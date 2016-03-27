@@ -174,8 +174,8 @@ void set_waveform(struct wave* wave, enum waveform waveform);
 void tap_tempo_task(void);
 
 /// \brief      Computes the current wave output value
-/// \details    This function must be registered as a fast background task. Over time the output
-///             value follows the configured waveform.
+/// \details    This function must be called in a fast background task. Over time the output value
+///             follows the configured waveform.
 /// \param      wave
 ///                 the wave whose output should be computed
 /// \return     the current output value
