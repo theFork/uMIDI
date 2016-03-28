@@ -100,10 +100,22 @@ uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background
 //---------------- Custom commands ----------------//
 struct serial_command serial_commands[] = {
     {
+        .cmd_string = "backup",
+        .help_string = "Backs up all programs, one bank per line",
+        .handler = &exec_backup
+    },
+    {
+        .cmd_string = "load",
+        .help_string = "<n>\n"
+                       "Loads the specified program:\n"
+                       "<n> : program number",
+        .handler = &exec_load
+    },
+    {
         .cmd_string = "rel",
         .help_string = "<r> <s>\n"
                        "Manipulates the switchers relays:\n"
-                       "<l> : Relay to manipulate\n"
+                       "<r> : Relay to manipulate\n"
                        "      'tm'  = Tune/Mute\n"
                        "      'l1' = Loop 1\n"
                        "      'l2' = Loop 2\n"
@@ -118,16 +130,18 @@ struct serial_command serial_commands[] = {
         .handler = &exec_relay
     },
     {
+        .cmd_string = "restore",
+        .help_string = "<n> <d>\n"
+                       "Restores a bank given as a hex-string to EEPROM:\n"
+                       "<n> : Number of the bank to restore,\n"
+                       "      padded with 0 if smaller than 10\n"
+                       "<d> : Program bank data",
+        .handler = &exec_restore
+    },
+    {
         .cmd_string = "save",
         .help_string = "Saves the current program configuration",
         .handler = &exec_save
     },
-    {
-        .cmd_string = "load",
-        .help_string = "<n>\n"
-                       "Loads the specified program:\n"
-                       "<n> : program number",
-        .handler = &exec_load
-    }
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);

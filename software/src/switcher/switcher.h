@@ -34,11 +34,17 @@
 
 
 //---------------- functions and procedures ----------------//
+/// \brief      Handler for the `backup` command
+bool exec_backup(const char* command);
+
 /// \brief      Handler for the `load` command
 bool exec_load(const char* command);
 
 /// \brief      Handler for the `relays` command
 bool exec_relay(const char* command);
+
+/// \brief      Handler for the `restore` command
+bool exec_restore(const char* command);
 
 /// \brief      Handler for the `save` command
 bool exec_save(const char* command);

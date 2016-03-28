@@ -89,6 +89,20 @@ void execute_program(uint32_t program_data)
 
 }
 
+bool exec_backup(const char* command)
+{
+    if (strlen(command) != 6) {
+        usb_puts("Malformed command" USB_NEWLINE);
+        return false;
+    }
+
+    // Export all programs, one bank per line
+    for (uint8_t i=0; i < PROGRAM_BANK_COUNT; ++i) {
+        usb_puts(export_bank(i));
+    }
+    return true;
+}
+
 bool exec_load(const char* command)
 {
     // Abort if the command is malformed
@@ -180,6 +194,24 @@ bool exec_relay(const char* command)
     gpio_set(selected_gpio, action);
     return true;
 }
+
+bool exec_restore(const char* command)
+{
+    if (strlen(command) < 91 || command[7] != ' ' || command[10] != ' ') {
+        usb_puts("Malformed command" USB_NEWLINE);
+        return false;
+    }
+
+    // Extract program bank number
+    uint8_t number = strtol(&command[8], NULL, 16);
+    usb_printf("Restoring bank number #%u" USB_NEWLINE, number);
+
+    // Import and store bank
+    import_bank(number, &command[11]);
+
+    return true;
+}
+
 
 bool exec_save(const char* command)
 {
