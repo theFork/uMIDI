@@ -44,7 +44,7 @@ bool exec_relay(const char* command);
 bool exec_save(const char* command);
 
 /// \brief      Replace current program by given program_data and update relays accordingly
-void execute_program(uint16_t program_data);
+void execute_program(uint32_t program_data);
 
 ///< \brief     Callback for program changes
 void handle_program_change(uint8_t program);
