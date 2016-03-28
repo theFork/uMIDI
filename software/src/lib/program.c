@@ -24,8 +24,11 @@
  * EEPROM program storage service functions.
 */
 
+#include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <avr/eeprom.h>
+#include <avr/wdt.h>
 #include <util/delay.h>
 
 #include "gpio.h"
@@ -117,6 +120,28 @@ void enter_program(uint8_t number)
     current_program.number = number;
     current_program.data = read_program_data(number);
     execute_program(current_program.data);
+}
+
+#include "usb.h"
+void import_bank(const uint8_t bank, const char* data)
+{
+    // Abort if the supplied string is too short
+    if (strlen(data) < 8*PROGRAMS_PER_BANK) {
+        return;
+    }
+
+    uint8_t offset = bank * PROGRAMS_PER_BANK;
+    char* hex_dword = "        ";
+
+    // Store programs
+    usb_printf("hex digits: 0x%s" USB_NEWLINE, hex_dword);
+    for (uint8_t i=0; i < PROGRAMS_PER_BANK; ++i) {
+        strncpy(hex_dword, data, 8);
+        usb_printf("hex digits: 0x%s" USB_NEWLINE, hex_dword);
+        eeprom_write_dword(&program_data_storage[offset+i], strtoul(hex_dword, NULL, 16));
+        data += 8;
+        wdt_reset();
+    }
 }
 
 void init_program_module(uint32_t program_initializer_value, void (* const execute_program_callback)(uint32_t program_data))
