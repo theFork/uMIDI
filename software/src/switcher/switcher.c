@@ -76,7 +76,7 @@ void execute_program(uint16_t program_data)
     current_program.word = program_data;
     effective_program.word = program_data;
 
-    usb_printf("Applying relays configuration: %04x" USB_NEWLINE, current_program.word);
+    usb_printf("Applying relays configuration: 0x%02x" USB_NEWLINE, current_program.word);
 
     gpio_set(GPIO_OUT_TUNE_MUTE, current_program.bit.tuner);
     gpio_set(GPIO_OUT_LOOP1, current_program.bit.loop1);
@@ -197,11 +197,13 @@ void handle_program_change(uint8_t program)
 {
     enter_program(program);
     flash_led_multiple(&save_led, 1);
+    usb_printf("Entering program %u" USB_NEWLINE, program);
 }
 
 void unknown_midi_message_handler(void)
 {
     flash_led_multiple(&save_led, 2);
+    usb_puts("Ignoring unknown MIDI message");
 }
 
 void poll_switches(void)
