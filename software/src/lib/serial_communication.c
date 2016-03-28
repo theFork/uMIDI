@@ -160,6 +160,7 @@ static inline bool exec_update(const char * const command)
 {
     // Make sure the command is well-formed
     if (command[8] != ' ') {
+        return false;
     }
 
     // Parse size of incoming update packet
@@ -191,7 +192,7 @@ static inline bool exec_update(const char * const command)
     wdt_disable();
     uint8_t error_code = xboot_app_temp_erase();
     if (error_code != XB_SUCCESS) {
-        usb_printf("Error erasing temprary application section: %d" USB_NEWLINE, error_code);
+        usb_printf("Error erasing temporary application section: %d" USB_NEWLINE, error_code);
         return true;
     }
     wdt_reenable();

@@ -45,7 +45,10 @@
 #define ESCAPE_CHAR_CODE        27
 
 /// \brief      Maximum program size in number of pages
-#define MAX_PAGE_NUM            (PROGMEM_SIZE / SPM_PAGESIZE / 2 - 1)
+/// \details    - usable program space 136 KiB - 8 KiB boot section
+///             - one self-programming page is 256 B
+///             - the last page is in use by the bootloader and can therefore not be used
+#define MAX_PAGE_NUM            ((PROGMEM_SIZE - BOOT_SECTION_SIZE) / SPM_PAGESIZE / 2 - 1)
 
 /// \brief      Device reset timout in [s]
 #define RESET_TIMEOUT           2
