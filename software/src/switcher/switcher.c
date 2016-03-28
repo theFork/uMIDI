@@ -24,6 +24,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <avr/io.h>
+#include <avr/wdt.h>
+#include <util/delay.h>
+
+#include "lib/background_tasks.h"
 #include "lib/gpio.h"
 #include "lib/leds.h"
 #include "lib/program.h"
@@ -55,7 +60,11 @@ union program_data
     } bit;
 };
 
+/// \brief  Switch configuration of the current program
 static union program_data current_program;
+
+/// \brief  The current switch configuration
+static union program_data effective_program;
 
 
 ////////////////////////////////////////////////////////////////
@@ -65,8 +74,9 @@ static union program_data current_program;
 void execute_program(uint16_t program_data)
 {
     current_program.word = program_data;
+    effective_program.word = program_data;
 
-    usb_printf("Applying relais configuration: %04x" USB_NEWLINE, current_program.word);
+    usb_printf("Applying relays configuration: %04x" USB_NEWLINE, current_program.word);
 
     gpio_set(GPIO_OUT_TUNE_MUTE, current_program.bit.tuner);
     gpio_set(GPIO_OUT_LOOP1, current_program.bit.loop1);
@@ -77,57 +87,6 @@ void execute_program(uint16_t program_data)
     gpio_set(GPIO_OUT_SWITCH1, current_program.bit.switch1);
     gpio_set(GPIO_OUT_SWITCH2, current_program.bit.switch2);
 
-}
-
-/// \brief      Handler for the `led` command
-bool exec_led(const char* command)
-{
-    // Abort if the command is malformed
-    if (strlen(command) != 7 || command[3] != ' ' || command[5] != ' ') {
-        usb_puts("Malformed command" USB_NEWLINE);
-        return false;
-    }
-
-    // Parse LED(s) to manipulate
-    enum led led;
-    switch (command[4]) {
-    case 'g':
-        led = LED_GREEN;
-        break;
-
-    case 'r':
-        led = LED_RED;
-        break;
-
-    case '!':
-        led = LED_ALL;
-        break;
-
-    default:
-        usb_puts("No such LED" USB_NEWLINE);
-        return false;
-    }
-
-    // Parse and execute action
-    switch (command[6]) {
-    case 'b':
-        blink_led(led, F_TASK_SLOW);
-        break;
-
-    case 'f':
-        flash_led(led);
-        break;
-
-    case 't':
-        toggle_led(led);
-        break;
-
-    default:
-        usb_puts("No such action" USB_NEWLINE);
-        return false;
-    }
-
-    return true;
 }
 
 bool exec_load(const char* command)
@@ -162,7 +121,6 @@ bool exec_relay(const char* command)
     }
     // Loopers
     else if (command[4] == 'l') {
-        flash_led(LED_RED);
         switch (command[5]) {
             case '1':
                 selected_gpio = GPIO_OUT_LOOP1;
@@ -206,7 +164,6 @@ bool exec_relay(const char* command)
         }
     }
     else {
-        flash_led(LED_RED);
         usb_puts("Unrecognized relay" USB_NEWLINE);
         return false;
     }
@@ -215,10 +172,10 @@ bool exec_relay(const char* command)
     bool action = false;
     if (command[7] == 'a') {
         action = true;
-        current_program.word |= _BV(program_bit_index);
+        effective_program.word |= _BV(program_bit_index);
     }
     else {
-        current_program.word &=~ _BV(program_bit_index);
+        effective_program.word &=~ _BV(program_bit_index);
     }
     gpio_set(selected_gpio, action);
     return true;
@@ -232,12 +189,56 @@ bool exec_save(const char* command)
         return false;
     }
 
-    update_current_program(current_program.word);
+    update_current_program(effective_program.word);
     return true;
 }
 
 void handle_program_change(uint8_t program)
 {
-    flash_led(LED_RED);
     enter_program(program);
+    flash_led_multiple(&save_led, 1);
+}
+
+void unknown_midi_message_handler(void)
+{
+    flash_led_multiple(&save_led, 2);
+}
+
+void poll_switches(void)
+{
+    uint8_t switch_index;
+
+    // Handle save switch
+    if (poll_gpio_input(GPIO_IN_SAVE_SWITCH, GPIO_INPUT_PULLUP)) {
+        // Abort if the program is unchanged
+        if (current_program.word == effective_program.word) {
+            return;
+        }
+
+        current_program.word = effective_program.word;
+        update_current_program(current_program.word);
+        flash_led_multiple(&save_led, 3);
+        return;
+    }
+
+    // Handle program-related switches
+    for (switch_index=0; switch_index<8; ++switch_index) {
+        if (poll_gpio_input(*gpio_mappings[8+switch_index].pin, GPIO_INPUT_PULLUP)) {
+            usb_printf("Switch #%u was pressed" USB_NEWLINE, switch_index);
+
+            // Update current program
+            effective_program.word ^= _BV(switch_index);
+
+            // Toggle relays
+            gpio_toggle(*gpio_mappings[switch_index].pin);
+        }
+    }
+
+    // Indicate modified program
+    if (current_program.word != effective_program.word) {
+        blink_led(&save_led, F_TASK_SLOW/4);
+    }
+    else if (save_led.state.mode != LED_FLASH) {
+        set_led(&save_led, false);
+    }
 }

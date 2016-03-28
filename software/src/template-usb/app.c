@@ -51,18 +51,14 @@ bool exec_led(const char* command)
     }
 
     // Parse LED(s) to manipulate
-    enum led led;
+    struct led* led;
     switch (command[4]) {
     case 'g':
-        led = LED_GREEN;
+        led = &led_green;
         break;
 
     case 'r':
-        led = LED_RED;
-        break;
-
-    case '!':
-        led = LED_ALL;
+        led = &led_red;
         break;
 
     default:

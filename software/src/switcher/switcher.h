@@ -34,9 +34,6 @@
 
 
 //---------------- functions and procedures ----------------//
-/// \brief      Handler for the `led` command
-bool exec_led(const char* command);
-
 /// \brief      Handler for the `load` command
 bool exec_load(const char* command);
 
@@ -46,12 +43,17 @@ bool exec_relay(const char* command);
 /// \brief      Handler for the `save` command
 bool exec_save(const char* command);
 
-/// \brief      TODO
+/// \brief      Replace current program by given program_data and update relays accordingly
 void execute_program(uint16_t program_data);
 
 ///< \brief     Callback for program changes
 void handle_program_change(uint8_t program);
 
+///< \brief     Callback for unimplemented midi messages
+void unknown_midi_message_handler(void);
+
+///< \brief     Task for polling all switches and update current program
+void poll_switches(void);
 
 //---------------- EOF ----------------//
 #endif // _APP_H

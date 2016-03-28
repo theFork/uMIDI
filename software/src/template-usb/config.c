@@ -78,7 +78,6 @@ struct serial_command serial_commands[] = {
                        "<l> : LED to manipulate\n"
                        "      'g' = green LED\n"
                        "      'r' = red LED\n"
-                       "      '!' = both LEDs\n"
                        "<a> : LED mode / action\n"
                        "      'b' = blink\n"
                        "      'f' = flash\n"

@@ -48,20 +48,22 @@
 // Toggle switches
 #define GPIO_IN_TUNE_MUTE   gpio.header2.pin2
 #define GPIO_IN_LOOP1       gpio.header2.pin3
-#define GPIO_IN_LOOP3       gpio.header2.pin4
-#define GPIO_IN_LOOP4       gpio.header2.pin5
-#define GPIO_IN_LOOP5       gpio.header2.pin6
-#define GPIO_IN_LOOP6       gpio.header2.pin7
+#define GPIO_IN_LOOP2       gpio.header2.pin4
+#define GPIO_IN_LOOP3       gpio.header2.pin5
+#define GPIO_IN_LOOP4       gpio.header2.pin6
+#define GPIO_IN_LOOP5       gpio.header2.pin7
 #define GPIO_IN_SWITCH1     gpio.header2.pin8
 #define GPIO_IN_SWITCH2     gpio.header2.pin9
 
 // Save button (with led)
 #define GPIO_OUT_SAVE_LED   gpio.header3.pin2
-#define GPIO_IN_SAVE_SWITCH gpio.header2.pin3
+#define GPIO_IN_SAVE_SWITCH gpio.header3.pin3
 
 //---------------- constant declarations ----------------//
 extern struct gpio_mapping gpio_mappings[];
 extern uint8_t gpio_mappings_size;
+
+struct led save_led;
 
 extern struct midi_config midi_config;
 

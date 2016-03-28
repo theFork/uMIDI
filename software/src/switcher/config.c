@@ -60,15 +60,22 @@ struct gpio_mapping gpio_mappings[] = {
     { .pin = &gpio.header2.pin9, .type = GPIO_INPUT_PULLUP },   // Toggle Switch 2
 
     // GPIO3: "Save" toggle switch and LED
-    { .pin = &gpio.header3.pin2, .type = GPIO_OUTPUT       },   // "Save" LED
     { .pin = &gpio.header3.pin3, .type = GPIO_INPUT_PULLUP },   // "Save" toggle switch
 };
 uint8_t gpio_mappings_size = sizeof(gpio_mappings)/sizeof(struct gpio_mapping);
 
+//---------------- LEDs ----------------//
+struct led save_led = {
+    .pin = &gpio.header3.pin2,
+};
+
 //---------------- MIDI ----------------//
 struct midi_config midi_config = {
     .event_handlers = {
-        .program_change = handle_program_change
+        .program_change = handle_program_change,
+        .control_change = (void*) unknown_midi_message_handler,
+        .note_on = (void*) unknown_midi_message_handler,
+        .note_off = (void*) unknown_midi_message_handler,
     },
     .tx_channel = 1,
 };
@@ -86,25 +93,12 @@ uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background
 
 background_task_t low_frequency_tasks[] = {
     &update_leds,
+    &poll_switches,
 };
 uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);
 
 //---------------- Custom commands ----------------//
 struct serial_command serial_commands[] = {
-    {
-        .cmd_string = "led",
-        .help_string = "<l> <a>\n"
-                       "Manipulates the two on-board LEDs:\n"
-                       "<l> : LED to manipulate\n"
-                       "      'g' = green LED\n"
-                       "      'r' = red LED\n"
-                       "      '!' = both LEDs\n"
-                       "<a> : LED mode / action\n"
-                       "      'b' = blink\n"
-                       "      'f' = flash\n"
-                       "      't' = toggle",
-        .handler = &exec_led
-    },
     {
         .cmd_string = "rel",
         .help_string = "<r> <s>\n"

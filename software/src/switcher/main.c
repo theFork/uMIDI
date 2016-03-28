@@ -63,6 +63,8 @@ int main( void )
     init_usb_module();
     init_serial_communication(serial_commands, serial_commands_size);
 
+    register_led(&save_led);
+
     // Initial program has alway tune/mute activated
     init_program_module(0x01, &execute_program);
     execute_program(0x01);
@@ -73,9 +75,6 @@ int main( void )
     // enable interrupts
     PMIC.CTRL = PMIC_LOLVLEN_bm;
     sei();
-
-    // Blink green LED
-    blink_led(LED_GREEN, F_TASK_SLOW);
 
     // Main loop
     while (true) {

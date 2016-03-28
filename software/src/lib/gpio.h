@@ -124,6 +124,7 @@ void configure_gpio_pin(const struct gpio_pin* pin, enum gpio_type type);
 void init_gpio_module(const struct gpio_mapping mappings[], uint8_t mappings_size);
 
 /// \brief      Polls a GPIO input pin
+/// \details    Automatically de-bounces the pin if it is detected as active.
 /// \param      pin
 ///                 the GPIO input pin to poll
 /// \param      type
