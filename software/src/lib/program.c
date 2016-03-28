@@ -24,6 +24,7 @@
  * EEPROM program storage service functions.
 */
 
+#include <stdio.h>
 #include <avr/eeprom.h>
 #include <util/delay.h>
 
@@ -87,6 +88,22 @@ void copy_current_program_to(uint8_t target_program)
 {
     // Copy program
     write_program(target_program, current_program.data);
+}
+
+char* export_bank(const uint8_t bank)
+{
+    // Allocate static (!) string buffer:
+    // 2 characters for hexadecimal encoding of each byte of the program plus string termination
+    static char result_string[2*sizeof(uint32_t)*PROGRAMS_PER_BANK+1] = "";
+
+    // Format programs
+    uint8_t offset = bank * PROGRAMS_PER_BANK;
+    char* write_pointer = result_string;
+    for (uint8_t i=0; i < PROGRAMS_PER_BANK; ++i) {
+        snprintf(write_pointer, 9, "%08lx", eeprom_read_dword(&program_data_storage[offset+i]));
+        write_pointer += 8;
+    }
+    return result_string;
 }
 
 void enter_program(uint8_t number)

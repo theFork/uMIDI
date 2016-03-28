@@ -49,12 +49,17 @@
 
 
 //---------------- constants ----------------//
+/// \brief      The maximum number of program banks
+#define     PROGRAM_BANK_COUNT          12
+
 /// \brief      The maximum number of programs that can be stored
 #define     PROGRAM_COUNT               120
 
+/// \brief      The number of program per bank
+#define     PROGRAMS_PER_BANK           (PROGRAM_COUNT / PROGRAM_BANK_COUNT)
+
 
 //---------------- data types ----------------//
-
 /// \brief      Data structure for program information
 struct program
 {
@@ -76,6 +81,13 @@ void copy_current_bank_to(uint8_t target_bank);
 /// \param      target_program
 ///                 Target program number [0..119].
 void copy_current_program_to(uint8_t target_program);
+
+/// \brief      Exports a program bank
+/// \details    Reads the data from EEPROM and converts it to a string of hexadecimal digits.
+/// \param      number
+///                 the number of the program bank to export
+/// \returns    the programs stored in EEPROM as a hex-string
+char* export_bank(const uint8_t number);
 
 /// \brief      Loads and executes the specified program.
 /// \details    Reads the new program data from EEPROM, updates the internal state and calls the
