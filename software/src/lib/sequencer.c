@@ -89,7 +89,7 @@ void configure_sequencer_channel(const enum sequencer_channel_number number, str
     configure_tap_tempo_wave(&channel->wave);
 }
 
-char* dump_pattern(const enum sequencer_pattern_number pattern_index)
+char* export_pattern(const enum sequencer_pattern_number pattern_index)
 {
     // Allocate static (!) string buffer:
     // 2 characters for hexadecimal encoding of each byte of the pattern plus string termination
@@ -136,7 +136,7 @@ void overwrite_pattern(const enum sequencer_pattern_number pattern_index, const 
     }
 }
 
-void restore_pattern(const enum sequencer_pattern_number pattern_index, const char* data)
+void import_pattern(const enum sequencer_pattern_number pattern_index, const char* data)
 {
     struct sequencer_pattern pattern = {0,};
     char* hex_byte = "  ";

@@ -156,9 +156,9 @@ void configure_sequencer_channel(enum sequencer_channel_number number, struct se
 /// \brief      Dumps a sequencer pattern
 /// \details    Reads the data from EEPROM and converts it to a string of hexadecimal digits.
 /// \param      number
-///                 number of the pattern to dump
+///                 number of the pattern to export
 /// \returns    the pattern stored in EEPROM as a hex-string
-char* dump_pattern(enum sequencer_pattern_number number);
+char* export_pattern(enum sequencer_pattern_number number);
 
 /// \brief      Initializes / Restores "factory-default" patterns
 /// \details    Copies a list of patterns to the start of the EEPROM pattern storage.
@@ -182,7 +182,7 @@ void overwrite_pattern(enum sequencer_pattern_number number, const struct sequen
 ///                 number of the pattern to overwrite
 /// \param      data
 ///                 the new pattern to store as a string of hexadecimal digits
-void restore_pattern(const enum sequencer_pattern_number number, const char* data);
+void import_pattern(enum sequencer_pattern_number number, const char* data);
 
 /// \brief      Selects a sequencer channel's pattern
 /// \param      channel
