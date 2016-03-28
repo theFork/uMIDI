@@ -35,7 +35,7 @@
 
 /// \brief      Size of the command buffer of the shell
 /// \details    Must be int the range of `uint8_t`.
-#define CMD_BUFFER_SIZE         80
+#define CMD_BUFFER_SIZE         100
 
 /// \brief      Number of recent commands in the history
 /// \details    Must be int the range of `uint8_t`.

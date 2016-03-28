@@ -24,7 +24,11 @@
  * EEPROM program storage service functions.
 */
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include <avr/eeprom.h>
+#include <avr/wdt.h>
 #include <util/delay.h>
 
 #include "gpio.h"
@@ -37,16 +41,16 @@
 ////////////////////////////////////////////////////////////////
 
 /// \brief      EEPROM program storage
-static uint16_t program_data_storage[PROGRAM_COUNT] EEMEM;
+static uint32_t program_data_storage[PROGRAM_COUNT] EEMEM;
 
 /// \brief      Initialization value for empty programs
-static uint16_t program_initializer;
+static uint32_t program_initializer;
 
 /// \brief      Current program
 static struct program current_program;
 
 /// \brief      Callback for program execution
-static void (*execute_program)(uint16_t);
+static void (*execute_program)(uint32_t);
 
 
 
@@ -60,7 +64,7 @@ void copy_current_bank_to(uint8_t target_bank)
     uint8_t sourceBank = ( (current_program.number+1) / 10 ) * 10;
 
     // Write programs
-    uint16_t data;
+    uint32_t data;
     uint8_t program_index;
     for (program_index=0; program_index<10; program_index++) {
         // Bank 0 contains only 9 programs, so we have to skip certain actions
@@ -89,6 +93,22 @@ void copy_current_program_to(uint8_t target_program)
     write_program(target_program, current_program.data);
 }
 
+char* export_bank(const uint8_t bank)
+{
+    // Allocate static (!) string buffer:
+    // 2 characters for hexadecimal encoding of each byte of the program plus string termination
+    static char result_string[2*sizeof(uint32_t)*PROGRAMS_PER_BANK+1] = "";
+
+    // Format programs
+    uint8_t offset = bank * PROGRAMS_PER_BANK;
+    char* write_pointer = result_string;
+    for (uint8_t i=0; i < PROGRAMS_PER_BANK; ++i) {
+        snprintf(write_pointer, 9, "%08lx", eeprom_read_dword(&program_data_storage[offset+i]));
+        write_pointer += 8;
+    }
+    return result_string;
+}
+
 void enter_program(uint8_t number)
 {
     // If the program has not changed, do nothing
@@ -102,7 +122,29 @@ void enter_program(uint8_t number)
     execute_program(current_program.data);
 }
 
-void init_program_module(uint16_t program_initializer_value, void (* const execute_program_callback)(uint16_t program_data))
+#include "usb.h"
+void import_bank(const uint8_t bank, const char* data)
+{
+    // Abort if the supplied string is too short
+    if (strlen(data) < 8*PROGRAMS_PER_BANK) {
+        return;
+    }
+
+    uint8_t offset = bank * PROGRAMS_PER_BANK;
+    char* hex_dword = "        ";
+
+    // Store programs
+    usb_printf("hex digits: 0x%s" USB_NEWLINE, hex_dword);
+    for (uint8_t i=0; i < PROGRAMS_PER_BANK; ++i) {
+        strncpy(hex_dword, data, 8);
+        usb_printf("hex digits: 0x%s" USB_NEWLINE, hex_dword);
+        eeprom_write_dword(&program_data_storage[offset+i], strtoul(hex_dword, NULL, 16));
+        data += 8;
+        wdt_reset();
+    }
+}
+
+void init_program_module(uint32_t program_initializer_value, void (* const execute_program_callback)(uint32_t program_data))
 {
     program_initializer = program_initializer_value;
     execute_program = execute_program_callback;
@@ -110,12 +152,12 @@ void init_program_module(uint16_t program_initializer_value, void (* const execu
     current_program.data = program_initializer;
 }
 
-uint16_t read_program_data(uint8_t number)
+uint32_t read_program_data(uint8_t number)
 {
-    return eeprom_read_word(&program_data_storage[number]);
+    return eeprom_read_dword(&program_data_storage[number]);
 }
 
-void update_current_program(uint16_t program_data)
+void update_current_program(uint32_t program_data)
 {
     current_program.data = program_data;
     write_program(current_program.number, program_data);
@@ -140,7 +182,7 @@ void wipe_current_program(void)
     enter_program(current_program.number);
 }
 
-void write_program(uint8_t number, uint16_t data)
+void write_program(uint8_t number, uint32_t data)
 {
-    eeprom_write_word(&program_data_storage[number], data);
+    eeprom_write_dword(&program_data_storage[number], data);
 }

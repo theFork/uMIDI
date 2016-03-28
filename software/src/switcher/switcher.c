@@ -71,7 +71,7 @@ static union program_data effective_program;
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void execute_program(uint16_t program_data)
+void execute_program(uint32_t program_data)
 {
     current_program.word = program_data;
     effective_program.word = program_data;
