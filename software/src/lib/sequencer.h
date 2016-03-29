@@ -153,6 +153,15 @@ midi_value_t adjust_sequencer_speed(struct sequencer_channel* channel, int8_t di
 /// \see        register_tap
 void configure_sequencer_channel(enum sequencer_channel_number number, struct sequencer_channel* channel);
 
+/// \brief      Copies a sequencer pattern
+/// \details    Duplicates the pattern at the source index and overwrites the pattern at the
+///             destination index with it.
+/// \param      source
+///                 number of the pattern to copy
+/// \param      destination
+///                 number of the pattern to overwrite
+void copy_pattern(enum sequencer_pattern_number source, enum sequencer_pattern_number destination);
+
 /// \brief      Dumps a sequencer pattern
 /// \details    Reads the data from EEPROM and converts it to a string of hexadecimal digits.
 /// \param      number
@@ -220,6 +229,12 @@ bool toggle_sequencer(struct sequencer_channel* channel);
 ///             an internal clock source, so it must be registered as a fast background task.
 /// \see        update_wave
 void update_sequencer(void);
+
+/// \brief      Wipes a sequencer pattern
+/// \details    Zeroes out memory at the given sequencer pattern index.
+/// \param      number
+///                 number of the pattern to wipe
+void wipe_pattern(enum sequencer_pattern_number number);
 
 //---------------- EOF ----------------//
 #endif // _SEQUENCER_H

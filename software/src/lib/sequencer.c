@@ -89,6 +89,18 @@ void configure_sequencer_channel(const enum sequencer_channel_number number, str
     configure_tap_tempo_wave(&channel->wave);
 }
 
+void copy_pattern(const enum sequencer_pattern_number source, const enum sequencer_pattern_number destination)
+{
+    // Copy pattern to temporary buffer
+    struct sequencer_pattern pattern = {0,};
+    pattern.length = get_pattern_length(source);
+    for (uint8_t step_index=0; step_index < pattern.length; ++step_index) {
+        pattern.steps[step_index] = get_pattern_step(source, step_index);
+    }
+
+    overwrite_pattern(destination, &pattern);
+}
+
 char* export_pattern(const enum sequencer_pattern_number pattern_index)
 {
     // Allocate static (!) string buffer:
@@ -238,4 +250,12 @@ void update_sequencer(void)
             stop_sequencer(channel);
         }
     }
+}
+
+void wipe_pattern(const enum sequencer_pattern_number pattern_index)
+{
+    struct sequencer_pattern pattern = {0,};
+    pattern.length = SEQUENCER_STEPS_PER_PATTERN;
+    overwrite_pattern(pattern_index, &pattern);
+    set_pattern_length(pattern_index, 0);
 }
