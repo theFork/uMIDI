@@ -1,4 +1,5 @@
-/// \file /// \brief  Handling of the on-board LEDs
+/// \file
+/// \brief  Handling of the on-board LEDs
 
 /*
  * Copyright 2015 Sebastian Neuser
@@ -26,24 +27,46 @@
 
 
 ////////////////////////////////////////////////////////////////
-//              G L O B A L   V A R I A B L E S               //
-////////////////////////////////////////////////////////////////
-
-struct led* led_red;
-
-struct led* led_green;
-
-
-
-////////////////////////////////////////////////////////////////
 //             P R I V A T E   V A R I A B L E S              //
 ////////////////////////////////////////////////////////////////
 
-///< Internal array of pointers to known leds
+/// \brief      Internal array of pointers to known leds
 static struct led * leds[32] = { 0, };
 
-///< Number of registered LEDs
+/// \brief      Number of registered LEDs
 static uint8_t registered_leds_count = 0;
+
+/// \brief      The GPIO pin the green LED is connected to
+static const struct gpio_pin green_led_pin = {
+    .port = &PORTE,
+    .bit  = 1
+};
+
+/// \brief      The green on-board LED
+static struct led green_led = {
+    .pin = &green_led_pin,
+};
+
+/// \brief      The GPIO pin the red LED is connected to
+static const struct gpio_pin red_led_pin = {
+    .port = &PORTE,
+    .bit  = 0
+};
+
+/// \brief      The red on-board LED
+static struct led red_led = {
+    .pin = &red_led_pin,
+};
+
+
+
+////////////////////////////////////////////////////////////////
+//              G L O B A L   V A R I A B L E S               //
+////////////////////////////////////////////////////////////////
+
+struct led* led_green = &green_led;
+
+struct led* led_red   = &red_led;
 
 
 
@@ -52,11 +75,11 @@ static uint8_t registered_leds_count = 0;
 ////////////////////////////////////////////////////////////////
 
 /// \brief          Enables or disables an LED by writing the corresponding GPIO output register
-/// \param      pin
+/// \param      led
 ///                 the LED to enable / disable
 /// \param      value
 ///                 `true` enables the LED; `false` disables it
-static inline void apply_led(struct led * const led , bool value)
+static inline void apply_led(struct led * const led, bool value)
 {
     // Update state varable
     led->state.active = value;
@@ -67,7 +90,7 @@ static inline void apply_led(struct led * const led , bool value)
 
 /// \brief      Initializes or updates an LED's blinking mode
 /// \details    Aborts if neither mode nor prescaler have changed
-/// \param      led
+/// \param      state
 ///                 state variable of the led
 /// \param      prescaler
 ///                 Prescaler for the blinking frequency
@@ -93,12 +116,8 @@ static void set_or_update_blinking_led_state(struct led_state * const state, uin
 void init_leds_module(void)
 {
     // Register onboard LEDs
-    const struct gpio_pin green_led_pin = { .port = &PORTE, .bit = 0 };
-    struct led green_led_tmp = { .pin = &green_led_pin, };
-    const struct gpio_pin red_led_pin = { .port = &PORTE, .bit = 1 };
-    struct led red_led_tmp = { .pin = &red_led_pin, };
-    register_led(&green_led_tmp);
-    register_led(&red_led_tmp);
+    register_led(led_green);
+    register_led(led_red);
 }
 
 void register_led(struct led * const led)

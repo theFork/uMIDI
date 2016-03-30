@@ -54,11 +54,11 @@ bool exec_led(const char* command)
     struct led* led;
     switch (command[4]) {
     case 'g':
-        led = &led_green;
+        led = led_green;
         break;
 
     case 'r':
-        led = &led_red;
+        led = led_red;
         break;
 
     default:
