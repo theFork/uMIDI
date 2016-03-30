@@ -1,7 +1,7 @@
 /**
 \page midi_pinout MIDI pinout
 
-\section intro Introduction
+\section midi_pinout_intro Introduction
 Purpose of this document is
     - to provide the standard MIDI connector and cable pinout and also
     - define electrical characteristics and a pinout power over MIDI.
