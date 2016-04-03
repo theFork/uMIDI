@@ -225,7 +225,15 @@ bool exec_save(const char* command)
 
 void handle_program_change(uint8_t program)
 {
-    enter_program(program);
+    // If the current program was modified and should be loaded again,
+    // re-apply the configuration directly without reading from EEPROM again.
+    if (current_program.dword != effective_program.dword) {
+        execute_program(current_program.dword);
+    }
+    else {
+        enter_program(program);
+    }
+
     flash_led_multiple(&save_led, 1);
     usb_printf("Entering program %u" USB_NEWLINE, program);
 }
