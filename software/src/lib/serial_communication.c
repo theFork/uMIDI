@@ -282,7 +282,7 @@ static inline void print_command_from_history(const int8_t offset)
     // Overwrite previously printed command
     static uint8_t last_cmd_length = 0;
     for (int i=0; i < last_cmd_length; ++i) {
-        usb_puts("\b \b");
+        usb_printf("\b \b");
         cmd_buffer[cmd_buffer_index] = '\0';
     }
 
@@ -363,7 +363,7 @@ static inline void process_command_char(void)
 
     // Clear last character and rewind buffer index if backspace was received
     if (data == '\b') {
-        usb_puts(" \b");
+        usb_printf(" \b");
         if (cmd_buffer_index > 0) {
             --cmd_buffer_index;
         }
