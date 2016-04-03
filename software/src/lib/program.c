@@ -152,7 +152,8 @@ void init_program_module(uint32_t program_initializer_value, void (* const execu
 {
     program_initializer = program_initializer_value;
     execute_program = execute_program_callback;
-    current_program.number = 0;
+    // Initialize program number with an invalid value
+    current_program.number = PROGRAM_COUNT;
     current_program.data = program_initializer;
 }
 
