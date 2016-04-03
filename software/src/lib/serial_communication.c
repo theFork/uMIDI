@@ -291,7 +291,7 @@ static inline void print_command_from_history(const int8_t offset)
     cmd_buffer_index = strlen(cmd_buffer);
 
     // Print out command and save command length for the next invocation
-    usb_puts(cmd_buffer);
+    usb_printf(cmd_buffer);
     last_cmd_length = cmd_buffer_index;
 }
 
