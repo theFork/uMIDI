@@ -45,7 +45,7 @@
 union program_data
 {
     // Either raw data in the memory ...
-    uint16_t word;
+    uint16_t dword;
 
     // ... or named bits
     struct {
@@ -73,10 +73,10 @@ static union program_data effective_program;
 
 void execute_program(uint32_t program_data)
 {
-    current_program.word = program_data;
-    effective_program.word = program_data;
+    current_program.dword = program_data;
+    effective_program.dword = program_data;
 
-    usb_printf("Applying relays configuration: 0x%02x" USB_NEWLINE, current_program.word);
+    usb_printf("Applying relays configuration: 0x%02x" USB_NEWLINE, current_program.dword);
 
     gpio_set(GPIO_OUT_TUNE_MUTE, current_program.bit.tuner);
     gpio_set(GPIO_OUT_LOOP1, current_program.bit.loop1);
@@ -186,10 +186,10 @@ bool exec_relay(const char* command)
     bool action = false;
     if (command[7] == 'a') {
         action = true;
-        effective_program.word |= _BV(program_bit_index);
+        effective_program.dword |= _BV(program_bit_index);
     }
     else {
-        effective_program.word &=~ _BV(program_bit_index);
+        effective_program.dword &=~ _BV(program_bit_index);
     }
     gpio_set(selected_gpio, action);
     return true;
@@ -221,7 +221,7 @@ bool exec_save(const char* command)
         return false;
     }
 
-    update_current_program(effective_program.word);
+    update_current_program(effective_program.dword);
     return true;
 }
 
@@ -243,13 +243,13 @@ void poll_switches(void)
     // Handle save switch
     if (poll_gpio_input_timeout(GPIO_IN_SAVE_SWITCH, GPIO_INPUT_PULLUP, 10) == GPIO_INPUT_EVENT_LONG) {
         // Abort if the program is unchanged
-        if (current_program.word == effective_program.word) {
+        if (current_program.dword == effective_program.dword) {
             return;
         }
 
         usb_puts("Saving program");
-        current_program.word = effective_program.word;
-        update_current_program(current_program.word);
+        current_program.dword = effective_program.dword;
+        update_current_program(current_program.dword);
         flash_led_multiple(&save_led, 3);
         return;
     }
@@ -260,7 +260,7 @@ void poll_switches(void)
             usb_printf("Switch #%u was pressed" USB_NEWLINE, switch_index);
 
             // Update current program
-            effective_program.word ^= _BV(switch_index);
+            effective_program.dword ^= _BV(switch_index);
 
             // Toggle relays
             gpio_toggle(*gpio_mappings[switch_index].pin);
@@ -268,7 +268,7 @@ void poll_switches(void)
     }
 
     // Indicate modified program
-    if (current_program.word != effective_program.word) {
+    if (current_program.dword != effective_program.dword) {
         blink_led(&save_led, F_TASK_SLOW/4);
     }
     else if (save_led.state.mode != LED_FLASH) {

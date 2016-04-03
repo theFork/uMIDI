@@ -66,8 +66,8 @@ int main( void )
     register_led(&save_led);
 
     // Initial program has alway tune/mute activated
-    init_program_module(0x01, &execute_program);
-    execute_program(0x01);
+    init_program_module(0x0000, &execute_program);
+    execute_program(0x0001);
 
     // set watchdog for 128ms
     wdt_enable(WDT_PER_128CLK_gc);
