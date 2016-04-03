@@ -102,10 +102,11 @@ void enter_program(uint8_t number);
 /// \brief      Imports and stores a program bank given as a hex-string
 /// \details    Overwrites stored program data!
 /// \param      number
-///                 the number of the program bank to import
+///                 the number of the program bank to import [0..11]
 /// \param      data
 ///                 the program bank to store as a string of hexadecimal digits
-void import_bank(const uint8_t number, const char* data);
+/// \returns    `true` if sanity checks passed
+bool import_bank(const uint8_t number, const char* data);
 
 /// \brief      Initializes the program storage module.
 /// \details    Stores the specified program data initialization word, used in the wipe functions

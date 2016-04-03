@@ -122,11 +122,16 @@ void enter_program(uint8_t number)
     execute_program(current_program.data);
 }
 
-void import_bank(const uint8_t bank, const char* data)
+bool import_bank(const uint8_t bank, const char* data)
 {
     // Abort if the supplied string is too short
     if (strlen(data) < 8*PROGRAMS_PER_BANK) {
-        return;
+        return false;
+    }
+
+    // Abort if the bank index is too big
+    if (bank > 11) {
+        return false;
     }
 
     uint8_t offset = bank * PROGRAMS_PER_BANK;
@@ -139,6 +144,8 @@ void import_bank(const uint8_t bank, const char* data)
         data += 8;
         wdt_reset();
     }
+
+    return true;
 }
 
 void init_program_module(uint32_t program_initializer_value, void (* const execute_program_callback)(uint32_t program_data))
