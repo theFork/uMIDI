@@ -203,13 +203,11 @@ bool exec_restore(const char* command)
     }
 
     // Extract program bank number
-    uint8_t number = strtol(&command[8], NULL, 16);
+    uint8_t number = strtol(&command[8], NULL, 10);
     usb_printf("Restoring bank number #%u" USB_NEWLINE, number);
 
     // Import and store bank
-    import_bank(number, &command[11]);
-
-    return true;
+    return import_bank(number, &command[11]);
 }
 
 
