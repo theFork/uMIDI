@@ -96,6 +96,12 @@ bool exec_backup(const char* command)
         return false;
     }
 
+    // Draw ruler
+    for (uint8_t i=0; i < PROGRAMS_PER_BANK; ++i) {
+        usb_printf("|-------");
+    }
+    usb_printf(USB_NEWLINE);
+
     // Export all programs, one bank per line
     for (uint8_t i=0; i < PROGRAM_BANK_COUNT; ++i) {
         usb_puts(export_bank(i));
