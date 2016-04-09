@@ -33,6 +33,8 @@ There are two modes, the
 - If it is a program change:
     - Load corresponding program
     - Flash save LED once
+- If it is a note on/off:
+    - See Kill switch support
 - Else:
     - Flash save LED twice
 
@@ -57,9 +59,40 @@ In micro mode the save LED is constanty on.
 See macro mode? Use to cycle through programs? Or send some MIDI packets?
 
 ### Event: MIDI packet received
-TODO
+- If it is a control change:
+    - TODO
+- If it is a note on/off:
+    - See Kill switch support
+- Else:
+    - Flash save LED twice
 
 ### Event: Save Switch pressed
 - Enter macro mode
 - Keep current configuration (i.e. the save LED blinks due to a modified program)
+
+## Kill switch support
+The following procedure is conducted when receiving a note on/off packet:
+- If it is a note on
+    - If the current program has kill switch support *and* the note on value corresponds to the configured value
+        - Activate tune/mute (mute the signal)
+        - Don't modify the other switches
+- If it is a note off
+    - If the current program has kill switch support *and* the note on value corresponds to the configured value
+        - Deactivate tune/mute
+        - Don't modify the other switches
+Due to the lack of an appropriate human-switcher hardware interface, kill switch support can only be configured using the serial console.
+
+## Serial console
+The serial console should implement the following features:
+
+### Backup and restore
+- Backup/Dump entire configuration
+- Backup/Dump a single bank
+- Restore entire configuration
+- Restore a single bank
+
+### Kill switch configuration
+For each program the user should be able to configure
+    - whether or not the kill switch is enabled and
+    - which note value triggers it.
 */
