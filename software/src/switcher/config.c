@@ -134,7 +134,6 @@ struct serial_command serial_commands[] = {
         .help_string = "<n> <d>\n"
                        "Restores a bank given as a hex-string to EEPROM:\n"
                        "<n> : Number of the bank to restore,\n"
-                       "      padded with 0 if smaller than 10\n"
                        "<d> : Program bank data",
         .handler = &exec_restore
     },

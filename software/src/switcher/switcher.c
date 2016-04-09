@@ -197,8 +197,23 @@ bool exec_relay(const char* command)
 
 bool exec_restore(const char* command)
 {
-    if (strlen(command) < 91 || command[7] != ' ' || command[10] != ' ') {
+    // Command sanity check
+    size_t command_length = strlen(command);
+    if (command_length < 90 || command[7] != ' ') {
         usb_puts("Malformed command" USB_NEWLINE);
+        return false;
+    }
+
+    // Check program number digit count
+    uint8_t digit_count = 0;
+    if (command[9] == ' ' && command_length == 90) {
+        digit_count = 1;
+    }
+    else if (command[10] == ' ' && command_length == 91) {
+        digit_count = 2;
+    }
+    else {
+        usb_puts("Malformed command (PC number digit count check)" USB_NEWLINE);
         return false;
     }
 
@@ -207,7 +222,7 @@ bool exec_restore(const char* command)
     usb_printf("Restoring bank number #%u" USB_NEWLINE, number);
 
     // Import and store bank
-    return import_bank(number, &command[11]);
+    return import_bank(number, &command[9+digit_count]);
 }
 
 
