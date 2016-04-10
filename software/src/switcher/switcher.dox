@@ -13,7 +13,7 @@
 # Control panel
 There are nine illuminated momentary switches on the control panel:
 
-- 1x Mute/Tune (red)
+- 1x Tune/Mute (red)
 - 5x Looper (green)
 - 2x Switch (blue, small)
 - 1x Save (red, small)
@@ -28,13 +28,36 @@ There are two modes, the
     - macro mode in which the switcher enters programs according to received program change packets and the
     - micro mode which allows controlling the separate relays using control change packets.
 
+## Program storage
+The library offers 4 bytes per program. These will be used as follows.
+
+### Byte 0 : Switch configuration
+Bits | Function
+-----|----------------
+0    | Tune/Mute
+1:5  | Looper 1-5
+6:7  | Switch 1 and 2
+
+###Byte 1 : Reserved
+May be used for further switches
+
+###Byte 2 : Reserved
+
+###Byte 3 : Toggle configuration
+Bits | Function
+-----|------------------------------------
+0    | Toggle Tune/Mute
+1:2  | Toggle Switch 1-2
+3    | Reserved for a fourth toggle output
+4:7  | Reserved
+
 ## Macro mode
 ### Event: MIDI packet received
 - If it is a program change:
     - Load corresponding program
     - Flash save LED once
 - If it is a note on/off:
-    - See Kill switch support
+    - See toggle outputs
 - Else:
     - Flash save LED twice
 
@@ -62,7 +85,7 @@ See macro mode? Use to cycle through programs? Or send some MIDI packets?
 - If it is a control change:
     - TODO
 - If it is a note on/off:
-    - See Kill switch support
+    - See toggle outputs
 - Else:
     - Flash save LED twice
 
@@ -70,17 +93,15 @@ See macro mode? Use to cycle through programs? Or send some MIDI packets?
 - Enter macro mode
 - Keep current configuration (i.e. the save LED blinks due to a modified program)
 
-## Kill switch support
+## Toggle outputs
 The following procedure is conducted when receiving a note on/off packet:
+- Select outputs from the toggle output configuration nibble of the current program
 - If it is a note on
-    - If the current program has kill switch support *and* the note on value corresponds to the configured value
-        - Activate tune/mute (mute the signal)
-        - Don't modify the other switches
+    - Drive corresponding toggle outputs high
 - If it is a note off
-    - If the current program has kill switch support *and* the note on value corresponds to the configured value
-        - Deactivate tune/mute
-        - Don't modify the other switches
-Due to the lack of an appropriate human-switcher hardware interface, kill switch support can only be configured using the serial console.
+    - Set corresponding toggle outputs low
+
+Due to the lack of an appropriate human-switcher hardware interface, the toggle outputs can only be configured using the serial console.
 
 ## Serial console
 The serial console should implement the following features:
@@ -91,8 +112,6 @@ The serial console should implement the following features:
 - Restore entire configuration
 - Restore a single bank
 
-### Kill switch configuration
-For each program the user should be able to configure
-    - whether or not the kill switch is enabled and
-    - which note value triggers it.
+### Toggle configuration
+For each program the user should be able to configure the four toggle configuration bits mentioned above.
 */
