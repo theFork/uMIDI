@@ -45,8 +45,7 @@
 union program_data
 {
     // Either raw data in the memory ...
-    // FIXME WTF?!
-    uint16_t dword;
+    uint32_t dword;
 
     // ... or named bits
     struct {
