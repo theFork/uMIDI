@@ -244,6 +244,42 @@ bool exec_save(const char* command)
     return true;
 }
 
+bool exec_toggle(const char* command)
+{
+    // Command 'toggle <i> <b>' with i and b one character
+
+    // Abort if the command is malformed
+    if (strlen(command) != 10 || command[6] != ' ' || command[8] != ' ') {
+        usb_puts("Malformed command" USB_NEWLINE);
+        return false;
+    }
+
+    // Check id range
+    uint8_t toggle_output_id = strtol(&command[7], NULL, 10);
+    if (toggle_output_id > 3) {
+        usb_puts("Inappropriate id [0-3]" USB_NEWLINE);
+        return false;
+    }
+
+    // Modify effective program
+    if (command[9] == 'd') {
+        // Deactivate
+        // TODO
+    }
+    else if (command[9] == 'a') {
+        // Activate
+        // TODO
+    }
+    else {
+        usb_puts("Unrecognized behaviour!" USB_NEWLINE);
+        return false;
+    }
+
+    // Save
+    // TODO
+    return true;
+}
+
 void handle_program_change(uint8_t program)
 {
     // If the current program was modified and should be loaded again,

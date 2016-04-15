@@ -74,6 +74,7 @@ struct midi_config midi_config = {
     .event_handlers = {
         .program_change = handle_program_change,
         .control_change = (void*) unknown_midi_message_handler,
+        //TODO
         .note_on = (void*) unknown_midi_message_handler,
         .note_off = (void*) unknown_midi_message_handler,
     },
@@ -141,6 +142,20 @@ struct serial_command serial_commands[] = {
         .cmd_string = "save",
         .help_string = "Saves the current program configuration",
         .handler = &exec_save
+    },
+    {
+        .cmd_string = "toggle",
+        .help_string = "<i> <b>\n"
+                       "Configures a toggle output for the current program:\n"
+                       "<i> : Toggle output id [0-3]\n"
+                       "      '0'  = Tune/Mute\n"
+                       "      '1' = Switch 1\n"
+                       "      '2' = Switch 2\n"
+                       "      '3' = Reserved...\n"
+                       "<b> : Output behaviour\n"
+                       "      'a' = activate output\n"
+                       "      'd' = deactivate output",
+        .handler = &exec_toggle
     },
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);

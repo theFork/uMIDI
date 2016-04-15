@@ -49,6 +49,9 @@ bool exec_restore(const char* command);
 /// \brief      Handler for the `save` command
 bool exec_save(const char* command);
 
+/// \brief      Handler for the `toggle` command
+bool exec_toggle(const char* command);
+
 /// \brief      Replace current program by given program_data and update relays accordingly
 void execute_program(uint32_t program_data);
 
