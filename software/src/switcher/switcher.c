@@ -45,10 +45,12 @@
 union program_data
 {
     // Either raw data in the memory ...
+    // FIXME WTF?!
     uint16_t dword;
 
     // ... or named bits
     struct {
+        // Byte #0 - Output switches and loops
         bool tuner      : 1;
         bool loop1      : 1;
         bool loop2      : 1;
@@ -57,6 +59,23 @@ union program_data
         bool loop5      : 1;
         bool switch1    : 1;
         bool switch2    : 1;
+
+        // Byte #1 - Reserved for further outputs
+        uint8_t reserved1      : 8;
+
+        // Byte #2 - Reserved
+        uint8_t reserved2      : 8;
+
+        // Byte #3 - Toggle outputs configuration
+        bool toggle_tune_mute   : 1;
+        bool toggle_switch1     : 1;
+        bool toggle_switch2     : 1;
+        bool toggle_reserved    : 1;
+        bool reserved3_4        : 1;
+        bool reserved3_5        : 1;
+        bool reserved3_6        : 1;
+        bool reserved3_7        : 1;
+
     } bit;
 };
 
