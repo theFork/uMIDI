@@ -281,12 +281,12 @@ bool exec_toggle(const char* command)
 
     // Modify effective program
     if (command[9] == 'd') {
-        // Deactivate
-        // TODO
+        // Deactivate selected toggle output
+        effective_program.dword &= ~(0x01000000 << toggle_output_id);
     }
     else if (command[9] == 'a') {
-        // Activate
-        // TODO
+        // Activate selected toggle output
+        effective_program.dword |= 0x01000000 << toggle_output_id;
     }
     else {
         usb_puts("Unrecognized behaviour!" USB_NEWLINE);
@@ -294,7 +294,9 @@ bool exec_toggle(const char* command)
     }
 
     // Save
-    // TODO
+    current_program.dword = effective_program.dword;
+    update_current_program(effective_program.dword);
+    usb_puts("Successfully modified toggle output behaviour" USB_NEWLINE);
     return true;
 }
 
