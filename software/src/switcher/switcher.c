@@ -315,6 +315,34 @@ void handle_program_change(uint8_t program)
     usb_printf("Entering program %u" USB_NEWLINE, program);
 }
 
+void handle_note_on(midi_value_t note)
+{
+    // Turn on configured toggle outputs
+    if (current_program.bit.toggle_tune_mute) {
+        gpio_set(GPIO_OUT_TUNE_MUTE, true);
+    }
+    if (current_program.bit.toggle_switch1) {
+        gpio_set(GPIO_OUT_SWITCH1, true);
+    }
+    if (current_program.bit.toggle_switch2) {
+        gpio_set(GPIO_OUT_SWITCH2, true);
+    }
+
+    // Flash LED and log
+    flash_led_multiple(&save_led, 1);
+    usb_printf("Note on" USB_NEWLINE);
+}
+
+void handle_note_off(midi_value_t note)
+{
+    // Restore current program (will turn off all toggle outputs)
+    execute_program(current_program.dword);
+
+    // Flash LED and log
+    flash_led_multiple(&save_led, 1);
+    usb_printf("Note off" USB_NEWLINE);
+}
+
 void unknown_midi_message_handler(void)
 {
     flash_led_multiple(&save_led, 2);

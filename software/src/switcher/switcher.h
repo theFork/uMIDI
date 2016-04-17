@@ -58,6 +58,12 @@ void execute_program(uint32_t program_data);
 ///< \brief     Callback for program changes
 void handle_program_change(uint8_t program);
 
+///< \brief     Callback for note on
+void handle_note_on(midi_value_t note);
+
+///< \brief     Callback for note off
+void handle_note_off(midi_value_t note);
+
 ///< \brief     Callback for unimplemented midi messages
 void unknown_midi_message_handler(void);
 
