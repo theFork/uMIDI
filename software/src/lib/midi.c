@@ -158,11 +158,11 @@ static void handle_status_byte(midi_value_t data)
 
     switch (data & MIDI_MESSAGE_TYPE_MASK) {
     case MIDI_MSG_TYPE_NOTE_OFF:
-        midi_state = MIDI_STATE_NOTE_OFF;
+        midi_state = MIDI_STATE_NOTE_OFF_NUMBER;
         break;
 
     case MIDI_MSG_TYPE_NOTE_ON:
-        midi_state = MIDI_STATE_NOTE_ON;
+        midi_state = MIDI_STATE_NOTE_ON_NUMBER;
         break;
 
     case MIDI_MSG_TYPE_CONTROL_CHANGE:
@@ -194,7 +194,7 @@ ISR(USARTE0_RXC_vect)
     // Fetch data
     uint8_t data = MIDI_UART.DATA;
 
-    static midi_value_t current_controller = 0;
+    static midi_value_t first_data_byte = 0;
     switch (midi_state) {
     ////
     // MIDI status byte
@@ -207,21 +207,20 @@ ISR(USARTE0_RXC_vect)
     ////
     // MIDI data byte 0
     ////
-    case MIDI_STATE_NOTE_OFF:
-        if (event_handlers->note_off != NULL) {
-            event_handlers->note_off(data);
-        }
-        midi_state = MIDI_STATE_IDLE;
+    case MIDI_STATE_CONTROL_CHANGE_NUMBER:
+        first_data_byte = data;
+        midi_state = MIDI_STATE_CONTROL_CHANGE_VALUE;
         break;
 
-
-    case MIDI_STATE_NOTE_ON:
-        if (event_handlers->note_on != NULL) {
-            event_handlers->note_on(data);
-        }
-        midi_state = MIDI_STATE_IDLE;
+    case MIDI_STATE_NOTE_OFF_NUMBER:
+        first_data_byte = data;
+        midi_state = MIDI_STATE_NOTE_OFF_VALUE;
         break;
 
+    case MIDI_STATE_NOTE_ON_NUMBER:
+        first_data_byte = data;
+        midi_state = MIDI_STATE_NOTE_ON_VALUE;
+        break;
 
     case MIDI_STATE_PROGRAM_CHANGE:
         if (event_handlers->program_change != NULL) {
@@ -231,18 +230,26 @@ ISR(USARTE0_RXC_vect)
         break;
 
 
-    case MIDI_STATE_CONTROL_CHANGE_NUMBER:
-        current_controller = data;
-        midi_state = MIDI_STATE_CONTROL_CHANGE_VALUE;
-        break;
-
-
     ////
     // MIDI data byte 1
     ////
     case MIDI_STATE_CONTROL_CHANGE_VALUE:
         if (event_handlers->control_change != NULL) {
-            event_handlers->control_change(current_controller, data);
+            event_handlers->control_change(first_data_byte, data);
+        }
+        midi_state = MIDI_STATE_IDLE;
+        break;
+
+    case MIDI_STATE_NOTE_OFF_VALUE:
+        if (event_handlers->note_off != NULL) {
+            event_handlers->note_off(first_data_byte, data);
+        }
+        midi_state = MIDI_STATE_IDLE;
+        break;
+
+    case MIDI_STATE_NOTE_ON_VALUE:
+        if (event_handlers->note_on != NULL) {
+            event_handlers->note_on(first_data_byte, data);
         }
         midi_state = MIDI_STATE_IDLE;
         break;
