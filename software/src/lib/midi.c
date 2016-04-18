@@ -108,16 +108,14 @@ void send_midi_message(enum midi_channel channel, enum midi_message_type type, m
     }
 }
 
-void send_note_off(midi_value_t note)
+void send_note_off(midi_value_t note, midi_value_t velocity)
 {
-    // Send note off message with maximum velocity
-    send_midi_message(MIDI_MSG_TYPE_NOTE_OFF, tx_channel, note & 0x7f, MIDI_MAX_VALUE);
+    send_midi_message(MIDI_MSG_TYPE_NOTE_OFF, tx_channel, note & 0x7f, velocity & 0x7f);
 }
 
-void send_note_on(midi_value_t note)
+void send_note_on(midi_value_t note, midi_value_t velocity)
 {
-    // Send note on message with maximum velocity
-    send_midi_message(MIDI_MSG_TYPE_NOTE_ON, tx_channel, note & 0x7f, MIDI_MAX_VALUE);
+    send_midi_message(MIDI_MSG_TYPE_NOTE_ON, tx_channel, note & 0x7f, velocity & 0x7f);
 }
 
 void send_program_change(midi_value_t pnum)

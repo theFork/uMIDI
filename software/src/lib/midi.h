@@ -192,12 +192,16 @@ void send_midi_message(enum midi_channel channel, enum midi_message_type type, m
 /// \brief      Sends a note off message
 /// \param      note
 ///                 the MIDI note number
-void send_note_off(midi_value_t note);
+///< \param     velocity
+///<                velocity of the key press
+void send_note_off(midi_value_t note, midi_value_t velocity);
 
 /// \brief      Sends a note on message
 /// \param      note
 ///                 the MIDI note number
-void send_note_on(midi_value_t note);
+///< \param     velocity
+///<                velocity of the key press
+void send_note_on(midi_value_t note, midi_value_t velocity);
 
 /// \brief      Sends a program change message
 /// \param      program

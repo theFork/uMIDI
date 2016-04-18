@@ -52,10 +52,10 @@ static bool switch_state = false;
 static void send_enable_message(bool enable)
 {
     if (enable) {
-        send_note_on(MIDI_NOTE_ENABLE_WAH);
+        send_note_on(MIDI_NOTE_ENABLE_WAH, MIDI_MAX_VALUE);
     }
     else {
-        send_note_off(MIDI_NOTE_ENABLE_WAH);
+        send_note_off(MIDI_NOTE_ENABLE_WAH, MIDI_MAX_VALUE);
     }
 }
 
