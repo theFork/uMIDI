@@ -124,28 +124,19 @@ char* export_pattern(const enum sequencer_pattern_number pattern_index)
     return result_string;
 }
 
-void init_sequencer_patterns(const struct sequencer_pattern * const factory_patterns, const uint8_t number_of_patterns)
+uint8_t get_pattern_length(const enum sequencer_pattern_number pattern_index)
 {
-    for (uint8_t pattern_index=0; pattern_index < number_of_patterns; ++pattern_index) {
-        overwrite_pattern(pattern_index, &factory_patterns[pattern_index]);
-    }
+    return eeprom_read_byte(&patterns[pattern_index].length);
 }
 
-void overwrite_pattern(const enum sequencer_pattern_number pattern_index, const struct sequencer_pattern * const pattern)
+struct sequencer_step get_pattern_step(const enum sequencer_pattern_number pattern_index, const uint8_t step_index)
 {
-    // Store pattern length
-    eeprom_write_byte(&patterns[pattern_index].length, pattern->length);
-
-    // Store pattern steps
-    for (uint8_t step_index=0; step_index < pattern->length; ++step_index) {
-        const struct sequencer_step* const step_source = &pattern->steps[step_index];
-        struct sequencer_step* const step_destination = &patterns[pattern_index].steps[step_index];
-        eeprom_write_byte((uint8_t* ) &step_destination->channel, step_source->channel);
-        eeprom_write_byte((uint8_t* ) &step_destination->type,    step_source->type);
-        eeprom_write_byte(&step_destination->data0,   step_source->data0);
-        eeprom_write_byte(&step_destination->data1,   step_source->data1);
-        wdt_reset();
-    }
+    struct sequencer_step result = {0,};
+    result.channel = eeprom_read_byte((uint8_t*) &patterns[pattern_index].steps[step_index].channel);
+    result.type    = eeprom_read_byte((uint8_t*) &patterns[pattern_index].steps[step_index].type);
+    result.data0   = eeprom_read_byte(&patterns[pattern_index].steps[step_index].data0);
+    result.data1   = eeprom_read_byte(&patterns[pattern_index].steps[step_index].data1);
+    return result;
 }
 
 void import_pattern(const enum sequencer_pattern_number pattern_index, const char* data)
@@ -173,6 +164,40 @@ void import_pattern(const enum sequencer_pattern_number pattern_index, const cha
 
     // Write data
     overwrite_pattern(pattern_index, &pattern);
+}
+
+void init_sequencer_patterns(const struct sequencer_pattern * const factory_patterns, const uint8_t number_of_patterns)
+{
+    for (uint8_t pattern_index=0; pattern_index < number_of_patterns; ++pattern_index) {
+        overwrite_pattern(pattern_index, &factory_patterns[pattern_index]);
+    }
+}
+
+void overwrite_pattern(const enum sequencer_pattern_number pattern_index, const struct sequencer_pattern * const pattern)
+{
+    // Store pattern length
+    set_pattern_length(pattern_index, pattern->length);
+
+    // Store pattern steps
+    for (uint8_t step_index=0; step_index < pattern->length; ++step_index) {
+        const struct sequencer_step* const step_source = &pattern->steps[step_index];
+        set_pattern_step(pattern_index, step_index, step_source);
+        wdt_reset();
+    }
+}
+
+void set_pattern_length(const enum sequencer_pattern_number pattern_index, const uint8_t length)
+{
+    eeprom_write_byte(&patterns[pattern_index].length, length);
+}
+
+void set_pattern_step(const enum sequencer_pattern_number pattern_index, const uint8_t step_index, const struct sequencer_step * const step)
+{
+    struct sequencer_step* const step_destination = &patterns[pattern_index].steps[step_index];
+    eeprom_write_byte((uint8_t* ) &step_destination->channel, step->channel);
+    eeprom_write_byte((uint8_t* ) &step_destination->type,    step->type);
+    eeprom_write_byte(&step_destination->data0,               step->data0);
+    eeprom_write_byte(&step_destination->data1,               step->data1);
 }
 
 void set_sequencer_pattern(struct sequencer_channel * const channel, const enum sequencer_pattern_number pattern)
