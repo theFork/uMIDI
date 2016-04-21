@@ -29,7 +29,7 @@ FUSE0 = 0xff
 FUSE1 = 0x00
 FUSE2 = 0xbf
 FUSE4 = 0xfe
-FUSE5 = 0xff
+FUSE5 = 0xe8
 
 # Optimization level, can be [0, 1, 2, 3, s].
 # 0 = turn off optimization. s = optimize for size.
