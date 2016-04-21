@@ -251,7 +251,7 @@ $(TARGET).bin: $(TARGET).elf
 fwupdate: $(TARGET).bin
 	$(info )
 	$(info $(MSG_UPDATE))
-	echo -n "fwupdate `du -b $(TARGET).bin | sed 's/\s.*//'`\r" > $(CDC_DEVICE)
+	echo -ne "fwupdate `du -b $(TARGET).bin | sed 's/\s.*//'`\r" > $(CDC_DEVICE)
 	sleep 2
 	cat main.bin > $(CDC_DEVICE) & cat $(CDC_DEVICE)
 
