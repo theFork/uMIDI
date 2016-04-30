@@ -59,7 +59,7 @@ void execute_program(uint32_t program_data);
 void handle_program_change(uint8_t program);
 
 ///< \brief     Callback for note on
-void handle_note_on(midi_value_t note);
+void handle_note_on(midi_value_t note, midi_value_t velocity);
 
 ///< \brief     Callback for note off
 void handle_note_off(midi_value_t note);

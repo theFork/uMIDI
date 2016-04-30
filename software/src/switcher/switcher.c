@@ -315,8 +315,14 @@ void handle_program_change(uint8_t program)
     usb_printf("Entering program %u" USB_NEWLINE, program);
 }
 
-void handle_note_on(midi_value_t note)
+void handle_note_on(midi_value_t note, midi_value_t velocity)
 {
+    // Call note off handler in case velocity is zero
+    if (velocity == 0) {
+        handle_note_off(note);
+        return;
+    }
+
     // Turn on configured toggle outputs
     if (current_program.bit.toggle_tune_mute) {
         gpio_set(GPIO_OUT_TUNE_MUTE, true);
