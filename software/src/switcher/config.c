@@ -74,8 +74,8 @@ struct midi_config midi_config = {
     .event_handlers = {
         .program_change = handle_program_change,
         .control_change = (void*) unknown_midi_message_handler,
-        .note_on = (void*) handle_note_on,
-        .note_off = (void*) handle_note_off,
+        .note_on = handle_note_on,
+        .note_off = handle_note_off,
     },
     .tx_channel = 1,
 };
