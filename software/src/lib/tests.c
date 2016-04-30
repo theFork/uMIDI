@@ -137,12 +137,12 @@ void send_control_change_test(void)
 
 void send_note_off_test(void)
 {
-    send_note_off(41);
+    send_note_off(41, 80);
 }
 
 void send_note_on_test(void)
 {
-    send_note_on(41);
+    send_note_on(41, 80);
 }
 
 void send_program_change_test(void)

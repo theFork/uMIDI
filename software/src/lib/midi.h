@@ -89,10 +89,12 @@ enum midi_message_type
 enum midi_state
 {
     MIDI_STATE_IDLE,                            ///< No pending MIDI message bytes
-    MIDI_STATE_NOTE_OFF,                        ///< Note off message status byte read
-    MIDI_STATE_NOTE_ON,                         ///< Note on message status byte read
-    MIDI_STATE_CONTROL_CHANGE_NUMBER,           ///< Control change message status byte read
-    MIDI_STATE_CONTROL_CHANGE_VALUE,            ///< Control change message controller number read
+    MIDI_STATE_CONTROL_CHANGE_NUMBER,           ///< Control change message status byte read; awaiting controller number
+    MIDI_STATE_CONTROL_CHANGE_VALUE,            ///< Control change message controller number read; awaiting value
+    MIDI_STATE_NOTE_OFF_NUMBER,                 ///< Note off message status byte read; awaiting note number
+    MIDI_STATE_NOTE_OFF_VALUE,                  ///< Note off message note number read; awaiting velocity
+    MIDI_STATE_NOTE_ON_NUMBER,                  ///< Note on message status byte read; awaiting note number
+    MIDI_STATE_NOTE_ON_VALUE,                   ///< Note on message note number read; awaiting velocity
     MIDI_STATE_PROGRAM_CHANGE,                  ///< Program change message status byte read
 };
 
@@ -109,13 +111,19 @@ struct midi_event_handlers
                                                 ///< \param value
                                                 ///<    the new MIDI controller value
 
-    void (*note_off)(midi_value_t note);        ///< Callback for note off messges
+    void (*note_off)(midi_value_t note, midi_value_t velocity);
+                                                ///< Callback for note off messges
                                                 ///< \param note
                                                 ///<    the MIDI note that was turned off
+                                                ///< \param velocity
+                                                ///<    velocity of the key press
 
-    void (*note_on)(midi_value_t note);         ///< Callback for not on messages
+    void (*note_on)(midi_value_t note, midi_value_t velocity);
+                                                ///< Callback for not on messages
                                                 ///< \param note
                                                 ///<    the MIDI note that was turned on
+                                                ///< \param velocity
+                                                ///<    velocity of the key press
 
     void (*program_change)(midi_value_t program);
                                                 ///< Callback for program changes
@@ -184,12 +192,16 @@ void send_midi_message(enum midi_channel channel, enum midi_message_type type, m
 /// \brief      Sends a note off message
 /// \param      note
 ///                 the MIDI note number
-void send_note_off(midi_value_t note);
+///< \param     velocity
+///<                velocity of the key press
+void send_note_off(midi_value_t note, midi_value_t velocity);
 
 /// \brief      Sends a note on message
 /// \param      note
 ///                 the MIDI note number
-void send_note_on(midi_value_t note);
+///< \param     velocity
+///<                velocity of the key press
+void send_note_on(midi_value_t note, midi_value_t velocity);
 
 /// \brief      Sends a program change message
 /// \param      program
