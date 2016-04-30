@@ -98,6 +98,9 @@ struct midi_config midi_config = {
         .note_on        = NULL,
         .program_change = NULL
     },
+    .omni_mode  = true,
+    .rx_channel = 1,
+    .signal_rx  = true,
     .tx_channel = 1,
 };
 

@@ -48,7 +48,10 @@ struct midi_config midi_config = {
         .note_on        = NULL,
         .program_change = NULL
     },
-    .tx_channel = 1,
+    .omni_mode  = true,
+    .rx_channel = MIDI_CHANNEL_01,
+    .signal_rx  = true,
+    .tx_channel = MIDI_CHANNEL_01,
 };
 
 //---------------- Background tasks ----------------//
