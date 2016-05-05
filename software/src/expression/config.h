@@ -33,6 +33,13 @@
 #include "lib/midi.h"
 
 
+//---------------- macros ----------------//
+/// \brief  The GPIO pin connected to the enable switch
+#define ENABLE_SWITCH_PIN   gpio.header3.pin7
+
+/// \brief  The GPIO pin connected to the status led
+#define STATUS_LED_PIN      gpio.header3.pin6
+
 //---------------- constant declarations ----------------//
 extern const struct adc_config adc_config;
 extern const struct adc_conversion_config expression_conversion;

@@ -50,28 +50,6 @@ const struct adc_conversion_config expression_conversion = {
     .callback_unsigned  = &update_expression_value,
 };
 
-//---------------- GPIO ----------------//
-struct gpio_mapping gpio_mappings[] = {
-    { .pin = &gpio.header1.pin6, .type = GPIO_INPUT },          // ADC input
-    { .pin = &gpio.header3.pin6, .type = GPIO_OUTPUT },         // Enable LED
-    { .pin = &gpio.header3.pin7, .type = GPIO_INPUT_PULLUP },   // Enable switch
-};
-uint8_t gpio_mappings_size = sizeof(gpio_mappings)/sizeof(struct gpio_mapping);
-
-//---------------- MIDI ----------------//
-struct midi_config midi_config = {
-    .event_handlers = {
-        .control_change = NULL,
-        .note_off       = NULL,
-        .note_on        = NULL,
-        .program_change = NULL
-    },
-    .omni_mode  = false,
-    .rx_channel = MIDI_CHANNEL_01,
-    .signal_rx  = false,
-    .tx_channel = MIDI_CHANNEL_01,
-};
-
 //---------------- Background tasks ----------------//
 background_task_t high_frequency_tasks[] = {
     &serial_communication_task,
@@ -89,3 +67,25 @@ background_task_t low_frequency_tasks[] = {
     &update_leds,
 };
 uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);
+
+//---------------- GPIO ----------------//
+struct gpio_mapping gpio_mappings[] = {
+    { .pin = &gpio.header1.pin6, .type = GPIO_INPUT },          // ADC input
+    { .pin = &STATUS_LED_PIN, .type = GPIO_OUTPUT },            // Status LED
+    { .pin = &ENABLE_SWITCH_PIN, .type = GPIO_INPUT_PULLUP },   // Enable switch
+};
+uint8_t gpio_mappings_size = sizeof(gpio_mappings)/sizeof(struct gpio_mapping);
+
+//---------------- MIDI ----------------//
+struct midi_config midi_config = {
+    .event_handlers = {
+        .control_change = NULL,
+        .note_off       = NULL,
+        .note_on        = NULL,
+        .program_change = NULL
+    },
+    .omni_mode  = false,
+    .rx_channel = MIDI_CHANNEL_01,
+    .signal_rx  = false,
+    .tx_channel = MIDI_CHANNEL_01,
+};

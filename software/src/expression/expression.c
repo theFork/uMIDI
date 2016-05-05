@@ -43,7 +43,7 @@ static bool switch_state = false;
 
 
 ////////////////////////////////////////////////////////////////
-//      F U N C T I O N S   A N D   P R O C E D U R E S       //
+//         P R I V A T E   I M P L E M E N T A T I O N        //
 ////////////////////////////////////////////////////////////////
 
 /// \brief      Send a MIDI note on/off message
@@ -59,25 +59,18 @@ static void send_enable_message(bool enable)
     }
 }
 
-void update_expression_value(uint16_t new_value) {
-    if (new_value != current_value) {
-        current_value = new_value;
-        flash_led(LED_RED);
-        send_control_change(69, new_value);
-    }
-}
 
-void trigger_expression_conversion(void)
-{
-    trigger_adc(expression_conversion.channel);
-}
+
+////////////////////////////////////////////////////////////////
+//          P U B L I C   I M P L E M E N T A T I O N         //
+////////////////////////////////////////////////////////////////
 
 void handle_enable_switch(void)
 {
     // Only save switch state on first run
     static bool first_run = true;
     if (first_run) {
-        switch_state = gpio_get(gpio.header3.pin7);
+        switch_state = gpio_get(ENABLE_SWITCH_PIN);
         first_run = false;
         return;
     }
@@ -89,7 +82,20 @@ void handle_enable_switch(void)
 
         // Broadcast change over MIDI and toggle LED
         enable_state = !enable_state;
-        gpio_set(gpio.header3.pin6, enable_state);
+        gpio_set(STATUS_LED_PIN, enable_state);
         send_enable_message(enable_state);
+    }
+}
+
+void trigger_expression_conversion(void)
+{
+    trigger_adc(expression_conversion.channel);
+}
+
+void update_expression_value(uint16_t new_value) {
+    if (new_value != current_value) {
+        current_value = new_value;
+        flash_led(LED_RED);
+        send_control_change(69, new_value);
     }
 }

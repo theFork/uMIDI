@@ -59,8 +59,8 @@ int main( void )
     init_midi_module(&midi_config);
     init_adc_module(&adc_config, &expression_conversion);
     init_background_tasks(high_frequency_tasks, high_frequency_tasks_size,
-                                mid_frequency_tasks, mid_frequency_tasks_size,
-                                low_frequency_tasks, low_frequency_tasks_size);
+                          mid_frequency_tasks, mid_frequency_tasks_size,
+                          low_frequency_tasks, low_frequency_tasks_size);
     init_usb_module();
     init_serial_communication(NULL, 0);
 
