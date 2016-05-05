@@ -38,6 +38,9 @@
 /// \brief  The GPIO pin connected to the enable switch
 #define ENABLE_SWITCH_PIN   gpio.header3.pin7
 
+/// \brief  The GPIO pin connected to the power led
+#define POWER_LED_PIN       gpio.header3.pin5
+
 /// \brief  The GPIO pin connected to the status led
 #define STATUS_LED_PIN      gpio.header3.pin6
 
@@ -55,6 +58,7 @@ extern uint8_t low_frequency_tasks_size;
 extern struct gpio_mapping gpio_mappings[];
 extern uint8_t gpio_mappings_size;
 
+extern struct led power_led;
 extern struct led status_led;
 
 extern struct midi_config midi_config;

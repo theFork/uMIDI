@@ -77,6 +77,7 @@ int main( void )
 
     // Blink green LED
     blink_led(LED_GREEN, F_TASK_SLOW);
+    set_led(&power_led, true);
 
     // Main loop
     while (true) {
