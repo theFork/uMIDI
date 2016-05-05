@@ -86,6 +86,11 @@ struct gpio_mapping gpio_mappings[] = {
 };
 uint8_t gpio_mappings_size = sizeof(gpio_mappings)/sizeof(struct gpio_mapping);
 
+//---------------- LEDS ----------------//
+struct led status_led = {
+    .pin = &STATUS_LED_PIN,
+};
+
 //---------------- MIDI ----------------//
 struct midi_config midi_config = {
     .event_handlers = {

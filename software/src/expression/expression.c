@@ -39,7 +39,6 @@
 /// \brief      The latest known expression value
 static uint8_t current_value = 0;
 
-static bool enable_state = false;
 static bool switch_state = false;
 
 
@@ -95,9 +94,9 @@ void handle_enable_switch(void)
         switch_state = current_switch_state;
 
         // Broadcast change over MIDI and toggle LED
-        enable_state = !enable_state;
-        gpio_set(STATUS_LED_PIN, enable_state);
-        send_enable_message(enable_state);
+        status_led.state.active = !status_led.state.active;
+        gpio_set(STATUS_LED_PIN, status_led.state.active);
+        send_enable_message(status_led.state.active);
     }
 }
 

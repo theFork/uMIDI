@@ -55,6 +55,8 @@ extern uint8_t low_frequency_tasks_size;
 extern struct gpio_mapping gpio_mappings[];
 extern uint8_t gpio_mappings_size;
 
+extern struct led status_led;
+
 extern struct midi_config midi_config;
 
 extern struct serial_command serial_commands[];
