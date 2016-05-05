@@ -68,6 +68,16 @@ background_task_t low_frequency_tasks[] = {
 };
 uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);
 
+//---------------- Commands ----------------//
+struct serial_command serial_commands[] = {
+    {
+        .cmd_string = "calibrate",
+        .help_string = "Interactively calibrate the pedal",
+        .handler = &exec_calibration
+    },
+};
+uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);
+
 //---------------- GPIO ----------------//
 struct gpio_mapping gpio_mappings[] = {
     { .pin = &gpio.header1.pin6, .type = GPIO_INPUT },          // ADC input

@@ -121,8 +121,7 @@ inline void enable_adc_interrupt(enum adc_channel channel)
     *adc_regs[channel].interrupt_register |= ADC_CH_INTLVL_LO_gc;
 }
 
-void init_adc_module(const struct adc_config* const config,
-                     const struct adc_conversion_config* const calibration_conversion)
+void init_adc_module(const struct adc_config* const config)
 {
     // Select voltage reference
     ADCA.REFCTRL = ADC_REFSEL_INTVCC_gc;
@@ -143,11 +142,6 @@ void init_adc_module(const struct adc_config* const config,
 
     // Enable the ADC
     ADCA.CTRLA |= ADC_ENABLE_bm;
-
-    init_adc_conversion(calibration_conversion);
-
-    // Measure offset and initialize sample buffer
-    calibrate_adc_offset(calibration_conversion->channel);
 }
 
 void init_adc_conversion(const struct adc_conversion_config* const config)

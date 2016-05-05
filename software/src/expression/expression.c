@@ -21,10 +21,12 @@
  */
 
 #include <stdbool.h>
+#include <string.h>
 
 #include "lib/adc.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
+#include "lib/usb.h"
 
 #include "config.h"
 #include "expression.h"
@@ -64,6 +66,18 @@ static void send_enable_message(bool enable)
 ////////////////////////////////////////////////////////////////
 //          P U B L I C   I M P L E M E N T A T I O N         //
 ////////////////////////////////////////////////////////////////
+
+bool exec_calibration(const char* command)
+{
+    if (strlen(command) != 9) {
+        usb_puts("Malformed command" USB_NEWLINE);
+        return false;
+    }
+
+    // Measure offset and initialize sample buffer
+    calibrate_adc_offset(expression_conversion.channel);
+    return true;
+}
 
 void handle_enable_switch(void)
 {

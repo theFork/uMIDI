@@ -31,6 +31,7 @@
 #include "lib/background_tasks.h"
 #include "lib/gpio.h"
 #include "lib/midi.h"
+#include "lib/serial_communication.h"
 
 
 //---------------- macros ----------------//
@@ -44,17 +45,20 @@
 extern const struct adc_config adc_config;
 extern const struct adc_conversion_config expression_conversion;
 
-extern struct gpio_mapping gpio_mappings[];
-extern uint8_t gpio_mappings_size;
-
-extern struct midi_config midi_config;
-
 extern background_task_t high_frequency_tasks[];
 extern uint8_t high_frequency_tasks_size;
 extern background_task_t mid_frequency_tasks[];
 extern uint8_t mid_frequency_tasks_size;
 extern background_task_t low_frequency_tasks[];
 extern uint8_t low_frequency_tasks_size;
+
+extern struct gpio_mapping gpio_mappings[];
+extern uint8_t gpio_mappings_size;
+
+extern struct midi_config midi_config;
+
+extern struct serial_command serial_commands[];
+extern uint8_t serial_commands_size;
 
 //---------------- EOF ----------------//
 #endif // _CONFIG_H

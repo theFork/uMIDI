@@ -38,6 +38,9 @@
 
 //---------------- functions and procedures ----------------//
 
+/// \brief      Handler for the serial command 'calibrate'
+bool exec_calibration(const char* command);
+
 /// \brief      A background task that handles the enable switch
 /// \details    This task polls the enable switch input. If the input changed, a MIDI note on / off
 ///             message is transmitted.
