@@ -32,6 +32,15 @@
 
 //---------------- data types ----------------//
 
+/// \brief      Possible GPIO input events
+/// \see        poll_gpio_input_timeout
+enum gpio_input_event
+{
+    GPIO_INPUT_EVENT_NONE,          ///< Nothing happened :-(
+    GPIO_INPUT_EVENT_SHORT,         ///< A GPIO input pin was seen logical "high" briefly
+    GPIO_INPUT_EVENT_LONG,          ///< A GPIO input pin was seen logical "high" for some time
+};
+
 /// \brief      Function / type of a GPIO pin
 enum gpio_type
 {
@@ -40,7 +49,7 @@ enum gpio_type
     GPIO_INPUT_PULLUP,              ///< The GPIO pin acts as an input and is pulled up
     GPIO_OUTPUT,                    ///< The GPIO pin acts as an output
     GPIO_UNUSED                     ///< The GPIO pin is not used
-                                    ///  Unused pins are configured as outputs and connected to GND
+                                    ///  Unused pins are configured as inputs with pull-down
 };
 
 /// \brief      Configuration of a single GPIO pin
@@ -50,42 +59,110 @@ struct gpio_pin
     PORT_t*             port;       ///< The corresponding AVR I/O port registers as defined in the
                                     ///  AVR gcc headers
     uint8_t             bit;        ///< The corresponding bit index in the configuration registers
-    enum gpio_type      type;       ///< Function / type of the pin
+};
+
+/// \brief      Maps a GPIO pin to its designated type / function
+struct gpio_mapping
+{
+    const struct gpio_pin*  pin;        ///< GPIO pin to configure
+    enum gpio_type          type;       ///< Type of the pin
 };
 
 /// \brief      Configurations of the GPIO pins contained in one 10-pin header
 /// \details    The pins 1 and 10 are reserved for \f$V_{cc}\f$ and GND respectively.
 struct gpio_header
 {
-    struct gpio_pin     pin2;       ///< Pin 2 in the pin header on the PCB
-    struct gpio_pin     pin3;       ///< Pin 3 in the pin header on the PCB
-    struct gpio_pin     pin4;       ///< Pin 4 in the pin header on the PCB
-    struct gpio_pin     pin5;       ///< Pin 5 in the pin header on the PCB
-    struct gpio_pin     pin6;       ///< Pin 6 in the pin header on the PCB
-    struct gpio_pin     pin7;       ///< Pin 7 in the pin header on the PCB
-    struct gpio_pin     pin8;       ///< Pin 8 in the pin header on the PCB
-    struct gpio_pin     pin9;       ///< Pin 9 in the pin header on the PCB
+    const struct gpio_pin     pin2;     ///< Pin 2 in the pin header on the PCB
+    const struct gpio_pin     pin3;     ///< Pin 3 in the pin header on the PCB
+    const struct gpio_pin     pin4;     ///< Pin 4 in the pin header on the PCB
+    const struct gpio_pin     pin5;     ///< Pin 5 in the pin header on the PCB
+    const struct gpio_pin     pin6;     ///< Pin 6 in the pin header on the PCB
+    const struct gpio_pin     pin7;     ///< Pin 7 in the pin header on the PCB
+    const struct gpio_pin     pin8;     ///< Pin 8 in the pin header on the PCB
+    const struct gpio_pin     pin9;     ///< Pin 9 in the pin header on the PCB
 };
 
+/// \brief      This struct represents the four solder jumpers on the bottom side of the PCB.
 struct jumpers
 {
-    struct gpio_pin     jp2;        ///< JP2 on the bottom side of the PCB
-    struct gpio_pin     jp3;        ///< JP3 on the bottom side of the PCB
-    struct gpio_pin     jp4;        ///< JP4 on the bottom side of the PCB
-    struct gpio_pin     jp5;        ///< JP5 on the bottom side of the PCB
+    const struct gpio_pin     jp2;      ///< JP2 on the bottom side of the PCB
+    const struct gpio_pin     jp3;      ///< JP3 on the bottom side of the PCB
+    const struct gpio_pin     jp4;      ///< JP4 on the bottom side of the PCB
+    const struct gpio_pin     jp5;      ///< JP5 on the bottom side of the PCB
 };
 
 /// \brief      Configurations for all available GPIO pins
-struct gpio_config
+struct gpio
 {
-    struct gpio_header  header1;    ///< Pin header GPIO1 on the PCB
-    struct gpio_header  header2;    ///< Pin header GPIO2 on the PCB
-    struct gpio_header  header3;    ///< Pin header GPIO3 on the PCB
-    struct jumpers      jumpers;    ///< Solder jumpers on the bottom side of the PCB
+    const struct gpio_header  header1;  ///< Pin header GPIO1 on the PCB
+    const struct gpio_header  header2;  ///< Pin header GPIO2 on the PCB
+    const struct gpio_header  header3;  ///< Pin header GPIO3 on the PCB
+    const struct jumpers      jumpers;  ///< Solder jumpers on the bottom side of the PCB
 };
 
 
+//---------------- public global variables ----------------//
+/// \brief      A global structure with all available GPIO pins
+/// \details    This data structure provides a nice way to address GPIO pins. The pins are grouped
+///             into three headers with eight pins each and a group for the four solder jumpers -
+///             exactly representing the hardware interface. You can use these aliases to configure
+///             the pins you need and to get / set the state of the pin.
+/// \see        configure_gpio_pin
+/// \see        init_gpio_module
+/// \see        gpio_get
+/// \see        gpio_set
+extern const struct gpio gpio;
+
+
 //---------------- functions and procedures ----------------//
+
+/// \brief      Configures a GPIO pin
+/// \param      pin
+///                 the GPIO pin to configure
+/// \param      type
+///                 the desired function / type of the pin
+void configure_gpio_pin(const struct gpio_pin* pin, enum gpio_type type);
+
+/// \brief      Initializes the GPIO module
+/// \details    Configures all available GPIO pins to a standard configuration. If an array of
+///             pin type mappings was supplied, those are also applied.
+/// \param      mappings
+///                 an array of pin type mappings or `NULL`
+/// \param      mappings_size
+///                 number of elements in the type mappings array or `0`
+void init_gpio_module(const struct gpio_mapping mappings[], uint8_t mappings_size);
+
+/// \brief      Polls a GPIO input pin
+/// \details    Automatically de-bounces the pin if it is detected as active and returns as soon as
+///             the input returns to logical 0. Warning: Uses busy waiting!
+/// \param      pin
+///                 the GPIO input pin to poll
+/// \param      type
+///                 the GPIO input type (pull-up or pull-down)
+/// \returns    `true` if the input pin reads logical 1
+/// \see        poll_gpio_input_timeout
+bool poll_gpio_input(const struct gpio_pin pin, enum gpio_type type);
+
+/// \brief      Polls a GPIO input pin with timeout
+/// \details    Reads and de-bounces an input pin and measures how long it is in logical high-state
+///             continuously. After a given amount of time the function announces the event by
+///             returning #GPIO_INPUT_EVENT_LONG. If the input pin returns to low before the timeout
+///             was reached, #GPIO_INPUT_EVENT_SHORT is returned.
+///             This function uses busy waiting, so all background tasks are stalled until the
+///             timeout is reached.
+///             When the timeout is set to zero, this function blocks until the input pin reads
+///             logical low again, which is what #poll_gpio_input does.
+/// \param      pin
+///                 the GPIO input pin to poll
+/// \param      type
+///                 the GPIO input type (pull-up or pull-down)
+/// \param      timeout
+///                 the timeout in [s/10], or 0 for infinity
+/// \returns    the detected input event or #GPIO_INPUT_EVENT_NONE
+enum gpio_input_event poll_gpio_input_timeout(const struct gpio_pin pin, enum gpio_type type, uint8_t timeout);
+
+
+//---------------- inline functions and procedures ----------------//
 
 /// \brief      Enables a GPIO output pin
 /// \param      pin
@@ -123,12 +200,6 @@ static inline void gpio_set(const struct gpio_pin pin, bool value) {
 static inline void gpio_toggle(const struct gpio_pin pin) {
     pin.port->OUT ^= _BV(pin.bit);
 }
-
-/// \brief      Initializes the GPIO module
-/// \details    Configures all available GPIO pins according to the provided configuration.
-/// \param      gpio
-///                 the GPIO configuration
-void init_gpio_module(const struct gpio_config* gpio);
 
 
 //---------------- EOF ----------------//

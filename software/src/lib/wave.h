@@ -37,10 +37,10 @@
 /// \details    The output will change in a random direction by this amount
 #define     RANDOM_WAVE_STEP_SIZE           4
 
-/// \brief       Number of levels in the stair wave
+/// \brief      Number of levels in the stair wave
 #define     STAIR_WAVE_STEPS                5
 
-/// \brief       Number of levels in the stair wave
+/// \brief      Number of different output levels of waves
 #define     WAVE_STEPS                      100
 
 /// \brief      Tap tempo buffer size
@@ -61,48 +61,6 @@ enum direction
     DIRECTION_UP,                               ///< The counter is counting up
 };
 
-/// \brief      Amplitudes that represent certain intervals on a DigiTech Whammy pedal
-enum whammy_amplitude
-{
-    WHAMMY_AMPLITUDE_UNISON             = 0,    ///< Unison, valid in every mode
-    WHAMMY_AMPLITUDE_MINOR_SECOND       = 13,   ///< Minor second in 1oct mode
-    WHAMMY_AMPLITUDE_MAJOR_SECOND       = 24,   ///< Major second in 1oct mode
-    WHAMMY_AMPLITUDE_MINOR_THIRD        = 32,   ///< Minor third in 1oct mode
-    WHAMMY_AMPLITUDE_MAJOR_THIRD        = 42,   ///< Major third in 1oct mode
-    WHAMMY_AMPLITUDE_PERFECT_FOURTH     = 52,   ///< Perfect fourth in 1oct mode
-    WHAMMY_AMPLITUDE_TRITONE            = 63,   ///< Tritone in 1oct mode
-    WHAMMY_AMPLITUDE_PERFECT_FIFTH      = 74,   ///< Perfect fifth in 1oct mode
-    WHAMMY_AMPLITUDE_MINOR_SIXTH        = 84,   ///< Minor sixth in 1oct mode
-    WHAMMY_AMPLITUDE_MAJOR_SIXTH        = 95,   ///< Major sixth in 1oct mode
-    WHAMMY_AMPLITUDE_MINOR_SEVENTH      = 106,  ///< Minor seventh in 1oct mode
-    WHAMMY_AMPLITUDE_MAJOR_SEVENTH      = 116,  ///< Major seventh in 1oct mode
-    WHAMMY_AMPLITUDE_OCTAVE             = 127,  ///< Octave in 1oct mode
-    WHAMMY_AMPLITUDE_1ST_MINOR_SECOND   = 5,    ///< First minor second in 2oct mode
-    WHAMMY_AMPLITUDE_1ST_MAJOR_SECOND   = 10,   ///< First major second in 2oct mode
-    WHAMMY_AMPLITUDE_1ST_MINOR_THIRD    = 16,   ///< First minor third in 2oct mode
-    WHAMMY_AMPLITUDE_1ST_MAJOR_THIRD    = 21,   ///< First major third in 2oct mode
-    WHAMMY_AMPLITUDE_1ST_PERFECT_FOURTH = 26,   ///< First perfect fourth in 2oct mode
-    WHAMMY_AMPLITUDE_1ST_TRITONE        = 32,   ///< First tritone in 2oct mode
-    WHAMMY_AMPLITUDE_1ST_PERFECT_FIFTH  = 37,   ///< First perfect fifth in 2oct mode
-    WHAMMY_AMPLITUDE_1ST_MINOR_SIXTH    = 42,   ///< First minor sixth in 2oct mode
-    WHAMMY_AMPLITUDE_1ST_MAJOR_SIXTH    = 48,   ///< First major sixth in 2oct mode
-    WHAMMY_AMPLITUDE_1ST_MINOR_SEVENTH  = 53,   ///< First minor seventh in 2oct mode
-    WHAMMY_AMPLITUDE_1ST_MAJOR_SEVENTH  = 58,   ///< First major seventh in 2oct mode
-    WHAMMY_AMPLITUDE_1ST_OCTAVE         = 63,   ///< First octave in 2oct mode
-    WHAMMY_AMPLITUDE_2ND_MINOR_SECOND   = 69,   ///< Second minor second in 2oct mode
-    WHAMMY_AMPLITUDE_2ND_MAJOR_SECOND   = 74,   ///< Second major second in 2oct mode
-    WHAMMY_AMPLITUDE_2ND_MINOR_THIRD    = 79,   ///< Second minor third in 2oct mode
-    WHAMMY_AMPLITUDE_2ND_MAJOR_THIRD    = 85,   ///< Second major third in 2oct mode
-    WHAMMY_AMPLITUDE_2ND_PERFECT_FOURTH = 90,   ///< Second perfect fourth in 2oct mode
-    WHAMMY_AMPLITUDE_2ND_TRITONE        = 95,   ///< Second tritone in 2oct mode
-    WHAMMY_AMPLITUDE_2ND_PERFECT_FIFTH  = 100,  ///< Second perfect fifth in 2oct mode
-    WHAMMY_AMPLITUDE_2ND_MINOR_SIXTH    = 106,  ///< Second minor sixth in 2oct mode
-    WHAMMY_AMPLITUDE_2ND_MAJOR_SIXTH    = 111,  ///< Second major sixth in 2oct mode
-    WHAMMY_AMPLITUDE_2ND_MINOR_SEVENTH  = 117,  ///< Second minor seventh in 2oct mode
-    WHAMMY_AMPLITUDE_2ND_MAJOR_SEVENTH  = 122,  ///< Second major seventh in 2oct mode
-    WHAMMY_AMPLITUDE_2ND_OCTAVE         = 127,  ///< Second octave in 2oct mode
-};
-
 /// \brief      Enumeration of available waveforms
 enum waveform
 {
@@ -114,14 +72,6 @@ enum waveform
     WAVE_SQUARE,                                ///< Square wave
     WAVE_STAIRS,                                ///< Stair wave
     WAVE_RANDOM,                                ///< Random wave
-    WAVE_PATTERN_01,                            ///< Wave pattern 01
-    WAVE_PATTERN_02,                            ///< Wave pattern 02
-    WAVE_PATTERN_03,                            ///< Wave pattern 03
-    WAVE_PATTERN_04,                            ///< Wave pattern 04
-    WAVE_PATTERN_05,                            ///< Wave pattern 05
-    WAVE_PATTERN_06,                            ///< Wave pattern 06
-    WAVE_PATTERN_07,                            ///< Wave pattern 07
-    WAVE_PATTERN_08,                            ///< Wave pattern 08
 };
 
 /// \brief      Wave configuration
@@ -185,6 +135,12 @@ void init_wave(struct wave* wave, enum waveform waveform, midi_value_t speed,
 /// \see        tap_tempo_task
 void register_tap(void);
 
+/// \brief      Resets a wave
+/// \details    Re-initializes all internal counters and states of the supplied wave
+/// \param      wave
+///                 the wave to reset
+void reset_wave(struct wave * const wave);
+
 /// \brief      Updates the frequency of a wave
 /// \param      wave
 ///                 the wave to update
@@ -218,8 +174,8 @@ void set_waveform(struct wave* wave, enum waveform waveform);
 void tap_tempo_task(void);
 
 /// \brief      Computes the current wave output value
-/// \details    This function must be registered as a fast background task. Over time the output
-///             value follows the configured waveform.
+/// \details    This function must be called in a fast background task. Over time the output value
+///             follows the configured waveform.
 /// \param      wave
 ///                 the wave whose output should be computed
 /// \return     the current output value

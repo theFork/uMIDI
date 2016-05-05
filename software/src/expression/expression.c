@@ -52,10 +52,10 @@ static bool switch_state = false;
 static void send_enable_message(bool enable)
 {
     if (enable) {
-        send_note_on(MIDI_NOTE_ENABLE_WAH);
+        send_note_on(MIDI_NOTE_ENABLE_WAH, MIDI_MAX_VALUE);
     }
     else {
-        send_note_off(MIDI_NOTE_ENABLE_WAH);
+        send_note_off(MIDI_NOTE_ENABLE_WAH, MIDI_MAX_VALUE);
     }
 }
 
@@ -77,19 +77,19 @@ void handle_enable_switch(void)
     // Only save switch state on first run
     static bool first_run = true;
     if (first_run) {
-        switch_state = gpio_get(gpio_config.header3.pin7);
+        switch_state = gpio_get(gpio.header3.pin7);
         first_run = false;
         return;
     }
 
     // Poll switch
-    bool current_switch_state = gpio_get(gpio_config.header3.pin7);
+    bool current_switch_state = gpio_get(gpio.header3.pin7);
     if (switch_state != current_switch_state) {
         switch_state = current_switch_state;
 
         // Broadcast change over MIDI and toggle LED
         enable_state = !enable_state;
-        gpio_set(gpio_config.header3.pin6, enable_state);
+        gpio_set(gpio.header3.pin6, enable_state);
         send_enable_message(enable_state);
     }
 }

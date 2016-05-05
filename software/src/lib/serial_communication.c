@@ -44,6 +44,12 @@ static char cmd_buffer[CMD_BUFFER_SIZE] = "";
 /// \brief      Command buffer write index
 static uint8_t cmd_buffer_index = 0;
 
+/// \brief      Buffer for incoming commands
+static char cmd_history[CMD_HISTORY_SIZE][CMD_BUFFER_SIZE] = {"",};
+
+/// \brief      Command buffer write index
+static uint8_t cmd_history_index = 0;
+
 /// \brief      Array of user-defined commands
 /// \see        init_serial_communication
 static const struct serial_command* user_commands;
@@ -77,6 +83,11 @@ static uint16_t page_buffer_index = 0;
 /// \brief      Temporary application write address
 static uint32_t temp_app_addr = 0;
 
+/// \brief      Terminal echo flag
+/// \details    When this flag is set, received bytes are immediately echoed back to provide a
+///             shell-like experience.
+static bool echo_on = true;
+
 
 
 ////////////////////////////////////////////////////////////////
@@ -88,6 +99,7 @@ static inline bool exec_help(void)
 {
     usb_puts("");
     usb_puts("Welcome to the uMIDI serial interface!");
+    usb_printf("Software ID: %s" USB_NEWLINE, UMIDI_SOFTWARE_ID);
     usb_puts("Built-in commands:");
     usb_puts("    clear             :  Clears the console by printing CR/LFs.");
     usb_puts("    fwupdate <s>      :  Initiates a firmware update:");
@@ -144,10 +156,11 @@ static inline bool exec_help(void)
 }
 
 /// \brief      Handler for the `update` command
-static inline bool exec_update(const char* command)
+static inline bool exec_update(const char * const command)
 {
     // Make sure the command is well-formed
     if (command[8] != ' ') {
+        return false;
     }
 
     // Parse size of incoming update packet
@@ -162,19 +175,33 @@ static inline bool exec_update(const char* command)
         ++num_pages;
     }
 
+    // Abort if the program is too big to fit into memory
+    if (num_pages > MAX_PAGE_NUM) {
+        usb_puts("Program is too big! Aborting.");
+        return true;
+    }
+
+    // Warn if the program is approaching the maximum size
+    uint8_t pages_left = MAX_PAGE_NUM - num_pages;
+    if (pages_left < 20) {
+        usb_printf("Warning: Only %u pages of program space left!" USB_NEWLINE, pages_left);
+    }
+
     // Erase temporary application memory
     usb_puts("Erasing temporary application flash section...");
     wdt_disable();
     uint8_t error_code = xboot_app_temp_erase();
     if (error_code != XB_SUCCESS) {
-        usb_printf("Error erasing temprary application section: %d" USB_NEWLINE, error_code);
-        return false;
+        usb_printf("Error erasing temporary application section: %d" USB_NEWLINE, error_code);
+        return true;
     }
     wdt_reenable();
 
     // Switch to update mode
-    usb_printf("Ready to receive %u bytes (%u pages)..." USB_NEWLINE, update_bytes_pending, num_pages);
-    usb_set_echo(false);
+    usb_printf("Ready to receive %u bytes (%u pages)..." USB_NEWLINE,
+               update_bytes_pending,
+               num_pages);
+    echo_on = false;
     update_in_progress = true;
     page_buffer_index = 0;
     temp_app_addr = 0;
@@ -188,7 +215,7 @@ static inline bool exec_update(const char* command)
 ///             non-zero value, an error message is sent.
 /// \param      command
 ///                 the full command line as a C-string
-static inline void execute_command(const char* command)
+static inline void execute_command(const char * const command)
 {
     bool success = true;
 
@@ -241,17 +268,106 @@ cleanup:
     cmd_buffer_index = 0;
 }
 
+/// \brief      Prints out a command from the history
+/// \details    Clears out the last printed command first.
+/// \param      offset
+///                 offset of the command to be printed
+static inline void print_command_from_history(const int8_t offset)
+{
+    // Cycle command history index
+    cmd_history_index += CMD_HISTORY_SIZE;
+    cmd_history_index += offset;
+    cmd_history_index %= CMD_HISTORY_SIZE;
+
+    // Overwrite previously printed command
+    static uint8_t last_cmd_length = 0;
+    for (int i=0; i < last_cmd_length; ++i) {
+        usb_printf("\b \b");
+        cmd_buffer[cmd_buffer_index] = '\0';
+    }
+
+    // Copy command from history to current command buffer
+    strncpy(cmd_buffer, cmd_history[cmd_history_index], CMD_BUFFER_SIZE);
+    cmd_buffer_index = strlen(cmd_buffer);
+
+    // Print out command and save command length for the next invocation
+    usb_printf(cmd_buffer);
+    last_cmd_length = cmd_buffer_index;
+}
+
+/// \brief      Handles ANSI escape sequences
+/// \return     `true` as long as we are in the middle of an escape sequence
+static bool handle_escape_sequence(const char data)
+{
+    static uint8_t escape_byte_index = 0;
+    if (data == ESCAPE_CHAR_CODE) {
+        escape_byte_index = 1;
+        return true;
+    }
+    if (escape_byte_index == 1) {
+        if (data == '[') {
+            escape_byte_index = 2;
+        }
+        else {
+            usb_puts("Unrecognized escape sequence!");
+            escape_byte_index = 0;
+        }
+        return true;
+    }
+    if (escape_byte_index == 2) {
+        if (data == 'A') {
+            print_command_from_history(-1);
+        }
+        if (data == 'B') {
+            print_command_from_history(1);
+        }
+        escape_byte_index = 0;
+        return true;
+    }
+    return false;
+}
+
 /// \brief      Processes a command character
 /// \details    If the supplied character is a carriage return, the command line read so far is
 ///             executed, otherwise the character is simply appended to a (circular!) buffer.
+///             If #echo_on is set, the character is also immediately sent back to the sender,
+///             whereby carriage return characters are replaced by #USB_NEWLINE.
 static inline void process_command_char(void)
 {
     // Fetch a character from the USB data buffer
     char data = usb_getc();
 
+    // Handle escape sequence if any and abort
+    if (handle_escape_sequence(data)) {
+        return;
+    }
+
+    // Echo back the received character if desired and possible
+    if (echo_on) {
+        if (data == '\r') {
+            usb_puts("");
+        }
+        else if (0 <= data && data < 128) {
+            usb_putc(data);
+        }
+    }
+
     // Parse and execute commands if the enter key was hit
     if (data == '\r') {
+        strncpy(cmd_history[cmd_history_index], cmd_buffer, CMD_BUFFER_SIZE);
+        ++cmd_history_index;
+        cmd_history_index %= CMD_HISTORY_SIZE;
         execute_command(cmd_buffer);
+        return;
+    }
+
+    // Clear last character and rewind buffer index if backspace was received
+    if (data == '\b') {
+        usb_printf(" \b");
+        if (cmd_buffer_index > 0) {
+            --cmd_buffer_index;
+        }
+        cmd_buffer[cmd_buffer_index] = '\0';
         return;
     }
 
@@ -305,7 +421,7 @@ static inline void process_update_data(void)
                    num_pages);
         */
         usb_printf("Writing temporary application page [%3u", temp_app_addr / SPM_PAGESIZE + 1);
-        usb_printf("/%3u]..." USB_NEWLINE, num_pages);
+        usb_printf("/%3u/%3u]..." USB_NEWLINE, num_pages, MAX_PAGE_NUM);
         if (xboot_app_temp_write_page(temp_app_addr, page_buffer, 0) != XB_SUCCESS) {
             goto fail;
         }
@@ -339,7 +455,7 @@ fail:
     // Return to normal operation if the update failed
     usb_puts("Update failed!");
     update_in_progress = false;
-    usb_set_echo(true);
+    echo_on = true;
 }
 
 void init_serial_communication(const struct serial_command * const commands, uint8_t commands_size)

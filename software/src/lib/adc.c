@@ -220,7 +220,7 @@ ISR(ADCA_CH0_vect)
 }
 
 /// \brief      Invokes registered callbacks for the given channels
-/// \param      adc_channel
+/// \param      channel
 ///                 the ADC channel whose callbacks should be invoked
 /// \param      value
 ///                 the ADC conversion result

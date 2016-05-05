@@ -52,6 +52,10 @@ static enum midi_channel rx_channel;
 /// \see        init_midi_module
 static enum midi_channel tx_channel;
 
+/// \brief      If set to `true`, the red on-board LED flashes on every received MIDI message
+/// \see        init_midi_module
+static bool signal_rx;
+
 
 
 ////////////////////////////////////////////////////////////////
@@ -78,6 +82,7 @@ void init_midi_module(const struct midi_config* const config)
     rx_channel = config->rx_channel;
     tx_channel = config->tx_channel;
     omni_mode = config->omni_mode;
+    signal_rx = config->signal_rx;
     event_handlers = (struct midi_event_handlers*) &config->event_handlers;
 }
 
@@ -91,47 +96,36 @@ enum midi_channel read_midi_channel_from_jumpers(const struct jumpers * jumpers)
 
 void send_control_change(midi_value_t controller, midi_value_t value)
 {
-    // Send control change status byte
-    uart_write((uint8_t) MIDI_MSG_TYPE_CONTROL_CHANGE | (tx_channel & 0x7f));
-
-    // Send controller number
-    uart_write(controller & 0x7f);
-
-    // Send value
-    uart_write(value & 0x7f);
+    send_midi_message(MIDI_MSG_TYPE_CONTROL_CHANGE, tx_channel, controller & 0x7f, value & 0x7f);
 }
 
-void send_note_off(midi_value_t note)
+void send_midi_message(enum midi_channel channel, enum midi_message_type type, midi_value_t data0, midi_value_t data1)
 {
-    // Send note off status byte
-    uart_write((uint8_t) MIDI_MSG_TYPE_NOTE_OFF | (tx_channel & 0x7f));
+    // Send status byte
+    uart_write(type | channel);
 
-    // Send note number
-    uart_write(note & 0x7f);
+    // Send data byte0
+    uart_write(data0 & 0x7f);
 
-    // Send maximum velocity
-    uart_write(MIDI_MAX_VALUE);
+    // Send data byte1 only if required
+    if (type != MIDI_MSG_TYPE_PROGRAM_CHANGE) {
+        uart_write(data1 & 0x7f);
+    }
 }
 
-void send_note_on(midi_value_t note)
+void send_note_off(midi_value_t note, midi_value_t velocity)
 {
-    // Send note on status byte
-    uart_write((uint8_t) MIDI_MSG_TYPE_NOTE_ON | (tx_channel & 0x7f));
+    send_midi_message(MIDI_MSG_TYPE_NOTE_OFF, tx_channel, note & 0x7f, velocity & 0x7f);
+}
 
-    // Send note number
-    uart_write(note & 0x7f);
-
-    // Send maximum velocity
-    uart_write(MIDI_MAX_VALUE);
+void send_note_on(midi_value_t note, midi_value_t velocity)
+{
+    send_midi_message(MIDI_MSG_TYPE_NOTE_ON, tx_channel, note & 0x7f, velocity & 0x7f);
 }
 
 void send_program_change(midi_value_t pnum)
 {
-    // Send program change status byte
-    uart_write((uint8_t) MIDI_MSG_TYPE_PROGRAM_CHANGE | (tx_channel & 0x7f));
-
-    // Send program number
-    uart_write(pnum & 0x7f);
+    send_midi_message(MIDI_MSG_TYPE_PROGRAM_CHANGE, tx_channel, pnum & 0x7f, 0);
 }
 
 void set_midi_rx_channel(enum midi_channel channel)
@@ -167,11 +161,11 @@ static void handle_status_byte(midi_value_t data)
 
     switch (data & MIDI_MESSAGE_TYPE_MASK) {
     case MIDI_MSG_TYPE_NOTE_OFF:
-        midi_state = MIDI_STATE_NOTE_OFF;
+        midi_state = MIDI_STATE_NOTE_OFF_NUMBER;
         break;
 
     case MIDI_MSG_TYPE_NOTE_ON:
-        midi_state = MIDI_STATE_NOTE_ON;
+        midi_state = MIDI_STATE_NOTE_ON_NUMBER;
         break;
 
     case MIDI_MSG_TYPE_CONTROL_CHANGE:
@@ -198,12 +192,14 @@ ISR(USARTE0_RXC_vect)
     // Disable interrupts
     cli();
 
-    flash_led(LED_RED);
+    if (signal_rx) {
+        flash_led(LED_RED);
+    }
 
     // Fetch data
     uint8_t data = MIDI_UART.DATA;
 
-    static midi_value_t current_controller = 0;
+    static midi_value_t first_data_byte = 0;
     switch (midi_state) {
     ////
     // MIDI status byte
@@ -216,21 +212,20 @@ ISR(USARTE0_RXC_vect)
     ////
     // MIDI data byte 0
     ////
-    case MIDI_STATE_NOTE_OFF:
-        if (event_handlers->note_off != NULL) {
-            event_handlers->note_off(data);
-        }
-        midi_state = MIDI_STATE_IDLE;
+    case MIDI_STATE_CONTROL_CHANGE_NUMBER:
+        first_data_byte = data;
+        midi_state = MIDI_STATE_CONTROL_CHANGE_VALUE;
         break;
 
-
-    case MIDI_STATE_NOTE_ON:
-        if (event_handlers->note_on != NULL) {
-            event_handlers->note_on(data);
-        }
-        midi_state = MIDI_STATE_IDLE;
+    case MIDI_STATE_NOTE_OFF_NUMBER:
+        first_data_byte = data;
+        midi_state = MIDI_STATE_NOTE_OFF_VALUE;
         break;
 
+    case MIDI_STATE_NOTE_ON_NUMBER:
+        first_data_byte = data;
+        midi_state = MIDI_STATE_NOTE_ON_VALUE;
+        break;
 
     case MIDI_STATE_PROGRAM_CHANGE:
         if (event_handlers->program_change != NULL) {
@@ -240,18 +235,26 @@ ISR(USARTE0_RXC_vect)
         break;
 
 
-    case MIDI_STATE_CONTROL_CHANGE_NUMBER:
-        current_controller = data;
-        midi_state = MIDI_STATE_CONTROL_CHANGE_VALUE;
-        break;
-
-
     ////
     // MIDI data byte 1
     ////
     case MIDI_STATE_CONTROL_CHANGE_VALUE:
         if (event_handlers->control_change != NULL) {
-            event_handlers->control_change(current_controller, data);
+            event_handlers->control_change(first_data_byte, data);
+        }
+        midi_state = MIDI_STATE_IDLE;
+        break;
+
+    case MIDI_STATE_NOTE_OFF_VALUE:
+        if (event_handlers->note_off != NULL) {
+            event_handlers->note_off(first_data_byte, data);
+        }
+        midi_state = MIDI_STATE_IDLE;
+        break;
+
+    case MIDI_STATE_NOTE_ON_VALUE:
+        if (event_handlers->note_on != NULL) {
+            event_handlers->note_on(first_data_byte, data);
         }
         midi_state = MIDI_STATE_IDLE;
         break;

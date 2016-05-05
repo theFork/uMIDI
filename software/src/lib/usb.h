@@ -64,8 +64,6 @@ void init_usb_module(void);
 uint16_t usb_bytes_received(void);
 
 /// \brief      Reads one byte or character from the USB receive buffer
-/// \details    If #send_echo is set, the character is also immediately sent back to the sender,
-///             whereby carriage return characters are replaced by #USB_NEWLINE.
 /// \return     the character read cast to an `int16_t` or `EOF`
 int16_t usb_getc(void);
 

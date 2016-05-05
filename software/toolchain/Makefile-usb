@@ -24,18 +24,18 @@ TARGET = main
 # Output directory.
 DIR = .
 
-# Fuse bits
+# Fuse bytes
 FUSE1 = 0x00
 FUSE2 = 0xbf
 FUSE4 = 0xfe
-FUSE5 = 0xff
+FUSE5 = 0xe8
 
 # Optimization level, can be [0, 1, 2, 3, s].
 # 0 = turn off optimization. s = optimize for size.
 OPT = s
 
 # Programmer configuration for avrdude
-AVRDUDE_PROGRAMMER_CONFIG = -c atmelice_pdi
+AVRDUDE_PROGRAMMER ?= atmelice_pdi
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
@@ -87,14 +87,14 @@ CFLAGS += -I$(LUFA_PATH)
 XBOOT_PATH = lib/xboot
 
 # Avrdude settings and variables.
-AVRDUDE_FLAGS = $(AVRDUDE_PROGRAMMER_CONFIG)
+AVRDUDE_FLAGS  = -c $(AVRDUDE_PROGRAMMER)
 AVRDUDE_FLAGS += -p x128a4u
 
 AVRDUDE_WRITE_FLASH = -U flash:w:$(DIR)/$(TARGET).hex
 AVRDUDE_VERIFY_FLASH = -U flash:v:$(DIR)/$(TARGET).hex
 AVRDUDE_READ_EEPROM = -U eeprom:r:$(DIR)/eeprom.eep:i
 AVRDUDE_WRITE_EEPROM = -U eeprom:w:$(DIR)/eeprom.eep:i
-AVRDUDE_WRITE_FUSES = -U fuse1:w:$(FUSE1):m
+AVRDUDE_WRITE_FUSES += -U fuse1:w:$(FUSE1):m
 AVRDUDE_WRITE_FUSES += -U fuse2:w:$(FUSE2):m
 AVRDUDE_WRITE_FUSES += -U fuse4:w:$(FUSE4):m
 AVRDUDE_WRITE_FUSES += -U fuse5:w:$(FUSE5):m
@@ -139,6 +139,12 @@ SRC  = $(LOOKUP_TABLES_FILE)
 SRC += $(filter-out $(LOOKUP_TABLES_FILE),$(wildcard lib/*.c)) $(wildcard *.c)
 SRC += $(XBOOT_PATH)/xbootapi.c
 SRC += $(LUFA_SRC_USB_DEVICE) $(LUFA_PATH)/LUFA/Drivers/USB/Class/Device/CDCClassDevice.c
+
+# Generate software ID string and predefine it for the preprocessor
+SOFTWARE_ID  = $(shell date +%F)
+SOFTWARE_ID += $(shell pwd | sed 's:.*/::')
+SOFTWARE_ID += $(shell git describe --all --long --dirty --always | sed 's:heads/::; s:-0-g:-:')
+CFLAGS += -D UMIDI_SOFTWARE_ID="\"$(SOFTWARE_ID)\""
 
 # Default target.
 help:
@@ -243,9 +249,9 @@ $(TARGET).bin: $(TARGET).elf
 fwupdate: $(TARGET).bin
 	$(info )
 	$(info $(MSG_UPDATE))
-	echo -n "fwupdate `du -b $(TARGET).bin | sed 's/\s.*//'`\r" > $(CDC_DEVICE)
+	echo -ne "fwupdate `du -b $(TARGET).bin | sed 's/\s.*//'`\r" > $(CDC_DEVICE)
 	sleep 2
-	cat main.bin > $(CDC_DEVICE)
+	cat main.bin > $(CDC_DEVICE) & cat $(CDC_DEVICE)
 
 # Target:
 # Set fuse bits.

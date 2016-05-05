@@ -116,17 +116,17 @@ void toggle_led_test(void)
 //---------------- GPIO tests ----------------//
 void clear_gpio_test(void)
 {
-    gpio_set(gpio_config.header3.pin6, false);
+//    gpio_set(gpio_config.header3.pin6, false);
 }
 
 void set_gpio_test(void)
 {
-    gpio_set(gpio_config.header3.pin6, true);
+//    gpio_set(gpio_config.header3.pin6, true);
 }
 
 void toggle_gpio_test(void)
 {
-    gpio_toggle(gpio_config.header3.pin8);
+//    gpio_toggle(gpio_config.header3.pin8);
 }
 
 //---------------- MIDI tests ----------------//
@@ -137,12 +137,12 @@ void send_control_change_test(void)
 
 void send_note_off_test(void)
 {
-    send_note_off(41);
+    send_note_off(41, 80);
 }
 
 void send_note_on_test(void)
 {
-    send_note_on(41);
+    send_note_on(41, 80);
 }
 
 void send_program_change_test(void)

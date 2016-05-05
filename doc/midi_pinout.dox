@@ -1,0 +1,38 @@
+/**
+\page midi_pinout MIDI pinout
+
+\section midi_pinout_intro Introduction
+Purpose of this document is
+    - to provide the standard MIDI connector and cable pinout and also
+    - define electrical characteristics and a pinout power over MIDI.
+
+This document uses key words defined in RFC 2119.
+
+\section classes Device classes
+\subsection transmitter Transmitter
+Transmitter devices (called TX) produce midi data.
+
+\subsection receiver Receiver
+Receiving devices (aka RX) receive midi data.
+
+\subsection coupler Coupler
+Coupler are both RX and TX in a single housing. They either MAY act as a
+    - repeater,
+    - merger or
+    - splitter device.
+
+\section connectors Connector Pin-Out
+
+This is the pinout of a MIDI cable viewed from inside a housing of both a transceiver
+and a transmitter device or from outside the cable connectors:
+\image html midi_pinout.png "The MIDI (cable side view) pinout"
+
+\section power Power Over MIDI
+The TX SHOULD supply 12V (+-1V) as depicted above. If so, the TX MUST supply at least 120mA to be able to supply at least one device.
+
+Coupler and TX devices MAY consume 100mA. MIDI systems often consist of a daisy-chain of
+coupler devices, therefore it is not possible to specify a certain current requirement.
+The system designer MUST take care ;)
+
+TX outputs SHOULD be marked with the letters PWR to indicate that a certain connector delivers power.
+*/

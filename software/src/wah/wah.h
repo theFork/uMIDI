@@ -29,6 +29,9 @@
 
 
 //---------------- constants ----------------//
+/// \brief      The MIDI note that represents uMIDI wah's enable / bypass state
+#define MIDI_NOTE_ENABLE_WAH            42
+
 
 
 //---------------- data types ----------------//
@@ -40,7 +43,9 @@ bool exec_enable(const char* command);
 bool exec_speed(const char* command);
 bool exec_tap(const char* command);
 bool exec_waveform(const char* command);
-void handle_midi_cc(uint8_t controller, uint8_t value);
+void handle_midi_cc(midi_value_t controller, midi_value_t value);
+void handle_midi_note_off(midi_value_t value, midi_value_t velocity);
+void handle_midi_note_on(midi_value_t value, midi_value_t velocity);
 void handle_switch(void);
 void init_wah_module(void);
 void update_wah_pwm(void);

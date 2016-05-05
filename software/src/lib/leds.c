@@ -20,36 +20,92 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "gpio.h"
 #include "leds.h"
 
 #include <avr/interrupt.h>
 
 
 ////////////////////////////////////////////////////////////////
-//                     V A R I A B L E S                      //
+//             P R I V A T E   V A R I A B L E S              //
 ////////////////////////////////////////////////////////////////
 
-/// \brief  State variable for the green LED
-static struct led_state green_led =
-{
-    .active     = false,
-    .mode       = LED_STATIC,
-    .prescaler  = 0,
-    .counter    = 0
+/// \brief      Internal array of pointers to known leds
+static struct led * leds[32] = { 0, };
+
+/// \brief      Number of registered LEDs
+static uint8_t registered_leds_count = 0;
+
+/// \brief      The GPIO pin the green LED is connected to
+static const struct gpio_pin green_led_pin = {
+    .port = &PORTE,
+    .bit  = 1
 };
 
-/// \brief  State variable for the red LED
-static struct led_state red_led =
-{
-    .active     = false,
-    .mode       = LED_STATIC,
-    .prescaler  = 0,
-    .counter    = 0
+/// \brief      The green on-board LED
+static struct led green_led = {
+    .pin = &green_led_pin,
 };
 
-/// \brief  This array holds pointers to all LED state variables
-/// \see    init_leds_module
-static struct led_state *leds[LED_COUNT];
+/// \brief      The GPIO pin the red LED is connected to
+static const struct gpio_pin red_led_pin = {
+    .port = &PORTE,
+    .bit  = 0
+};
+
+/// \brief      The red on-board LED
+static struct led red_led = {
+    .pin = &red_led_pin,
+};
+
+
+
+////////////////////////////////////////////////////////////////
+//              G L O B A L   V A R I A B L E S               //
+////////////////////////////////////////////////////////////////
+
+struct led* led_green = &green_led;
+
+struct led* led_red   = &red_led;
+
+
+
+////////////////////////////////////////////////////////////////
+//                    PRIVATE FUNCTIONS                       //
+////////////////////////////////////////////////////////////////
+
+/// \brief          Enables or disables an LED by writing the corresponding GPIO output register
+/// \param      led
+///                 the LED to enable / disable
+/// \param      value
+///                 `true` enables the LED; `false` disables it
+static inline void apply_led(struct led * const led, bool value)
+{
+    // Update state varable
+    led->state.active = value;
+
+    // Write GPIO output register
+    gpio_set(*led->pin, value);
+}
+
+/// \brief      Initializes or updates an LED's blinking mode
+/// \details    Aborts if neither mode nor prescaler have changed
+/// \param      state
+///                 state variable of the led
+/// \param      prescaler
+///                 Prescaler for the blinking frequency
+static void set_or_update_blinking_led_state(struct led_state * const state, uint8_t prescaler)
+{
+    // Abort if neither mode nor prescaler have changed
+    if (state->mode == LED_BLINK && state->prescaler == prescaler) {
+        return;
+    }
+
+    // Update mode and prescaler and restart counter
+    state->mode = LED_BLINK;
+    state->prescaler = prescaler;
+    state->counter = 0;
+}
 
 
 
@@ -57,108 +113,82 @@ static struct led_state *leds[LED_COUNT];
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-/// \brief          Enables or disables an LED by writing the corresponding GPIO output register
-/// \param      pin
-///                 the LED to enable / disable
-/// \param      value
-///                 `true` enables the LED; `false` disables it
-static inline void apply_led(enum led pin, bool value)
-{
-    // Update state varable
-    leds[pin]->active = value;
-
-    // Write GPIO output register
-    if (value) {
-        LED_PORT.OUTSET = _BV(pin);
-    }
-    else {
-        LED_PORT.OUTCLR = _BV(pin);
-    }
-}
-
-/// \brief      Initializes or updates an LED's blinking mode
-/// \details    Aborts if neither mode nor prescaler have changed
-/// \param      led
-///                 state variable of the led
-/// \param      prescaler
-///                 Prescaler for the blinking frequency
-static void set_or_update_blinking_led_state(struct led_state *led, uint8_t prescaler)
-{
-    // Abort if neither mode nor prescaler have changed
-    if (led->mode == LED_BLINK && led->prescaler == prescaler) {
-        return;
-    }
-
-    // Update mode and prescaler and restart counter
-    led->mode = LED_BLINK;
-    led->prescaler = prescaler;
-    led->counter = 0;
-}
-
 void init_leds_module(void)
 {
-    // Configure AVR ports
-    LED_PORT.DIRSET = _BV(RED_LED_BIT) | _BV(GREEN_LED_BIT);
-
-    // Populate led map
-    leds[RED_LED_BIT] = &red_led;
-    leds[GREEN_LED_BIT] = &green_led;
-
-    // Turn all LEDs off
-    set_led(LED_ALL, false);
+    // Register onboard LEDs
+    register_led(led_green);
+    register_led(led_red);
 }
 
-void blink_led(enum led led, uint8_t prescaler)
+void register_led(struct led * const led)
+{
+    // Configure AVR port
+    configure_gpio_pin(led->pin, GPIO_OUTPUT);
+
+    // Add to leds array
+    leds[registered_leds_count] = led;
+    ++registered_leds_count;
+
+    // Initialize state
+    led->state.active = false;
+    led->state.mode = LED_STATIC;
+    led->state.prescaler = 0;
+    led->state.counter = 0;
+}
+
+void blink_led(struct led* const led, const uint8_t prescaler)
 {
     // Set blink mode and update prescaler
-    if (led == LED_ALL) {
-        set_or_update_blinking_led_state(&red_led, prescaler);
-        set_or_update_blinking_led_state(&green_led, prescaler);
-    }
-    else {
-        set_or_update_blinking_led_state(leds[led], prescaler);
-    }
+    set_or_update_blinking_led_state(&led->state, prescaler);
 }
 
-void flash_led(enum led led)
+void flash_led(struct led* const led)
 {
-    // Set flash mode
-    if (led == LED_ALL) {
-        red_led.mode = LED_FLASH;
-        green_led.mode = LED_FLASH;
-    }
-    else {
-        leds[led]->mode = LED_FLASH;
-    }
+    led->state.mode = LED_FLASH;
+    led->state.counter = 1;
 }
 
-void set_led(enum led led, bool value)
+void flash_led_multiple(struct led * const led, const uint8_t count)
 {
-    // Set static mode and enable / disable LED(s)
-    if (led == LED_ALL) {
-        green_led.mode = LED_STATIC;
-        apply_led(LED_GREEN, value);
-        red_led.mode = LED_STATIC;
-        apply_led(LED_RED, value);
-    }
-    else {
-        leds[led]->mode = LED_STATIC;
-        apply_led(led, value);
-    }
+    led->state.mode = LED_FLASH;
+    led->state.counter = count;
 }
 
-void toggle_led(enum led led)
+void set_led(struct led* const led, const bool value)
 {
-    // Set static mode and toggle LED(s)
-    if (led == LED_ALL) {
-        green_led.mode = LED_STATIC;
-        apply_led(LED_GREEN, !green_led.active);
-        red_led.mode = LED_STATIC;
-        apply_led(LED_RED, !red_led.active);
+    led->state.mode = LED_STATIC;
+    apply_led(led, value);
+}
+
+void toggle_led(struct led* const led)
+{
+    led->state.mode = LED_STATIC;
+    apply_led(led, !led->state.active);
+}
+
+static void update_flashing_led(uint8_t index)
+{
+    // Divide call frequency by 5
+    static uint8_t prescaler = 0;
+    ++prescaler;
+    if (prescaler < 8) {
+        return;
     }
+    prescaler = 0;
+
+    // Enable the LED in even calls
+    if (!leds[index]->state.active) {
+        apply_led(leds[index], true);
+    }
+    // Disable the LED in odd calls
     else {
-        leds[led]->mode = LED_STATIC;
-        apply_led(led, !leds[led]->active);
+        --leds[index]->state.counter;
+        apply_led(leds[index], false);
+
+        // Reset if the required blink count was reached
+        if (leds[index]->state.counter == 0) {
+            leds[index]->state.mode = LED_STATIC;
+        }
     }
 }
 
@@ -166,31 +196,23 @@ void update_leds(void)
 {
     // Iterate LEDs
     uint8_t i;
-    for (i=0; i<LED_COUNT; i++) {
-        switch (leds[i]->mode) {
+    for (i=0; i<registered_leds_count; ++i) {
+        switch (leds[i]->state.mode) {
         case LED_FLASH:
-            // Enable the LED in the first call
-            if (!leds[i]->active) {
-                apply_led(i, true);
-            }
-            // Disable the LED in the second call
-            else {
-                leds[i]->mode = LED_STATIC;
-                apply_led(i, false);
-            }
+            update_flashing_led(i);
             break;
 
         case LED_BLINK:
             // Increment counter
-            ++leds[i]->counter;
+            ++leds[i]->state.counter;
 
             // When the counter reaches the prescaler value
-            if (leds[i]->counter >= leds[i]->prescaler) {
+            if (leds[i]->state.counter >= leds[i]->state.prescaler) {
                 // Reset the counter
-                leds[i]->counter = 0;
+                leds[i]->state.counter = 0;
 
                 // Toggle LED
-                apply_led(i, !leds[i]->active);
+                apply_led(leds[i], !leds[i]->state.active);
             }
             break;
 

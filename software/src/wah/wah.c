@@ -60,10 +60,16 @@ static inline uint16_t linear_function(uint8_t midi_value)
     return linear(&pwm_range, midi_value);
 }
 
+static inline void toggle_wah(void)
+{
+    enable_wah(!enable_state);
+}
+
 void enable_wah(bool enable)
 {
-    gpio_set(gpio_config.header3.pin4, enable);
-    gpio_set(gpio_config.header3.pin8, enable);
+    enable_state = enable;
+    gpio_set(gpio.header3.pin4, enable);
+    gpio_set(gpio.header3.pin8, enable);
 }
 
 bool exec_enable(const char* command)
@@ -134,18 +140,32 @@ exec:
     return true;
 }
 
-void handle_midi_cc(uint8_t controller, uint8_t value)
+void handle_midi_cc(midi_value_t controller, midi_value_t value)
 {
     set_pwm_duty_cycle(value);
 }
 
+void handle_midi_note_off(midi_value_t note, midi_value_t velocity) {
+    if (note == MIDI_NOTE_ENABLE_WAH) {
+        enable_wah(false);
+    }
+}
+
+void handle_midi_note_on(midi_value_t note, midi_value_t velocity) {
+    if (note == MIDI_NOTE_ENABLE_WAH) {
+        enable_wah(true);
+    }
+}
+
 void handle_switch(void)
 {
-    if (!gpio_get(gpio_config.header3.pin6)) {
-        enable_state = !enable_state;
-        enable_wah(enable_state);
+    // If the momentary switch was pressed (pull-down)
+    if (!gpio_get(gpio.header3.pin6)) {
+        toggle_wah();
+
+        // De-bounce
         _delay_ms(50);
-        while (!gpio_get(gpio_config.header3.pin6)) {
+        while (!gpio_get(gpio.header3.pin6)) {
             wdt_reset();
         }
     }
@@ -154,17 +174,15 @@ void handle_switch(void)
 void init_wah_module(void)
 {
     // Setup linear conversion function
-    pwm_range.from = 550;
-    pwm_range.to = PWM_MAX_DUTY-50;
+    pwm_range.from = 570;
+    pwm_range.to = PWM_MAX_DUTY-190;
     init_linear(&pwm_range);
     init_pwm_module(&linear_function);
     set_pwm_duty_cycle(pwm_range.from);
 
     // Setup wave module
-    const uint8_t speed = 40;
-    const uint8_t amplitude = MIDI_MAX_VALUE-6;
-    init_wave(&pwm_wave, WAVE_OFF, speed, amplitude, 0);
     configure_tap_tempo_wave(&pwm_wave);
+    init_wave(&pwm_wave, WAVE_OFF, 90, MIDI_MAX_VALUE-23, 71);
 }
 
 void update_wah_pwm(void)
