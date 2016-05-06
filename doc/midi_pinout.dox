@@ -48,12 +48,23 @@ This is the pinout of a MIDI cable viewed from inside a housing of both a transc
 and a transmitter device or from outside the cable connectors:
 \image html midi_pinout.png "The MIDI (cable side view) pinout"
 
-\section power Power Over MIDI
-The RX SHOULD supply 12V (+-1V) as depicted above. If so, the RX MUST supply at least 110mA to be able to supply at least one device.
+\section power Power over MIDI
+All socket types MAY supply power over MIDI. If a socket delivers power, it MUST be labellel as described in \ref socket_marking.
 
-Coupler and TX devices MAY consume 100mA. MIDI systems often consist of a daisy-chain of
-coupler devices, therefore it is not possible to specify a certain current requirement.
-The system designer MUST take care ;)
+Powered sockets SHOULD supply 12V (+-1V) DC. Since MIDI system usually consist of a daisy-chain of
+coupler devices, it is omitted to specify a current source requirement. 
 
-TX outputs SHOULD be marked with the letters PWR to indicate that a certain connector delivers power.
+\section socket_marking Socket marking
+All sockets SHOULD be labelled. Sockets that either deliver or use power over MIDI MUST be labelled. The label SHOULD consist of three lines:
+
+1. MIDI Data Flow<br>
+This line indicates the socket type and MUST either be IN, OUT or THRU.
+
+2. MIDI Power Type<br>
+SHOULD be either SRC, SNK or FWD. SRC is the label for power source sockets, SNK indicates a power sink socket. The FWD label stands for "Forward". FWD is meant for sockets which passively forward power from a sink socket build into the same enclosure.
+
+3. Current<br>
+For source devices: Maximum current available
+For sink devices: Maximum current consumption
+For forward devices: Maximum current consumption of the device, followed by a plus sign
 */
