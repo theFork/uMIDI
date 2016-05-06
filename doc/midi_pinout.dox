@@ -28,7 +28,7 @@ and a transmitter device or from outside the cable connectors:
 \image html midi_pinout.png "The MIDI (cable side view) pinout"
 
 \section power Power Over MIDI
-The TX SHOULD supply 12V (+-1V) as depicted above. If so, the TX MUST supply at least 120mA to be able to supply at least one device.
+The RX SHOULD supply 12V (+-1V) as depicted above. If so, the RX MUST supply at least 110mA to be able to supply at least one device.
 
 Coupler and TX devices MAY consume 100mA. MIDI systems often consist of a daisy-chain of
 coupler devices, therefore it is not possible to specify a certain current requirement.
