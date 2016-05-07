@@ -81,7 +81,7 @@ uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_co
 //---------------- GPIO ----------------//
 struct gpio_mapping gpio_mappings[] = {
     { .pin = &gpio.header1.pin6, .type = GPIO_INPUT },          // ADC input
-    { .pin = &POWER_LED_PIN, .type = GPIO_OUTPUT },            // Status LED
+    { .pin = &POWER_LED_PIN, .type = GPIO_OUTPUT },             // Power LED
     { .pin = &STATUS_LED_PIN, .type = GPIO_OUTPUT },            // Status LED
     { .pin = &ENABLE_SWITCH_PIN, .type = GPIO_INPUT_PULLUP },   // Enable switch
 };
