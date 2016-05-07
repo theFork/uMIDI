@@ -8,6 +8,27 @@ Purpose of this document is
 
 This document uses key words defined in RFC 2119.
 
+\section terminology Terminology
+
+<b>Connection</b> The logical connection between two sockets<br>
+<b>Device</b> A device that has at least one socket<br>
+<b>Message</b> A MIDI message such as note on or program change<br>
+<b>Socket</b> A single 5-pin MIDI connector build into an enclosure
+
+\section socket_types Socket types
+There are three different types of sockets:
+
+\subsection socket_type_in MIDI In
+A MIDI in or input is the receiving side of a connection where messages are intepreted.
+A MIDI input MUST implement galvanic isolation, i.e. by means of an opto-isolator.
+
+\subsection socket_type_out MIDI Out
+A MIDI out or output is the transmitting side of a connection. At this side messages are generated.
+
+\subsection socket_type_thru MIDI Thru
+A thru socket also transmit messages, but without generating them. The origin of the messages is
+a second socket inside the same device.
+
 \section classes Device classes
 \subsection transmitter Transmitter
 Transmitter devices (called TX) produce midi data.
