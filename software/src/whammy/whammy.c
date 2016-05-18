@@ -1,5 +1,5 @@
 /// \file
-/// \brief      Sequencer module implementation
+/// \brief      Whammy module implementation
 
 /*
  * Copyright 2015 Sebastian Neuser
