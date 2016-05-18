@@ -176,13 +176,21 @@ void init_sequencer_patterns(const struct sequencer_pattern * const factory_patt
 void overwrite_pattern(const enum sequencer_pattern_number pattern_index, const struct sequencer_pattern * const pattern)
 {
     // Store pattern length
-    set_pattern_length(pattern_index, pattern->length);
+    if (get_pattern_length(pattern_index) != pattern->length) {
+        set_pattern_length(pattern_index, pattern->length);
+    }
 
     // Store pattern steps
     for (uint8_t step_index=0; step_index < pattern->length; ++step_index) {
         const struct sequencer_step* const step_source = &pattern->steps[step_index];
-        set_pattern_step(pattern_index, step_index, step_source);
-        wdt_reset();
+        struct sequencer_step stored_step = get_pattern_step(pattern_index, step_index);
+        if (stored_step.channel != step_source->channel
+        ||  stored_step.type    != step_source->type
+        ||  stored_step.data0   != step_source->data0
+        ||  stored_step.data1   != step_source->data1) {
+            set_pattern_step(pattern_index, step_index, step_source);
+            wdt_reset();
+        }
     }
 }
 

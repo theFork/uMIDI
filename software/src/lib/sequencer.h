@@ -200,7 +200,7 @@ void import_pattern(enum sequencer_pattern_number number, const char* data);
 void init_sequencer_patterns(const struct sequencer_pattern* factory_patterns, uint8_t number_of_patterns);
 
 /// \brief      Stores a given pattern at the specified location
-/// \details    Overwrites stored data!
+/// \details    Overwrites stored data! Checks if the data actually changed before writing to save EEPROM write cycles.
 /// \param      number
 ///                 number of the pattern to overwrite
 /// \param      pattern
