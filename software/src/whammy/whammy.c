@@ -151,24 +151,153 @@ bool exec_factory_reset(const char* command)
     return true;
 }
 
-bool exec_pattern(const char* command)
+bool exec_patcpy(const char* command)
 {
-    if (strlen(command) < 12 || command[7] != ' ') {
+    if (strlen(command) < 8 || command[6] != ' ') {
         usb_puts(PSTR("Malformed command" USB_NEWLINE));
         return false;
     }
 
-    if (strncmp(STRING_NEXT, command+8, sizeof(STRING_NEXT)) == 0) {
+    uint8_t number = atoi(command+7);
+    copy_pattern(sequencer.pattern, number);
+
+    return true;
+}
+
+bool exec_patdump(const char* command)
+{
+    if (strlen(command) != 7) {
+        usb_puts(PSTR("Malformed command" USB_NEWLINE));
+        return false;
+    }
+
+    uint8_t length = get_pattern_length(sequencer.pattern);
+    usb_printf(PSTR("Pattern length: %u" USB_NEWLINE), length);
+
+    usb_puts(PSTR("Steps:" USB_NEWLINE "## Chan Type Dat0 Dat1"));
+    for (uint8_t step_index=0; step_index < length; ++step_index) {
+        struct sequencer_step step = get_pattern_step(sequencer.pattern, step_index);
+
+        // Prepare pretty output strings
+        char* type_string = "";
+        switch (step.type) {
+            case MIDI_MSG_TYPE_CONTROL_CHANGE:
+                type_string = "CCH";
+                break;
+            case MIDI_MSG_TYPE_NOTE_OFF:
+                type_string = "NOF";
+                break;
+            case MIDI_MSG_TYPE_NOTE_ON:
+                type_string = "NON";
+                break;
+            case MIDI_MSG_TYPE_PROGRAM_CHANGE:
+                type_string = "PCH";
+                break;
+            default:
+                type_string = "INV";
+                break;
+        }
+        char data1_string[5] = {'\0',};
+        if (step.type != MIDI_MSG_TYPE_PROGRAM_CHANGE) {
+            sprintf(data1_string, "%4u", step.data1);
+        }
+
+        usb_printf(PSTR("%2u %4u %4s %4u %s" USB_NEWLINE),
+                   step_index+1, step.channel+1, type_string, step.data0, data1_string);
+    }
+
+    return true;
+}
+
+bool exec_patlen(const char* command)
+{
+    if (strlen(command) < 8 || command[6] != ' ') {
+        usb_puts(PSTR("Malformed command" USB_NEWLINE));
+        return false;
+    }
+
+    uint8_t length = atoi(command+7);
+    set_pattern_length(sequencer.pattern, length);
+
+    return true;
+}
+
+bool exec_patmod(const char* command)
+{
+    if (strlen(command) != 22 || command[6] != ' ' || command[9] != ' ' || command[12] != ' '
+                              || command[14] != ' ' || command[18] != ' ') {
+        usb_puts(PSTR("Malformed command" USB_NEWLINE));
+        return false;
+    }
+
+    uint8_t step_index = atoi(command+7) - 1;
+    if (step_index >= SEQUENCER_STEPS_PER_PATTERN) {
+        usb_puts(PSTR("Invalid pattern index"));
+        return false;
+    }
+
+    struct sequencer_step step = {0,};
+    step.channel = atoi(command+10) - 1;
+    switch (*(command+13)) {
+        case 'c':
+            step.type = MIDI_MSG_TYPE_CONTROL_CHANGE;
+            break;
+        case 'f':
+            step.type = MIDI_MSG_TYPE_NOTE_OFF;
+            break;
+        case 'n':
+            step.type = MIDI_MSG_TYPE_NOTE_ON;
+            break;
+        case 'p':
+            step.type = MIDI_MSG_TYPE_PROGRAM_CHANGE;
+            break;
+        default:
+            break;
+    }
+    step.data0 = atoi(command+15);
+    step.data1 = atoi(command+19);
+
+    set_pattern_step(sequencer.pattern, step_index, &step);
+
+    return true;
+}
+
+bool exec_patsel(const char* command)
+{
+    if (strlen(command) < 8 || command[6] != ' ') {
+        usb_puts(PSTR("Malformed command" USB_NEWLINE));
+        return false;
+    }
+
+    if (strncmp(STRING_NEXT, command+7, sizeof(STRING_NEXT)) == 0) {
         select_next_pattern();
         return true;
     }
-    if (strncmp(STRING_PREV, command+8, sizeof(STRING_PREV)) == 0) {
+    if (strncmp(STRING_PREV, command+7, sizeof(STRING_PREV)) == 0) {
         select_previous_pattern();
+        return true;
+    }
+
+    uint8_t number = atoi(command+7);
+    if (number < SEQUENCER_PATTERNS) {
+        set_sequencer_pattern(&sequencer, number);
         return true;
     }
 
     usb_puts(PSTR("Unknown parameter" USB_NEWLINE));
     return false;
+}
+
+bool exec_patwipe(const char* command)
+{
+    if (strlen(command) != 7) {
+        usb_puts(PSTR("Malformed command" USB_NEWLINE));
+        return false;
+    }
+
+    wipe_pattern(sequencer.pattern);
+
+    return true;
 }
 
 bool exec_speed(const char* command)

@@ -46,6 +46,37 @@
 ////////////////////////////////////////////////////////////////
 
 //---------------- Commands ----------------//
+static const char cmd_string_patcpy[] PROGMEM = "patcpy";
+static const char help_string_patcpy[] PROGMEM = "i\n"
+    "Copies the selected pattern to the specified slot:\n"
+    "<i> : target pattern index [0, 19]\n";
+static const char cmd_string_patdump[] PROGMEM = "patdump";
+static const char help_string_patdump[] PROGMEM = "Shows information about the selected pattern";
+static const char cmd_string_patlen[] PROGMEM = "patlen";
+static const char help_string_patlen[] PROGMEM = "l\n"
+    "Set the selected pattern's length:\n"
+    "<l> : pattern length in steps\n";
+static const char cmd_string_patmod[] PROGMEM = "patmod";
+static const char help_string_patmod[] PROGMEM = "s c t d e\n"
+    "Modify a step of the selected pattern:\n"
+    "<s> : step index [1, length] (2 digits, zero-padded)\n"
+    "<c> : MIDI channel [1, 16] (2 digits, zero-padded)\n"
+    "<t> : MIDI message type\n"
+    "      'c' control change\n"
+    "      'f' note off\n"
+    "      'n' note on\n"
+    "      'p' program change\n"
+    "<d> : MIDI data byte 0 (3 digits, zero-padded)\n"
+    "<e> : MIDI data byte 1 (3 digits, zero-padded)\n";
+static const char cmd_string_patsel[] PROGMEM = "patsel";
+static const char help_string_patsel[] PROGMEM = "p\n"
+    "Select sequencer pattern:\n"
+    "<p> : pattern\n"
+    "      \"next\" = switch to next pattern\n"
+    "      \"prev\" = switch to previous pattern\n"
+    "      index = switch to specified pattern [0, 19]\n";
+static const char cmd_string_patwipe[] PROGMEM = "patwipe";
+static const char help_string_patwipe[] PROGMEM = "Wipes the selected pattern";
 static const char cmd_string_backup[] PROGMEM = "backup";
 static const char help_string_backup[] PROGMEM = "Dumps all data stored in EEPROM";
 static const char cmd_string_reset[] PROGMEM = "factoryreset";
@@ -66,7 +97,12 @@ static const char help_string_pattern[] PROGMEM = "<p>\n"
 struct serial_command serial_commands[] = {
     { .cmd_string = cmd_string_backup,  .help_string = help_string_backup,  .handler = &exec_backup        },
     { .cmd_string = cmd_string_reset,   .help_string = help_string_reset,   .handler = &exec_factory_reset },
-    { .cmd_string = cmd_string_pattern, .help_string = help_string_pattern, .handler = &exec_pattern       },
+    { .cmd_string = cmd_string_patcpy,  .help_string = help_string_patcpy,  .handler = &exec_patcpy        },
+    { .cmd_string = cmd_string_patdump, .help_string = help_string_patdump, .handler = &exec_patdump       },
+    { .cmd_string = cmd_string_patlen,  .help_string = help_string_patlen,  .handler = &exec_patlen        },
+    { .cmd_string = cmd_string_patmod,  .help_string = help_string_patmod,  .handler = &exec_patmod        },
+    { .cmd_string = cmd_string_patsel,  .help_string = help_string_patsel,  .handler = &exec_patsel        },
+    { .cmd_string = cmd_string_patwipe, .help_string = help_string_patwipe, .handler = &exec_patwipe       },
     { .cmd_string = cmd_string_speed,   .help_string = help_string_speed,   .handler = &exec_speed         },
     { .cmd_string = cmd_string_tap,     .help_string = help_string_tap,     .handler = &exec_tap           },
 };
