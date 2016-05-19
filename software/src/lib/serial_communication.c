@@ -117,7 +117,8 @@ static inline bool exec_help(void)
         char* first_nl = strchr(user_commands[i].help_string, '\n');
         if (first_nl) {
             // Parse specified options / parameters to the command string
-            char* params = strtok_r(strdup(user_commands[i].help_string), "\n", &tok_ptr);
+            char* help_string = strdup(user_commands[i].help_string);
+            char* params = strtok_r(help_string, "\n", &tok_ptr);
 
             if (user_commands[i].help_string == first_nl) {
                 // If the first character of the help string is a newline character, the parsed
@@ -141,6 +142,8 @@ static inline bool exec_help(void)
                 usb_printf("                         %s" USB_NEWLINE, tail);
                 tail = strtok_r(NULL, "\n", &tok_ptr);
             }
+
+            free(help_string);
         }
         else {
             // Print simple command description
