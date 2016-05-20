@@ -153,12 +153,43 @@ midi_value_t adjust_sequencer_speed(struct sequencer_channel* channel, int8_t di
 /// \see        register_tap
 void configure_sequencer_channel(enum sequencer_channel_number number, struct sequencer_channel* channel);
 
+/// \brief      Copies a sequencer pattern
+/// \details    Duplicates the pattern at the source index and overwrites the pattern at the
+///             destination index with it.
+/// \param      source
+///                 number of the pattern to copy
+/// \param      destination
+///                 number of the pattern to overwrite
+void copy_pattern(enum sequencer_pattern_number source, enum sequencer_pattern_number destination);
+
 /// \brief      Dumps a sequencer pattern
 /// \details    Reads the data from EEPROM and converts it to a string of hexadecimal digits.
 /// \param      number
-///                 number of the pattern to dump
+///                 number of the pattern to export
 /// \returns    the pattern stored in EEPROM as a hex-string
-char* dump_pattern(enum sequencer_pattern_number number);
+char* export_pattern(enum sequencer_pattern_number number);
+
+/// \brief      Reads a sequencer pattern's length
+/// \param      pattern
+///                 number of the pattern
+/// \returns    the selected pattern's length
+uint8_t get_pattern_length(enum sequencer_pattern_number pattern);
+
+/// \brief      Reads step from a sequencer pattern
+/// \param      pattern
+///                 number of the sequencer pattern containing the step to read
+/// \param      index
+///                 the index of the step within the pattern
+/// \returns    the requested sequencer step
+struct sequencer_step get_pattern_step(enum sequencer_pattern_number pattern, uint8_t index);
+
+/// \brief      Stores a pattern given as a hex-string at the specified location
+/// \details    Overwrites stored data!
+/// \param      number
+///                 number of the pattern to overwrite
+/// \param      data
+///                 the new pattern to store as a string of hexadecimal digits
+void import_pattern(enum sequencer_pattern_number number, const char* data);
 
 /// \brief      Initializes / Restores "factory-default" patterns
 /// \details    Copies a list of patterns to the start of the EEPROM pattern storage.
@@ -169,20 +200,30 @@ char* dump_pattern(enum sequencer_pattern_number number);
 void init_sequencer_patterns(const struct sequencer_pattern* factory_patterns, uint8_t number_of_patterns);
 
 /// \brief      Stores a given pattern at the specified location
-/// \details    Overwrites stored data!
+/// \details    Overwrites stored data! Checks if the data actually changed before writing to save EEPROM write cycles.
 /// \param      number
 ///                 number of the pattern to overwrite
 /// \param      pattern
 ///                 the new pattern to store
 void overwrite_pattern(enum sequencer_pattern_number number, const struct sequencer_pattern* pattern);
 
-/// \brief      Stores a pattern given as a hex-string at the specified location
+/// \brief      Sets a sequencer pattern's length
 /// \details    Overwrites stored data!
-/// \param      number
-///                 number of the pattern to overwrite
-/// \param      data
-///                 the new pattern to store as a string of hexadecimal digits
-void restore_pattern(const enum sequencer_pattern_number number, const char* data);
+/// \param      pattern
+///                 number of the sequencer pattern to modify
+/// \param      length
+///                 the new pattern length
+void set_pattern_length(enum sequencer_pattern_number pattern, uint8_t length);
+
+/// \brief      Modifies a single step in a sequencer pattern
+/// \details    Overwrites stored data!
+/// \param      pattern
+///                 number of the sequencer pattern containing the step to modify
+/// \param      index
+///                 the index of the step in the pattern to update
+/// \param      step
+///                 the new sequencer step
+void set_pattern_step(enum sequencer_pattern_number pattern, uint8_t index, const struct sequencer_step* step);
 
 /// \brief      Selects a sequencer channel's pattern
 /// \param      channel
@@ -220,6 +261,12 @@ bool toggle_sequencer(struct sequencer_channel* channel);
 ///             an internal clock source, so it must be registered as a fast background task.
 /// \see        update_wave
 void update_sequencer(void);
+
+/// \brief      Wipes a sequencer pattern
+/// \details    Zeroes out memory at the given sequencer pattern index.
+/// \param      number
+///                 number of the pattern to wipe
+void wipe_pattern(enum sequencer_pattern_number number);
 
 //---------------- EOF ----------------//
 #endif // _SEQUENCER_H
