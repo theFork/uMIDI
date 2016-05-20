@@ -1,5 +1,5 @@
 <map id="/home/haggl/repositories/uMIDI/software/src/lib/system.h" name="/home/haggl/repositories/uMIDI/software/src/lib/system.h">
-<area shape="rect" id="node3" href="$serial__communication_8c.html" title="Implementation of the serial communication module." alt="" coords="5,117,168,181"/>
-<area shape="rect" id="node5" href="$system_8c.html" title="System configuration procedures." alt="" coords="192,117,355,181"/>
-<area shape="rect" id="node7" href="$usb_8c.html" title="USB CDC device driver implementation." alt="" coords="379,126,568,173"/>
+<area shape="rect" id="node2" href="$serial__communication_8c.html" title="Implementation of the serial communication module. " alt="" coords="5,109,169,165"/>
+<area shape="rect" id="node3" href="$system_8c.html" title="System configuration procedures. " alt="" coords="193,109,357,165"/>
+<area shape="rect" id="node4" href="$usb_8c.html" title="USB CDC device driver implementation. " alt="" coords="381,117,572,158"/>
 </map>

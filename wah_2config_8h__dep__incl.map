@@ -1,5 +1,5 @@
 <map id="/home/haggl/repositories/uMIDI/software/src/wah/config.h" name="/home/haggl/repositories/uMIDI/software/src/wah/config.h">
-<area shape="rect" id="node3" href="$wah_2config_8c.html" title="Device configuration." alt="" coords="5,117,171,181"/>
-<area shape="rect" id="node5" href="$wah_2main_8c.html" title="Entry point and main loop of the uMIDI firmware." alt="" coords="195,126,403,173"/>
-<area shape="rect" id="node7" href="$wah_8c.html" title="Wah&#45;wah module implementation." alt="" coords="427,126,632,173"/>
+<area shape="rect" id="node2" href="$wah_2config_8c.html" title="Device configuration. " alt="" coords="5,109,172,165"/>
+<area shape="rect" id="node3" href="$wah_2main_8c.html" title="Entry point and main loop of the uMIDI firmware. " alt="" coords="196,117,405,158"/>
+<area shape="rect" id="node4" href="$wah_8c.html" title="Wah&#45;wah module implementation. " alt="" coords="430,117,635,158"/>
 </map>

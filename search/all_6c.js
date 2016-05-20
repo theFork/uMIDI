@@ -15,6 +15,7 @@ var searchData=
   ['leds',['leds',['../leds_8c.html#a29100e863027572c3d0a3362bd1f390e',1,'leds.c']]],
   ['leds_2ec',['leds.c',['../leds_8c.html',1,'']]],
   ['leds_2eh',['leds.h',['../leds_8h.html',1,'']]],
+  ['length',['length',['../structsequencer__pattern.html#a8a9a4083d58bb0d632feeba081352b35',1,'sequencer_pattern']]],
   ['linear',['linear',['../math_8c.html#ad67fcb5c9bd80218164bac328c0a9c4f',1,'linear(const struct linear_range *const config, midi_value_t midi_value):&#160;math.c'],['../math_8h.html#ac75dbced7c54f3e23b471696fef85dc8',1,'linear(const struct linear_range *config, midi_value_t midi_value):&#160;math.c']]],
   ['linear_5ffunction',['linear_function',['../wah_8c.html#ad22cae68b72968ee2c5502273323aeb7',1,'wah.c']]],
   ['linear_5frange',['linear_range',['../structlinear__range.html',1,'']]],

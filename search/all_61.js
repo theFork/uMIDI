@@ -27,14 +27,16 @@ var searchData=
   ['adc_5fregs',['adc_regs',['../adc_8c.html#a2fbc4624f9a9e5020e2cf5e8ceb79c0f',1,'adc.c']]],
   ['adc_5fresolution',['ADC_RESOLUTION',['../adc_8h.html#a00978ca9e8220475258dcbbbb7d29129',1,'adc.h']]],
   ['adc_5fsample_5fbuffer_5fsize',['ADC_SAMPLE_BUFFER_SIZE',['../adc_8h.html#ae676ae8c57baab20f52520a42b6a2a9b',1,'adc.h']]],
+  ['adjust_5fsequencer_5fpattern',['adjust_sequencer_pattern',['../sequencer_8c.html#a1442d4c230a6d7727cdbd62d0463b468',1,'adjust_sequencer_pattern(struct sequencer_channel *const channel, const int8_t difference):&#160;sequencer.c'],['../sequencer_8h.html#a5c40a225ad6242b4fa7ea3b99d0ca4d7',1,'adjust_sequencer_pattern(struct sequencer_channel *channel, int8_t difference):&#160;sequencer.c']]],
+  ['adjust_5fsequencer_5fspeed',['adjust_sequencer_speed',['../sequencer_8c.html#acab213771ed4c0d4382c086459d1fa57',1,'adjust_sequencer_speed(struct sequencer_channel *const channel, const int8_t difference):&#160;sequencer.c'],['../sequencer_8h.html#a68bb53b666999839a6e4b5de126be4a2',1,'adjust_sequencer_speed(struct sequencer_channel *channel, int8_t difference):&#160;sequencer.c']]],
   ['advance_5f3phase_5fencoder',['advance_3phase_encoder',['../encoder_8c.html#a694acd2440d35a4fe66bb7c1f4a67392',1,'encoder.c']]],
   ['advance_5f4phase_5fencoder',['advance_4phase_encoder',['../encoder_8c.html#ac943a0ba30cce4a9f45fe7053d996e24',1,'encoder.c']]],
   ['advance_5fstep_5fcounter',['advance_step_counter',['../wave_8c.html#a21b50d2e37a975936f2f9a097b837991',1,'wave.c']]],
   ['amplitude',['amplitude',['../structwave__settings.html#a3904d47b028dc807bd6cfc845c731f79',1,'wave_settings']]],
   ['app_2ec',['app.c',['../template-nousb_2app_8c.html',1,'']]],
   ['app_2ec',['app.c',['../template-usb_2app_8c.html',1,'']]],
-  ['app_2eh',['app.h',['../template-nousb_2app_8h.html',1,'']]],
   ['app_2eh',['app.h',['../template-usb_2app_8h.html',1,'']]],
+  ['app_2eh',['app.h',['../template-nousb_2app_8h.html',1,'']]],
   ['apply_5fduty_5fcycle_5ftest',['apply_duty_cycle_test',['../tests_8c.html#adf96ffbe57799322a28cb339ea40c485',1,'apply_duty_cycle_test(void *duty):&#160;tests.c'],['../tests_8h.html#adf96ffbe57799322a28cb339ea40c485',1,'apply_duty_cycle_test(void *duty):&#160;tests.c']]],
   ['apply_5fled',['apply_led',['../leds_8c.html#a634cb3a2f80bca9adf858f46f029ce1b',1,'leds.c']]]
 ];

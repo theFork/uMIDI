@@ -1,8 +1,8 @@
 <map id="/home/haggl/repositories/uMIDI/software/src/lib/math.h" name="/home/haggl/repositories/uMIDI/software/src/lib/math.h">
-<area shape="rect" id="node3" href="$math_8c.html" title="Implementation of mathematical functions." alt="" coords="5,102,203,149"/>
-<area shape="rect" id="node5" href="$pwm_8c.html" title="PWM configuration and service functions." alt="" coords="227,102,424,149"/>
-<area shape="rect" id="node7" href="$wave_8h.html" title="Waveform function generator." alt="" coords="448,102,648,149"/>
-<area shape="rect" id="node9" href="$sequencer_8c.html" title="Sequencer module implementation." alt="" coords="407,309,569,373"/>
-<area shape="rect" id="node11" href="$sequencer_8h.html" title="Sequencer module API." alt="" coords="467,197,629,261"/>
-<area shape="rect" id="node14" href="$wave_8c.html" title="Waveform function generator." alt="" coords="653,206,853,253"/>
+<area shape="rect" id="node2" href="$math_8c.html" title="Implementation of mathematical functions. " alt="" coords="5,95,204,136"/>
+<area shape="rect" id="node3" href="$pwm_8c.html" title="PWM configuration and service functions. " alt="" coords="228,95,427,136"/>
+<area shape="rect" id="node4" href="$sequencer_8c.html" title="Sequencer module implementation. " alt="" coords="501,288,665,344"/>
+<area shape="rect" id="node5" href="$sequencer_8h.html" title="Sequencer module API. " alt="" coords="501,184,665,240"/>
+<area shape="rect" id="node6" href="$wave_8h.html" title="Waveform function generator. " alt="" coords="591,95,792,136"/>
+<area shape="rect" id="node7" href="$wave_8c.html" title="Waveform function generator. " alt="" coords="741,191,943,233"/>
 </map>

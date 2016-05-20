@@ -1,6 +1,6 @@
 <map id="/home/haggl/repositories/uMIDI/software/src/lib/background_tasks.h" name="/home/haggl/repositories/uMIDI/software/src/lib/background_tasks.h">
-<area shape="rect" id="node3" href="$background__tasks_8c.html" title="Background task scheduler." alt="" coords="5,117,168,181"/>
-<area shape="rect" id="node5" href="$serial__communication_8c.html" title="Implementation of the serial communication module." alt="" coords="192,117,355,181"/>
-<area shape="rect" id="node7" href="$tests_8c.html" title="/home/haggl/repositories\l/uMIDI/software/src/lib\l/tests.c" alt="" coords="379,117,541,181"/>
-<area shape="rect" id="node9" href="$wave_8c.html" title="Waveform function generator." alt="" coords="565,126,765,173"/>
+<area shape="rect" id="node2" href="$background__tasks_8c.html" title="Background task scheduler. " alt="" coords="5,109,169,165"/>
+<area shape="rect" id="node3" href="$serial__communication_8c.html" title="Implementation of the serial communication module. " alt="" coords="193,109,357,165"/>
+<area shape="rect" id="node4" href="$tests_8c.html" title="/home/haggl/repositories\l/uMIDI/software/src/lib\l/tests.c" alt="" coords="381,109,545,165"/>
+<area shape="rect" id="node5" href="$wave_8c.html" title="Waveform function generator. " alt="" coords="569,117,771,158"/>
 </map>

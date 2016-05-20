@@ -55,6 +55,6 @@ var searchData=
   ['midi_5fstate_5fprogram_5fchange',['MIDI_STATE_PROGRAM_CHANGE',['../midi_8h.html#aa24501820672db24a7655770a150cefea4332e5b69a7b56d5f38d794931049023',1,'midi.h']]],
   ['midi_5fuart',['MIDI_UART',['../midi_8h.html#a57e9b955863a0270f6bdf5317003d6a4',1,'midi.h']]],
   ['midi_5fvalue_5ft',['midi_value_t',['../midi_8h.html#a855fab3ea354d116fdd2cbff9c806180',1,'midi.h']]],
-  ['mode',['mode',['../structadc__config.html#abd8e53d9c7b4bba88136980470bb6d0d',1,'adc_config::mode()'],['../structled__state.html#a53b506b29a6245147541d6a4790341e7',1,'led_state::mode()']]],
+  ['mode',['mode',['../structadc__config.html#abd8e53d9c7b4bba88136980470bb6d0d',1,'adc_config::mode()'],['../structled__state.html#a53b506b29a6245147541d6a4790341e7',1,'led_state::mode()'],['../structsequencer__channel.html#a3e6ed2f4a2c67c5aa2ccda449d918b60',1,'sequencer_channel::mode()']]],
   ['mux_5fregister',['mux_register',['../structadc__channel__regs.html#adc802a44d3b91a3f7e61c05960b91100',1,'adc_channel_regs']]]
 ];

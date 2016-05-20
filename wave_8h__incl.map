@@ -1,5 +1,5 @@
 <map id="/home/haggl/repositories/uMIDI/software/src/lib/wave.h" name="/home/haggl/repositories/uMIDI/software/src/lib/wave.h">
-<area shape="rect" id="node5" href="$math_8h.html" title="API for a small collection of mathematical functions." alt="" coords="75,101,136,131"/>
-<area shape="rect" id="node10" href="$midi_8h.html" title="MIDI message transceiver." alt="" coords="145,179,201,208"/>
-<area shape="rect" id="node16" href="$gpio_8h.html" title="GPIO configuration and service functions." alt="" coords="145,256,201,285"/>
+<area shape="rect" id="node3" href="$math_8h.html" title="API for a small collection of mathematical functions. " alt="" coords="75,95,137,121"/>
+<area shape="rect" id="node5" href="$midi_8h.html" title="MIDI message transceiver. " alt="" coords="147,169,204,196"/>
+<area shape="rect" id="node7" href="$gpio_8h.html" title="GPIO configuration and service functions. " alt="" coords="147,244,204,271"/>
 </map>

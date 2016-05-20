@@ -1,16 +1,20 @@
 var searchData=
 [
   ['sample_5fbuffer',['sample_buffer',['../adc_8c.html#a2fbc710d23c598d991139c3aba5a887d',1,'adc.c']]],
+  ['sequencer',['sequencer',['../whammy_8c.html#ab992c11b8aad9f1489157c7020df7054',1,'whammy.c']]],
   ['serial_5fcommands',['serial_commands',['../switcher_2config_8c.html#aa437cfa836cc1a7a60adf661b0a76344',1,'serial_commands():&#160;config.c'],['../switcher_2config_8h.html#aa437cfa836cc1a7a60adf661b0a76344',1,'serial_commands():&#160;config.c'],['../template-usb_2config_8c.html#aa437cfa836cc1a7a60adf661b0a76344',1,'serial_commands():&#160;config.c'],['../template-usb_2config_8h.html#aa437cfa836cc1a7a60adf661b0a76344',1,'serial_commands():&#160;config.c'],['../wah_2config_8c.html#aa437cfa836cc1a7a60adf661b0a76344',1,'serial_commands():&#160;config.c'],['../wah_2config_8h.html#aa437cfa836cc1a7a60adf661b0a76344',1,'serial_commands():&#160;config.c'],['../whammy_2config_8c.html#aa437cfa836cc1a7a60adf661b0a76344',1,'serial_commands():&#160;config.c'],['../whammy_2config_8h.html#aa437cfa836cc1a7a60adf661b0a76344',1,'serial_commands():&#160;config.c']]],
   ['serial_5fcommands_5fsize',['serial_commands_size',['../switcher_2config_8c.html#a6fe59b02acadfc36edd467d5a8b4f3cb',1,'serial_commands_size():&#160;config.c'],['../switcher_2config_8h.html#a6fe59b02acadfc36edd467d5a8b4f3cb',1,'serial_commands_size():&#160;config.c'],['../template-usb_2config_8c.html#a6fe59b02acadfc36edd467d5a8b4f3cb',1,'serial_commands_size():&#160;config.c'],['../template-usb_2config_8h.html#a6fe59b02acadfc36edd467d5a8b4f3cb',1,'serial_commands_size():&#160;config.c'],['../wah_2config_8c.html#a6fe59b02acadfc36edd467d5a8b4f3cb',1,'serial_commands_size():&#160;config.c'],['../wah_2config_8h.html#a6fe59b02acadfc36edd467d5a8b4f3cb',1,'serial_commands_size():&#160;config.c'],['../whammy_2config_8c.html#a6fe59b02acadfc36edd467d5a8b4f3cb',1,'serial_commands_size():&#160;config.c'],['../whammy_2config_8h.html#a6fe59b02acadfc36edd467d5a8b4f3cb',1,'serial_commands_size():&#160;config.c']]],
   ['settings',['settings',['../structwave.html#a3c55b66190d5d709a31f1c75ea1291ed',1,'wave']]],
   ['sine_5ftable',['sine_table',['../lookup__tables_8c.html#ae6e5f1da3fe28147fe94108e59d3583a',1,'sine_table():&#160;lookup_tables.c'],['../lookup__tables_8h.html#ae6e5f1da3fe28147fe94108e59d3583a',1,'sine_table():&#160;lookup_tables.c']]],
   ['slope',['slope',['../structlinear__range.html#a1a22e6fd05951ed28063bc37a221cf71',1,'linear_range']]],
+  ['speed',['speed',['../structsequencer__channel.html#a26fcf4191f3bca30c93d8cfe5b0826b6',1,'sequencer_channel']]],
   ['speed_5fcounter',['speed_counter',['../structwave__state.html#a20e8c4c233677f7c2d2e88ff33baab71',1,'wave_state']]],
   ['speed_5fprescaler',['speed_prescaler',['../structwave__state.html#ad3c7681d422caf68ec6481eb4e5a3f66',1,'wave_state']]],
   ['state',['state',['../structencoder.html#a9add65746861236aad0f31083ac57903',1,'encoder::state()'],['../structwave.html#a2feff4be7ed9e0fb587645b03bc16fa2',1,'wave::state()']]],
-  ['step_5fcounter',['step_counter',['../structwave__state.html#ad87363248bf922d16b7d7f4b33571969',1,'wave_state::step_counter()'],['../sequencer_8c.html#a64736852e41c580f2e4a1f37f2c9881e',1,'step_counter():&#160;sequencer.c']]],
+  ['step_5fcounter',['step_counter',['../structwave__state.html#ad87363248bf922d16b7d7f4b33571969',1,'wave_state']]],
   ['step_5fdirection',['step_direction',['../structwave__state.html#a7f91ea8ad755129914e401464e190fc0',1,'wave_state']]],
+  ['step_5findex',['step_index',['../structsequencer__channel.html#ad39f4228a9c10329195744095fb1c0a0',1,'sequencer_channel']]],
+  ['steps',['steps',['../structsequencer__pattern.html#aa27d16a0565e2bf916a3abdfd5baaab7',1,'sequencer_pattern']]],
   ['switch1',['switch1',['../unionprogram__data.html#a076aa3523a2286c8c7f2b89d6dcf6345',1,'program_data']]],
   ['switch2',['switch2',['../unionprogram__data.html#a572a3abb7a60d0f3859b870014f3a093',1,'program_data']]],
   ['switch_5fstate',['switch_state',['../expression_8c.html#aa4dfc0ef0e4414b4135656752e06b8ec',1,'expression.c']]]

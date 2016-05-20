@@ -2,6 +2,7 @@ var searchData=
 [
   ['languagestring',['LanguageString',['../usb__descriptors_8c.html#a2706320165dd3831bf525233371d7af9',1,'usb_descriptors.c']]],
   ['leds',['leds',['../leds_8c.html#a29100e863027572c3d0a3362bd1f390e',1,'leds.c']]],
+  ['length',['length',['../structsequencer__pattern.html#a8a9a4083d58bb0d632feeba081352b35',1,'sequencer_pattern']]],
   ['log_5ftable',['log_table',['../lookup__tables_8c.html#a4faf205e9a02e550f4712fcee3b42a00',1,'log_table():&#160;lookup_tables.c'],['../lookup__tables_8h.html#a4faf205e9a02e550f4712fcee3b42a00',1,'log_table():&#160;lookup_tables.c']]],
   ['lookup_5ftable_5fresolution',['lookup_table_resolution',['../lookup__tables_8c.html#a5aa785eb4d6e74d52066701a5b315165',1,'lookup_table_resolution():&#160;lookup_tables.c'],['../lookup__tables_8h.html#a5aa785eb4d6e74d52066701a5b315165',1,'lookup_table_resolution():&#160;lookup_tables.c']]],
   ['loop1',['loop1',['../unionprogram__data.html#a0d51d6247b769d4ab70d414496f4721f',1,'program_data']]],

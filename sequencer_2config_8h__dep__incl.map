@@ -1,5 +1,0 @@
-<map id="src/sequencer/config.h" name="src/sequencer/config.h">
-<area shape="rect" id="node3" href="$sequencer_2config_8c.html" title="Device configuration." alt="" coords="5,83,160,112"/>
-<area shape="rect" id="node5" href="$sequencer_2main_8c.html" title="Entry point and main loop of the uMIDI firmware." alt="" coords="184,83,331,112"/>
-<area shape="rect" id="node7" href="$sequencer_8c.html" title="Sequencer module implementation." alt="" coords="355,83,533,112"/>
-</map>

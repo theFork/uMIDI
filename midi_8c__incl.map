@@ -1,5 +1,5 @@
 <map id="/home/haggl/repositories/uMIDI/software/src/lib/midi.c" name="/home/haggl/repositories/uMIDI/software/src/lib/midi.c">
-<area shape="rect" id="node9" href="$gpio_8h.html" title="GPIO configuration and service functions." alt="" coords="325,179,381,208"/>
-<area shape="rect" id="node16" href="$midi_8h.html" title="MIDI message transceiver." alt="" coords="325,101,381,131"/>
-<area shape="rect" id="node22" href="$leds_8h.html" title="Handling of the on&#45;board LEDs." alt="" coords="507,179,563,208"/>
+<area shape="rect" id="node5" href="$gpio_8h.html" title="GPIO configuration and service functions. " alt="" coords="379,169,437,196"/>
+<area shape="rect" id="node8" href="$midi_8h.html" title="MIDI message transceiver. " alt="" coords="446,95,503,121"/>
+<area shape="rect" id="node9" href="$leds_8h.html" title="Handling of the on&#45;board LEDs. " alt="" coords="286,95,343,121"/>
 </map>

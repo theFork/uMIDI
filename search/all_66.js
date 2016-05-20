@@ -4,6 +4,8 @@ var searchData=
   ['f_5ftask_5fmid',['F_TASK_MID',['../background__tasks_8h.html#aadd0736a68458905fa7bca00d7f5f9be',1,'background_tasks.h']]],
   ['f_5ftask_5fslow',['F_TASK_SLOW',['../background__tasks_8h.html#a6cf2a4ef4c846f63e307f38c33bb5e30',1,'background_tasks.h']]],
   ['f_5ftimer',['F_TIMER',['../background__tasks_8h.html#aca12ec03d86eb5ef061e7a94b02b0ac0',1,'background_tasks.h']]],
+  ['factory_5fpatterns',['factory_patterns',['../whammy_8c.html#a30b42bd1c6d90746ade2f2d7a4bbf6bd',1,'whammy.c']]],
+  ['factory_5fpatterns_5fsize',['factory_patterns_size',['../whammy_8c.html#a39c5e311db07b13ae25b1380b295be15',1,'whammy.c']]],
   ['fixed_5faccu_5ft',['fixed_accu_t',['../math_8h.html#ab1f521af7c99ce055c6718d54db45bc6',1,'math.h']]],
   ['fixed_5fdiv',['fixed_div',['../math_8h.html#a9a97346ef56e19bc4aa178bbe30f84f3',1,'math.h']]],
   ['fixed_5ffrom_5fint',['fixed_from_int',['../math_8h.html#a7ff7ed001ea53ada5c5dbb49ea6f96a2',1,'math.h']]],

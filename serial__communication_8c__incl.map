@@ -1,6 +1,6 @@
 <map id="/home/haggl/repositories/uMIDI/software/src/lib/serial_communication.c" name="/home/haggl/repositories/uMIDI/software/src/lib/serial_communication.c">
-<area shape="rect" id="node19" href="$background__tasks_8h.html" title="Background task scheduler." alt="" coords="899,144,1037,173"/>
-<area shape="rect" id="node23" href="$usb_8h.html" title="USB CDC device API." alt="" coords="523,144,576,173"/>
-<area shape="rect" id="node98" href="$serial__communication_8h.html" title="Serial communication module." alt="" coords="1061,144,1219,173"/>
-<area shape="rect" id="node102" href="$system_8h.html" title="System configuration procedures." alt="" coords="8045,144,8120,173"/>
+<area shape="rect" id="node10" href="$background__tasks_8h.html" title="Background task scheduler. " alt="" coords="909,131,1048,158"/>
+<area shape="rect" id="node12" href="$usb_8h.html" title="USB CDC device API. " alt="" coords="529,131,583,158"/>
+<area shape="rect" id="node48" href="$serial__communication_8h.html" title="Serial communication module. " alt="" coords="1073,131,1231,158"/>
+<area shape="rect" id="node49" href="$system_8h.html" title="System configuration procedures. " alt="" coords="8077,131,8153,158"/>
 </map>
