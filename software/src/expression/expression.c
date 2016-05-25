@@ -178,7 +178,8 @@ void handle_enable_switch(void)
 
 void init_expression_module(void)
 {
-    set_adc_offset(eeprom_read_word(&adc_offset_eemem));
+    adc_offset = eeprom_read_word(&adc_offset_eemem);
+    set_adc_offset(adc_offset);
     calibration_function.from = eeprom_read_word(&from_eemem);
     calibration_function.to = eeprom_read_word(&to_eemem);
     calibration_function.slope = eeprom_read_dword(&slope_eemem);
