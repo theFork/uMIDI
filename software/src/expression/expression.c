@@ -39,6 +39,9 @@
 /// \brief      The latest known expression value
 static uint8_t current_value = 0;
 
+/// \brief      Status variable for expression value console echo
+static bool echo = false;
+
 static bool switch_state = false;
 
 
@@ -78,6 +81,24 @@ bool exec_calibration(const char* command)
     return true;
 }
 
+bool exec_echo(const char* command)
+{
+    if (strlen(command) < 7 || strlen(command) > 8) {
+        usb_puts("Malformed command" USB_NEWLINE);
+        return false;
+    }
+
+    // Enable echo via global variable
+    if (!strncmp(command+5, "on", 2)) {
+        echo = true;
+    }
+    else if (!strncmp(command+5, "off", 2)) {
+        echo = false;
+    }
+
+    return true;
+}
+
 void handle_enable_switch(void)
 {
     // Only save switch state on first run
@@ -110,5 +131,8 @@ void update_expression_value(uint16_t new_value) {
         current_value = new_value;
         flash_led(LED_RED);
         send_control_change(69, new_value);
+        if (echo) {
+            usb_printf("Sending CC 69 %3u" USB_NEWLINE, new_value);
+        }
     }
 }

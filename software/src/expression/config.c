@@ -75,6 +75,13 @@ struct serial_command serial_commands[] = {
         .help_string = "Interactively calibrate the pedal",
         .handler = &exec_calibration
     },
+    {
+        .cmd_string = "echo",
+        .help_string = "<v>\n"
+                       "Switch expression value console output on / off\n"
+                       "<v> : \"on\" or \"off\"\n",
+        .handler = &exec_echo
+    },
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);
 
