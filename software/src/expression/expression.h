@@ -50,6 +50,10 @@ bool exec_echo(const char* command);
 /// \see        MIDI_NOTE_ENABLE_WAH
 void handle_enable_switch(void);
 
+/// \brief      Initializes the expression module
+/// \details    Reads calibration values from EEPROM.
+void init_expression_module(void);
+
 /// \brief      Updates the stored expression value
 /// \details    If the value changed, the new value is sent as a MIDI control change message for
 ///             controller #69 (Waldorf Blofeld's F1 Cutoff).

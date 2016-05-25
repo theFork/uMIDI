@@ -73,8 +73,12 @@ struct serial_command serial_commands[] = {
     {
         .cmd_string = "cal",
         .help_string = "<m>\n"
-                       "Calibrate the pedal\n"
-                       "<m> : \"min\" or \"max\"",
+                       "Calibrate the pedal (in the following order):\n"
+                       "<m> : \"adc\" calibrates the ADC offset\n"
+                       "      \"min\" sets the minimum registered ADC value\n"
+                       "      \"max\" sets the maximum registered ADC value\n"
+                       "      \"dmp\" dumps currently active values\n"
+                       "      \"sav\" saves active values to EEPROM\n",
         .handler = &exec_cal
     },
     {

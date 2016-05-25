@@ -64,6 +64,7 @@ int main( void )
                           low_frequency_tasks, low_frequency_tasks_size);
     init_usb_module();
     init_serial_communication(serial_commands, serial_commands_size);
+    init_expression_module();
 
     // set watchdog for 128ms
     wdt_enable(WDT_PER_128CLK_gc);
