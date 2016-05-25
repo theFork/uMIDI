@@ -38,8 +38,8 @@
 
 //---------------- functions and procedures ----------------//
 
-/// \brief      Handler for the serial command 'calibrate'
-bool exec_calibration(const char* command);
+/// \brief      Handler for the serial command 'cal'
+bool exec_cal(const char* command);
 
 /// \brief      Handler for the serial command 'echo'
 bool exec_echo(const char* command);

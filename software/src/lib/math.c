@@ -49,7 +49,7 @@ void init_linear_to_midi(struct linear_range* config)
 
 uint16_t linear_from_midi(const struct linear_range* const config, midi_value_t midi_value)
 {
-    return fixed_to_int(config->slope * input + fixed_from_int(config->from));
+    return fixed_to_int(config->slope * midi_value + fixed_from_int(config->from));
 }
 
 midi_value_t linear_to_midi(const struct linear_range* config, uint16_t input)

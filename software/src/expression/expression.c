@@ -25,6 +25,7 @@
 
 #include "lib/adc.h"
 #include "lib/leds.h"
+#include "lib/math.h"
 #include "lib/midi.h"
 #include "lib/usb.h"
 
@@ -37,12 +38,21 @@
 ////////////////////////////////////////////////////////////////
 
 /// \brief      The latest known expression value
-static uint8_t current_value = 0;
+static uint8_t current_expression_value = 0;
+
+/// \brief      The latest known expression value
+static uint16_t last_adc_value = 0;
 
 /// \brief      Status variable for expression value console echo
 static bool echo = false;
 
 static bool switch_state = false;
+
+static struct linear_range calibration_function = {
+        .from = 0,
+        .to = 127,
+        .slope = 1L << 16 // fixed from int
+};
 
 
 
@@ -69,15 +79,29 @@ static void send_enable_message(bool enable)
 //          P U B L I C   I M P L E M E N T A T I O N         //
 ////////////////////////////////////////////////////////////////
 
-bool exec_calibration(const char* command)
+bool exec_cal(const char* command)
 {
-    if (strlen(command) != 9) {
-        usb_puts("Malformed command" USB_NEWLINE);
+    if (strlen(command) != 7) {
+        usb_puts("Malformed command");
         return false;
     }
 
-    // Measure offset and initialize sample buffer
-    calibrate_adc_offset(expression_conversion.channel);
+    bool echo_state = echo;
+    if (!strncmp(command+4, "min", 3)) {
+        echo = false;
+        usb_puts("Perfoming offset calibration...");
+        calibrate_adc_offset(expression_conversion.channel);
+        usb_puts("done.");
+    }
+    else if (!strncmp(command+4, "max", 3)) {
+        echo = false;
+        usb_puts("Perfoming max calibration and setting up linear function...");
+        calibration_function.to = last_adc_value;
+        init_linear_to_midi(&calibration_function);
+        usb_puts("done.");
+    }
+    echo = echo_state;
+
     return true;
 }
 
@@ -126,13 +150,20 @@ void trigger_expression_conversion(void)
     trigger_adc(expression_conversion.channel);
 }
 
-void update_expression_value(uint16_t new_value) {
-    if (new_value != current_value) {
-        current_value = new_value;
+void update_expression_value(uint16_t new_adc_value) {
+    if (new_adc_value != last_adc_value) {
+        // Update stored values
+        last_adc_value = new_adc_value;
+        current_expression_value = linear_to_midi(&calibration_function, new_adc_value);
+        if (current_expression_value > MIDI_MAX_VALUE) {
+            current_expression_value = MIDI_MAX_VALUE;
+        }
+
         flash_led(LED_RED);
-        send_control_change(69, new_value);
+        send_control_change(69, current_expression_value);
+
         if (echo) {
-            usb_printf("Sending CC 69 %3u" USB_NEWLINE, new_value);
+            usb_printf("Sending CC 69 %3u" USB_NEWLINE, current_expression_value);
         }
     }
 }

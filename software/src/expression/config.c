@@ -71,9 +71,11 @@ uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background
 //---------------- Commands ----------------//
 struct serial_command serial_commands[] = {
     {
-        .cmd_string = "calibrate",
-        .help_string = "Interactively calibrate the pedal",
-        .handler = &exec_calibration
+        .cmd_string = "cal",
+        .help_string = "<m>\n"
+                       "Calibrate the pedal\n"
+                       "<m> : \"min\" or \"max\"",
+        .handler = &exec_cal
     },
     {
         .cmd_string = "echo",
