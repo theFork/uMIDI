@@ -57,7 +57,7 @@ static bool enable_state = false;
 
 static inline uint16_t linear_function(uint8_t midi_value)
 {
-    return linear(&pwm_range, midi_value);
+    return linear_from_midi(&pwm_range, midi_value);
 }
 
 static inline void toggle_wah(void)
@@ -176,7 +176,7 @@ void init_wah_module(void)
     // Setup linear conversion function
     pwm_range.from = 570;
     pwm_range.to = PWM_MAX_DUTY-190;
-    init_linear(&pwm_range);
+    init_linear_from_midi(&pwm_range);
     init_pwm_module(&linear_function);
     set_pwm_duty_cycle(pwm_range.from);
 
