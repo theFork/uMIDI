@@ -57,12 +57,14 @@ int main( void )
     init_leds_module();
     init_gpio_module(gpio_mappings, gpio_mappings_size);
     init_midi_module(&midi_config);
-    init_adc_module(&adc_config, &expression_conversion);
+    init_adc_module(&adc_config);
+    init_adc_conversion(&expression_conversion);
     init_background_tasks(high_frequency_tasks, high_frequency_tasks_size,
-                                mid_frequency_tasks, mid_frequency_tasks_size,
-                                low_frequency_tasks, low_frequency_tasks_size);
+                          mid_frequency_tasks, mid_frequency_tasks_size,
+                          low_frequency_tasks, low_frequency_tasks_size);
     init_usb_module();
-    init_serial_communication(NULL, 0);
+    init_serial_communication(serial_commands, serial_commands_size);
+    init_expression_module();
 
     // set watchdog for 128ms
     wdt_enable(WDT_PER_128CLK_gc);
@@ -76,6 +78,7 @@ int main( void )
 
     // Blink green LED
     blink_led(LED_GREEN, F_TASK_SLOW);
+    set_led(&power_led, true);
 
     // Main loop
     while (true) {

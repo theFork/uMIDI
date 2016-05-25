@@ -31,16 +31,22 @@
 #include "lib/background_tasks.h"
 #include "lib/gpio.h"
 #include "lib/midi.h"
+#include "lib/serial_communication.h"
 
+
+//---------------- macros ----------------//
+/// \brief  The GPIO pin connected to the enable switch
+#define ENABLE_SWITCH_PIN   gpio.header3.pin7
+
+/// \brief  The GPIO pin connected to the power led
+#define POWER_LED_PIN       gpio.header3.pin5
+
+/// \brief  The GPIO pin connected to the status led
+#define STATUS_LED_PIN      gpio.header3.pin6
 
 //---------------- constant declarations ----------------//
 extern const struct adc_config adc_config;
 extern const struct adc_conversion_config expression_conversion;
-
-extern struct gpio_mapping gpio_mappings[];
-extern uint8_t gpio_mappings_size;
-
-extern struct midi_config midi_config;
 
 extern background_task_t high_frequency_tasks[];
 extern uint8_t high_frequency_tasks_size;
@@ -48,6 +54,17 @@ extern background_task_t mid_frequency_tasks[];
 extern uint8_t mid_frequency_tasks_size;
 extern background_task_t low_frequency_tasks[];
 extern uint8_t low_frequency_tasks_size;
+
+extern struct gpio_mapping gpio_mappings[];
+extern uint8_t gpio_mappings_size;
+
+extern struct led power_led;
+extern struct led status_led;
+
+extern struct midi_config midi_config;
+
+extern struct serial_command serial_commands[];
+extern uint8_t serial_commands_size;
 
 //---------------- EOF ----------------//
 #endif // _CONFIG_H

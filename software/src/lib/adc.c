@@ -97,8 +97,10 @@ static void (*callbacks_unsigned[sizeof(adc_regs)/sizeof(struct adc_channel_regs
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void calibrate_adc_offset(enum adc_channel channel)
+uint16_t calibrate_adc_offset(enum adc_channel channel)
 {
+    cli();
+
     adc_accumulator accumulator = 0;
     uint8_t i;
     for (i=0; i<ADC_SAMPLE_BUFFER_SIZE; i++) {
@@ -109,6 +111,9 @@ void calibrate_adc_offset(enum adc_channel channel)
         sample_buffer[i] = *adc_regs[channel].result_register;
     }
     offset = accumulator / ADC_SAMPLE_BUFFER_SIZE;
+
+    sei();
+    return offset;
 }
 
 inline void disable_adc_interrupt(enum adc_channel channel)
@@ -121,8 +126,7 @@ inline void enable_adc_interrupt(enum adc_channel channel)
     *adc_regs[channel].interrupt_register |= ADC_CH_INTLVL_LO_gc;
 }
 
-void init_adc_module(const struct adc_config* const config,
-                     const struct adc_conversion_config* const calibration_conversion)
+void init_adc_module(const struct adc_config* const config)
 {
     // Select voltage reference
     ADCA.REFCTRL = ADC_REFSEL_INTVCC_gc;
@@ -143,11 +147,6 @@ void init_adc_module(const struct adc_config* const config,
 
     // Enable the ADC
     ADCA.CTRLA |= ADC_ENABLE_bm;
-
-    init_adc_conversion(calibration_conversion);
-
-    // Measure offset and initialize sample buffer
-    calibrate_adc_offset(calibration_conversion->channel);
 }
 
 void init_adc_conversion(const struct adc_conversion_config* const config)
@@ -166,6 +165,11 @@ void init_adc_conversion(const struct adc_conversion_config* const config)
     trigger_adc(config->channel);
     while (!*adc_regs[config->channel].interrupt_flag);
     *adc_regs[config->channel].interrupt_flag = true;
+}
+
+void set_adc_offset(uint16_t new_offset)
+{
+    offset = new_offset;
 }
 
 void trigger_adc(enum adc_channel channel)

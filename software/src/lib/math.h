@@ -42,28 +42,42 @@ typedef uint32_t        fixed_t;
 /// \brief      Datatype for accumulators in fixed point number arithmetic functions
 typedef uint64_t        fixed_accu_t;
 
-/// \brief      Configuration for a linear function.
+/// \brief      Configuration for a linear scaling function.
 struct linear_range
 {
-    uint16_t    from;       ///< The value that will be returned by linear() when called with midi_value = 0
-    uint16_t    to;         ///< The value that will be returned by linear() whenn called with midi_value = 127
-    int16_t     slope;      ///< The slope of the linear function (computed in init_linear())
+    uint16_t    from;       ///< The lowest input (#linear_to_midi) / output (#linear_from_midi) value
+    uint16_t    to;         ///< The highest input (#linear_to_midi) / output (#linear_from_midi) value
+    fixed_t     slope;      ///< The slope of the linear function (computed in init_linear_...())
 };
 
 
 //---------------- prototypes ----------------//
 
-/// \brief      Initializes a linear function
+/// \brief      Initializes a linear function to map from MIDI values to an arbitrary integer range
 /// \param      config
 ///                 the configuration of the linear function to initialize
-void init_linear(struct linear_range* config);
+void init_linear_from_midi(struct linear_range* config);
 
-/// \brief      Calculates a linear function from a given midi value
+/// \brief      Initializes a linear function to map from an arbitrary integer range to MIDI values
 /// \param      config
 ///                 the configuration of the linear function to initialize
+void init_linear_to_midi(struct linear_range* config);
+
+/// \brief      Yields an integer in the configured range that corresponds to the given MIDI value
+/// \param      config
+///                 the configuration of the linear function
 /// \param      midi_value
-///                 the MIDI value to convert [0 .. 127]
-uint16_t linear(const struct linear_range* config, midi_value_t midi_value);
+///                 the MIDI value to convert [0,127]
+/// \returns    the input scaled to the configured range
+uint16_t linear_from_midi(const struct linear_range* config, midi_value_t midi_value);
+
+/// \brief      Yields the MIDI value [0,127] from a given integer in the configured range
+/// \param      config
+///                 the configuration of the linear function
+/// \param      input
+///                 the integer to convert to a MIDI value
+/// \returns    the input scaled to the MIDI range [0,127]
+midi_value_t linear_to_midi(const struct linear_range* config, uint16_t input);
 
 
 //---------------- inline functions ----------------//

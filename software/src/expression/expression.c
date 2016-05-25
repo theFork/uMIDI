@@ -21,10 +21,14 @@
  */
 
 #include <stdbool.h>
+#include <string.h>
+#include <avr/eeprom.h>
 
 #include "lib/adc.h"
 #include "lib/leds.h"
+#include "lib/math.h"
 #include "lib/midi.h"
+#include "lib/usb.h"
 
 #include "config.h"
 #include "expression.h"
@@ -35,15 +39,33 @@
 ////////////////////////////////////////////////////////////////
 
 /// \brief      The latest known expression value
-static uint8_t current_value = 0;
+static uint8_t current_expression_value = 0;
 
-static bool enable_state = false;
+/// \brief      The latest known expression value
+static uint16_t last_adc_value = 0;
+
+/// \brief      Status variable for expression value console echo
+static bool echo = false;
+
 static bool switch_state = false;
+
+static struct linear_range calibration_function = {
+        .from = 0,
+        .to = 127,
+        .slope = 1L << 16 // fixed from int
+};
+
+uint16_t adc_offset = 0;
+
+uint16_t adc_offset_eemem EEMEM;
+uint16_t from_eemem EEMEM;
+uint16_t to_eemem EEMEM;
+uint32_t slope_eemem EEMEM;
 
 
 
 ////////////////////////////////////////////////////////////////
-//      F U N C T I O N S   A N D   P R O C E D U R E S       //
+//         P R I V A T E   I M P L E M E N T A T I O N        //
 ////////////////////////////////////////////////////////////////
 
 /// \brief      Send a MIDI note on/off message
@@ -59,17 +81,77 @@ static void send_enable_message(bool enable)
     }
 }
 
-void update_expression_value(uint16_t new_value) {
-    if (new_value != current_value) {
-        current_value = new_value;
-        flash_led(LED_RED);
-        send_control_change(69, new_value);
+
+
+////////////////////////////////////////////////////////////////
+//          P U B L I C   I M P L E M E N T A T I O N         //
+////////////////////////////////////////////////////////////////
+
+bool exec_cal(const char* command)
+{
+    if (strlen(command) != 7) {
+        usb_puts("Malformed command");
+        return false;
     }
+
+    bool echo_state = echo;
+    if (!strncmp(command+4, "adc", 3)) {
+        usb_puts("Calibrating ADC offset...");
+        adc_offset = calibrate_adc_offset(expression_conversion.channel);
+        usb_puts("done.");
+    }
+    else if (!strncmp(command+4, "dmp", 3)) {
+        usb_printf("Offset: %u" USB_NEWLINE, adc_offset);
+        usb_printf("Min: %u" USB_NEWLINE, calibration_function.from);
+        usb_printf("Max: %u" USB_NEWLINE, calibration_function.to);
+    }
+    else if (!strncmp(command+4, "max", 3)) {
+        echo = false;
+        usb_puts("Updating max ADC value and updating linear function range...");
+
+        calibration_function.to = last_adc_value;
+        init_linear_to_midi(&calibration_function);
+
+        usb_puts("done.");
+    }
+    else if (!strncmp(command+4, "min", 3)) {
+        echo = false;
+        usb_puts("Saving min ADC value and updating linear functino range...");
+
+        calibration_function.from = last_adc_value;
+        init_linear_to_midi(&calibration_function);
+
+        usb_puts("done.");
+    }
+    else if (!strncmp(command+4, "sav", 3)) {
+        usb_puts("Storing current calibration values...");
+        eeprom_write_word(&adc_offset_eemem, adc_offset);
+        eeprom_write_word(&from_eemem,       calibration_function.from);
+        eeprom_write_word(&to_eemem,         calibration_function.to);
+        eeprom_write_dword(&slope_eemem,     calibration_function.slope);
+        usb_puts("done.");
+    }
+    echo = echo_state;
+
+    return true;
 }
 
-void trigger_expression_conversion(void)
+bool exec_echo(const char* command)
 {
-    trigger_adc(expression_conversion.channel);
+    if (strlen(command) < 7 || strlen(command) > 8) {
+        usb_puts("Malformed command" USB_NEWLINE);
+        return false;
+    }
+
+    // Enable echo via global variable
+    if (!strncmp(command+5, "on", 2)) {
+        echo = true;
+    }
+    else if (!strncmp(command+5, "off", 2)) {
+        echo = false;
+    }
+
+    return true;
 }
 
 void handle_enable_switch(void)
@@ -77,19 +159,50 @@ void handle_enable_switch(void)
     // Only save switch state on first run
     static bool first_run = true;
     if (first_run) {
-        switch_state = gpio_get(gpio.header3.pin9);
+        switch_state = gpio_get(ENABLE_SWITCH_PIN);
         first_run = false;
         return;
     }
 
     // Poll switch
-    bool current_switch_state = gpio_get(gpio.header3.pin9);
+    bool current_switch_state = gpio_get(gpio.header3.pin7);
     if (switch_state != current_switch_state) {
         switch_state = current_switch_state;
 
         // Broadcast change over MIDI and toggle LED
-        enable_state = !enable_state;
-        gpio_set(gpio.header3.pin6, enable_state);
-        send_enable_message(enable_state);
+        status_led.state.active = !status_led.state.active;
+        gpio_set(STATUS_LED_PIN, status_led.state.active);
+        send_enable_message(status_led.state.active);
+    }
+}
+
+void init_expression_module(void)
+{
+    set_adc_offset(eeprom_read_word(&adc_offset_eemem));
+    calibration_function.from = eeprom_read_word(&from_eemem);
+    calibration_function.to = eeprom_read_word(&to_eemem);
+    calibration_function.slope = eeprom_read_dword(&slope_eemem);
+}
+
+void trigger_expression_conversion(void)
+{
+    trigger_adc(expression_conversion.channel);
+}
+
+void update_expression_value(uint16_t new_adc_value) {
+    if (new_adc_value != last_adc_value) {
+        // Update stored values
+        last_adc_value = new_adc_value;
+        current_expression_value = linear_to_midi(&calibration_function, new_adc_value);
+        if (current_expression_value > MIDI_MAX_VALUE) {
+            current_expression_value = MIDI_MAX_VALUE;
+        }
+
+        flash_led(LED_RED);
+        send_control_change(69, current_expression_value);
+
+        if (echo) {
+            usb_printf("Sending CC 69 %3u" USB_NEWLINE, current_expression_value);
+        }
     }
 }

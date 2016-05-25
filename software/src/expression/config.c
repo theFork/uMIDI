@@ -50,13 +50,64 @@ const struct adc_conversion_config expression_conversion = {
     .callback_unsigned  = &update_expression_value,
 };
 
+//---------------- Background tasks ----------------//
+background_task_t high_frequency_tasks[] = {
+    &serial_communication_task,
+};
+uint8_t high_frequency_tasks_size = sizeof(high_frequency_tasks)/sizeof(background_task_t);
+
+background_task_t mid_frequency_tasks[] = {
+    &trigger_expression_conversion,
+    &usb_main_task,
+};
+uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background_task_t);
+
+background_task_t low_frequency_tasks[] = {
+    &handle_enable_switch,
+    &update_leds,
+};
+uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);
+
+//---------------- Commands ----------------//
+struct serial_command serial_commands[] = {
+    {
+        .cmd_string = "cal",
+        .help_string = "<m>\n"
+                       "Calibrate the pedal (in the following order):\n"
+                       "<m> : \"adc\" calibrates the ADC offset\n"
+                       "      \"min\" sets the minimum registered ADC value\n"
+                       "      \"max\" sets the maximum registered ADC value\n"
+                       "      \"dmp\" dumps currently active values\n"
+                       "      \"sav\" saves active values to EEPROM\n",
+        .handler = &exec_cal
+    },
+    {
+        .cmd_string = "echo",
+        .help_string = "<v>\n"
+                       "Switch expression value console output on / off\n"
+                       "<v> : \"on\" or \"off\"\n",
+        .handler = &exec_echo
+    },
+};
+uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);
+
 //---------------- GPIO ----------------//
 struct gpio_mapping gpio_mappings[] = {
     { .pin = &gpio.header1.pin6, .type = GPIO_INPUT },          // ADC input
-    { .pin = &gpio.header3.pin4, .type = GPIO_OUTPUT },         // Enable LED
-    { .pin = &gpio.header3.pin9, .type = GPIO_INPUT_PULLUP },   // Enable switch
+    { .pin = &POWER_LED_PIN, .type = GPIO_OUTPUT },             // Power LED
+    { .pin = &STATUS_LED_PIN, .type = GPIO_OUTPUT },            // Status LED
+    { .pin = &ENABLE_SWITCH_PIN, .type = GPIO_INPUT_PULLUP },   // Enable switch
 };
 uint8_t gpio_mappings_size = sizeof(gpio_mappings)/sizeof(struct gpio_mapping);
+
+//---------------- LEDS ----------------//
+struct led power_led = {
+    .pin = &POWER_LED_PIN,
+};
+
+struct led status_led = {
+    .pin = &STATUS_LED_PIN,
+};
 
 //---------------- MIDI ----------------//
 struct midi_config midi_config = {
@@ -71,20 +122,3 @@ struct midi_config midi_config = {
     .signal_rx  = false,
     .tx_channel = MIDI_CHANNEL_01,
 };
-
-//---------------- Background tasks ----------------//
-background_task_t high_frequency_tasks[] = {};
-uint8_t high_frequency_tasks_size = sizeof(high_frequency_tasks)/sizeof(background_task_t);
-
-background_task_t mid_frequency_tasks[] = {
-    &trigger_expression_conversion,
-    &usb_main_task,
-};
-uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background_task_t);
-
-background_task_t low_frequency_tasks[] = {
-    &handle_enable_switch,
-    &update_leds,
-    &serial_communication_task,
-};
-uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);

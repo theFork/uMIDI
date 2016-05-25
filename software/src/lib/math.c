@@ -35,12 +35,24 @@
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void init_linear(struct linear_range* const config)
+void init_linear_from_midi(struct linear_range* const config)
 {
-    config->slope = (int16_t)(config->to - config->from) / MIDI_MAX_VALUE;
+    config->slope = fixed_div(fixed_from_int(config->to - config->from),
+                              fixed_from_int(MIDI_MAX_VALUE));
 }
 
-uint16_t linear(const struct linear_range* const config, midi_value_t midi_value)
+void init_linear_to_midi(struct linear_range* config)
 {
-    return config->slope * midi_value + config->from;
+    config->slope = fixed_div(fixed_from_int(MIDI_MAX_VALUE),
+                              fixed_from_int(config->to - config->from));
+}
+
+uint16_t linear_from_midi(const struct linear_range* const config, midi_value_t midi_value)
+{
+    return fixed_to_int(config->slope * midi_value + fixed_from_int(config->from));
+}
+
+midi_value_t linear_to_midi(const struct linear_range* config, uint16_t input)
+{
+    return fixed_to_int(config->slope * input + fixed_from_int(config->from));
 }

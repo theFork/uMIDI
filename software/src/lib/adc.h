@@ -103,7 +103,8 @@ struct adc_config
 /// \brief      Calibrates the ADC offset using the given channel
 /// \param      channel
 ///                 the ADC channel
-void calibrate_adc_offset(enum adc_channel channel);
+/// \returns    the measured offset
+uint16_t calibrate_adc_offset(enum adc_channel channel);
 
 /// \brief      Disables the interrupt for an ADC channel
 /// \param      channel
@@ -128,10 +129,12 @@ void init_adc_conversion(const struct adc_conversion_config* config);
 ///             calibrates the ADC
 /// \param      config
 ///                 the shared ADC configuration
-/// \param      calibration_conversion
-///                 a conversion configuration used for ADC offset calibration
-void init_adc_module(const struct adc_config* config,
-                     const struct adc_conversion_config* calibration_conversion);
+void init_adc_module(const struct adc_config* config);
+
+/// \brief      Sets the ADC offset
+/// \param      offset
+///                 the offset
+void set_adc_offset(uint16_t offset);
 
 /// \brief      Triggers a conversion for the given channel
 /// \param      channel
