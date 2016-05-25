@@ -99,6 +99,8 @@ static void (*callbacks_unsigned[sizeof(adc_regs)/sizeof(struct adc_channel_regs
 
 void calibrate_adc_offset(enum adc_channel channel)
 {
+    cli();
+
     adc_accumulator accumulator = 0;
     uint8_t i;
     for (i=0; i<ADC_SAMPLE_BUFFER_SIZE; i++) {
@@ -109,6 +111,8 @@ void calibrate_adc_offset(enum adc_channel channel)
         sample_buffer[i] = *adc_regs[channel].result_register;
     }
     offset = accumulator / ADC_SAMPLE_BUFFER_SIZE;
+
+    sei();
 }
 
 inline void disable_adc_interrupt(enum adc_channel channel)
