@@ -6,14 +6,14 @@
 ///             define a `union` for easier access of these components in your application code -
 ///             for example something like
 ///             \code
-///             union program_data = {
+///             union program_data {
 ///                 uint32_t word;
 ///                 struct {
 ///                     bool flag0 : 1;
 ///                     bool flag1 : 1;
 ///                     bool flag2 : 1;
 ///                 } bit;
-///             }
+///             };
 ///             \endcode
 ///             The programs are grouped into twelve banks of ten programs each - leaving 1568
 ///             bytes of EEPROM for other application specific data.
@@ -45,6 +45,7 @@
 
 
 //---------------- includes ----------------//
+#include <stdbool.h>
 #include <stdint.h>
 
 
