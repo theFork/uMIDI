@@ -56,7 +56,7 @@ static void sequencer_tick_handler(void);
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-const struct sequencer_pattern factory_patterns[] = {
+static const struct sequencer_pattern factory_patterns[] = {
     { // SEQUENCER_PATTERN_01
         .length     = 8,
         .steps      = {
@@ -98,9 +98,9 @@ const struct sequencer_pattern factory_patterns[] = {
         }
     },
 };
-const uint8_t factory_patterns_size = sizeof(factory_patterns) / sizeof(struct sequencer_pattern);
+static const uint8_t factory_patterns_size = sizeof(factory_patterns) / sizeof(struct sequencer_pattern);
 
-struct sequencer_channel sequencer = {
+static struct sequencer_channel sequencer = {
     .pattern        = SEQUENCER_PATTERN_01,
     .speed          = 40,
     .mode           = SEQUENCER_CHANNEL_MODE_CONTINUOUS,
