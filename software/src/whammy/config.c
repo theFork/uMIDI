@@ -97,9 +97,9 @@ struct midi_config midi_config = {
         .program_change = NULL
     },
     .omni_mode  = true,
-    .rx_channel = 1,
+    .rx_channel = MIDI_CHANNEL_01,
     .signal_rx  = true,
-    .tx_channel = 1,
+    .tx_channel = MIDI_CHANNEL_01,
 };
 
 //---------------- State machine ----------------//
