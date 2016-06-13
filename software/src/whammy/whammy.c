@@ -350,6 +350,54 @@ bool exec_tap(const char* command)
     return true;
 }
 
+void execute_program_callback(uint32_t program_data)
+{
+    // Update active controller program in RAM
+    active_program.word = program_data;
+
+    // Apply Whammy controller mode
+    switch (active_program.field.ctrl_mode) {
+        case WHAMMY_CTRL_MODE_WAVE:
+            stop_sequencer(&sequencer);
+            show_led_pattern(0x00);
+
+            // TODO Set up wave
+            // active_program.speed -> speed
+            // active_program.additional -> amplitude
+            // active_program.waveform -> waveform
+            break;
+
+        case WHAMMY_CTRL_MODE_PATTERN:
+            // Set up sequencer according to the loaded program
+            set_sequencer_pattern(&sequencer, active_program.field.additional);
+            set_sequencer_speed(&sequencer, active_program.field.speed);
+            start_sequencer(&sequencer);
+            break;
+
+        case WHAMMY_CTRL_MODE_MOMENTARY:
+        default:
+            stop_sequencer(&sequencer);
+            show_led_pattern(0x00);
+
+            send_control_change(WHAMMY_MIDI_CC_NUMBER, 0);
+            break;
+    }
+
+    // Update Whammy pedal mode
+    if (active_program.field.ctrl_mode == WHAMMY_CTRL_MODE_MOMENTARY) {
+        send_program_change(WHAMMY_MODE_OFF);
+    }
+    else {
+        send_program_change(active_program.field.pedal_mode);
+    }
+}
+
+void handle_midi_program_change(midi_value_t program)
+{
+    usb_printf(PSTR("Entering program #%u" USB_NEWLINE), program+1);
+    enter_program(program);
+}
+
 void decrease_speed(void)
 {
     usb_printf(PSTR("Set speed to %d" USB_NEWLINE), adjust_sequencer_speed(&sequencer, -1));

@@ -32,6 +32,9 @@
 
 //---------------- constants ----------------//
 
+/// \brief      The MIDI controller number used by the Whammy pedal to modify the pitch
+#define WHAMMY_MIDI_CC_NUMBER   11
+
 
 //---------------- data types ----------------//
 
@@ -163,6 +166,7 @@ bool exec_patwipe(const char* command);
 bool exec_speed(const char* command);
 bool exec_store(const char* command);
 bool exec_tap(const char* command);
+void handle_midi_program_change(midi_value_t program);
 void decrease_speed(void);
 void increase_speed(void);
 void init_whammy_module(void);

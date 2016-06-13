@@ -143,7 +143,7 @@ struct midi_config midi_config = {
         .control_change = NULL,
         .note_off       = NULL,
         .note_on        = NULL,
-        .program_change = NULL
+        .program_change = handle_midi_program_change
     },
     .omni_mode  = true,
     .rx_channel = MIDI_CHANNEL_01,
