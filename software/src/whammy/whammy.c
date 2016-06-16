@@ -106,6 +106,12 @@ static struct sequencer_channel sequencer = {
     .tick_callback  = &sequencer_tick_handler,
 };
 
+static struct wave control_wave = {
+    .settings = {
+        .waveform = WAVE_OFF,
+    }
+};
+
 static union whammy_ctrl_program active_program = {
     .field.ctrl_mode = WHAMMY_CTRL_MODE_BYPASS,
 };
@@ -123,8 +129,8 @@ static void adjust_speed(int8_t delta)
 {
     uint8_t speed = adjust_sequencer_speed(&sequencer, delta);
     // TODO Adjust pitch bend speed
-    // TODO Adjust wave speed
     active_program.field.speed = speed;
+    set_speed(&control_wave, speed);
     set_sequencer_speed(&sequencer, speed);
     usb_printf(PSTR("Set speed to %d" USB_NEWLINE), speed);
 }
@@ -202,6 +208,7 @@ static void dump_current_program(void)
 static void enter_bypass_mode(void)
 {
     stop_sequencer(&sequencer);
+    set_waveform(&control_wave, WAVE_OFF);
 
     usb_puts(PSTR("Enabling bypass"));
     active_program.field.ctrl_mode = WHAMMY_CTRL_MODE_BYPASS;
@@ -212,6 +219,7 @@ static void enter_bypass_mode(void)
 static void enter_momentary_mode(void)
 {
     stop_sequencer(&sequencer);
+    set_waveform(&control_wave, WAVE_OFF);
 
     usb_puts(PSTR("Entering momentary mode"));
     active_program.field.ctrl_mode = WHAMMY_CTRL_MODE_MOMENTARY;
@@ -221,6 +229,8 @@ static void enter_momentary_mode(void)
 /// \brief      Enters pattern mode
 static void enter_pattern_mode(const enum sequencer_pattern_number pattern)
 {
+    set_waveform(&control_wave, WAVE_OFF);
+
     usb_puts(PSTR("Entering pattern mode"));
     active_program.field.ctrl_mode = WHAMMY_CTRL_MODE_PATTERN;
     active_program.field.waveform = pattern;
@@ -233,10 +243,12 @@ static void enter_pattern_mode(const enum sequencer_pattern_number pattern)
 static void enter_wave_mode(const enum waveform waveform)
 {
     stop_sequencer(&sequencer);
+    show_led_pattern(0x0);
 
     usb_puts(PSTR("Entering wave mode"));
     active_program.field.ctrl_mode = WHAMMY_CTRL_MODE_WAVE;
     active_program.field.waveform = waveform;
+    set_waveform(&control_wave, waveform);
     usb_printf(PSTR("Waveform %d" USB_NEWLINE), waveform);
 }
 
@@ -342,9 +354,13 @@ bool exec_mode(const char* command)
             }
         }
 
-        case 'w':
-            // TODO Switch to wave mode
-            return true;
+        case 'w': {
+            uint8_t number = atoi(command+7);
+            if (number <= WAVE_RANDOM) {
+                enter_wave_mode(number);
+                return true;
+            }
+        }
     }
 
     usb_puts(PSTR("Unknown parameter" USB_NEWLINE));
@@ -440,8 +456,8 @@ bool exec_speed(const char* command)
     speed %= MIDI_MAX_VALUE + 1;
     usb_printf(PSTR("Setting waveform speed to %u" USB_NEWLINE), speed);
     // TODO Adjust pitch bend speed
-    // TODO Adjust wave speed
     active_program.field.speed = speed;
+    set_speed(&control_wave, speed);
     set_sequencer_speed(&sequencer, speed);
     return true;
 }
@@ -488,16 +504,20 @@ void execute_program_callback(uint32_t program_data)
             stop_sequencer(&sequencer);
             show_led_pattern(0x00);
 
-            // TODO Set up wave
-            // active_program.speed -> speed
-            // active_program.additional -> amplitude
-            // active_program.waveform -> waveform
+            // Set up wave
+            init_wave(&control_wave, active_program.field.waveform,
+                      active_program.field.speed, active_program.field.amplitude, 0);
+            configure_tap_tempo_wave(&control_wave);
+
+            // Update sequencer speed for seamless speed adjustment via HMI
+            set_sequencer_speed(&sequencer, active_program.field.speed);
             break;
 
         case WHAMMY_CTRL_MODE_PATTERN:
             // Set up sequencer according to the loaded program
             set_sequencer_pattern(&sequencer, active_program.field.waveform);
             set_sequencer_speed(&sequencer, active_program.field.speed);
+            configure_tap_tempo_wave(&sequencer.wave);
             start_sequencer(&sequencer);
             break;
 
@@ -537,6 +557,7 @@ void increase_speed(void)
 
 void init_whammy_module(void)
 {
+    init_program_module(0x0000, &execute_program_callback);
     configure_sequencer_channel(SEQUENCER_CHANNEL_1, &sequencer);
     enter_program(0);
     init_wave(&control_wave, active_program.field.waveform,
@@ -566,6 +587,7 @@ void select_next_mode(void)
                 enter_pattern_mode(SEQUENCER_PATTERN_01);
                 break;
             }
+            set_waveform(&control_wave, active_program.field.waveform);
             usb_printf(PSTR("Waveform %d" USB_NEWLINE), active_program.field.waveform);
             break;
 
@@ -601,6 +623,7 @@ void select_previous_mode(void)
                 enter_momentary_mode();
                 break;
             }
+            set_waveform(&control_wave, active_program.field.waveform);
             usb_printf(PSTR("Waveform %d" USB_NEWLINE), active_program.field.waveform);
             break;
 
@@ -640,5 +663,26 @@ void toggle_sequencing(void)
     toggle_sequencer(&sequencer);
     if (!sequencer.running) {
         show_led_pattern(0x00);
+    }
+}
+
+void update_controller_value(void)
+{
+    switch (active_program.field.ctrl_mode) {
+        case WHAMMY_CTRL_MODE_PATTERN:
+            update_sequencer();
+            break;
+        case WHAMMY_CTRL_MODE_WAVE:
+        {
+            static uint8_t last_sent_value = 0;
+            uint8_t value = update_wave(&control_wave);
+            if (value != last_sent_value) {
+                last_sent_value = value;
+                send_control_change(WHAMMY_MIDI_CC_NUMBER, value);
+            }
+            break;
+        }
+        default:
+            break;
     }
 }

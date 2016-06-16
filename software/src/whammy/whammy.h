@@ -176,6 +176,7 @@ void select_previous_mode(void);
 void tap_tempo(void);
 void toggle_sequencer_mode(void);
 void toggle_sequencing(void);
+void update_controller_value(void);
 
 //---------------- EOF ----------------//
 #endif // _WHAMMY_H

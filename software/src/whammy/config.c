@@ -153,7 +153,7 @@ struct midi_config midi_config = {
 //---------------- State machine ----------------//
 background_task_t high_frequency_tasks[] = {
     &serial_communication_task,
-    &update_sequencer,
+    &update_controller_value,
 };
 uint8_t high_frequency_tasks_size = sizeof(high_frequency_tasks)/sizeof(background_task_t);
 
