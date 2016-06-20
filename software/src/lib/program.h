@@ -148,6 +148,11 @@ void wipe_current_program(void);
 ///                 Program data as 32-bit dword.
 void write_program(uint8_t number, uint32_t data);
 
+/// \brief      Stores a given program data word at last read position in memory.
+/// \param      data
+///                 Program data as 32-bit dword.
+void update_program(uint32_t data);
+
 
 //---------------- EOF ----------------//
 #endif // _PROGRAM_H

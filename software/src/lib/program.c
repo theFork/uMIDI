@@ -191,3 +191,8 @@ void write_program(uint8_t number, uint32_t data)
 {
     eeprom_write_dword(&program_data_storage[number], data);
 }
+
+void update_program(uint32_t data)
+{
+    write_program(current_program.number, data);
+}
