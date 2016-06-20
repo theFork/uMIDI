@@ -85,6 +85,12 @@ static const char cmd_string_speed[] PROGMEM = "speed";
 static const char help_string_speed[] PROGMEM = "<s>\n"
     "Adjust the speed of the sequencer:\n"
     "<s> : wave speed\n";
+static const char cmd_string_store[] PROGMEM = "store";
+static const char help_string_store[] PROGMEM = "t n d\n"
+    "Stores given data in EEPROM:\n"
+    "<t> : 'P' for pattern or 'p' for program\n"
+    "<n> : pattern  or program number (counting from 1)\n"
+    "<d> : data in hexadecimal format\n";
 static const char cmd_string_tap[] PROGMEM = "tap";
 static const char help_string_tap[] PROGMEM = "\nSend this command repeatedly to tap in a tempo\n";
 static const char cmd_string_pattern[] PROGMEM = "pattern";
@@ -104,6 +110,7 @@ struct serial_command serial_commands[] = {
     { .cmd_string = cmd_string_patsel,  .help_string = help_string_patsel,  .handler = &exec_patsel        },
     { .cmd_string = cmd_string_patwipe, .help_string = help_string_patwipe, .handler = &exec_patwipe       },
     { .cmd_string = cmd_string_speed,   .help_string = help_string_speed,   .handler = &exec_speed         },
+    { .cmd_string = cmd_string_store,   .help_string = help_string_store,   .handler = &exec_store         },
     { .cmd_string = cmd_string_tap,     .help_string = help_string_tap,     .handler = &exec_tap           },
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);
@@ -119,7 +126,7 @@ struct hmi_config hmi_config = {
     .output_header = &gpio.header1,
     .long_input_threashold = 15,
     .button1_short_handler = &toggle_sequencer_mode,
-    .button1_long_handler = NULL,
+    .button1_long_handler = &save_current_program,
     .button2_short_handler = &toggle_sequencing,
     .button2_long_handler = NULL,
     .encoder1cw_handler = select_next_pattern,

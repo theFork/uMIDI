@@ -27,6 +27,7 @@
 #include "lib/hmi.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
+#include "lib/program.h"
 #include "lib/sequencer.h"
 #include "lib/usb.h"
 #include "lib/wave.h"
@@ -106,6 +107,10 @@ static struct sequencer_channel sequencer = {
     .mode           = SEQUENCER_CHANNEL_MODE_CONTINUOUS,
     .running        = true,
     .tick_callback  = &sequencer_tick_handler,
+};
+
+static union whammy_ctrl_program active_program = {
+    .field.ctrl_mode = WHAMMY_CTRL_MODE_BYPASS,
 };
 
 
@@ -314,6 +319,31 @@ bool exec_speed(const char* command)
     return true;
 }
 
+bool exec_store(const char* command)
+{
+    // Abort if the command is malformed
+    if (strlen(command) < 11 || command[5] != ' ' || command[7] != ' '
+    ||  (command[6] != 'P' && command[6] != 'p')) {
+        usb_puts(PSTR("Malformed command" USB_NEWLINE));
+        return false;
+    }
+
+    // Extract pattern or program number
+    uint8_t number = strtol(&command[8], NULL, 16);
+
+    if (command[6] == 'P') {
+        usb_printf(PSTR("Storing pattern #%d..." USB_NEWLINE), number);
+        import_pattern(number, &command[10]);
+    }
+    if (command[6] == 'p') {
+        --number;
+        usb_printf(PSTR("Storing program #%d..." USB_NEWLINE), number);
+        write_program(number, strtol(&command[10], NULL, 16));
+    }
+
+    return true;
+}
+
 bool exec_tap(const char* command)
 {
     register_tap();
@@ -333,6 +363,15 @@ void increase_speed(void)
 void init_whammy_module(void)
 {
     configure_sequencer_channel(SEQUENCER_CHANNEL_1, &sequencer);
+    enter_program(0);
+    init_wave(&control_wave, active_program.field.waveform,
+              active_program.field.speed, active_program.field.additional, 0);
+}
+
+void save_current_program(void)
+{
+    usb_puts(PSTR("Storing current setup"));
+    update_program(active_program.word);
 }
 
 void select_next_pattern(void)
