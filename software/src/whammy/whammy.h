@@ -157,11 +157,11 @@ union whammy_ctrl_program {
 //---------------- functions and procedures ----------------//
 bool exec_backup(const char* command);
 bool exec_factory_reset(const char* command);
+bool exec_mode(const char* command);
 bool exec_patcpy(const char* command);
 bool exec_patdump(const char* command);
 bool exec_patlen(const char* command);
 bool exec_patmod(const char* command);
-bool exec_patsel(const char* command);
 bool exec_patwipe(const char* command);
 bool exec_speed(const char* command);
 bool exec_store(const char* command);
@@ -171,8 +171,8 @@ void decrease_speed(void);
 void increase_speed(void);
 void init_whammy_module(void);
 void save_current_program(void);
-void select_next_pattern(void);
-void select_previous_pattern(void);
+void select_next_mode(void);
+void select_previous_mode(void);
 void tap_tempo(void);
 void toggle_sequencer_mode(void);
 void toggle_sequencing(void);

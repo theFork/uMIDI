@@ -46,6 +46,8 @@
 ////////////////////////////////////////////////////////////////
 
 //---------------- Commands ----------------//
+static const char cmd_string_backup[] PROGMEM = "backup";
+static const char help_string_backup[] PROGMEM = "Dumps all data stored in EEPROM";
 static const char cmd_string_patcpy[] PROGMEM = "patcpy";
 static const char help_string_patcpy[] PROGMEM = "i\n"
     "Copies the selected pattern to the specified slot:\n"
@@ -68,17 +70,18 @@ static const char help_string_patmod[] PROGMEM = "s c t d e\n"
     "      'p' program change\n"
     "<d> : MIDI data byte 0 (3 digits, zero-padded)\n"
     "<e> : MIDI data byte 1 (3 digits, zero-padded)\n";
-static const char cmd_string_patsel[] PROGMEM = "patsel";
-static const char help_string_patsel[] PROGMEM = "p\n"
-    "Select sequencer pattern:\n"
-    "<p> : pattern\n"
-    "      \"next\" = switch to next pattern\n"
-    "      \"prev\" = switch to previous pattern\n"
-    "      index = switch to specified pattern [0, 19]\n";
+static const char cmd_string_mode[] PROGMEM = "mode";
+static const char help_string_mode[] PROGMEM = "p\n"
+    "Select control mode:\n"
+    "<p> : mode\n"
+    "      'N' = switch to next mode\n"
+    "      'P' = switch to previous mode\n"
+    "      'b'     = enable bypass (turn effect off)\n"
+    "      'm'     = momentary pitch bend mode\n"
+    "      'w' <n> = specified wave n [1, 7]\n"
+    "      'p' <n> = specified pattern n [1, 20]\n";
 static const char cmd_string_patwipe[] PROGMEM = "patwipe";
 static const char help_string_patwipe[] PROGMEM = "Wipes the selected pattern";
-static const char cmd_string_backup[] PROGMEM = "backup";
-static const char help_string_backup[] PROGMEM = "Dumps all data stored in EEPROM";
 static const char cmd_string_reset[] PROGMEM = "factoryreset";
 static const char help_string_reset[] PROGMEM = "Restores all patterns to factory settings";
 static const char cmd_string_speed[] PROGMEM = "speed";
@@ -93,21 +96,15 @@ static const char help_string_store[] PROGMEM = "t n d\n"
     "<d> : data in hexadecimal format\n";
 static const char cmd_string_tap[] PROGMEM = "tap";
 static const char help_string_tap[] PROGMEM = "\nSend this command repeatedly to tap in a tempo\n";
-static const char cmd_string_pattern[] PROGMEM = "pattern";
-static const char help_string_pattern[] PROGMEM = "<p>\n"
-    "Select sequencer pattern:\n"
-    "<p> : pattern\n"
-    "      \"next\" = switch to next pattern\n"
-    "      \"prev\" = switch to previous pattern\n";
 
 struct serial_command serial_commands[] = {
     { .cmd_string = cmd_string_backup,  .help_string = help_string_backup,  .handler = &exec_backup        },
     { .cmd_string = cmd_string_reset,   .help_string = help_string_reset,   .handler = &exec_factory_reset },
+    { .cmd_string = cmd_string_mode,    .help_string = help_string_mode,    .handler = &exec_mode          },
     { .cmd_string = cmd_string_patcpy,  .help_string = help_string_patcpy,  .handler = &exec_patcpy        },
     { .cmd_string = cmd_string_patdump, .help_string = help_string_patdump, .handler = &exec_patdump       },
     { .cmd_string = cmd_string_patlen,  .help_string = help_string_patlen,  .handler = &exec_patlen        },
     { .cmd_string = cmd_string_patmod,  .help_string = help_string_patmod,  .handler = &exec_patmod        },
-    { .cmd_string = cmd_string_patsel,  .help_string = help_string_patsel,  .handler = &exec_patsel        },
     { .cmd_string = cmd_string_patwipe, .help_string = help_string_patwipe, .handler = &exec_patwipe       },
     { .cmd_string = cmd_string_speed,   .help_string = help_string_speed,   .handler = &exec_speed         },
     { .cmd_string = cmd_string_store,   .help_string = help_string_store,   .handler = &exec_store         },
@@ -129,8 +126,8 @@ struct hmi_config hmi_config = {
     .button1_long_handler = &save_current_program,
     .button2_short_handler = &toggle_sequencing,
     .button2_long_handler = NULL,
-    .encoder1cw_handler = select_next_pattern,
-    .encoder1ccw_handler = select_previous_pattern,
+    .encoder1cw_handler = select_next_mode,
+    .encoder1ccw_handler = select_previous_mode,
     .encoder1push_handler = NULL,
     .encoder2cw_handler = &increase_speed,
     .encoder2ccw_handler = &decrease_speed,

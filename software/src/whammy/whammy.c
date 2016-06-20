@@ -40,9 +40,6 @@
 //               P R I V A T E   D E F I N E S                //
 ////////////////////////////////////////////////////////////////
 
-#define     STRING_NEXT     "next"
-#define     STRING_PREV     "prev"
-
 
 
 ////////////////////////////////////////////////////////////////
@@ -119,6 +116,49 @@ static union whammy_ctrl_program active_program = {
 // S T A T I C   F U N C T I O N S   A N D   P R O C E D U R E S //
 ///////////////////////////////////////////////////////////////////
 
+/// \brief      Enters bypass (off) mode
+static void enter_bypass_mode(void)
+{
+    stop_sequencer(&sequencer);
+
+    usb_puts(PSTR("Enabling bypass"));
+    active_program.field.ctrl_mode = WHAMMY_CTRL_MODE_BYPASS;
+    send_program_change(WHAMMY_MODE_OFF);
+}
+
+/// \brief      Enters momentary (pitch bend) mode
+static void enter_momentary_mode(void)
+{
+    stop_sequencer(&sequencer);
+
+    usb_puts(PSTR("Entering momentary mode"));
+    active_program.field.ctrl_mode = WHAMMY_CTRL_MODE_MOMENTARY;
+    send_program_change(WHAMMY_MODE_OFF);
+}
+
+/// \brief      Enters pattern mode
+static void enter_pattern_mode(const enum sequencer_pattern_number pattern)
+{
+    usb_puts(PSTR("Entering pattern mode"));
+    active_program.field.ctrl_mode = WHAMMY_CTRL_MODE_PATTERN;
+    active_program.field.waveform = pattern;
+    set_sequencer_pattern(&sequencer, pattern);
+    start_sequencer(&sequencer);
+    usb_printf(PSTR("Pattern %d" USB_NEWLINE), pattern+1);
+}
+
+/// \brief      Enters wave mode
+static void enter_wave_mode(const enum waveform waveform)
+{
+    stop_sequencer(&sequencer);
+
+    usb_puts(PSTR("Entering wave mode"));
+    active_program.field.ctrl_mode = WHAMMY_CTRL_MODE_WAVE;
+    active_program.field.waveform = waveform;
+    usb_printf(PSTR("Waveform %d" USB_NEWLINE), waveform);
+}
+
+/// \brief      Updates the HMI led bar to reflect the current sequencer pattern step index
 static void sequencer_tick_handler(void)
 {
     show_led_pattern(0x80 >> sequencer.step_index);
@@ -154,6 +194,47 @@ bool exec_factory_reset(const char* command)
 
     init_sequencer_patterns(factory_patterns, factory_patterns_size);
     return true;
+}
+
+bool exec_mode(const char* command)
+{
+    if (strlen(command) < 6 || command[4] != ' ') {
+        usb_puts(PSTR("Malformed command" USB_NEWLINE));
+        return false;
+    }
+
+    switch (*(command+5)) {
+        case 'N':
+            select_next_mode();
+            return true;
+
+        case 'P':
+            select_previous_mode();
+            return true;
+
+        case 'b':
+            enter_bypass_mode();
+            return true;
+
+        case 'm':
+            enter_momentary_mode();
+            return true;
+
+        case 'p': {
+            uint8_t number = atoi(command+7) - 1;
+            if (number < SEQUENCER_PATTERNS) {
+                enter_pattern_mode(number);
+                return true;
+            }
+        }
+
+        case 'w':
+            // TODO Switch to wave mode
+            return true;
+    }
+
+    usb_puts(PSTR("Unknown parameter" USB_NEWLINE));
+    return false;
 }
 
 bool exec_patcpy(const char* command)
@@ -267,32 +348,6 @@ bool exec_patmod(const char* command)
     return true;
 }
 
-bool exec_patsel(const char* command)
-{
-    if (strlen(command) < 8 || command[6] != ' ') {
-        usb_puts(PSTR("Malformed command" USB_NEWLINE));
-        return false;
-    }
-
-    if (strncmp(STRING_NEXT, command+7, sizeof(STRING_NEXT)) == 0) {
-        select_next_pattern();
-        return true;
-    }
-    if (strncmp(STRING_PREV, command+7, sizeof(STRING_PREV)) == 0) {
-        select_previous_pattern();
-        return true;
-    }
-
-    uint8_t number = atoi(command+7);
-    if (number < SEQUENCER_PATTERNS) {
-        set_sequencer_pattern(&sequencer, number);
-        return true;
-    }
-
-    usb_puts(PSTR("Unknown parameter" USB_NEWLINE));
-    return false;
-}
-
 bool exec_patwipe(const char* command)
 {
     if (strlen(command) != 7) {
@@ -369,7 +424,7 @@ void execute_program_callback(uint32_t program_data)
 
         case WHAMMY_CTRL_MODE_PATTERN:
             // Set up sequencer according to the loaded program
-            set_sequencer_pattern(&sequencer, active_program.field.additional);
+            set_sequencer_pattern(&sequencer, active_program.field.waveform);
             set_sequencer_speed(&sequencer, active_program.field.speed);
             start_sequencer(&sequencer);
             break;
@@ -413,7 +468,7 @@ void init_whammy_module(void)
     configure_sequencer_channel(SEQUENCER_CHANNEL_1, &sequencer);
     enter_program(0);
     init_wave(&control_wave, active_program.field.waveform,
-              active_program.field.speed, active_program.field.additional, 0);
+              active_program.field.speed, active_program.field.amplitude, 0);
 }
 
 void save_current_program(void)
@@ -422,14 +477,74 @@ void save_current_program(void)
     update_program(active_program.word);
 }
 
-void select_next_pattern(void)
+void select_next_mode(void)
 {
-    usb_printf(PSTR("Selected pattern %d" USB_NEWLINE), adjust_sequencer_pattern(&sequencer, 1));
+    switch(active_program.field.ctrl_mode) {
+        case WHAMMY_CTRL_MODE_BYPASS:
+            enter_momentary_mode();
+            break;
+
+        case WHAMMY_CTRL_MODE_MOMENTARY:
+            enter_wave_mode(WAVE_SINE);
+            break;
+
+        case WHAMMY_CTRL_MODE_WAVE:
+            ++active_program.field.waveform;
+            if (active_program.field.waveform > WAVE_RANDOM) {
+                enter_pattern_mode(SEQUENCER_PATTERN_01);
+                break;
+            }
+            usb_printf(PSTR("Waveform %d" USB_NEWLINE), active_program.field.waveform);
+            break;
+
+        case WHAMMY_CTRL_MODE_PATTERN:
+            adjust_sequencer_pattern(&sequencer, 1);
+            active_program.field.waveform = sequencer.pattern;
+            if (sequencer.pattern != SEQUENCER_PATTERN_01) {
+                usb_printf(PSTR("Pattern %d" USB_NEWLINE), sequencer.pattern+1);
+                break;
+            }
+            // else fall through
+
+        default:
+            enter_bypass_mode();
+            break;
+    }
 }
 
-void select_previous_pattern(void)
+void select_previous_mode(void)
 {
-    usb_printf(PSTR("Selected pattern %d" USB_NEWLINE), adjust_sequencer_pattern(&sequencer, -1));
+    switch(active_program.field.ctrl_mode) {
+        case WHAMMY_CTRL_MODE_BYPASS:
+            enter_pattern_mode(SEQUENCER_PATTERN_20);
+            break;
+
+        case WHAMMY_CTRL_MODE_MOMENTARY:
+            enter_bypass_mode();
+            break;
+
+        case WHAMMY_CTRL_MODE_WAVE:
+            --active_program.field.waveform;
+            if (active_program.field.waveform == WAVE_OFF) {
+                enter_momentary_mode();
+                break;
+            }
+            usb_printf(PSTR("Waveform %d" USB_NEWLINE), active_program.field.waveform);
+            break;
+
+        case WHAMMY_CTRL_MODE_PATTERN:
+            adjust_sequencer_pattern(&sequencer, -1);
+            if (sequencer.pattern == SEQUENCER_PATTERN_20) {
+                enter_wave_mode(WAVE_RANDOM);
+                break;
+            }
+            usb_printf(PSTR("Pattern %d" USB_NEWLINE), sequencer.pattern+1);
+            break;
+
+        default:
+            enter_bypass_mode();
+            break;
+    }
 }
 
 void tap_tempo(void)
