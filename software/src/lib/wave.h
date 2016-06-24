@@ -111,7 +111,7 @@ struct wave
 /// \param      wave
 ///                 the wave to configure
 /// \see        tap_tempo_task
-void configure_tap_tempo_wave(struct wave * const wave);
+void configure_tap_tempo_wave(struct wave* wave);
 
 /// \brief      Initializes a wave
 /// \param      wave
