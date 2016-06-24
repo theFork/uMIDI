@@ -129,6 +129,75 @@ static void adjust_speed(int8_t delta)
     usb_printf(PSTR("Set speed to %d" USB_NEWLINE), speed);
 }
 
+/// \brief      Prints the selected pattern to the terminal
+static void dump_current_pattern(void)
+{
+    uint8_t length = get_pattern_length(sequencer.pattern);
+    usb_printf(PSTR("Pattern length: %u" USB_NEWLINE), length);
+
+    usb_puts(PSTR("Steps:" USB_NEWLINE "## Chan Type Dat0 Dat1"));
+    for (uint8_t step_index=0; step_index < length; ++step_index) {
+        struct sequencer_step step = get_pattern_step(sequencer.pattern, step_index);
+
+        // Prepare pretty output strings
+        char* type_string = "";
+        switch (step.type) {
+            case MIDI_MSG_TYPE_CONTROL_CHANGE:
+                type_string = "CCH";
+                break;
+            case MIDI_MSG_TYPE_NOTE_OFF:
+                type_string = "NOF";
+                break;
+            case MIDI_MSG_TYPE_NOTE_ON:
+                type_string = "NON";
+                break;
+            case MIDI_MSG_TYPE_PROGRAM_CHANGE:
+                type_string = "PCH";
+                break;
+            default:
+                type_string = "INV";
+                break;
+        }
+        char data1_string[5] = {'\0',};
+        if (step.type != MIDI_MSG_TYPE_PROGRAM_CHANGE) {
+            sprintf(data1_string, "%4u", step.data1);
+        }
+
+        usb_printf(PSTR("%2u %4u %4s %4u %s" USB_NEWLINE),
+                   step_index+1, step.channel+1, type_string, step.data0, data1_string);
+    }
+}
+
+/// \brief      Prints the active configuration to the terminal
+static void dump_current_program(void)
+{
+    usb_puts(PSTR("Mode Wham Spee Addi Wave"));
+
+    // Prepare pretty output strings
+    char* mode_string = "";
+    switch (active_program.field.ctrl_mode) {
+        case WHAMMY_CTRL_MODE_BYPASS:
+            mode_string = "OFF";
+            break;
+        case WHAMMY_CTRL_MODE_MOMENTARY:
+            mode_string = "MOM";
+            break;
+        case WHAMMY_CTRL_MODE_PATTERN:
+            mode_string = "PAT";
+            break;
+        case WHAMMY_CTRL_MODE_WAVE:
+            mode_string = "WAV";
+            break;
+        default:
+            mode_string = "INV";
+            break;
+    }
+
+    usb_printf(PSTR("%4s %4u %4u %4u %4u" USB_NEWLINE),
+               mode_string, active_program.field.pedal_mode, active_program.field.speed,
+               active_program.field.amplitude, active_program.field.waveform);
+}
+
 /// \brief      Enters bypass (off) mode
 static void enter_bypass_mode(void)
 {
@@ -205,6 +274,30 @@ bool exec_backup(const char* command)
     return true;
 }
 
+bool exec_dump(const char* command)
+{
+    if (strlen(command) != 6 || command[4] != ' ') {
+        usb_puts(PSTR("Malformed command" USB_NEWLINE));
+        return false;
+    }
+
+    switch (command[5]) {
+        case 'p':
+            dump_current_program();
+            break;
+
+        case 'P':
+            dump_current_pattern();
+            break;
+
+        default:
+            usb_puts(PSTR("Malformed command" USB_NEWLINE));
+            return false;
+    }
+
+    return true;
+}
+
 bool exec_factory_reset(const char* command)
 {
     // Abort if the command is malformed
@@ -267,51 +360,6 @@ bool exec_patcpy(const char* command)
 
     uint8_t number = atoi(command+7);
     copy_pattern(sequencer.pattern, number);
-
-    return true;
-}
-
-bool exec_patdump(const char* command)
-{
-    if (strlen(command) != 7) {
-        usb_puts(PSTR("Malformed command" USB_NEWLINE));
-        return false;
-    }
-
-    uint8_t length = get_pattern_length(sequencer.pattern);
-    usb_printf(PSTR("Pattern length: %u" USB_NEWLINE), length);
-
-    usb_puts(PSTR("Steps:" USB_NEWLINE "## Chan Type Dat0 Dat1"));
-    for (uint8_t step_index=0; step_index < length; ++step_index) {
-        struct sequencer_step step = get_pattern_step(sequencer.pattern, step_index);
-
-        // Prepare pretty output strings
-        char* type_string = "";
-        switch (step.type) {
-            case MIDI_MSG_TYPE_CONTROL_CHANGE:
-                type_string = "CCH";
-                break;
-            case MIDI_MSG_TYPE_NOTE_OFF:
-                type_string = "NOF";
-                break;
-            case MIDI_MSG_TYPE_NOTE_ON:
-                type_string = "NON";
-                break;
-            case MIDI_MSG_TYPE_PROGRAM_CHANGE:
-                type_string = "PCH";
-                break;
-            default:
-                type_string = "INV";
-                break;
-        }
-        char data1_string[5] = {'\0',};
-        if (step.type != MIDI_MSG_TYPE_PROGRAM_CHANGE) {
-            sprintf(data1_string, "%4u", step.data1);
-        }
-
-        usb_printf(PSTR("%2u %4u %4s %4u %s" USB_NEWLINE),
-                   step_index+1, step.channel+1, type_string, step.data0, data1_string);
-    }
 
     return true;
 }

@@ -52,8 +52,10 @@ static const char cmd_string_patcpy[] PROGMEM = "patcpy";
 static const char help_string_patcpy[] PROGMEM = "i\n"
     "Copies the selected pattern to the specified slot:\n"
     "<i> : target pattern index [0, 19]\n";
-static const char cmd_string_patdump[] PROGMEM = "patdump";
-static const char help_string_patdump[] PROGMEM = "Shows information about the selected pattern";
+static const char cmd_string_dump[] PROGMEM = "dump";
+static const char help_string_dump[] PROGMEM = "\n"
+    "Shows information about the selected pattern or program\n"
+    "<t> : 'P' for pattern or 'p' for program\n";
 static const char cmd_string_patlen[] PROGMEM = "patlen";
 static const char help_string_patlen[] PROGMEM = "l\n"
     "Set the selected pattern's length:\n"
@@ -99,10 +101,10 @@ static const char help_string_tap[] PROGMEM = "\nSend this command repeatedly to
 
 struct serial_command serial_commands[] = {
     { .cmd_string = cmd_string_backup,  .help_string = help_string_backup,  .handler = &exec_backup        },
+    { .cmd_string = cmd_string_dump,    .help_string = help_string_dump,    .handler = &exec_dump          },
     { .cmd_string = cmd_string_reset,   .help_string = help_string_reset,   .handler = &exec_factory_reset },
     { .cmd_string = cmd_string_mode,    .help_string = help_string_mode,    .handler = &exec_mode          },
     { .cmd_string = cmd_string_patcpy,  .help_string = help_string_patcpy,  .handler = &exec_patcpy        },
-    { .cmd_string = cmd_string_patdump, .help_string = help_string_patdump, .handler = &exec_patdump       },
     { .cmd_string = cmd_string_patlen,  .help_string = help_string_patlen,  .handler = &exec_patlen        },
     { .cmd_string = cmd_string_patmod,  .help_string = help_string_patmod,  .handler = &exec_patmod        },
     { .cmd_string = cmd_string_patwipe, .help_string = help_string_patwipe, .handler = &exec_patwipe       },

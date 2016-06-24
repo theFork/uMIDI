@@ -156,10 +156,10 @@ union whammy_ctrl_program {
 
 //---------------- functions and procedures ----------------//
 bool exec_backup(const char* command);
+bool exec_dump(const char* command);
 bool exec_factory_reset(const char* command);
 bool exec_mode(const char* command);
 bool exec_patcpy(const char* command);
-bool exec_patdump(const char* command);
 bool exec_patlen(const char* command);
 bool exec_patmod(const char* command);
 bool exec_patwipe(const char* command);
