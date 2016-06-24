@@ -116,6 +116,19 @@ static union whammy_ctrl_program active_program = {
 // S T A T I C   F U N C T I O N S   A N D   P R O C E D U R E S //
 ///////////////////////////////////////////////////////////////////
 
+/// \brief      Adjusts the speed of all control modes
+/// \param      delta
+///                 difference from current speed
+static void adjust_speed(int8_t delta)
+{
+    uint8_t speed = adjust_sequencer_speed(&sequencer, delta);
+    // TODO Adjust pitch bend speed
+    // TODO Adjust wave speed
+    active_program.field.speed = speed;
+    set_sequencer_speed(&sequencer, speed);
+    usb_printf(PSTR("Set speed to %d" USB_NEWLINE), speed);
+}
+
 /// \brief      Enters bypass (off) mode
 static void enter_bypass_mode(void)
 {
@@ -370,6 +383,9 @@ bool exec_speed(const char* command)
     midi_value_t speed = atoi(command+6);
     speed %= MIDI_MAX_VALUE + 1;
     usb_printf(PSTR("Setting waveform speed to %u" USB_NEWLINE), speed);
+    // TODO Adjust pitch bend speed
+    // TODO Adjust wave speed
+    active_program.field.speed = speed;
     set_sequencer_speed(&sequencer, speed);
     return true;
 }
@@ -455,12 +471,12 @@ void handle_midi_program_change(midi_value_t program)
 
 void decrease_speed(void)
 {
-    usb_printf(PSTR("Set speed to %d" USB_NEWLINE), adjust_sequencer_speed(&sequencer, -1));
+    adjust_speed(-1);
 }
 
 void increase_speed(void)
 {
-    usb_printf(PSTR("Set speed to %d" USB_NEWLINE), adjust_sequencer_speed(&sequencer, 1));
+    adjust_speed(1);
 }
 
 void init_whammy_module(void)

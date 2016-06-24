@@ -86,8 +86,8 @@ static const char cmd_string_reset[] PROGMEM = "factoryreset";
 static const char help_string_reset[] PROGMEM = "Restores all patterns to factory settings";
 static const char cmd_string_speed[] PROGMEM = "speed";
 static const char help_string_speed[] PROGMEM = "<s>\n"
-    "Adjust the speed of the sequencer:\n"
-    "<s> : wave speed\n";
+    "Adjust the speed of the effect:\n"
+    "<s> : bend/pattern/wave speed [0, 127]\n";
 static const char cmd_string_store[] PROGMEM = "store";
 static const char help_string_store[] PROGMEM = "t n d\n"
     "Stores given data in EEPROM:\n"
