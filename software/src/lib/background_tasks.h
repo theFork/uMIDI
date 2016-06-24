@@ -33,13 +33,13 @@
 /// \brief      Frequency of the CPU timer used in by the task scheduler in [Hz]
 #define     F_TIMER             20000
 
-/// \brief      High priority task frequency in [Hz]
+/// \brief      High priority task: Called every 50 us (20 kHz)
 #define     F_TASK_FAST         F_TIMER
 
-/// \brief      Medium priority task frequency in [Hz]
+/// \brief      Medium priority task: Called every 1 ms (1 kHz)
 #define     F_TASK_MID          (F_TASK_FAST / 20)
 
-/// \brief      Low priority task frequency in [Hz]
+/// \brief      Low priority task: Called every 10 ms (100 Hz)
 #define     F_TASK_SLOW         (F_TASK_MID / 10)
 
 
