@@ -70,20 +70,20 @@ uint16_t spi_transceive(const uint16_t output)
 
     if (spi_config->clk_phase) {
         for (int8_t i=spi_config->word_length-1; i>=0; --i) {
-            // Toggle clock
-            gpio_toggle(*spi_config->clk_pin);
-
             // Set data line
             gpio_set(*spi_config->mosi_pin, output & _BV(i));
+
+            // Toggle clock
+            gpio_toggle(*spi_config->clk_pin);
 
             // Wait
             _delay_us(1);
 
-            // Toggle clock
-            gpio_toggle(*spi_config->clk_pin);
-
             // Read incoming data
             read_buffer |= gpio_get(*spi_config->miso_pin) << i;
+
+            // Toggle clock
+            gpio_toggle(*spi_config->clk_pin);
 
             // Wait
             _delay_us(1);
@@ -97,11 +97,11 @@ uint16_t spi_transceive(const uint16_t output)
             // Wait
             _delay_us(1);
 
-            // Toggle clock
-            gpio_toggle(*spi_config->clk_pin);
-
             // Read incoming data
             read_buffer |= gpio_get(*spi_config->miso_pin) << i;
+
+            // Toggle clock
+            gpio_toggle(*spi_config->clk_pin);
 
             // Wait
             _delay_us(1);
