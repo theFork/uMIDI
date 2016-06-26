@@ -1,12 +1,12 @@
 var searchData=
 [
   ['languagestring',['LanguageString',['../usb__descriptors_8c.html#a2706320165dd3831bf525233371d7af9',1,'usb_descriptors.c']]],
+  ['last_5fadc_5fvalue',['last_adc_value',['../expression_8c.html#a67d28e8534e7870e8cba79e91cf9eeec',1,'expression.c']]],
   ['led_5fgreen',['led_green',['../leds_8c.html#a5b63e961995566d5361fc1e6286727cb',1,'led_green():&#160;leds.c'],['../leds_8h.html#a5b63e961995566d5361fc1e6286727cb',1,'led_green():&#160;leds.c']]],
   ['led_5fred',['led_red',['../leds_8c.html#a68bae95865294e7ab18258c7a2d1b186',1,'led_red():&#160;leds.c'],['../leds_8h.html#a68bae95865294e7ab18258c7a2d1b186',1,'led_red():&#160;leds.c']]],
   ['leds',['leds',['../leds_8c.html#aa1fea196abbcc1b6045d15abde6ca771',1,'leds.c']]],
   ['length',['length',['../structsequencer__pattern.html#a8a9a4083d58bb0d632feeba081352b35',1,'sequencer_pattern']]],
   ['log_5ftable',['log_table',['../lookup__tables_8c.html#a4faf205e9a02e550f4712fcee3b42a00',1,'log_table():&#160;lookup_tables.c'],['../lookup__tables_8h.html#a4faf205e9a02e550f4712fcee3b42a00',1,'log_table():&#160;lookup_tables.c']]],
-  ['long_5finput_5fthreashold',['long_input_threashold',['../structhmi__config.html#a1d7da32b6a37b6aa5c289d10d5fe0316',1,'hmi_config']]],
   ['lookup_5ftable_5fresolution',['lookup_table_resolution',['../lookup__tables_8c.html#a5aa785eb4d6e74d52066701a5b315165',1,'lookup_table_resolution():&#160;lookup_tables.c'],['../lookup__tables_8h.html#a5aa785eb4d6e74d52066701a5b315165',1,'lookup_table_resolution():&#160;lookup_tables.c']]],
   ['loop1',['loop1',['../unionprogram__data.html#a0d51d6247b769d4ab70d414496f4721f',1,'program_data']]],
   ['loop2',['loop2',['../unionprogram__data.html#a5bd1219789ac9345396e99bd2744a0f9',1,'program_data']]],

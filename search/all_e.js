@@ -21,6 +21,8 @@ var searchData=
   ['poll_5fhmi',['poll_hmi',['../hmi_8c.html#ab5187198d3352d89b76fb9a6db1a7937',1,'poll_hmi(void):&#160;hmi.c'],['../hmi_8h.html#ab5187198d3352d89b76fb9a6db1a7937',1,'poll_hmi(void):&#160;hmi.c']]],
   ['poll_5fswitches',['poll_switches',['../switcher_8c.html#a289509ef861bae13bcc1cf239669a662',1,'poll_switches(void):&#160;switcher.c'],['../switcher_8h.html#a289509ef861bae13bcc1cf239669a662',1,'poll_switches(void):&#160;switcher.c']]],
   ['port',['port',['../structgpio__pin.html#a89731d4b41ae76b9bb7350f94b1eed25',1,'gpio_pin']]],
+  ['power_5fled',['power_led',['../expression_2config_8c.html#a80d9cb5c9c027efe3219816ac0a1c5bf',1,'power_led():&#160;config.c'],['../expression_2config_8h.html#a80d9cb5c9c027efe3219816ac0a1c5bf',1,'power_led():&#160;config.c']]],
+  ['power_5fled_5fpin',['POWER_LED_PIN',['../expression_2config_8h.html#a8cf19b18ebffbab3acfa2b66393b13bb',1,'config.h']]],
   ['prescaler',['prescaler',['../structadc__config.html#aa1a1870a77606c2efcbc22c42dbf850d',1,'adc_config::prescaler()'],['../structled__state.html#aee45b7dafe747161b8a51e12a536c546',1,'led_state::prescaler()']]],
   ['print_5fcommand_5ffrom_5fhistory',['print_command_from_history',['../serial__communication_8c.html#a3e2ec2b8d89902d628e67510fe2ffc74',1,'serial_communication.c']]],
   ['process_5fbackground_5ftasks',['process_background_tasks',['../background__tasks_8c.html#a59b8f1c0605d7525987674f81ac7669b',1,'process_background_tasks(void):&#160;background_tasks.c'],['../background__tasks_8h.html#a59b8f1c0605d7525987674f81ac7669b',1,'process_background_tasks(void):&#160;background_tasks.c']]],

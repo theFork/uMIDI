@@ -114,7 +114,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <area shape="rect" id="node2" href="whammy_2config_8h.html" title="Device configuration header. " alt="" coords="200,109,395,165"/>
 <area shape="rect" id="node3" href="whammy_2config_8c.html" title="Device configuration. " alt="" coords="5,213,200,269"/>
 <area shape="rect" id="node4" href="whammy_2main_8c.html" title="Entry point and main loop of the uMIDI firmware. " alt="" coords="225,221,463,262"/>
-<area shape="rect" id="node5" href="whammy_8c.html" title="Whammy module implementation. " alt="" coords="488,213,683,269"/>
+<area shape="rect" id="node5" href="whammy_8c.html" title="Sequencer module implementation. " alt="" coords="488,213,683,269"/>
 </map>
 </div>
 </div>
@@ -176,27 +176,10 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a425e7acbcfae396852d68de21bf5e7a0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="whammy_8h.html#a425e7acbcfae396852d68de21bf5e7a0">exec_backup</a> (const char *command)</td></tr>
-<tr class="memdesc:a425e7acbcfae396852d68de21bf5e7a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handler for the <code>backup</code> command.  <a href="#a425e7acbcfae396852d68de21bf5e7a0">More...</a><br /></td></tr>
-<tr class="separator:a425e7acbcfae396852d68de21bf5e7a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40d98c4540b1cf75a817a9ad04175301"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="whammy_8h.html#a40d98c4540b1cf75a817a9ad04175301">exec_factory_reset</a> (const char *command)</td></tr>
-<tr class="separator:a40d98c4540b1cf75a817a9ad04175301"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab370188ee68ec8299d4a2b0c6a4f4ee5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="whammy_8h.html#ab370188ee68ec8299d4a2b0c6a4f4ee5">exec_patcpy</a> (const char *command)</td></tr>
-<tr class="separator:ab370188ee68ec8299d4a2b0c6a4f4ee5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa1b7c370202ef832f42238dd2189eab"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="whammy_8h.html#aaa1b7c370202ef832f42238dd2189eab">exec_patdump</a> (const char *command)</td></tr>
-<tr class="separator:aaa1b7c370202ef832f42238dd2189eab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d8a3d1f0b5e04533ab473649f642aab"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="whammy_8h.html#a1d8a3d1f0b5e04533ab473649f642aab">exec_patlen</a> (const char *command)</td></tr>
-<tr class="separator:a1d8a3d1f0b5e04533ab473649f642aab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6699fc72814c237340bbe1b780575d4d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="whammy_8h.html#a6699fc72814c237340bbe1b780575d4d">exec_patmod</a> (const char *command)</td></tr>
-<tr class="separator:a6699fc72814c237340bbe1b780575d4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5354dd944c76efc31db3214b9da4d293"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="whammy_8h.html#a5354dd944c76efc31db3214b9da4d293">exec_patsel</a> (const char *command)</td></tr>
-<tr class="separator:a5354dd944c76efc31db3214b9da4d293"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b36e034e634f8d8ca43f4b283333a91"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="whammy_8h.html#a1b36e034e634f8d8ca43f4b283333a91">exec_patwipe</a> (const char *command)</td></tr>
-<tr class="separator:a1b36e034e634f8d8ca43f4b283333a91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd282251cd82af228fdbf431f67634ef"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="whammy_8h.html#afd282251cd82af228fdbf431f67634ef">exec_pattern</a> (const char *command)</td></tr>
+<tr class="separator:afd282251cd82af228fdbf431f67634ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5bc8e37d6ce0ead901c66191f39a802c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="whammy_8h.html#a5bc8e37d6ce0ead901c66191f39a802c">exec_speed</a> (const char *command)</td></tr>
 <tr class="separator:a5bc8e37d6ce0ead901c66191f39a802c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a268bac63383114de2c34a5e1feed185e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="whammy_8h.html#a268bac63383114de2c34a5e1feed185e">exec_store</a> (const char *command)</td></tr>
-<tr class="separator:a268bac63383114de2c34a5e1feed185e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a442a1226d716ea9be737f00e043eb88e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="whammy_8h.html#a442a1226d716ea9be737f00e043eb88e">exec_tap</a> (const char *command)</td></tr>
 <tr class="separator:a442a1226d716ea9be737f00e043eb88e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a549cb9e6cbc8ad0d4588c94472bb0525"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="whammy_8h.html#a549cb9e6cbc8ad0d4588c94472bb0525">decrease_speed</a> (void)</td></tr>
@@ -211,8 +194,6 @@ Functions</h2></td></tr>
 <tr class="separator:a4a58705941d814b2af7cb2491a0ad443"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab4797a61ebbf5a5d244cd413b6f31671"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="whammy_8h.html#ab4797a61ebbf5a5d244cd413b6f31671">tap_tempo</a> (void)</td></tr>
 <tr class="separator:ab4797a61ebbf5a5d244cd413b6f31671"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a663199ed645af73c8c77097eb62faec3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="whammy_8h.html#a663199ed645af73c8c77097eb62faec3">toggle_sequencer_mode</a> (void)</td></tr>
-<tr class="separator:a663199ed645af73c8c77097eb62faec3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d746d3f4f37cc7c41211d494c631fdf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="whammy_8h.html#a5d746d3f4f37cc7c41211d494c631fdf">toggle_sequencing</a> (void)</td></tr>
 <tr class="separator:a5d746d3f4f37cc7c41211d494c631fdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -363,126 +344,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a425e7acbcfae396852d68de21bf5e7a0"></a>
+<a class="anchor" id="afd282251cd82af228fdbf431f67634ef"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool exec_backup </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>command</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Handler for the <code>backup</code> command. </p>
-
-</div>
-</div>
-<a class="anchor" id="a40d98c4540b1cf75a817a9ad04175301"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool exec_factory_reset </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>command</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ab370188ee68ec8299d4a2b0c6a4f4ee5"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool exec_patcpy </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>command</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="aaa1b7c370202ef832f42238dd2189eab"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool exec_patdump </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>command</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a1d8a3d1f0b5e04533ab473649f642aab"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool exec_patlen </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>command</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a6699fc72814c237340bbe1b780575d4d"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool exec_patmod </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>command</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a5354dd944c76efc31db3214b9da4d293"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool exec_patsel </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>command</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a1b36e034e634f8d8ca43f4b283333a91"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool exec_patwipe </td>
+          <td class="memname">bool exec_pattern </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>command</em></td><td>)</td>
@@ -499,22 +366,6 @@ Functions</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">bool exec_speed </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>command</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a268bac63383114de2c34a5e1feed185e"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool exec_store </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>command</em></td><td>)</td>
@@ -621,22 +472,6 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a663199ed645af73c8c77097eb62faec3"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void toggle_sequencer_mode </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="a5d746d3f4f37cc7c41211d494c631fdf"></a>
 <div class="memitem">
 <div class="memproto">
@@ -656,7 +491,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 20 2016 13:46:21 for uMIDI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Jun 26 2016 21:08:51 for uMIDI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

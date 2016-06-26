@@ -198,11 +198,11 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Invokes registered background tasks if certain conditions are met. </p>
-<p>This procedure must be called in the main loop of the program. If the CPU timer interrupt flag of CPU timer 0 is active, it is reset and the prescaler counters are incremented. If one of the prescalers reaches its target value, it is reset as well and the corresponding tasks are executed one by one. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="background__tasks_8h.html#a0ccb08d3b903865a450dc2b4633d2d97" title="High priority task frequency in [Hz]. ">F_TASK_FAST</a> </dd>
+<p>This procedure must be called in the main loop of the program. If the CPU timer interrupt flag of CPU timer 0 is active, it is reset and the prescaler counters are incremented. If one of the prescalers reaches its target value, it is reset as well and the corresponding tasks are executed one by one. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="background__tasks_8h.html#a0ccb08d3b903865a450dc2b4633d2d97" title="High priority task: Called every 50 us (20 kHz) ">F_TASK_FAST</a> </dd>
 <dd>
-<a class="el" href="background__tasks_8h.html#aadd0736a68458905fa7bca00d7f5f9be" title="Medium priority task frequency in [Hz]. ">F_TASK_MID</a> </dd>
+<a class="el" href="background__tasks_8h.html#aadd0736a68458905fa7bca00d7f5f9be" title="Medium priority task: Called every 1 ms (1 kHz) ">F_TASK_MID</a> </dd>
 <dd>
-<a class="el" href="background__tasks_8h.html#a6cf2a4ef4c846f63e307f38c33bb5e30" title="Low priority task frequency in [Hz]. ">F_TASK_SLOW</a> </dd></dl>
+<a class="el" href="background__tasks_8h.html#a6cf2a4ef4c846f63e307f38c33bb5e30" title="Low priority task: Called every 10 ms (100 Hz) ">F_TASK_SLOW</a> </dd></dl>
 
 </div>
 </div>
@@ -366,7 +366,7 @@ Variables</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 20 2016 13:46:21 for uMIDI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Jun 26 2016 21:08:51 for uMIDI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

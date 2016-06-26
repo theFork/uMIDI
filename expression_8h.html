@@ -125,9 +125,18 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a5320117ff0128e10ef0c28cbf4fda020"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="expression_8h.html#a5320117ff0128e10ef0c28cbf4fda020">exec_cal</a> (const char *command)</td></tr>
+<tr class="memdesc:a5320117ff0128e10ef0c28cbf4fda020"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handler for the serial command 'cal'.  <a href="#a5320117ff0128e10ef0c28cbf4fda020">More...</a><br /></td></tr>
+<tr class="separator:a5320117ff0128e10ef0c28cbf4fda020"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6fc545cc6dd58031561bbb28b3b5aca"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="expression_8h.html#ad6fc545cc6dd58031561bbb28b3b5aca">exec_echo</a> (const char *command)</td></tr>
+<tr class="memdesc:ad6fc545cc6dd58031561bbb28b3b5aca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handler for the serial command 'echo'.  <a href="#ad6fc545cc6dd58031561bbb28b3b5aca">More...</a><br /></td></tr>
+<tr class="separator:ad6fc545cc6dd58031561bbb28b3b5aca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e7a1967afda35dda862dfa864bfabaf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="expression_8h.html#a4e7a1967afda35dda862dfa864bfabaf">handle_enable_switch</a> (void)</td></tr>
 <tr class="memdesc:a4e7a1967afda35dda862dfa864bfabaf"><td class="mdescLeft">&#160;</td><td class="mdescRight">A background task that handles the enable switch.  <a href="#a4e7a1967afda35dda862dfa864bfabaf">More...</a><br /></td></tr>
 <tr class="separator:a4e7a1967afda35dda862dfa864bfabaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c118a30b1cabdf70b8c66ee7ad3703a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="expression_8h.html#a4c118a30b1cabdf70b8c66ee7ad3703a">init_expression_module</a> (void)</td></tr>
+<tr class="memdesc:a4c118a30b1cabdf70b8c66ee7ad3703a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the expression module.  <a href="#a4c118a30b1cabdf70b8c66ee7ad3703a">More...</a><br /></td></tr>
+<tr class="separator:a4c118a30b1cabdf70b8c66ee7ad3703a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7746104b0e63e13e360596c99263b9cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="expression_8h.html#a7746104b0e63e13e360596c99263b9cf">update_expression_value</a> (uint16_t new_value)</td></tr>
 <tr class="memdesc:a7746104b0e63e13e360596c99263b9cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the stored expression value.  <a href="#a7746104b0e63e13e360596c99263b9cf">More...</a><br /></td></tr>
 <tr class="separator:a7746104b0e63e13e360596c99263b9cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -153,6 +162,42 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="a5320117ff0128e10ef0c28cbf4fda020"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool exec_cal </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>command</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handler for the serial command 'cal'. </p>
+
+</div>
+</div>
+<a class="anchor" id="ad6fc545cc6dd58031561bbb28b3b5aca"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool exec_echo </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>command</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handler for the serial command 'echo'. </p>
+
+</div>
+</div>
 <a class="anchor" id="a4e7a1967afda35dda862dfa864bfabaf"></a>
 <div class="memitem">
 <div class="memproto">
@@ -169,6 +214,25 @@ Functions</h2></td></tr>
 
 <p>A background task that handles the enable switch. </p>
 <p>This task polls the enable switch input. If the input changed, a MIDI note on / off message is transmitted. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="expression_8h.html#a8bf422fef8e65c3398a9111d6b95521c" title="The MIDI note that represents uMIDI wah&#39;s enable / bypass state. ">MIDI_NOTE_ENABLE_WAH</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a4c118a30b1cabdf70b8c66ee7ad3703a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void init_expression_module </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initializes the expression module. </p>
+<p>Reads calibration values from EEPROM. </p>
 
 </div>
 </div>
@@ -212,7 +276,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 20 2016 13:46:21 for uMIDI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Jun 26 2016 21:08:51 for uMIDI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

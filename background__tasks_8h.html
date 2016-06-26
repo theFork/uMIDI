@@ -125,13 +125,13 @@ Macros</h2></td></tr>
 <tr class="memdesc:aca12ec03d86eb5ef061e7a94b02b0ac0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frequency of the CPU timer used in by the task scheduler in [Hz].  <a href="#aca12ec03d86eb5ef061e7a94b02b0ac0">More...</a><br /></td></tr>
 <tr class="separator:aca12ec03d86eb5ef061e7a94b02b0ac0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ccb08d3b903865a450dc2b4633d2d97"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="background__tasks_8h.html#a0ccb08d3b903865a450dc2b4633d2d97">F_TASK_FAST</a>&#160;&#160;&#160;<a class="el" href="background__tasks_8h.html#aca12ec03d86eb5ef061e7a94b02b0ac0">F_TIMER</a></td></tr>
-<tr class="memdesc:a0ccb08d3b903865a450dc2b4633d2d97"><td class="mdescLeft">&#160;</td><td class="mdescRight">High priority task frequency in [Hz].  <a href="#a0ccb08d3b903865a450dc2b4633d2d97">More...</a><br /></td></tr>
+<tr class="memdesc:a0ccb08d3b903865a450dc2b4633d2d97"><td class="mdescLeft">&#160;</td><td class="mdescRight">High priority task: Called every 50 us (20 kHz)  <a href="#a0ccb08d3b903865a450dc2b4633d2d97">More...</a><br /></td></tr>
 <tr class="separator:a0ccb08d3b903865a450dc2b4633d2d97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aadd0736a68458905fa7bca00d7f5f9be"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="background__tasks_8h.html#aadd0736a68458905fa7bca00d7f5f9be">F_TASK_MID</a>&#160;&#160;&#160;(<a class="el" href="background__tasks_8h.html#a0ccb08d3b903865a450dc2b4633d2d97">F_TASK_FAST</a> / 20)</td></tr>
-<tr class="memdesc:aadd0736a68458905fa7bca00d7f5f9be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Medium priority task frequency in [Hz].  <a href="#aadd0736a68458905fa7bca00d7f5f9be">More...</a><br /></td></tr>
+<tr class="memdesc:aadd0736a68458905fa7bca00d7f5f9be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Medium priority task: Called every 1 ms (1 kHz)  <a href="#aadd0736a68458905fa7bca00d7f5f9be">More...</a><br /></td></tr>
 <tr class="separator:aadd0736a68458905fa7bca00d7f5f9be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6cf2a4ef4c846f63e307f38c33bb5e30"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="background__tasks_8h.html#a6cf2a4ef4c846f63e307f38c33bb5e30">F_TASK_SLOW</a>&#160;&#160;&#160;(<a class="el" href="background__tasks_8h.html#aadd0736a68458905fa7bca00d7f5f9be">F_TASK_MID</a> / 10)</td></tr>
-<tr class="memdesc:a6cf2a4ef4c846f63e307f38c33bb5e30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Low priority task frequency in [Hz].  <a href="#a6cf2a4ef4c846f63e307f38c33bb5e30">More...</a><br /></td></tr>
+<tr class="memdesc:a6cf2a4ef4c846f63e307f38c33bb5e30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Low priority task: Called every 10 ms (100 Hz)  <a href="#a6cf2a4ef4c846f63e307f38c33bb5e30">More...</a><br /></td></tr>
 <tr class="separator:a6cf2a4ef4c846f63e307f38c33bb5e30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
@@ -162,7 +162,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>High priority task frequency in [Hz]. </p>
+<p>High priority task: Called every 50 us (20 kHz) </p>
 
 </div>
 </div>
@@ -176,7 +176,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Medium priority task frequency in [Hz]. </p>
+<p>Medium priority task: Called every 1 ms (1 kHz) </p>
 
 </div>
 </div>
@@ -190,7 +190,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Low priority task frequency in [Hz]. </p>
+<p>Low priority task: Called every 10 ms (100 Hz) </p>
 
 </div>
 </div>
@@ -284,11 +284,11 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="background__tasks_8h.html#a0ccb08d3b903865a450dc2b4633d2d97" title="High priority task frequency in [Hz]. ">F_TASK_FAST</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="background__tasks_8h.html#a0ccb08d3b903865a450dc2b4633d2d97" title="High priority task: Called every 50 us (20 kHz) ">F_TASK_FAST</a> </dd>
 <dd>
-<a class="el" href="background__tasks_8h.html#aadd0736a68458905fa7bca00d7f5f9be" title="Medium priority task frequency in [Hz]. ">F_TASK_MID</a> </dd>
+<a class="el" href="background__tasks_8h.html#aadd0736a68458905fa7bca00d7f5f9be" title="Medium priority task: Called every 1 ms (1 kHz) ">F_TASK_MID</a> </dd>
 <dd>
-<a class="el" href="background__tasks_8h.html#a6cf2a4ef4c846f63e307f38c33bb5e30" title="Low priority task frequency in [Hz]. ">F_TASK_SLOW</a> </dd></dl>
+<a class="el" href="background__tasks_8h.html#a6cf2a4ef4c846f63e307f38c33bb5e30" title="Low priority task: Called every 10 ms (100 Hz) ">F_TASK_SLOW</a> </dd></dl>
 
 </div>
 </div>
@@ -307,18 +307,18 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Invokes registered background tasks if certain conditions are met. </p>
-<p>This procedure must be called in the main loop of the program. If the CPU timer interrupt flag of CPU timer 0 is active, it is reset and the prescaler counters are incremented. If one of the prescalers reaches its target value, it is reset as well and the corresponding tasks are executed one by one. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="background__tasks_8h.html#a0ccb08d3b903865a450dc2b4633d2d97" title="High priority task frequency in [Hz]. ">F_TASK_FAST</a> </dd>
+<p>This procedure must be called in the main loop of the program. If the CPU timer interrupt flag of CPU timer 0 is active, it is reset and the prescaler counters are incremented. If one of the prescalers reaches its target value, it is reset as well and the corresponding tasks are executed one by one. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="background__tasks_8h.html#a0ccb08d3b903865a450dc2b4633d2d97" title="High priority task: Called every 50 us (20 kHz) ">F_TASK_FAST</a> </dd>
 <dd>
-<a class="el" href="background__tasks_8h.html#aadd0736a68458905fa7bca00d7f5f9be" title="Medium priority task frequency in [Hz]. ">F_TASK_MID</a> </dd>
+<a class="el" href="background__tasks_8h.html#aadd0736a68458905fa7bca00d7f5f9be" title="Medium priority task: Called every 1 ms (1 kHz) ">F_TASK_MID</a> </dd>
 <dd>
-<a class="el" href="background__tasks_8h.html#a6cf2a4ef4c846f63e307f38c33bb5e30" title="Low priority task frequency in [Hz]. ">F_TASK_SLOW</a> </dd></dl>
+<a class="el" href="background__tasks_8h.html#a6cf2a4ef4c846f63e307f38c33bb5e30" title="Low priority task: Called every 10 ms (100 Hz) ">F_TASK_SLOW</a> </dd></dl>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 20 2016 13:46:21 for uMIDI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Jun 26 2016 21:08:51 for uMIDI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

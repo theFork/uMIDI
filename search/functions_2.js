@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['calibrate_5fadc_5foffset',['calibrate_adc_offset',['../adc_8c.html#ab706d53fb0f20c5cea68bfd0b647b275',1,'calibrate_adc_offset(enum adc_channel channel):&#160;adc.c'],['../adc_8h.html#ab706d53fb0f20c5cea68bfd0b647b275',1,'calibrate_adc_offset(enum adc_channel channel):&#160;adc.c']]],
+  ['calibrate_5fadc_5foffset',['calibrate_adc_offset',['../adc_8c.html#a4c136f692889bfb0acb5431d60980151',1,'calibrate_adc_offset(enum adc_channel channel):&#160;adc.c'],['../adc_8h.html#a4c136f692889bfb0acb5431d60980151',1,'calibrate_adc_offset(enum adc_channel channel):&#160;adc.c']]],
   ['callback_5fusb_5fgetdescriptor',['CALLBACK_USB_GetDescriptor',['../usb__descriptors_8c.html#aa0890c5e991cffc64420173f6bd6c623',1,'CALLBACK_USB_GetDescriptor(const uint16_t wValue, const uint16_t wIndex, const void **const DescriptorAddress):&#160;usb_descriptors.c'],['../usb__descriptors_8h.html#af8c2dd70ada32eb9017d08afc75543b2',1,'CALLBACK_USB_GetDescriptor(const uint16_t wValue, const uint16_t wIndex, const void **const DescriptorAddress) ATTR_WARN_UNUSED_RESULT ATTR_NON_NULL_PTR_ARG(3):&#160;usb_descriptors.c']]],
   ['clear_5fgpio_5ftest',['clear_gpio_test',['../tests_8c.html#af0ee0ce0bb96ee49f66fa28a9aa33df6',1,'clear_gpio_test(void):&#160;tests.c'],['../tests_8h.html#af0ee0ce0bb96ee49f66fa28a9aa33df6',1,'clear_gpio_test(void):&#160;tests.c']]],
   ['compute_5framp',['compute_ramp',['../wave_8c.html#a399ed801d9aa5e6d4342e28c5eb875a6',1,'wave.c']]],

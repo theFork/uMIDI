@@ -112,21 +112,12 @@ Data Fields</h2></td></tr>
 <tr class="memitem:a69ecda6ca89ac7080192f60e27c24053"><td class="memItemLeft" align="right" valign="top">const struct <a class="el" href="structgpio__header.html">gpio_header</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhmi__config.html#a69ecda6ca89ac7080192f60e27c24053">output_header</a></td></tr>
 <tr class="memdesc:a69ecda6ca89ac7080192f60e27c24053"><td class="mdescLeft">&#160;</td><td class="mdescRight">the pin header that is connected to the HMI board's X1 header  <a href="#a69ecda6ca89ac7080192f60e27c24053">More...</a><br /></td></tr>
 <tr class="separator:a69ecda6ca89ac7080192f60e27c24053"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d7da32b6a37b6aa5c289d10d5fe0316"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhmi__config.html#a1d7da32b6a37b6aa5c289d10d5fe0316">long_input_threashold</a></td></tr>
-<tr class="memdesc:a1d7da32b6a37b6aa5c289d10d5fe0316"><td class="mdescLeft">&#160;</td><td class="mdescRight">the time in [s/10] after which a button press is considered "long"  <a href="#a1d7da32b6a37b6aa5c289d10d5fe0316">More...</a><br /></td></tr>
-<tr class="separator:a1d7da32b6a37b6aa5c289d10d5fe0316"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac10f459242af213865a22c12dd74d7d9"><td class="memItemLeft" align="right" valign="top">void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhmi__config.html#ac10f459242af213865a22c12dd74d7d9">button1_short_handler</a> )(void)</td></tr>
-<tr class="memdesc:ac10f459242af213865a22c12dd74d7d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">this handler is called when button 1 is pressed briefly  <a href="#ac10f459242af213865a22c12dd74d7d9">More...</a><br /></td></tr>
-<tr class="separator:ac10f459242af213865a22c12dd74d7d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a813d1cf341eea821536a3b236ecb6508"><td class="memItemLeft" align="right" valign="top">void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhmi__config.html#a813d1cf341eea821536a3b236ecb6508">button1_long_handler</a> )(void)</td></tr>
-<tr class="memdesc:a813d1cf341eea821536a3b236ecb6508"><td class="mdescLeft">&#160;</td><td class="mdescRight">this handler is called when button 1 is pressed long  <a href="#a813d1cf341eea821536a3b236ecb6508">More...</a><br /></td></tr>
-<tr class="separator:a813d1cf341eea821536a3b236ecb6508"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05cb7ebb192a6d983d25aee2d8b54ca0"><td class="memItemLeft" align="right" valign="top">void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhmi__config.html#a05cb7ebb192a6d983d25aee2d8b54ca0">button2_short_handler</a> )(void)</td></tr>
-<tr class="memdesc:a05cb7ebb192a6d983d25aee2d8b54ca0"><td class="mdescLeft">&#160;</td><td class="mdescRight">this handler is called when button 2 is pressed briefly  <a href="#a05cb7ebb192a6d983d25aee2d8b54ca0">More...</a><br /></td></tr>
-<tr class="separator:a05cb7ebb192a6d983d25aee2d8b54ca0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a112bbfc7f99bca1f564ffc2676528413"><td class="memItemLeft" align="right" valign="top">void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhmi__config.html#a112bbfc7f99bca1f564ffc2676528413">button2_long_handler</a> )(void)</td></tr>
-<tr class="memdesc:a112bbfc7f99bca1f564ffc2676528413"><td class="mdescLeft">&#160;</td><td class="mdescRight">this handler is called when button 2 is pressed long  <a href="#a112bbfc7f99bca1f564ffc2676528413">More...</a><br /></td></tr>
-<tr class="separator:a112bbfc7f99bca1f564ffc2676528413"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6cf392925f217db75ad355f995ebd389"><td class="memItemLeft" align="right" valign="top">void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhmi__config.html#a6cf392925f217db75ad355f995ebd389">button1_handler</a> )(void)</td></tr>
+<tr class="memdesc:a6cf392925f217db75ad355f995ebd389"><td class="mdescLeft">&#160;</td><td class="mdescRight">this handler is called when button 1 is pressed  <a href="#a6cf392925f217db75ad355f995ebd389">More...</a><br /></td></tr>
+<tr class="separator:a6cf392925f217db75ad355f995ebd389"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab07db54dc00123db2c428bc14a22e362"><td class="memItemLeft" align="right" valign="top">void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhmi__config.html#ab07db54dc00123db2c428bc14a22e362">button2_handler</a> )(void)</td></tr>
+<tr class="memdesc:ab07db54dc00123db2c428bc14a22e362"><td class="mdescLeft">&#160;</td><td class="mdescRight">this handler is called when button 2 is pressed  <a href="#ab07db54dc00123db2c428bc14a22e362">More...</a><br /></td></tr>
+<tr class="separator:ab07db54dc00123db2c428bc14a22e362"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a549fc854cbf285de445b01ff686e3005"><td class="memItemLeft" align="right" valign="top">void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhmi__config.html#a549fc854cbf285de445b01ff686e3005">encoder1cw_handler</a> )(void)</td></tr>
 <tr class="memdesc:a549fc854cbf285de445b01ff686e3005"><td class="mdescLeft">&#160;</td><td class="mdescRight">this handler is called when encoder 1 is rotated clockwise  <a href="#a549fc854cbf285de445b01ff686e3005">More...</a><br /></td></tr>
 <tr class="separator:a549fc854cbf285de445b01ff686e3005"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -149,59 +140,31 @@ Data Fields</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Configuration structure for the HMI module. </p>
 </div><h2 class="groupheader">Field Documentation</h2>
-<a class="anchor" id="a813d1cf341eea821536a3b236ecb6508"></a>
+<a class="anchor" id="a6cf392925f217db75ad355f995ebd389"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void(*  hmi_config::button1_long_handler) (void)</td>
+          <td class="memname">void(*  hmi_config::button1_handler) (void)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>this handler is called when button 1 is pressed long </p>
+<p>this handler is called when button 1 is pressed </p>
 
 </div>
 </div>
-<a class="anchor" id="ac10f459242af213865a22c12dd74d7d9"></a>
+<a class="anchor" id="ab07db54dc00123db2c428bc14a22e362"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void(*  hmi_config::button1_short_handler) (void)</td>
+          <td class="memname">void(*  hmi_config::button2_handler) (void)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>this handler is called when button 1 is pressed briefly </p>
-
-</div>
-</div>
-<a class="anchor" id="a112bbfc7f99bca1f564ffc2676528413"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void(*  hmi_config::button2_long_handler) (void)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>this handler is called when button 2 is pressed long </p>
-
-</div>
-</div>
-<a class="anchor" id="a05cb7ebb192a6d983d25aee2d8b54ca0"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void(*  hmi_config::button2_short_handler) (void)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>this handler is called when button 2 is pressed briefly </p>
+<p>this handler is called when button 2 is pressed </p>
 
 </div>
 </div>
@@ -303,20 +266,6 @@ Data Fields</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a1d7da32b6a37b6aa5c289d10d5fe0316"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint8_t hmi_config::long_input_threashold</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>the time in [s/10] after which a button press is considered "long" </p>
-
-</div>
-</div>
 <a class="anchor" id="a69ecda6ca89ac7080192f60e27c24053"></a>
 <div class="memitem">
 <div class="memproto">
@@ -337,7 +286,7 @@ Data Fields</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 20 2016 13:46:21 for uMIDI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Jun 26 2016 21:08:51 for uMIDI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

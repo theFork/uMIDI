@@ -1,5 +1,5 @@
 <map id="/home/haggl/repositories/uMIDI/software/src/whammy/config.h" name="/home/haggl/repositories/uMIDI/software/src/whammy/config.h">
 <area shape="rect" id="node2" href="$whammy_2config_8c.html" title="Device configuration. " alt="" coords="5,109,200,165"/>
 <area shape="rect" id="node3" href="$whammy_2main_8c.html" title="Entry point and main loop of the uMIDI firmware. " alt="" coords="225,117,463,158"/>
-<area shape="rect" id="node4" href="$whammy_8c.html" title="Whammy module implementation. " alt="" coords="488,109,683,165"/>
+<area shape="rect" id="node4" href="$whammy_8c.html" title="Sequencer module implementation. " alt="" coords="488,109,683,165"/>
 </map>
