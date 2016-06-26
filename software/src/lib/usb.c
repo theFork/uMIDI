@@ -186,11 +186,15 @@ void usb_main_task(void)
 
 void usb_printf(const char * const format, ...)
 {
+    // Prepare varargs parameter
     va_list ap;
-    char buffer[80] = "";
-
     va_start(ap, format);
-    vsprintf(buffer, format, ap);
+
+    // Format to buffer
+    char buffer[USB_PRINTF_MAX_LENGTH+1];
+    vsnprintf(buffer, sizeof(buffer), format, ap);
+
+    // Cleanup varargs
     va_end(ap);
 
     send_string(buffer);
