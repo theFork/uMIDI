@@ -54,8 +54,8 @@ int main( void )
     init_gpio_module(gpio_mappings, gpio_mappings_size);
     init_midi_module(&midi_config);
     init_background_tasks(high_frequency_tasks, high_frequency_tasks_size,
-                                mid_frequency_tasks, mid_frequency_tasks_size,
-                                low_frequency_tasks, low_frequency_tasks_size);
+                          mid_frequency_tasks, mid_frequency_tasks_size,
+                          low_frequency_tasks, low_frequency_tasks_size);
 
     // set watchdog for 128ms
     wdt_enable(WDT_PER_128CLK_gc);
