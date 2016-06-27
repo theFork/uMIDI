@@ -111,14 +111,13 @@ static inline bool exec_help(void)
         usb_puts("Special commands:");
     }
 
-    char* tok_ptr;
     for (uint8_t i=0; i<user_commands_size; ++i) {
         // Check if the help string contains newline characters
         char* first_nl = strchr(user_commands[i].help_string, '\n');
         if (first_nl) {
             // Parse specified options / parameters to the command string
             char* help_string = strdup(user_commands[i].help_string);
-            char* params = strtok_r(help_string, "\n", &tok_ptr);
+            char* params = strtok(help_string, "\n");
 
             if (user_commands[i].help_string == first_nl) {
                 // If the first character of the help string is a newline character, the parsed
@@ -133,14 +132,14 @@ static inline bool exec_help(void)
                 usb_printf("    %-16s  :  ", first_column);
 
                 // Complete the first line of the help string
-                usb_printf("%s" USB_NEWLINE, strtok_r(NULL, "\n", &tok_ptr));
+                usb_printf("%s" USB_NEWLINE, strtok(NULL, "\n"));
             }
 
             // Split remaining command description at '\n' chars, pad with spaces and print
-            char* tail = strtok_r(NULL, "\n", &tok_ptr);
+            char* tail = strtok(NULL, "\n");
             while (tail) {
                 usb_printf("                         %s" USB_NEWLINE, tail);
-                tail = strtok_r(NULL, "\n", &tok_ptr);
+                tail = strtok(NULL, "\n");
             }
 
             free(help_string);
