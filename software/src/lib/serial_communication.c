@@ -291,7 +291,7 @@ static inline void print_command_from_history(const int8_t offset)
 
     // Copy command from history to current command buffer
     strncpy(cmd_buffer, cmd_history[cmd_history_index], CMD_BUFFER_SIZE);
-    cmd_buffer_index = strlen(cmd_buffer);
+    cmd_buffer_index = strlen(cmd_buffer) % CMD_BUFFER_SIZE;
 
     // Print out command and save command length for the next invocation
     usb_printf(cmd_buffer);
