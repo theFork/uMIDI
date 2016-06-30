@@ -40,7 +40,7 @@
 
 /// \brief      Number of recent commands in the history
 /// \details    Must be int the range of `uint8_t`.
-#define CMD_HISTORY_SIZE        8
+#define CMD_HISTORY_SIZE        4
 
 /// \brief      ASCII escape character
 #define ESCAPE_CHAR_CODE        27
