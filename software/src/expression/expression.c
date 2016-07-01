@@ -90,46 +90,46 @@ static void send_enable_message(bool enable)
 bool exec_cal(const char* command)
 {
     if (strlen(command) != 7) {
-        usb_puts("Malformed command");
+        usb_puts(PSTR("Malformed command"));
         return false;
     }
 
     bool echo_state = echo;
     if (!strncmp(command+4, "adc", 3)) {
-        usb_puts("Calibrating ADC offset...");
+        usb_puts(PSTR("Calibrating ADC offset..."));
         adc_offset = calibrate_adc_offset(expression_conversion.channel);
-        usb_puts("done.");
+        usb_puts(PSTR("done."));
     }
     else if (!strncmp(command+4, "dmp", 3)) {
-        usb_printf("Offset: %u" USB_NEWLINE, adc_offset);
-        usb_printf("Min: %u" USB_NEWLINE, calibration_function.from);
-        usb_printf("Max: %u" USB_NEWLINE, calibration_function.to);
+        usb_printf(PSTR("Offset: %u" USB_NEWLINE), adc_offset);
+        usb_printf(PSTR("Min: %u" USB_NEWLINE), calibration_function.from);
+        usb_printf(PSTR("Max: %u" USB_NEWLINE), calibration_function.to);
     }
     else if (!strncmp(command+4, "max", 3)) {
         echo = false;
-        usb_puts("Updating max ADC value and updating linear function range...");
+        usb_puts(PSTR("Updating max ADC value and updating linear function range..."));
 
         calibration_function.to = last_adc_value;
         init_linear_to_midi(&calibration_function);
 
-        usb_puts("done.");
+        usb_puts(PSTR("done."));
     }
     else if (!strncmp(command+4, "min", 3)) {
         echo = false;
-        usb_puts("Saving min ADC value and updating linear functino range...");
+        usb_puts(PSTR("Saving min ADC value and updating linear functino range..."));
 
         calibration_function.from = last_adc_value;
         init_linear_to_midi(&calibration_function);
 
-        usb_puts("done.");
+        usb_puts(PSTR("done."));
     }
     else if (!strncmp(command+4, "sav", 3)) {
-        usb_puts("Storing current calibration values...");
+        usb_puts(PSTR("Storing current calibration values..."));
         eeprom_write_word(&adc_offset_eemem, adc_offset);
         eeprom_write_word(&from_eemem,       calibration_function.from);
         eeprom_write_word(&to_eemem,         calibration_function.to);
         eeprom_write_dword(&slope_eemem,     calibration_function.slope);
-        usb_puts("done.");
+        usb_puts(PSTR("done."));
     }
     echo = echo_state;
 
@@ -139,7 +139,7 @@ bool exec_cal(const char* command)
 bool exec_echo(const char* command)
 {
     if (strlen(command) < 7 || strlen(command) > 8) {
-        usb_puts("Malformed command" USB_NEWLINE);
+        usb_puts(PSTR("Malformed command" USB_NEWLINE));
         return false;
     }
 
@@ -203,7 +203,7 @@ void update_expression_value(uint16_t new_adc_value) {
         send_control_change(69, current_expression_value);
 
         if (echo) {
-            usb_printf("Sending CC 69 %3u" USB_NEWLINE, current_expression_value);
+            usb_printf(PSTR("Sending CC 69 %3u" USB_NEWLINE), current_expression_value);
         }
     }
 }

@@ -101,50 +101,41 @@ background_task_t low_frequency_tasks[] = {
 uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);
 
 //---------------- Custom commands ----------------//
+static const char cmd_string_backup[] PROGMEM = "backup";
+static const char help_string_backup[] PROGMEM = "Backs up all programs, one bank per line";
+static const char cmd_string_load[] PROGMEM = "load";
+static const char help_string_load[] PROGMEM = "<n>\n"
+    "Loads the specified program:\n"
+    "<n> : program number";
+static const char cmd_string_relay[] PROGMEM = "rel";
+static const char help_string_relay[] PROGMEM = "<r> <s>\n"
+    "Manipulates the switchers relays:\n"
+    "<r> : Relay to manipulate\n"
+    "      'tm'  = Tune/Mute\n"
+    "      'l1' = Loop 1\n"
+    "      'l2' = Loop 2\n"
+    "      'l3' = Loop 3\n"
+    "      'l4' = Loop 4\n"
+    "      'l5' = Loop 5\n"
+    "      's1' = Switch 1\n"
+    "      's2' = Switch 2\n"
+    "<s> : Relay status\n"
+    "      'a' = activate relay\n"
+    "      'd' = deactivate relay";
+static const char cmd_string_restore[] PROGMEM = "restore";
+static const char help_string_restore[] PROGMEM = "<n> <d>\n"
+    "Restores a bank given as a hex-string to EEPROM:\n"
+    "<n> : Number of the bank to restore,\n"
+    "      padded with 0 if smaller than 10\n"
+    "<d> : Program bank data";
+static const char cmd_string_save[] PROGMEM = "save";
+static const char help_string_save[] PROGMEM = "Saves the current program configuration";
+
 struct serial_command serial_commands[] = {
-    {
-        .cmd_string = "backup",
-        .help_string = "Backs up all programs, one bank per line",
-        .handler = &exec_backup
-    },
-    {
-        .cmd_string = "load",
-        .help_string = "<n>\n"
-                       "Loads the specified program:\n"
-                       "<n> : program number",
-        .handler = &exec_load
-    },
-    {
-        .cmd_string = "rel",
-        .help_string = "<r> <s>\n"
-                       "Manipulates the switchers relays:\n"
-                       "<r> : Relay to manipulate\n"
-                       "      'tm'  = Tune/Mute\n"
-                       "      'l1' = Loop 1\n"
-                       "      'l2' = Loop 2\n"
-                       "      'l3' = Loop 3\n"
-                       "      'l4' = Loop 4\n"
-                       "      'l5' = Loop 5\n"
-                       "      's1' = Switch 1\n"
-                       "      's2' = Switch 2\n"
-                       "<s> : Relay status\n"
-                       "      'a' = activate relay\n"
-                       "      'd' = deactivate relay",
-        .handler = &exec_relay
-    },
-    {
-        .cmd_string = "restore",
-        .help_string = "<n> <d>\n"
-                       "Restores a bank given as a hex-string to EEPROM:\n"
-                       "<n> : Number of the bank to restore,\n"
-                       "      padded with 0 if smaller than 10\n"
-                       "<d> : Program bank data",
-        .handler = &exec_restore
-    },
-    {
-        .cmd_string = "save",
-        .help_string = "Saves the current program configuration",
-        .handler = &exec_save
-    },
+    { .cmd_string = cmd_string_backup , .help_string = help_string_backup,  .handler = &exec_backup  },
+    { .cmd_string = cmd_string_load,    .help_string = help_string_load,    .handler = &exec_load    },
+    { .cmd_string = cmd_string_relay,   .help_string = help_string_relay,   .handler = &exec_relay   },
+    { .cmd_string = cmd_string_restore, .help_string = help_string_restore, .handler = &exec_restore },
+    { .cmd_string = cmd_string_save,    .help_string = help_string_save,    .handler = &exec_save    },
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);

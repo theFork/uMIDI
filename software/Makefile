@@ -6,7 +6,9 @@ PROJECTS=$(filter-out src/lib/.,$(wildcard src/*/.))
 DOXYGEN=doxygen
 MAKE=make
 
-all: $(PROJECTS) doc
+all: compile doc
+
+compile: $(PROJECTS)
 
 doc:
 	cd ../doc; $(DOXYGEN)
@@ -16,5 +18,5 @@ $(PROJECTS):
 	$(MAKE) -C $@ clean compile
 
 .NOTPARALLEL:
-.PHONY: all doc $(PROJECTS)
+.PHONY: all compile doc $(PROJECTS)
 # vim: tabstop=4 shiftwidth=4 noexpandtab

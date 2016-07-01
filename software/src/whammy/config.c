@@ -46,28 +46,23 @@
 ////////////////////////////////////////////////////////////////
 
 //---------------- Commands ----------------//
+static const char cmd_string_speed[] PROGMEM = "speed";
+static const char help_string_speed[] PROGMEM = "<s>\n"
+    "Adjust the speed of the sequencer:\n"
+    "<s> : wave speed\n";
+static const char cmd_string_tap[] PROGMEM = "tap";
+static const char help_string_tap[] PROGMEM = "\nSend this command repeatedly to tap in a tempo\n";
+static const char cmd_string_pattern[] PROGMEM = "pattern";
+static const char help_string_pattern[] PROGMEM = "<p>\n"
+    "Select sequencer pattern:\n"
+    "<p> : pattern\n"
+    "      \"next\" = switch to next pattern\n"
+    "      \"prev\" = switch to previous pattern\n";
+
 struct serial_command serial_commands[] = {
-    {
-        .cmd_string = "speed",
-        .help_string = "<s>\n"
-            "Adjust the speed of the sequencer:\n"
-            "<s> : wave speed\n",
-        .handler = &exec_speed
-    },
-    {
-        .cmd_string = "tap",
-        .help_string = "\nSend this command repeatedly to tap in a tempo\n",
-        .handler = &exec_tap
-    },
-    {
-        .cmd_string = "pattern",
-        .help_string = "<p>\n"
-            "Select sequencer pattern:\n"
-            "<p> : pattern\n"
-            "      \"next\" = switch to next pattern\n"
-            "      \"prev\" = switch to previous pattern\n",
-        .handler = &exec_pattern
-    },
+    { .cmd_string = cmd_string_speed,   .help_string = help_string_speed,   .handler = &exec_speed   },
+    { .cmd_string = cmd_string_tap,     .help_string = help_string_tap,     .handler = &exec_tap     },
+    { .cmd_string = cmd_string_pattern, .help_string = help_string_pattern, .handler = &exec_pattern },
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);
 

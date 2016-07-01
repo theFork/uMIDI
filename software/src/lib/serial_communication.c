@@ -23,6 +23,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <avr/pgmspace.h>
 #include <avr/wdt.h>
 
 #include "xboot/xbootapi.h"
@@ -97,61 +98,68 @@ static bool echo_on = true;
 /// \brief      Handler for the `help` command
 static inline bool exec_help(void)
 {
-    usb_puts("");
-    usb_puts("Welcome to the uMIDI serial interface!");
-    usb_printf("Software ID: %s" USB_NEWLINE, UMIDI_SOFTWARE_ID);
-    usb_puts("Built-in commands:");
-    usb_puts("    clear             :  Clears the console by printing CR/LFs.");
-    usb_puts("    fwupdate <s>      :  Initiates a firmware update:");
-    usb_puts("                         <s> : firmware update packet size");
-    usb_puts("    help              :  Prints this help message.");
-    usb_puts("    reset             :  Resets the device.");
+    usb_puts(PSTR(""));
+    usb_puts(PSTR("Welcome to the uMIDI serial interface!"));
+    usb_printf(PSTR("Software ID: %s" USB_NEWLINE), UMIDI_SOFTWARE_ID);
+    usb_puts(PSTR("Built-in commands:"));
+    usb_puts(PSTR("    clear             :  Clears the console by printing CR/LFs."));
+    usb_puts(PSTR("    fwupdate <s>      :  Initiates a firmware update:"));
+    usb_puts(PSTR("                         <s> : firmware update packet size"));
+    usb_puts(PSTR("    help              :  Prints this help message."));
+    usb_puts(PSTR("    reset             :  Resets the device."));
 
     if (user_commands_size) {
-        usb_puts("Special commands:");
+        usb_puts(PSTR("Special commands:"));
     }
 
     for (uint8_t i=0; i<user_commands_size; ++i) {
+        // Copy strings to RAM for processing
+        uint16_t cmd_string_size = strlen_P(user_commands[i].cmd_string)+1;
+        char* cmd_string = malloc(cmd_string_size);
+        strlcpy_P(cmd_string, user_commands[i].cmd_string, cmd_string_size);
+
+        uint16_t help_string_size = strlen_P(user_commands[i].help_string)+1;
+        char* help_string = malloc(help_string_size);
+        strlcpy_P(help_string, user_commands[i].help_string, help_string_size);
+
         // Check if the help string contains newline characters
-        char* first_nl = strchr(user_commands[i].help_string, '\n');
+        const char* first_nl = strchr(help_string, '\n');
         if (first_nl) {
             // Parse specified options / parameters to the command string
-            char* help_string = strdup(user_commands[i].help_string);
             char* params = strtok(help_string, "\n");
 
-            if (user_commands[i].help_string == first_nl) {
+            if (help_string == first_nl) {
                 // If the first character of the help string is a newline character, the parsed
                 // params are actually the first line of the description text.
-                usb_printf("    %-16s  :  %s" USB_NEWLINE, user_commands[i].cmd_string, params);
+                usb_printf(PSTR("    %-16s  :  %s" USB_NEWLINE), cmd_string, params);
             }
             else {
                 // Append options / parameters to command string and print the whole thing
                 char first_column[17] = "";
                 snprintf(first_column, sizeof(first_column),
-                         "%s %s", user_commands[i].cmd_string, params);
-                usb_printf("    %-16s  :  ", first_column);
+                         "%s %s", cmd_string, params);
+                usb_printf(PSTR("    %-16s  :  "), first_column);
 
                 // Complete the first line of the help string
-                usb_printf("%s" USB_NEWLINE, strtok(NULL, "\n"));
+                usb_printf(PSTR("%s" USB_NEWLINE), strtok(NULL, "\n"));
             }
 
             // Split remaining command description at '\n' chars, pad with spaces and print
             char* tail = strtok(NULL, "\n");
             while (tail) {
-                usb_printf("                         %s" USB_NEWLINE, tail);
+                usb_printf(PSTR("                         %s" USB_NEWLINE), tail);
                 tail = strtok(NULL, "\n");
             }
-
-            free(help_string);
         }
         else {
             // Print simple command description
-            usb_printf("    %-16s  :  %s" USB_NEWLINE,
-                       (user_commands+i)->cmd_string, (user_commands+i)->help_string);
+            usb_printf(PSTR("    %-16s  :  %s" USB_NEWLINE), cmd_string, help_string);
         }
+
+        free(help_string);
     }
 
-    usb_puts("Please enter a command:");
+    usb_puts(PSTR("Please enter a command:"));
 
     // Success
     return true;
@@ -179,28 +187,28 @@ static inline bool exec_update(const char * const command)
 
     // Abort if the program is too big to fit into memory
     if (num_pages > MAX_PAGE_NUM) {
-        usb_puts("Program is too big! Aborting.");
+        usb_puts(PSTR("Program is too big! Aborting."));
         return true;
     }
 
     // Warn if the program is approaching the maximum size
     uint8_t pages_left = MAX_PAGE_NUM - num_pages;
     if (pages_left < 20) {
-        usb_printf("Warning: Only %u pages of program space left!" USB_NEWLINE, pages_left);
+        usb_printf(PSTR("Warning: Only %u pages of program space left!" USB_NEWLINE), pages_left);
     }
 
     // Erase temporary application memory
-    usb_puts("Erasing temporary application flash section...");
+    usb_puts(PSTR("Erasing temporary application flash section..."));
     wdt_disable();
     uint8_t error_code = xboot_app_temp_erase();
     if (error_code != XB_SUCCESS) {
-        usb_printf("Error erasing temporary application section: %d" USB_NEWLINE, error_code);
+        usb_printf(PSTR("Error erasing temporary application section: %d" USB_NEWLINE), error_code);
         return true;
     }
     wdt_reenable();
 
     // Switch to update mode
-    usb_printf("Ready to receive %u bytes (%u pages)..." USB_NEWLINE,
+    usb_printf(PSTR("Ready to receive %u bytes (%u pages)..." USB_NEWLINE),
                update_bytes_pending,
                num_pages);
     echo_on = false;
@@ -228,7 +236,7 @@ static inline void execute_command(const char * const command)
 
     else if (strcmp(command, "clear") == 0) {
         for (int i=0; i<80; ++i) {
-            usb_puts("");
+            usb_puts(PSTR(""));
         }
     }
 
@@ -241,7 +249,7 @@ static inline void execute_command(const char * const command)
     }
 
     else if (strcmp(command, "reset") == 0) {
-        usb_puts("Resetting device...");
+        usb_puts(PSTR("Resetting device..."));
         reset = true;
     }
 
@@ -249,20 +257,20 @@ static inline void execute_command(const char * const command)
         // Iterate all user-defined commands and try to find a matching one
         for (uint8_t i=0; i<user_commands_size; ++i) {
             const struct serial_command* user_command = user_commands + i;
-            if (strncmp(command, user_command->cmd_string, strlen(user_command->cmd_string)) == 0) {
+            if (strncmp_P(command, user_command->cmd_string, strlen_P(user_command->cmd_string)) == 0) {
                 success = user_command->handler(command);
                 goto cleanup;
             }
         }
 
         // No known command matches :-(
-        usb_printf("Unknown command: [%s]" USB_NEWLINE, command);
-        usb_puts("Type `help` for help." USB_NEWLINE);
+        usb_printf(PSTR("Unknown command: [%s]" USB_NEWLINE), command);
+        usb_puts(PSTR("Type `help` for help." USB_NEWLINE));
     }
 
 cleanup:
     if (!success) {
-        usb_printf("Error executing command: [%s]" USB_NEWLINE, command);
+        usb_printf(PSTR("Error executing command: [%s]" USB_NEWLINE), command);
     }
 
     // Clear command buffer and reset write pointer
@@ -284,7 +292,7 @@ static inline void print_command_from_history(const int8_t offset)
     // Overwrite previously printed command
     static uint8_t last_cmd_length = 0;
     for (int i=0; i < last_cmd_length; ++i) {
-        usb_printf("\b \b");
+        usb_printf(PSTR("\b \b"));
         cmd_buffer[cmd_buffer_index] = '\0';
     }
 
@@ -293,7 +301,7 @@ static inline void print_command_from_history(const int8_t offset)
     cmd_buffer_index = strlen(cmd_buffer) % CMD_BUFFER_SIZE;
 
     // Print out command and save command length for the next invocation
-    usb_printf(cmd_buffer);
+    usb_printf_S(cmd_buffer);
     last_cmd_length = cmd_buffer_index;
 }
 
@@ -311,7 +319,7 @@ static bool handle_escape_sequence(const char data)
             escape_byte_index = 2;
         }
         else {
-            usb_puts("Unrecognized escape sequence!");
+            usb_puts(PSTR("Unrecognized escape sequence!"));
             escape_byte_index = 0;
         }
         return true;
@@ -347,7 +355,7 @@ static inline void process_command_char(void)
     // Echo back the received character if desired and possible
     if (echo_on) {
         if (data == '\r') {
-            usb_puts("");
+            usb_puts(PSTR(""));
         }
         else if (0 <= data && data < 128) {
             usb_putc(data);
@@ -365,7 +373,7 @@ static inline void process_command_char(void)
 
     // Clear last character and rewind buffer index if backspace was received
     if (data == '\b') {
-        usb_printf(" \b");
+        usb_printf(PSTR(" \b"));
         if (cmd_buffer_index > 0) {
             --cmd_buffer_index;
         }
@@ -397,16 +405,16 @@ static inline void process_update_data(void)
         expected_crc = page_buffer[page_buffer_index-2] << 8;
         expected_crc |= page_buffer[page_buffer_index-1];
         if (expected_crc == 0) {
-            usb_puts("Invalid empty CRC found!");
+            usb_puts(PSTR("Invalid empty CRC found!"));
             return;
         }
-        usb_printf("Expected CRC checksum: %x" USB_NEWLINE, expected_crc);
+        usb_printf(PSTR("Expected CRC checksum: %x" USB_NEWLINE), expected_crc);
 
         // Rewind page_buffer_index
         page_buffer_index -= 2;
 
         // Pad last page with 0xFF for CRC calculation
-        usb_puts("Padding last application page...");
+        usb_puts(PSTR("Padding last application page..."));
         while (page_buffer_index < SPM_PAGESIZE)
         {
             page_buffer[page_buffer_index] = 0xff;
@@ -418,12 +426,12 @@ static inline void process_update_data(void)
     if (page_buffer_index == SPM_PAGESIZE) {
         // TODO: For unknown reasons, the following call prints 0 for the total number of pages:
         /*
-        usb_printf("Writing temporary application page [%3u/%3u]..." USB_NEWLINE,
+        usb_printf(PSTR("Writing temporary application page [%3u/%3u]..." USB_NEWLINE),
                    temp_app_addr / SPM_PAGESIZE + 1,
                    num_pages);
         */
-        usb_printf("Writing temporary application page [%3u", temp_app_addr / SPM_PAGESIZE + 1);
-        usb_printf("/%3u/%3u]..." USB_NEWLINE, num_pages, MAX_PAGE_NUM);
+        usb_printf(PSTR("Writing temporary application page [%3u"), temp_app_addr / SPM_PAGESIZE + 1);
+        usb_printf(PSTR("/%3u/%3u]..." USB_NEWLINE), num_pages, MAX_PAGE_NUM);
         if (xboot_app_temp_write_page(temp_app_addr, page_buffer, 0) != XB_SUCCESS) {
             goto fail;
         }
@@ -433,14 +441,14 @@ static inline void process_update_data(void)
 
     if (update_bytes_pending == 0) {
         // Calculate CRC of the written application and compare with expected CRC
-        usb_puts("Performing CRC...");
+        usb_puts(PSTR("Performing CRC..."));
         uint16_t actual_crc = 0;
         xboot_app_temp_crc16(&actual_crc);
         if (expected_crc != actual_crc) {
-            usb_printf("CRC checksum mismatch: %x != %x" USB_NEWLINE, expected_crc, actual_crc);
+            usb_printf(PSTR("CRC checksum mismatch: %x != %x" USB_NEWLINE), expected_crc, actual_crc);
             goto fail;
         }
-        usb_puts("Success!");
+        usb_puts(PSTR("Success!"));
 
         // Tell xboot to install the firmware on next reset
         if (xboot_install_firmware(expected_crc) != XB_SUCCESS) {
@@ -448,14 +456,14 @@ static inline void process_update_data(void)
         }
 
         // Reset device
-        usb_puts("Resetting device and installing new firmware...");
+        usb_puts(PSTR("Resetting device and installing new firmware..."));
         reset = true;
     }
 
     return;
 fail:
     // Return to normal operation if the update failed
-    usb_puts("Update failed!");
+    usb_puts(PSTR("Update failed!"));
     update_in_progress = false;
     echo_on = true;
 }

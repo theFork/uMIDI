@@ -29,6 +29,7 @@
 //---------------- includes ----------------//
 #include <stdbool.h>
 #include <stdint.h>
+#include <avr/pgmspace.h>
 
 
 //---------------- constants ----------------//
@@ -61,11 +62,18 @@
 typedef bool (*cmd_handler_t)(const char* cmd);
 
 /// \brief      Command specification
+/// \details    *Note:* The strings must be placed in program space. Unfortunately this is a
+///             two-step process: First you have to define the string in program space:
+///             \code
+///             static const char cmd_string[] PROGMEM = "command";
+///             \endcode
+///             You can then reference this string in the definition of a command struct. Please
+///             look at the USB-ready application template for an examplary command definition.
 struct serial_command
 {
-    char* cmd_string;           ///< The command as typed in the console
+    PGM_P cmd_string;           ///< The command as typed in the console
 
-    char* help_string;          ///< Description of the command (used by the `help` command)
+    PGM_P help_string;          ///< Description of the command (used by the `help` command)
                                 ///<
                                 ///< The description may contain newline characters, which will
                                 ///< be automatically followed by white space in the help message

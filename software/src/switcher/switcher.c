@@ -76,7 +76,7 @@ void execute_program(uint32_t program_data)
     current_program.dword = program_data;
     effective_program.dword = program_data;
 
-    usb_printf("Applying relays configuration: 0x%02x" USB_NEWLINE, current_program.dword);
+    usb_printf(PSTR("Applying relays configuration: 0x%02x" USB_NEWLINE), current_program.dword);
 
     gpio_set(GPIO_OUT_TUNE_MUTE, current_program.bit.tuner);
     gpio_set(GPIO_OUT_LOOP1, current_program.bit.loop1);
@@ -92,13 +92,13 @@ void execute_program(uint32_t program_data)
 bool exec_backup(const char* command)
 {
     if (strlen(command) != 6) {
-        usb_puts("Malformed command" USB_NEWLINE);
+        usb_puts(PSTR("Malformed command" USB_NEWLINE));
         return false;
     }
 
     // Export all programs, one bank per line
     for (uint8_t i=0; i < PROGRAM_BANK_COUNT; ++i) {
-        usb_puts(export_bank(i));
+        usb_puts_S(export_bank(i));
     }
     return true;
 }
@@ -107,7 +107,7 @@ bool exec_load(const char* command)
 {
     // Abort if the command is malformed
     if (strlen(command) < 6 || command[4] != ' ') {
-        usb_puts("Malformed command" USB_NEWLINE);
+        usb_puts(PSTR("Malformed command" USB_NEWLINE));
         return false;
     }
 
@@ -120,7 +120,7 @@ bool exec_relay(const char* command)
 {
     // Abort if the command is malformed
     if (strlen(command) != 8 || command[3] != ' ' || command[6] != ' ') {
-        usb_puts("Malformed command" USB_NEWLINE);
+        usb_puts(PSTR("Malformed command" USB_NEWLINE));
         return false;
     }
 
@@ -157,7 +157,7 @@ bool exec_relay(const char* command)
                 program_bit_index = 5;
                 break;
             default:
-                usb_puts("No such looper relay" USB_NEWLINE);
+                usb_puts(PSTR("No such looper relay" USB_NEWLINE));
                 return false;
         }
     }
@@ -173,12 +173,12 @@ bool exec_relay(const char* command)
                 program_bit_index = 7;
                 break;
             default:
-                usb_puts("No such switch relay" USB_NEWLINE);
+                usb_puts(PSTR("No such switch relay" USB_NEWLINE));
                 return false;
         }
     }
     else {
-        usb_puts("Unrecognized relay" USB_NEWLINE);
+        usb_puts(PSTR("Unrecognized relay" USB_NEWLINE));
         return false;
     }
 
@@ -198,13 +198,13 @@ bool exec_relay(const char* command)
 bool exec_restore(const char* command)
 {
     if (strlen(command) < 91 || command[7] != ' ' || command[10] != ' ') {
-        usb_puts("Malformed command" USB_NEWLINE);
+        usb_puts(PSTR("Malformed command" USB_NEWLINE));
         return false;
     }
 
     // Extract program bank number
     uint8_t number = strtol(&command[8], NULL, 10);
-    usb_printf("Restoring bank number #%u" USB_NEWLINE, number);
+    usb_printf(PSTR("Restoring bank number #%u" USB_NEWLINE), number);
 
     // Import and store bank
     return import_bank(number, &command[11]);
@@ -215,7 +215,7 @@ bool exec_save(const char* command)
 {
     // Abort if the command is malformed
     if (strlen(command) != 4) {
-        usb_puts("Malformed command" USB_NEWLINE);
+        usb_puts(PSTR("Malformed command" USB_NEWLINE));
         return false;
     }
 
@@ -235,13 +235,13 @@ void handle_program_change(uint8_t program)
     }
 
     flash_led_multiple(&save_led, 1);
-    usb_printf("Entering program %u" USB_NEWLINE, program);
+    usb_printf(PSTR("Entering program %u" USB_NEWLINE), program);
 }
 
 void unknown_midi_message_handler(void)
 {
     flash_led_multiple(&save_led, 2);
-    usb_puts("Ignoring unknown MIDI message");
+    usb_puts(PSTR("Ignoring unknown MIDI message"));
 }
 
 void poll_switches(void)
@@ -253,7 +253,7 @@ void poll_switches(void)
             return;
         }
 
-        usb_puts("Saving program");
+        usb_puts(PSTR("Saving program"));
         current_program.dword = effective_program.dword;
         update_current_program(current_program.dword);
         flash_led_multiple(&save_led, 3);
@@ -263,7 +263,7 @@ void poll_switches(void)
     // Handle program-related switches
     for (uint8_t switch_index=0; switch_index<8; ++switch_index) {
         if (poll_gpio_input(*gpio_mappings[8+switch_index].pin, GPIO_INPUT_PULLUP)) {
-            usb_printf("Switch #%u was pressed" USB_NEWLINE, switch_index);
+            usb_printf(PSTR("Switch #%u was pressed" USB_NEWLINE), switch_index);
 
             // Update current program
             effective_program.dword ^= _BV(switch_index);
