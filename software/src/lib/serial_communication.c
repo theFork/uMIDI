@@ -229,12 +229,7 @@ static inline void execute_command(const char * const command)
 {
     bool success = true;
 
-    // Ignore empty command
-    if (strcmp(command, "") == 0) {
-        return;
-    }
-
-    else if (strcmp(command, "clear") == 0) {
+    if (strcmp(command, "clear") == 0) {
         for (int i=0; i<80; ++i) {
             usb_puts(PSTR(""));
         }
@@ -364,6 +359,10 @@ static inline void process_command_char(void)
 
     // Parse and execute commands if the enter key was hit
     if (data == '\r') {
+        // Ignore empty command
+        if (strcmp(cmd_buffer, "") == 0) {
+            return;
+        }
         strncpy(cmd_history[cmd_history_index], cmd_buffer, CMD_BUFFER_SIZE);
         ++cmd_history_index;
         cmd_history_index %= CMD_HISTORY_SIZE;
