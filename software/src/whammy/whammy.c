@@ -191,9 +191,17 @@ bool exec_backup(const char* command)
         return false;
     }
 
+    usb_puts(PSTR("Programs:"));
+    for (uint8_t i=0; i<PROGRAM_BANK_COUNT; ++i) {
+        usb_puts_S(export_bank(i));
+    }
+
+    // Dump patterns
+    usb_puts(PSTR(USB_NEWLINE "Patterns:"));
     for (uint8_t i=0; i<SEQUENCER_PATTERNS; ++i) {
         usb_puts_S(export_pattern(i));
     }
+
     return true;
 }
 
