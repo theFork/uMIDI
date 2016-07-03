@@ -71,6 +71,13 @@ struct program
 
 //---------------- functions and procedures ----------------//
 
+/// \brief      Selects and enters a program relative to the current one.
+/// \param      delta
+///                 offset to add to the current program number
+/// \returns    the number of the loaded program
+/// \see        enter_program
+uint8_t adjust_program(int8_t delta);
+
 /// \brief      Copies all programs in the current bank to another bank.
 /// \details    Irreversibly overwrites all programs in the target bank.
 /// \param      target_bank
@@ -83,13 +90,6 @@ void copy_current_bank_to(uint8_t target_bank);
 ///                 Target program number [0..119].
 void copy_current_program_to(uint8_t target_program);
 
-/// \brief      Exports a program bank
-/// \details    Reads the data from EEPROM and converts it to a string of hexadecimal digits.
-/// \param      number
-///                 the number of the program bank to export
-/// \returns    the programs stored in EEPROM as a hex-string
-char* export_bank(const uint8_t number);
-
 /// \brief      Loads and executes the specified program.
 /// \details    Reads the new program data from EEPROM, updates the internal state and calls the
 ///             registered callback function, which executes the program.
@@ -99,6 +99,13 @@ char* export_bank(const uint8_t number);
 ///                 Program number [0..119].
 /// \see init_program_module
 void enter_program(uint8_t number);
+
+/// \brief      Exports a program bank
+/// \details    Reads the data from EEPROM and converts it to a string of hexadecimal digits.
+/// \param      number
+///                 the number of the program bank to export
+/// \returns    the programs stored in EEPROM as a hex-string
+char* export_bank(const uint8_t number);
 
 /// \brief      Imports and stores a program bank given as a hex-string
 /// \details    Overwrites stored program data!
