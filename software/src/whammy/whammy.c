@@ -685,11 +685,6 @@ void save_current_program(void)
     update_program(active_program.word);
 }
 
-void tap_tempo(void)
-{
-    register_tap();
-}
-
 void update_controller_value(void)
 {
     switch (active_program.field.ctrl_mode) {

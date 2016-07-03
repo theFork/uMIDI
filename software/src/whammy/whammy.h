@@ -171,7 +171,6 @@ bool exec_tap(const char* command);
 void handle_midi_program_change(midi_value_t program);
 void init_whammy_module(void);
 void save_current_program(void);
-void tap_tempo(void);
 void update_controller_value(void);
 void value1_decrement(void);
 void value1_increment(void);
