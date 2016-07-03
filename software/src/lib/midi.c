@@ -96,7 +96,7 @@ enum midi_channel read_midi_channel_from_jumpers(const struct jumpers * jumpers)
 
 void send_control_change(midi_value_t controller, midi_value_t value)
 {
-    send_midi_message(MIDI_MSG_TYPE_CONTROL_CHANGE, tx_channel, controller & 0x7f, value & 0x7f);
+    send_midi_message(tx_channel, MIDI_MSG_TYPE_CONTROL_CHANGE, controller & 0x7f, value & 0x7f);
 }
 
 void send_midi_message(enum midi_channel channel, enum midi_message_type type, midi_value_t data0, midi_value_t data1)
@@ -115,17 +115,17 @@ void send_midi_message(enum midi_channel channel, enum midi_message_type type, m
 
 void send_note_off(midi_value_t note, midi_value_t velocity)
 {
-    send_midi_message(MIDI_MSG_TYPE_NOTE_OFF, tx_channel, note & 0x7f, velocity & 0x7f);
+    send_midi_message(tx_channel, MIDI_MSG_TYPE_NOTE_OFF, note & 0x7f, velocity & 0x7f);
 }
 
 void send_note_on(midi_value_t note, midi_value_t velocity)
 {
-    send_midi_message(MIDI_MSG_TYPE_NOTE_ON, tx_channel, note & 0x7f, velocity & 0x7f);
+    send_midi_message(tx_channel, MIDI_MSG_TYPE_NOTE_ON, note & 0x7f, velocity & 0x7f);
 }
 
 void send_program_change(midi_value_t pnum)
 {
-    send_midi_message(MIDI_MSG_TYPE_PROGRAM_CHANGE, tx_channel, pnum & 0x7f, 0);
+    send_midi_message(tx_channel, MIDI_MSG_TYPE_PROGRAM_CHANGE, pnum & 0x7f, 0);
 }
 
 void set_midi_rx_channel(enum midi_channel channel)
