@@ -168,6 +168,7 @@ bool exec_patwipe(const char* command);
 bool exec_speed(const char* command);
 bool exec_store(const char* command);
 bool exec_tap(const char* command);
+bool exec_wham(const char* command);
 void handle_midi_program_change(midi_value_t program);
 void init_whammy_module(void);
 void save_current_program(void);

@@ -162,6 +162,33 @@ static void adjust_speed(int8_t delta)
     usb_printf(PSTR("Set speed to %d" USB_NEWLINE), speed);
 }
 
+/// \brief      Adjusts the whammy pedal mode
+/// \param      delta
+///                 difference from current mode
+static void adjust_whammy_mode(int8_t delta)
+{
+    active_program.field.pedal_mode += delta;
+
+    // Clamp to meaningful values
+    if (active_program.field.pedal_mode > WHAMMY_MODE_CHORDS_OCT_2OCT) {
+        if (delta < 0) {
+            active_program.field.pedal_mode = WHAMMY_MODE_CHORDS_OCT_2OCT;
+        }
+        else if (delta > 0) {
+            active_program.field.pedal_mode = WHAMMY_MODE_CLASSIC_2OCT_UP;
+        }
+    }
+    else {
+        while (active_program.field.pedal_mode > WHAMMY_MODE_CLASSIC_OCT_2OCT
+           &&  active_program.field.pedal_mode < WHAMMY_MODE_CHORDS_2OCT_UP) {
+            active_program.field.pedal_mode += delta;
+        }
+    }
+
+    usb_printf(PSTR("Selecting Whammy pedal mode %d" USB_NEWLINE), active_program.field.pedal_mode+1);
+    send_program_change(active_program.field.pedal_mode);
+}
+
 /// \brief      Prints the selected pattern to the terminal
 static void dump_current_pattern(void)
 {
@@ -618,6 +645,19 @@ bool exec_tap(const char* command)
     return true;
 }
 
+bool exec_wham(const char* command)
+{
+    // Abort if the command is malformed
+    if (strlen(command) < 6 || command[4] != ' ') {
+        usb_puts(PSTR("Malformed command"));
+        return false;
+    }
+
+    active_program.field.pedal_mode = atoi(command+5);
+    adjust_whammy_mode(-1);
+    return true;
+}
+
 void execute_program_callback(uint32_t program_data)
 {
     // Update active controller program in RAM
@@ -745,6 +785,7 @@ void value2_decrement(void)
             adjust_speed(-1);
             break;
         case HMI_LAYER_MODE:
+            adjust_whammy_mode(-1);
             break;
         case HMI_LAYER_PROGRAM:
             break;
@@ -760,6 +801,7 @@ void value2_increment(void)
             adjust_speed(1);
             break;
         case HMI_LAYER_MODE:
+            adjust_whammy_mode(1);
             break;
         case HMI_LAYER_PROGRAM:
             break;

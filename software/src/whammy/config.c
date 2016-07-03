@@ -102,6 +102,10 @@ static const char help_string_store[] PROGMEM = "t n d\n"
     "<d> : data in hexadecimal format\n";
 static const char cmd_string_tap[] PROGMEM = "tap";
 static const char help_string_tap[] PROGMEM = "\nSend this command repeatedly to tap in a tempo\n";
+static const char cmd_string_wham[] PROGMEM = "wham";
+static const char help_string_wham[] PROGMEM = "<m>\n"
+    "Select whammy pedal mode:\n"
+    "<m> : mode {1..21, 43..63}\n";
 
 struct serial_command serial_commands[] = {
     { .cmd_string = cmd_string_ampl,    .help_string = help_string_ampl,    .handler = &exec_ampl          },
@@ -116,6 +120,7 @@ struct serial_command serial_commands[] = {
     { .cmd_string = cmd_string_speed,   .help_string = help_string_speed,   .handler = &exec_speed         },
     { .cmd_string = cmd_string_store,   .help_string = help_string_store,   .handler = &exec_store         },
     { .cmd_string = cmd_string_tap,     .help_string = help_string_tap,     .handler = &exec_tap           },
+    { .cmd_string = cmd_string_wham,    .help_string = help_string_wham,    .handler = &exec_wham          },
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);
 
