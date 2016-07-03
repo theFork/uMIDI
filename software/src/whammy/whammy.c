@@ -41,6 +41,19 @@
 ////////////////////////////////////////////////////////////////
 
 
+////////////////////////////////////////////////////////////////
+//              P R I V A T E   T Y P E D E F S               //
+////////////////////////////////////////////////////////////////
+
+enum hmi_layer
+{
+    HMI_LAYER_DEFAULT,
+    HMI_LAYER_MODE,
+    HMI_LAYER_PROGRAM,
+    HMI_LAYER_COUNT
+};
+
+
 
 ////////////////////////////////////////////////////////////////
 //          F O R W A R D   D E C L A R A T I O N S           //
@@ -116,6 +129,8 @@ static union whammy_ctrl_program active_program = {
     .field.ctrl_mode = WHAMMY_CTRL_MODE_BYPASS,
 };
 
+static enum hmi_layer hmi_layer = 0;
+
 
 
 ///////////////////////////////////////////////////////////////////
@@ -177,7 +192,7 @@ static void dump_current_pattern(void)
 /// \brief      Prints the active configuration to the terminal
 static void dump_current_program(void)
 {
-    usb_puts(PSTR("Mode Wham Spee Addi Wave"));
+    usb_puts(PSTR("Mode Wham Spee Ampl Wave"));
 
     // Prepare pretty output strings
     char* mode_string = "";
@@ -252,10 +267,84 @@ static void enter_wave_mode(const enum waveform waveform)
     usb_printf(PSTR("Waveform %d" USB_NEWLINE), waveform);
 }
 
+static void select_next_mode(void)
+{
+    switch(active_program.field.ctrl_mode) {
+        case WHAMMY_CTRL_MODE_BYPASS:
+            enter_momentary_mode();
+            break;
+
+        case WHAMMY_CTRL_MODE_MOMENTARY:
+            enter_wave_mode(WAVE_SINE);
+            break;
+
+        case WHAMMY_CTRL_MODE_WAVE:
+            ++active_program.field.waveform;
+            if (active_program.field.waveform > WAVE_RANDOM) {
+                enter_pattern_mode(SEQUENCER_PATTERN_01);
+                break;
+            }
+            set_waveform(&control_wave, active_program.field.waveform);
+            usb_printf(PSTR("Waveform %d" USB_NEWLINE), active_program.field.waveform);
+            break;
+
+        case WHAMMY_CTRL_MODE_PATTERN:
+            adjust_sequencer_pattern(&sequencer, 1);
+            active_program.field.waveform = sequencer.pattern;
+            if (sequencer.pattern != SEQUENCER_PATTERN_01) {
+                usb_printf(PSTR("Pattern %d" USB_NEWLINE), sequencer.pattern+1);
+                break;
+            }
+            // else fall through
+
+        default:
+            enter_bypass_mode();
+            break;
+    }
+}
+
+static void select_previous_mode(void)
+{
+    switch(active_program.field.ctrl_mode) {
+        case WHAMMY_CTRL_MODE_BYPASS:
+            enter_pattern_mode(SEQUENCER_PATTERN_20);
+            break;
+
+        case WHAMMY_CTRL_MODE_MOMENTARY:
+            enter_bypass_mode();
+            break;
+
+        case WHAMMY_CTRL_MODE_WAVE:
+            --active_program.field.waveform;
+            if (active_program.field.waveform == WAVE_OFF) {
+                enter_momentary_mode();
+                break;
+            }
+            set_waveform(&control_wave, active_program.field.waveform);
+            usb_printf(PSTR("Waveform %d" USB_NEWLINE), active_program.field.waveform);
+            break;
+
+        case WHAMMY_CTRL_MODE_PATTERN:
+            adjust_sequencer_pattern(&sequencer, -1);
+            if (sequencer.pattern == SEQUENCER_PATTERN_20) {
+                enter_wave_mode(WAVE_RANDOM);
+                break;
+            }
+            usb_printf(PSTR("Pattern %d" USB_NEWLINE), sequencer.pattern+1);
+            break;
+
+        default:
+            enter_bypass_mode();
+            break;
+    }
+}
+
 /// \brief      Updates the HMI led bar to reflect the current sequencer pattern step index
 static void sequencer_tick_handler(void)
 {
-    show_led_pattern(0x80 >> sequencer.step_index);
+    if (hmi_layer == HMI_LAYER_DEFAULT) {
+        show_led_pattern(0x80 >> sequencer.step_index);
+    }
 }
 
 
@@ -263,6 +352,13 @@ static void sequencer_tick_handler(void)
 ////////////////////////////////////////////////////////////////
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
+
+void cycle_hmi_layer(void)
+{
+    ++hmi_layer;
+    hmi_layer %= HMI_LAYER_COUNT;
+    show_led_pattern(hmi_layer);
+}
 
 bool exec_backup(const char* command)
 {
@@ -545,16 +641,6 @@ void handle_midi_program_change(midi_value_t program)
     enter_program(program);
 }
 
-void decrease_speed(void)
-{
-    adjust_speed(-1);
-}
-
-void increase_speed(void)
-{
-    adjust_speed(1);
-}
-
 void init_whammy_module(void)
 {
     init_program_module(0x0000, &execute_program_callback);
@@ -570,100 +656,9 @@ void save_current_program(void)
     update_program(active_program.word);
 }
 
-void select_next_mode(void)
-{
-    switch(active_program.field.ctrl_mode) {
-        case WHAMMY_CTRL_MODE_BYPASS:
-            enter_momentary_mode();
-            break;
-
-        case WHAMMY_CTRL_MODE_MOMENTARY:
-            enter_wave_mode(WAVE_SINE);
-            break;
-
-        case WHAMMY_CTRL_MODE_WAVE:
-            ++active_program.field.waveform;
-            if (active_program.field.waveform > WAVE_RANDOM) {
-                enter_pattern_mode(SEQUENCER_PATTERN_01);
-                break;
-            }
-            set_waveform(&control_wave, active_program.field.waveform);
-            usb_printf(PSTR("Waveform %d" USB_NEWLINE), active_program.field.waveform);
-            break;
-
-        case WHAMMY_CTRL_MODE_PATTERN:
-            adjust_sequencer_pattern(&sequencer, 1);
-            active_program.field.waveform = sequencer.pattern;
-            if (sequencer.pattern != SEQUENCER_PATTERN_01) {
-                usb_printf(PSTR("Pattern %d" USB_NEWLINE), sequencer.pattern+1);
-                break;
-            }
-            // else fall through
-
-        default:
-            enter_bypass_mode();
-            break;
-    }
-}
-
-void select_previous_mode(void)
-{
-    switch(active_program.field.ctrl_mode) {
-        case WHAMMY_CTRL_MODE_BYPASS:
-            enter_pattern_mode(SEQUENCER_PATTERN_20);
-            break;
-
-        case WHAMMY_CTRL_MODE_MOMENTARY:
-            enter_bypass_mode();
-            break;
-
-        case WHAMMY_CTRL_MODE_WAVE:
-            --active_program.field.waveform;
-            if (active_program.field.waveform == WAVE_OFF) {
-                enter_momentary_mode();
-                break;
-            }
-            set_waveform(&control_wave, active_program.field.waveform);
-            usb_printf(PSTR("Waveform %d" USB_NEWLINE), active_program.field.waveform);
-            break;
-
-        case WHAMMY_CTRL_MODE_PATTERN:
-            adjust_sequencer_pattern(&sequencer, -1);
-            if (sequencer.pattern == SEQUENCER_PATTERN_20) {
-                enter_wave_mode(WAVE_RANDOM);
-                break;
-            }
-            usb_printf(PSTR("Pattern %d" USB_NEWLINE), sequencer.pattern+1);
-            break;
-
-        default:
-            enter_bypass_mode();
-            break;
-    }
-}
-
 void tap_tempo(void)
 {
     register_tap();
-}
-
-void toggle_sequencer_mode(void)
-{
-    if (sequencer.mode == SEQUENCER_CHANNEL_MODE_CONTINUOUS) {
-        sequencer.mode = SEQUENCER_CHANNEL_MODE_ONE_SHOT;
-    }
-    else {
-        sequencer.mode = SEQUENCER_CHANNEL_MODE_CONTINUOUS;
-    }
-    usb_printf(PSTR("Setting sequencer mode %d" USB_NEWLINE), sequencer.mode);
-}
-
-void toggle_sequencing(void)
-{
-    toggle_sequencer(&sequencer);
-    if (!sequencer.running) {
-        show_led_pattern(0x00);
-    }
 }
 
 void update_controller_value(void)
@@ -682,6 +677,66 @@ void update_controller_value(void)
             }
             break;
         }
+        default:
+            break;
+    }
+}
+
+void value1_decrement(void)
+{
+    switch (hmi_layer) {
+        case HMI_LAYER_DEFAULT:
+            break;
+        case HMI_LAYER_MODE:
+            select_previous_mode();
+            break;
+        case HMI_LAYER_PROGRAM:
+            break;
+        default:
+            break;
+    }
+}
+
+void value1_increment(void)
+{
+    switch (hmi_layer) {
+        case HMI_LAYER_DEFAULT:
+            break;
+        case HMI_LAYER_MODE:
+            select_next_mode();
+            break;
+        case HMI_LAYER_PROGRAM:
+            break;
+        default:
+            break;
+    }
+}
+
+void value2_decrement(void)
+{
+    switch (hmi_layer) {
+        case HMI_LAYER_DEFAULT:
+            adjust_speed(-1);
+            break;
+        case HMI_LAYER_MODE:
+            break;
+        case HMI_LAYER_PROGRAM:
+            break;
+        default:
+            break;
+    }
+}
+
+void value2_increment(void)
+{
+    switch (hmi_layer) {
+        case HMI_LAYER_DEFAULT:
+            adjust_speed(1);
+            break;
+        case HMI_LAYER_MODE:
+            break;
+        case HMI_LAYER_PROGRAM:
+            break;
         default:
             break;
     }

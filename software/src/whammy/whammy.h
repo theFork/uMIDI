@@ -155,6 +155,7 @@ union whammy_ctrl_program {
 
 
 //---------------- functions and procedures ----------------//
+void cycle_hmi_layer(void);
 bool exec_backup(const char* command);
 bool exec_dump(const char* command);
 bool exec_factory_reset(const char* command);
@@ -167,16 +168,14 @@ bool exec_speed(const char* command);
 bool exec_store(const char* command);
 bool exec_tap(const char* command);
 void handle_midi_program_change(midi_value_t program);
-void decrease_speed(void);
-void increase_speed(void);
 void init_whammy_module(void);
 void save_current_program(void);
-void select_next_mode(void);
-void select_previous_mode(void);
 void tap_tempo(void);
-void toggle_sequencer_mode(void);
-void toggle_sequencing(void);
 void update_controller_value(void);
+void value1_decrement(void);
+void value1_increment(void);
+void value2_decrement(void);
+void value2_increment(void);
 
 //---------------- EOF ----------------//
 #endif // _WHAMMY_H

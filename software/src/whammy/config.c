@@ -124,16 +124,16 @@ struct hmi_config hmi_config = {
     .input_header = &gpio.header2,
     .output_header = &gpio.header1,
     .long_input_threashold = 15,
-    .button1_short_handler = &toggle_sequencer_mode,
+    .button1_short_handler = &cycle_hmi_layer,
     .button1_long_handler = &save_current_program,
-    .button2_short_handler = &toggle_sequencing,
+    .button2_short_handler = &register_tap,
     .button2_long_handler = NULL,
-    .encoder1cw_handler = select_next_mode,
-    .encoder1ccw_handler = select_previous_mode,
+    .encoder1cw_handler = &value1_increment,
+    .encoder1ccw_handler = &value1_decrement,
     .encoder1push_handler = NULL,
-    .encoder2cw_handler = &increase_speed,
-    .encoder2ccw_handler = &decrease_speed,
-    .encoder2push_handler = &register_tap,
+    .encoder2cw_handler = &value2_increment,
+    .encoder2ccw_handler = &value2_decrement,
+    .encoder2push_handler = NULL,
 };
 
 //---------------- MIDI ----------------//
