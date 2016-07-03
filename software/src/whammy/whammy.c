@@ -137,6 +137,18 @@ static enum hmi_layer hmi_layer = 0;
 // S T A T I C   F U N C T I O N S   A N D   P R O C E D U R E S //
 ///////////////////////////////////////////////////////////////////
 
+/// \brief      Adjusts the amplitude of the control wave / the pitch bend target
+/// \param      delta
+///                 difference from current amplitude
+static void adjust_amplitude(int8_t delta)
+{
+    active_program.field.amplitude += delta;
+    active_program.field.amplitude %= MIDI_MAX_VALUE+1;
+    control_wave.settings.amplitude = active_program.field.amplitude;
+    usb_printf(PSTR("Set amplitude to %d" USB_NEWLINE), active_program.field.amplitude);
+    // TODO Adjust pitch bend note
+}
+
 /// \brief      Adjusts the speed of all control modes
 /// \param      delta
 ///                 difference from current speed
@@ -358,6 +370,23 @@ void cycle_hmi_layer(void)
     ++hmi_layer;
     hmi_layer %= HMI_LAYER_COUNT;
     show_led_pattern(hmi_layer);
+}
+
+bool exec_ampl(const char* command)
+{
+    // Abort if the command is malformed
+    if (strlen(command) < 6 || command[4] != ' ') {
+        usb_puts(PSTR("Malformed command"));
+        return false;
+    }
+
+    midi_value_t amplitude = atoi(command+5);
+    amplitude %= MIDI_MAX_VALUE + 1;
+    usb_printf(PSTR("Setting amplitude to %u" USB_NEWLINE), amplitude);
+    // TODO Adjust pitch bend note
+    active_program.field.amplitude = amplitude;
+    control_wave.settings.amplitude = amplitude;
+    return true;
 }
 
 bool exec_backup(const char* command)
@@ -686,6 +715,7 @@ void value1_decrement(void)
 {
     switch (hmi_layer) {
         case HMI_LAYER_DEFAULT:
+            adjust_amplitude(-1);
             break;
         case HMI_LAYER_MODE:
             select_previous_mode();
@@ -701,6 +731,7 @@ void value1_increment(void)
 {
     switch (hmi_layer) {
         case HMI_LAYER_DEFAULT:
+            adjust_amplitude(1);
             break;
         case HMI_LAYER_MODE:
             select_next_mode();

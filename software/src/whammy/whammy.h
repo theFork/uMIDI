@@ -156,6 +156,7 @@ union whammy_ctrl_program {
 
 //---------------- functions and procedures ----------------//
 void cycle_hmi_layer(void);
+bool exec_ampl(const char* command);
 bool exec_backup(const char* command);
 bool exec_dump(const char* command);
 bool exec_factory_reset(const char* command);

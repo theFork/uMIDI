@@ -46,6 +46,10 @@
 ////////////////////////////////////////////////////////////////
 
 //---------------- Commands ----------------//
+static const char cmd_string_ampl[] PROGMEM = "ampl";
+static const char help_string_ampl[] PROGMEM = "<a>\n"
+    "Adjust the amplitude of the wave / pitch bend:\n"
+    "<a> : amplitude [0, 127]\n";
 static const char cmd_string_backup[] PROGMEM = "backup";
 static const char help_string_backup[] PROGMEM = "Dumps all data stored in EEPROM";
 static const char cmd_string_patcpy[] PROGMEM = "patcpy";
@@ -100,6 +104,7 @@ static const char cmd_string_tap[] PROGMEM = "tap";
 static const char help_string_tap[] PROGMEM = "\nSend this command repeatedly to tap in a tempo\n";
 
 struct serial_command serial_commands[] = {
+    { .cmd_string = cmd_string_ampl,    .help_string = help_string_ampl,    .handler = &exec_ampl          },
     { .cmd_string = cmd_string_backup,  .help_string = help_string_backup,  .handler = &exec_backup        },
     { .cmd_string = cmd_string_dump,    .help_string = help_string_dump,    .handler = &exec_dump          },
     { .cmd_string = cmd_string_reset,   .help_string = help_string_reset,   .handler = &exec_factory_reset },
