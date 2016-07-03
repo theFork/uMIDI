@@ -112,18 +112,13 @@ static const struct sequencer_pattern factory_patterns[] = {
 static const uint8_t factory_patterns_size = sizeof(factory_patterns) / sizeof(struct sequencer_pattern);
 
 static struct sequencer_channel sequencer = {
-    .pattern        = SEQUENCER_PATTERN_01,
-    .speed          = 40,
+    .speed          = 80,
     .mode           = SEQUENCER_CHANNEL_MODE_CONTINUOUS,
-    .running        = true,
     .tick_callback  = &sequencer_tick_handler,
 };
 
-static struct wave control_wave = {
-    .settings = {
-        .waveform = WAVE_OFF,
-    }
-};
+// Initialized in init_whammy_module()
+static struct wave control_wave;
 
 static union whammy_ctrl_program active_program = {
     .field.ctrl_mode = WHAMMY_CTRL_MODE_BYPASS,
@@ -736,9 +731,8 @@ void init_whammy_module(void)
 {
     init_program_module(0x0000, &execute_program_callback);
     configure_sequencer_channel(SEQUENCER_CHANNEL_1, &sequencer);
-    enter_program(0);
-    init_wave(&control_wave, active_program.field.waveform,
-              active_program.field.speed, active_program.field.amplitude, 0);
+    // speed: 80, amplitude: 127, offset: 0
+    init_wave(&control_wave, WAVE_OFF, 80, 127, 0);
 }
 
 void save_current_program(void)
