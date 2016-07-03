@@ -165,6 +165,7 @@ bool exec_patcpy(const char* command);
 bool exec_patlen(const char* command);
 bool exec_patmod(const char* command);
 bool exec_patwipe(const char* command);
+bool exec_pgm(const char* command);
 bool exec_speed(const char* command);
 bool exec_store(const char* command);
 bool exec_tap(const char* command);

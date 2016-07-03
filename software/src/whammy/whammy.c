@@ -145,9 +145,10 @@ static void adjust_amplitude(int8_t delta)
     active_program.field.amplitude += delta;
     active_program.field.amplitude %= MIDI_MAX_VALUE+1;
     control_wave.settings.amplitude = active_program.field.amplitude;
-    usb_printf(PSTR("Set amplitude to %d" USB_NEWLINE), active_program.field.amplitude);
+    usb_printf(PSTR("Set amplitude to %u" USB_NEWLINE), active_program.field.amplitude);
     // TODO Adjust pitch bend note
 }
+
 
 /// \brief      Adjusts the speed of all control modes
 /// \param      delta
@@ -159,7 +160,7 @@ static void adjust_speed(int8_t delta)
     active_program.field.speed = speed;
     set_speed(&control_wave, speed);
     set_sequencer_speed(&sequencer, speed);
-    usb_printf(PSTR("Set speed to %d" USB_NEWLINE), speed);
+    usb_printf(PSTR("Set speed to %u" USB_NEWLINE), speed);
 }
 
 /// \brief      Adjusts the whammy pedal mode
@@ -187,6 +188,13 @@ static void adjust_whammy_mode(int8_t delta)
 
     usb_printf(PSTR("Selecting Whammy pedal mode %d" USB_NEWLINE), active_program.field.pedal_mode+1);
     send_program_change(active_program.field.pedal_mode);
+}
+
+static void clear_leds(void)
+{
+    show_led_pattern(0x0);
+    set_hmi_led(HMI_LED1, hmi_layer == HMI_LAYER_MODE);
+    set_hmi_led(HMI_LED2, hmi_layer == HMI_LAYER_PROGRAM);
 }
 
 /// \brief      Prints the selected pattern to the terminal
@@ -297,7 +305,7 @@ static void enter_pattern_mode(const enum sequencer_pattern_number pattern)
 static void enter_wave_mode(const enum waveform waveform)
 {
     stop_sequencer(&sequencer);
-    show_led_pattern(0x0);
+    clear_leds();
 
     usb_puts(PSTR("Entering wave mode"));
     active_program.field.ctrl_mode = WHAMMY_CTRL_MODE_WAVE;
@@ -396,7 +404,7 @@ void cycle_hmi_layer(void)
 {
     ++hmi_layer;
     hmi_layer %= HMI_LAYER_COUNT;
-    show_led_pattern(hmi_layer);
+    clear_leds();
 }
 
 bool exec_ampl(const char* command)
@@ -597,6 +605,20 @@ bool exec_patwipe(const char* command)
     return true;
 }
 
+bool exec_pgm(const char* command)
+{
+    // Abort if the command is malformed
+    if (strlen(command) < 5 || command[3] != ' ') {
+        usb_puts(PSTR("Malformed command"));
+        return false;
+    }
+
+    uint8_t program = atoi(command+4);
+    usb_printf(PSTR("Entering program #%u" USB_NEWLINE), program);
+    enter_program(program-1);
+    return true;
+}
+
 bool exec_speed(const char* command)
 {
     if (strlen(command) < 7 || command[5] != ' ') {
@@ -667,7 +689,7 @@ void execute_program_callback(uint32_t program_data)
     switch (active_program.field.ctrl_mode) {
         case WHAMMY_CTRL_MODE_WAVE:
             stop_sequencer(&sequencer);
-            show_led_pattern(0x00);
+            clear_leds();
 
             // Set up wave
             init_wave(&control_wave, active_program.field.waveform,
@@ -689,7 +711,7 @@ void execute_program_callback(uint32_t program_data)
         case WHAMMY_CTRL_MODE_MOMENTARY:
         default:
             stop_sequencer(&sequencer);
-            show_led_pattern(0x00);
+            clear_leds();
 
             send_control_change(WHAMMY_MIDI_CC_NUMBER, 0);
             break;
@@ -756,6 +778,7 @@ void value1_decrement(void)
             select_previous_mode();
             break;
         case HMI_LAYER_PROGRAM:
+            usb_printf(PSTR("Selected program %u" USB_NEWLINE), adjust_program(-1)+1);
             break;
         default:
             break;
@@ -772,6 +795,7 @@ void value1_increment(void)
             select_next_mode();
             break;
         case HMI_LAYER_PROGRAM:
+            usb_printf(PSTR("Selected program %u" USB_NEWLINE), adjust_program(1)+1);
             break;
         default:
             break;

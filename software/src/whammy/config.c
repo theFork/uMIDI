@@ -52,14 +52,26 @@ static const char help_string_ampl[] PROGMEM = "<a>\n"
     "<a> : amplitude [0, 127]\n";
 static const char cmd_string_backup[] PROGMEM = "backup";
 static const char help_string_backup[] PROGMEM = "Dumps all data stored in EEPROM";
-static const char cmd_string_patcpy[] PROGMEM = "patcpy";
-static const char help_string_patcpy[] PROGMEM = "i\n"
-    "Copies the selected pattern to the specified slot:\n"
-    "<i> : target pattern index [0, 19]\n";
 static const char cmd_string_dump[] PROGMEM = "dump";
 static const char help_string_dump[] PROGMEM = "\n"
     "Shows information about the selected pattern or program\n"
     "<t> : 'P' for pattern or 'p' for program\n";
+static const char cmd_string_reset[] PROGMEM = "factoryreset";
+static const char help_string_reset[] PROGMEM = "Restores all patterns to factory settings";
+static const char cmd_string_mode[] PROGMEM = "mode";
+static const char help_string_mode[] PROGMEM = "p\n"
+    "Select control mode:\n"
+    "<p> : mode\n"
+    "      'N' = switch to next mode\n"
+    "      'P' = switch to previous mode\n"
+    "      'b'     = enable bypass (turn effect off)\n"
+    "      'm'     = momentary pitch bend mode\n"
+    "      'w' <n> = specified wave n [1, 7]\n"
+    "      'p' <n> = specified pattern n [1, 20]\n";
+static const char cmd_string_patcpy[] PROGMEM = "patcpy";
+static const char help_string_patcpy[] PROGMEM = "i\n"
+    "Copies the selected pattern to the specified slot:\n"
+    "<i> : target pattern index [0, 19]\n";
 static const char cmd_string_patlen[] PROGMEM = "patlen";
 static const char help_string_patlen[] PROGMEM = "l\n"
     "Set the selected pattern's length:\n"
@@ -76,20 +88,12 @@ static const char help_string_patmod[] PROGMEM = "s c t d e\n"
     "      'p' program change\n"
     "<d> : MIDI data byte 0 (3 digits, zero-padded)\n"
     "<e> : MIDI data byte 1 (3 digits, zero-padded)\n";
-static const char cmd_string_mode[] PROGMEM = "mode";
-static const char help_string_mode[] PROGMEM = "p\n"
-    "Select control mode:\n"
-    "<p> : mode\n"
-    "      'N' = switch to next mode\n"
-    "      'P' = switch to previous mode\n"
-    "      'b'     = enable bypass (turn effect off)\n"
-    "      'm'     = momentary pitch bend mode\n"
-    "      'w' <n> = specified wave n [1, 7]\n"
-    "      'p' <n> = specified pattern n [1, 20]\n";
 static const char cmd_string_patwipe[] PROGMEM = "patwipe";
 static const char help_string_patwipe[] PROGMEM = "Wipes the selected pattern";
-static const char cmd_string_reset[] PROGMEM = "factoryreset";
-static const char help_string_reset[] PROGMEM = "Restores all patterns to factory settings";
+static const char cmd_string_pgm[] PROGMEM = "pgm";
+static const char help_string_pgm[] PROGMEM = "<p>\n"
+    "Select program:\n"
+    "<p> : program number [1, 120]\n";
 static const char cmd_string_speed[] PROGMEM = "speed";
 static const char help_string_speed[] PROGMEM = "<s>\n"
     "Adjust the speed of the effect:\n"
@@ -117,6 +121,7 @@ struct serial_command serial_commands[] = {
     { .cmd_string = cmd_string_patlen,  .help_string = help_string_patlen,  .handler = &exec_patlen        },
     { .cmd_string = cmd_string_patmod,  .help_string = help_string_patmod,  .handler = &exec_patmod        },
     { .cmd_string = cmd_string_patwipe, .help_string = help_string_patwipe, .handler = &exec_patwipe       },
+    { .cmd_string = cmd_string_pgm,     .help_string = help_string_pgm,     .handler = &exec_pgm           },
     { .cmd_string = cmd_string_speed,   .help_string = help_string_speed,   .handler = &exec_speed         },
     { .cmd_string = cmd_string_store,   .help_string = help_string_store,   .handler = &exec_store         },
     { .cmd_string = cmd_string_tap,     .help_string = help_string_tap,     .handler = &exec_tap           },
