@@ -393,7 +393,7 @@ bool exec_backup(const char* command)
 {
     // Abort if the command is malformed
     if (strlen(command) != 6) {
-        usb_puts(PSTR("Malformed command" USB_NEWLINE));
+        usb_puts(PSTR("Malformed command"));
         return false;
     }
 
@@ -414,7 +414,7 @@ bool exec_backup(const char* command)
 bool exec_dump(const char* command)
 {
     if (strlen(command) != 6 || command[4] != ' ') {
-        usb_puts(PSTR("Malformed command" USB_NEWLINE));
+        usb_puts(PSTR("Malformed command"));
         return false;
     }
 
@@ -428,7 +428,7 @@ bool exec_dump(const char* command)
             break;
 
         default:
-            usb_puts(PSTR("Malformed command" USB_NEWLINE));
+            usb_puts(PSTR("Malformed command"));
             return false;
     }
 
@@ -439,7 +439,7 @@ bool exec_factory_reset(const char* command)
 {
     // Abort if the command is malformed
     if (strlen(command) != 12) {
-        usb_puts(PSTR("Malformed command" USB_NEWLINE));
+        usb_puts(PSTR("Malformed command"));
         return false;
     }
 
@@ -450,7 +450,7 @@ bool exec_factory_reset(const char* command)
 bool exec_mode(const char* command)
 {
     if (strlen(command) < 6 || command[4] != ' ') {
-        usb_puts(PSTR("Malformed command" USB_NEWLINE));
+        usb_puts(PSTR("Malformed command"));
         return false;
     }
 
@@ -495,7 +495,7 @@ bool exec_mode(const char* command)
 bool exec_patcpy(const char* command)
 {
     if (strlen(command) < 8 || command[6] != ' ') {
-        usb_puts(PSTR("Malformed command" USB_NEWLINE));
+        usb_puts(PSTR("Malformed command"));
         return false;
     }
 
@@ -508,7 +508,7 @@ bool exec_patcpy(const char* command)
 bool exec_patlen(const char* command)
 {
     if (strlen(command) < 8 || command[6] != ' ') {
-        usb_puts(PSTR("Malformed command" USB_NEWLINE));
+        usb_puts(PSTR("Malformed command"));
         return false;
     }
 
@@ -522,7 +522,7 @@ bool exec_patmod(const char* command)
 {
     if (strlen(command) != 22 || command[6] != ' ' || command[9] != ' ' || command[12] != ' '
                               || command[14] != ' ' || command[18] != ' ') {
-        usb_puts(PSTR("Malformed command" USB_NEWLINE));
+        usb_puts(PSTR("Malformed command"));
         return false;
     }
 
@@ -561,7 +561,7 @@ bool exec_patmod(const char* command)
 bool exec_patwipe(const char* command)
 {
     if (strlen(command) != 7) {
-        usb_puts(PSTR("Malformed command" USB_NEWLINE));
+        usb_puts(PSTR("Malformed command"));
         return false;
     }
 
@@ -573,7 +573,7 @@ bool exec_patwipe(const char* command)
 bool exec_speed(const char* command)
 {
     if (strlen(command) < 7 || command[5] != ' ') {
-        usb_puts(PSTR("Malformed command" USB_NEWLINE));
+        usb_puts(PSTR("Malformed command"));
         return false;
     }
 
@@ -592,7 +592,7 @@ bool exec_store(const char* command)
     // Abort if the command is malformed
     if (strlen(command) < 11 || command[5] != ' ' || command[7] != ' '
     ||  (command[6] != 'P' && command[6] != 'p')) {
-        usb_puts(PSTR("Malformed command" USB_NEWLINE));
+        usb_puts(PSTR("Malformed command"));
         return false;
     }
 
