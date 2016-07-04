@@ -140,6 +140,9 @@ static void adjust_amplitude(int8_t delta)
     active_program.field.amplitude += delta;
     active_program.field.amplitude %= MIDI_MAX_VALUE+1;
     control_wave.settings.amplitude = active_program.field.amplitude;
+    if (active_program.field.ctrl_mode == WHAMMY_CTRL_MODE_DETUNE) {
+        send_control_change(WHAMMY_MIDI_CC_NUMBER, active_program.field.amplitude);
+    }
     usb_printf(PSTR("Set amplitude to %u" USB_NEWLINE), active_program.field.amplitude);
     // TODO Adjust pitch bend note
 }
@@ -242,6 +245,9 @@ static void dump_current_program(void)
         case WHAMMY_CTRL_MODE_BYPASS:
             mode_string = "OFF";
             break;
+        case WHAMMY_CTRL_MODE_DETUNE:
+            mode_string = "DET";
+            break;
         case WHAMMY_CTRL_MODE_MOMENTARY:
             mode_string = "MOM";
             break;
@@ -270,6 +276,17 @@ static void enter_bypass_mode(void)
     usb_puts(PSTR("Enabling bypass"));
     active_program.field.ctrl_mode = WHAMMY_CTRL_MODE_BYPASS;
     send_program_change(WHAMMY_MODE_OFF);
+}
+
+/// \brief      Enters static detune mode
+static void enter_detune_mode(void)
+{
+    stop_sequencer(&sequencer);
+    set_waveform(&control_wave, WAVE_OFF);
+
+    usb_puts(PSTR("Entering detune mode"));
+    active_program.field.ctrl_mode = WHAMMY_CTRL_MODE_DETUNE;
+    send_control_change(WHAMMY_MIDI_CC_NUMBER, active_program.field.amplitude);
 }
 
 /// \brief      Enters momentary (pitch bend) mode
@@ -313,6 +330,10 @@ static void select_next_mode(void)
 {
     switch(active_program.field.ctrl_mode) {
         case WHAMMY_CTRL_MODE_BYPASS:
+            enter_detune_mode();
+            break;
+
+        case WHAMMY_CTRL_MODE_DETUNE:
             enter_momentary_mode();
             break;
 
@@ -352,8 +373,12 @@ static void select_previous_mode(void)
             enter_pattern_mode(SEQUENCER_PATTERN_20);
             break;
 
-        case WHAMMY_CTRL_MODE_MOMENTARY:
+        case WHAMMY_CTRL_MODE_DETUNE:
             enter_bypass_mode();
+            break;
+
+        case WHAMMY_CTRL_MODE_MOMENTARY:
+            enter_detune_mode();
             break;
 
         case WHAMMY_CTRL_MODE_WAVE:
@@ -415,6 +440,9 @@ bool exec_ampl(const char* command)
     usb_printf(PSTR("Setting amplitude to %u" USB_NEWLINE), amplitude);
     // TODO Adjust pitch bend note
     active_program.field.amplitude = amplitude;
+    if (active_program.field.ctrl_mode == WHAMMY_CTRL_MODE_DETUNE) {
+        send_control_change(WHAMMY_MIDI_CC_NUMBER, active_program.field.amplitude);
+    }
     control_wave.settings.amplitude = amplitude;
     return true;
 }
@@ -495,6 +523,10 @@ bool exec_mode(const char* command)
 
         case 'b':
             enter_bypass_mode();
+            return true;
+
+        case 'd':
+            enter_detune_mode();
             return true;
 
         case 'm':
@@ -675,7 +707,7 @@ bool exec_wham(const char* command)
     return true;
 }
 
-void execute_program_callback(uint32_t program_data)
+void execute_program_callback(const uint32_t program_data)
 {
     // Update active controller program in RAM
     active_program.word = program_data;
@@ -703,17 +735,19 @@ void execute_program_callback(uint32_t program_data)
             start_sequencer(&sequencer);
             break;
 
-        case WHAMMY_CTRL_MODE_MOMENTARY:
+        case WHAMMY_CTRL_MODE_DETUNE:
+            send_control_change(WHAMMY_MIDI_CC_NUMBER, active_program.field.amplitude);
+            // intentional fall-through
+
         default:
             stop_sequencer(&sequencer);
             clear_leds();
-
-            send_control_change(WHAMMY_MIDI_CC_NUMBER, 0);
             break;
     }
 
     // Update Whammy pedal mode
-    if (active_program.field.ctrl_mode == WHAMMY_CTRL_MODE_MOMENTARY) {
+    if (active_program.field.ctrl_mode == WHAMMY_CTRL_MODE_BYPASS
+    ||  active_program.field.ctrl_mode == WHAMMY_CTRL_MODE_MOMENTARY) {
         send_program_change(WHAMMY_MODE_OFF);
     }
     else {

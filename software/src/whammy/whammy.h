@@ -42,6 +42,7 @@
 enum whammy_ctrl_mode
 {
     WHAMMY_CTRL_MODE_BYPASS,    ///< The controller does not send CC messages
+    WHAMMY_CTRL_MODE_DETUNE,    ///< The controller selects a program and a static pitch
     WHAMMY_CTRL_MODE_WAVE,      ///< The controller sends CC messages following a waveform
     WHAMMY_CTRL_MODE_PATTERN,   ///< The controller sends CC messages following a sequencer pattern
     WHAMMY_CTRL_MODE_MOMENTARY, ///< The controller sends CC messages that achieve a momentary pitch
