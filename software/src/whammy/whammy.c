@@ -655,6 +655,12 @@ bool exec_pgm(const char* command)
         return false;
     }
 
+    // Update current program if 'u' was given as argument
+    if (command[4] == 'u') {
+        save_current_program();
+        return true;
+    }
+
     uint8_t program = atoi(command+4);
     usb_printf(PSTR("Entering program #%u" USB_NEWLINE), program);
     enter_program(program-1);

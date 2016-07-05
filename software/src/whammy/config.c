@@ -93,8 +93,8 @@ static const char cmd_string_patwipe[] PROGMEM = "patwipe";
 static const char help_string_patwipe[] PROGMEM = "Wipes the selected pattern";
 static const char cmd_string_pgm[] PROGMEM = "pgm";
 static const char help_string_pgm[] PROGMEM = "<p>\n"
-    "Select program:\n"
-    "<p> : program number [1, 120]\n";
+    "Select or update program:\n"
+    "<p> : program number [1, 120] or 'u' to overwrite the current program\n";
 static const char cmd_string_speed[] PROGMEM = "speed";
 static const char help_string_speed[] PROGMEM = "<s>\n"
     "Adjust the speed of the effect:\n"
