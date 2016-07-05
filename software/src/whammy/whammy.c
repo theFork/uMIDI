@@ -276,6 +276,7 @@ static void enter_bypass_mode(void)
     usb_puts(PSTR("Enabling bypass"));
     active_program.field.ctrl_mode = WHAMMY_CTRL_MODE_BYPASS;
     send_program_change(WHAMMY_MODE_OFF);
+    clear_leds();
 }
 
 /// \brief      Enters static detune mode
@@ -298,6 +299,7 @@ static void enter_momentary_mode(void)
     usb_puts(PSTR("Entering momentary mode"));
     active_program.field.ctrl_mode = WHAMMY_CTRL_MODE_MOMENTARY;
     send_program_change(WHAMMY_MODE_OFF);
+    clear_leds();
 }
 
 /// \brief      Enters pattern mode
@@ -317,7 +319,6 @@ static void enter_pattern_mode(const enum sequencer_pattern_number pattern)
 static void enter_wave_mode(const enum waveform waveform)
 {
     stop_sequencer(&sequencer);
-    clear_leds();
 
     usb_puts(PSTR("Entering wave mode"));
     active_program.field.ctrl_mode = WHAMMY_CTRL_MODE_WAVE;
@@ -411,6 +412,20 @@ static void sequencer_tick_handler(void)
 {
     if (hmi_layer == HMI_LAYER_DEFAULT) {
         show_led_pattern(0x80 >> sequencer.step_index);
+    }
+}
+
+/// \brief      Updates the HMI led bar to visualize the current waveform
+static void update_control_wave(void)
+{
+    static uint8_t last_sent_value = 0;
+    uint8_t value = update_wave(&control_wave);
+    if (value != last_sent_value) {
+        last_sent_value = value;
+        send_control_change(WHAMMY_MIDI_CC_NUMBER, value);
+        if (hmi_layer == HMI_LAYER_DEFAULT) {
+            show_led_pattern(1<<(value / 16));
+        }
     }
 }
 
@@ -783,12 +798,7 @@ void update_controller_value(void)
             break;
         case WHAMMY_CTRL_MODE_WAVE:
         {
-            static uint8_t last_sent_value = 0;
-            uint8_t value = update_wave(&control_wave);
-            if (value != last_sent_value) {
-                last_sent_value = value;
-                send_control_change(WHAMMY_MIDI_CC_NUMBER, value);
-            }
+            update_control_wave();
             break;
         }
         default:
