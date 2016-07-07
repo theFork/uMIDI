@@ -38,7 +38,8 @@
 #include "lib/wave.h"
 
 #include "config.h"
-#include "whammy.h"
+#include "user_interface.h"
+#include "whammy_controller.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -137,11 +138,11 @@ uint8_t gpio_mappings_size = sizeof(gpio_mappings)/sizeof(struct gpio_mapping);
 
 //---------------- HMI ----------------//
 struct hmi_config hmi_config = {
-    .input_header = &gpio.header2,
+    .input_header = &gpio.header3,
     .output_header = &gpio.header1,
     .long_input_threashold = 15,
     .button1_short_handler = &cycle_hmi_layer,
-    .button1_long_handler = &save_current_program,
+    .button1_long_handler = &store_setup,
     .button2_short_handler = &register_tap,
     .button2_long_handler = NULL,
     .encoder1cw_handler = &value1_increment,

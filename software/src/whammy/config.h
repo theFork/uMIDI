@@ -34,7 +34,7 @@
 #include "lib/midi.h"
 #include "lib/serial_communication.h"
 
-#include "whammy.h"
+#include "whammy_controller.h"
 
 
 

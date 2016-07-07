@@ -1,5 +1,5 @@
 /// \file
-/// \brief      Whammy module API
+/// \brief      Whammy controller API
 
 /*
  * Copyright 2015, 2016 Sebastian Neuser
@@ -156,29 +156,30 @@ union whammy_ctrl_program {
 
 
 //---------------- functions and procedures ----------------//
-void cycle_hmi_layer(void);
-bool exec_ampl(const char* command);
-bool exec_backup(const char* command);
-bool exec_dump(const char* command);
-bool exec_factory_reset(const char* command);
-bool exec_mode(const char* command);
-bool exec_patcpy(const char* command);
-bool exec_patlen(const char* command);
-bool exec_patmod(const char* command);
-bool exec_patwipe(const char* command);
-bool exec_pgm(const char* command);
-bool exec_speed(const char* command);
-bool exec_store(const char* command);
-bool exec_tap(const char* command);
-bool exec_wham(const char* command);
+void adjust_amplitude(int8_t delta);
+void adjust_speed(int8_t delta);
+void adjust_whammy_mode(int8_t delta);
+void copy_whammy_ctrl_pattern(enum sequencer_pattern_number destination);
+void dump_current_pattern(void);
+void dump_current_program(void);
+void enter_bypass_mode(void);
+void enter_detune_mode(void);
+void enter_momentary_mode(void);
+void enter_pattern_mode(const enum sequencer_pattern_number pattern);
+void enter_wave_mode(const enum waveform waveform);
 void handle_midi_program_change(midi_value_t program);
-void init_whammy_module(void);
+void init_whammy_controller(void);
+void reset_whammy_patterns(void);
 void save_current_program(void);
+void select_next_mode(void);
+void select_previous_mode(void);
+void set_whammy_ctrl_amplitude(uint8_t amplitude);
+void set_whammy_ctrl_pattern_length(uint8_t length);
+void set_whammy_ctrl_pattern_step(uint8_t step_index, const struct sequencer_step* step);
+void set_whammy_ctrl_speed(uint8_t speed);
+void set_whammy_mode(enum whammy_mode mode);
 void update_controller_value(void);
-void value1_decrement(void);
-void value1_increment(void);
-void value2_decrement(void);
-void value2_increment(void);
+void wipe_whammy_ctrl_pattern(void);
 
 //---------------- EOF ----------------//
 #endif // _WHAMMY_H

@@ -34,7 +34,7 @@
 #include "lib/usb.h"
 
 #include "config.h"
-#include "whammy.h"
+#include "whammy_controller.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -64,7 +64,7 @@ int main( void )
     init_usb_module();
     init_serial_communication(serial_commands, serial_commands_size);
     init_hmi_module(&hmi_config);
-    init_whammy_module();
+    init_whammy_controller();
 
     // set watchdog for 128ms
     wdt_enable(WDT_PER_128CLK_gc);
