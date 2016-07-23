@@ -44,6 +44,9 @@ bool exec_cal(const char* command);
 /// \brief      Handler for the serial command 'echo'
 bool exec_echo(const char* command);
 
+/// \brief      Handler for the serial command 'mute'
+bool exec_mute(const char* command);
+
 /// \brief      A background task that handles the enable switch
 /// \details    This task polls the enable switch input. If the input changed, a MIDI note on / off
 ///             message is transmitted.

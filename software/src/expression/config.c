@@ -88,6 +88,17 @@ struct serial_command serial_commands[] = {
                        "<v> : \"on\" or \"off\"\n",
         .handler = &exec_echo
     },
+    {
+        .cmd_string = "mute",
+        .help_string = "<v>\n"
+                       "Mute CC message transmission when status LED is off.\n"
+                       "Should only be enabled if there is an enable switch.\n"
+                       "This setting is immediately stored to EEPROM.\n"
+                       "<m> : \"on\" mute if not enabled\n"
+                       "      \"off\" always transmit\n"
+                       "      \"stat\" show current setting\n",
+        .handler = &exec_mute
+    },
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);
 

@@ -62,7 +62,8 @@ uint16_t from_eemem EEMEM;
 uint16_t to_eemem EEMEM;
 uint32_t slope_eemem EEMEM;
 
-
+static uint8_t mute_enabled;
+uint8_t mute_enabled_eemem EEMEM;
 
 ////////////////////////////////////////////////////////////////
 //         P R I V A T E   I M P L E M E N T A T I O N        //
@@ -154,6 +155,33 @@ bool exec_echo(const char* command)
     return true;
 }
 
+bool exec_mute(const char* command)
+{
+    if (strlen(command) < 7 || strlen(command) > 9) {
+        usb_puts("Malformed command" USB_NEWLINE);
+        return false;
+    }
+
+    if (!strncmp(command+5, "on", 2)) {
+        eeprom_write_byte(&mute_enabled_eemem, true);
+        mute_enabled = true;
+        usb_puts("Muting enabled, setting stored." USB_NEWLINE);
+    }
+    else if (!strncmp(command+5, "off", 2)) {
+        eeprom_write_byte(&mute_enabled_eemem, false);
+        mute_enabled = false;
+        usb_puts("Muting disabled, setting stored." USB_NEWLINE);
+    }
+    else if (!strncmp(command+5, "stat", 2)) {
+        if (mute_enabled) {
+            usb_puts("Muting currently enabled." USB_NEWLINE);
+        } else {
+            usb_puts("Muting currently disabled." USB_NEWLINE);
+        }
+    }
+    return true;
+}
+
 void handle_enable_switch(void)
 {
     // Save switch state on first run to ensure the switch is
@@ -183,11 +211,17 @@ void handle_enable_switch(void)
 
 void init_expression_module(void)
 {
+    // Read and set adc offset from EEPROM
     adc_offset = eeprom_read_word(&adc_offset_eemem);
     set_adc_offset(adc_offset);
+
+    // Read calibration data from EEPROM
     calibration_function.from = eeprom_read_word(&from_eemem);
     calibration_function.to = eeprom_read_word(&to_eemem);
     calibration_function.slope = eeprom_read_dword(&slope_eemem);
+
+    // Read mute setting from EEPROM
+    mute_enabled = eeprom_read_byte(&mute_enabled_eemem);
 }
 
 void trigger_expression_conversion(void)
@@ -204,8 +238,8 @@ void update_expression_value(uint16_t new_adc_value) {
             current_expression_value = MIDI_MAX_VALUE;
         }
 
-        // Only transmit if status LED is on, i.e. the slave device listens
-        if(status_led.state.active) {
+        // If muting enabled only transmit if status LED is on
+        if ((mute_enabled && status_led.state.active) || !mute_enabled) {
             send_control_change(69, current_expression_value);
             flash_led(LED_RED);
         }
