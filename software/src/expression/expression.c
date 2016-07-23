@@ -156,7 +156,8 @@ bool exec_echo(const char* command)
 
 void handle_enable_switch(void)
 {
-    // Only save switch state on first run
+    // Save switch state on first run to ensure the switch is
+    // initially off
     static bool first_run = true;
     if (first_run) {
         switch_state = gpio_get(ENABLE_SWITCH_PIN);
@@ -166,12 +167,16 @@ void handle_enable_switch(void)
 
     // Poll switch
     bool current_switch_state = gpio_get(gpio.header3.pin7);
+
+    // If switch has changed...
     if (switch_state != current_switch_state) {
         switch_state = current_switch_state;
 
-        // Broadcast change over MIDI and toggle LED
+        // ... toggle status LED
         status_led.state.active = !status_led.state.active;
         gpio_set(STATUS_LED_PIN, status_led.state.active);
+
+        // Use LED state to remember current status
         send_enable_message(status_led.state.active);
     }
 }
@@ -199,11 +204,15 @@ void update_expression_value(uint16_t new_adc_value) {
             current_expression_value = MIDI_MAX_VALUE;
         }
 
-        flash_led(LED_RED);
-        send_control_change(69, current_expression_value);
+        // Only transmit if status LED is on, i.e. the slave device listens
+        if(status_led.state.active) {
+            send_control_change(69, current_expression_value);
+            flash_led(LED_RED);
+        }
 
+        // If echo enabled, always print
         if (echo) {
-            usb_printf("Sending CC 69 %3u" USB_NEWLINE, current_expression_value);
+            usb_printf("Expression value: %3u" USB_NEWLINE, current_expression_value);
         }
     }
 }
