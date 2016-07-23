@@ -128,13 +128,13 @@ static void sequencer_tick_handler(void)
 bool exec_speed(const char* command)
 {
     if (strlen(command) < 7 || command[5] != ' ') {
-        usb_puts("Malformed command" USB_NEWLINE);
+        usb_puts(PSTR("Malformed command" USB_NEWLINE));
         return false;
     }
 
     midi_value_t speed = atoi(command+6);
     speed %= MIDI_MAX_VALUE + 1;
-    usb_printf("Setting waveform speed to %u" USB_NEWLINE, speed);
+    usb_printf(PSTR("Setting waveform speed to %u" USB_NEWLINE), speed);
     set_sequencer_speed(&sequencer, speed);
     return true;
 }
@@ -148,7 +148,7 @@ bool exec_tap(const char* command)
 bool exec_pattern(const char* command)
 {
     if (strlen(command) < 12 || command[7] != ' ') {
-        usb_puts("Malformed command" USB_NEWLINE);
+        usb_puts(PSTR("Malformed command" USB_NEWLINE));
         return false;
     }
 
@@ -161,18 +161,18 @@ bool exec_pattern(const char* command)
         return true;
     }
 
-    usb_puts("Unknown parameter" USB_NEWLINE);
+    usb_puts(PSTR("Unknown parameter" USB_NEWLINE));
     return false;
 }
 
 void decrease_speed(void)
 {
-    usb_printf("Set speed to %d" USB_NEWLINE, adjust_sequencer_speed(&sequencer, -1));
+    usb_printf(PSTR("Set speed to %d" USB_NEWLINE), adjust_sequencer_speed(&sequencer, -1));
 }
 
 void increase_speed(void)
 {
-    usb_printf("Set speed to %d" USB_NEWLINE, adjust_sequencer_speed(&sequencer, 1));
+    usb_printf(PSTR("Set speed to %d" USB_NEWLINE), adjust_sequencer_speed(&sequencer, 1));
 }
 
 void init_whammy_module(void)
@@ -183,12 +183,12 @@ void init_whammy_module(void)
 
 void select_next_pattern(void)
 {
-    usb_printf("Selected pattern %d" USB_NEWLINE, adjust_sequencer_pattern(&sequencer, 1));
+    usb_printf(PSTR("Selected pattern %d" USB_NEWLINE), adjust_sequencer_pattern(&sequencer, 1));
 }
 
 void select_previous_pattern(void)
 {
-    usb_printf("Selected pattern %d" USB_NEWLINE, adjust_sequencer_pattern(&sequencer, -1));
+    usb_printf(PSTR("Selected pattern %d" USB_NEWLINE), adjust_sequencer_pattern(&sequencer, -1));
 }
 
 void tap_tempo(void)

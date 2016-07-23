@@ -191,7 +191,23 @@ void usb_printf(const char * const format, ...)
     va_start(ap, format);
 
     // Format to buffer
-    char buffer[USB_PRINTF_MAX_LENGTH+1];
+    char buffer[USB_STRING_MAX_LENGTH+1];
+    vsnprintf_P(buffer, sizeof(buffer), format, ap);
+
+    // Cleanup varargs
+    va_end(ap);
+
+    send_string(buffer);
+}
+
+void usb_printf_S(const char * const format, ...)
+{
+    // Prepare varargs parameter
+    va_list ap;
+    va_start(ap, format);
+
+    // Format to buffer
+    char buffer[USB_STRING_MAX_LENGTH+1];
     vsnprintf(buffer, sizeof(buffer), format, ap);
 
     // Cleanup varargs
@@ -216,6 +232,14 @@ void usb_putc(char c)
 }
 
 void usb_puts(const char * const string)
+{
+    char buffer[USB_STRING_MAX_LENGTH+1];
+    strlcpy_P(buffer, string, sizeof(buffer));
+    send_string(buffer);
+    send_string(USB_NEWLINE);
+}
+
+void usb_puts_S(const char * const string)
 {
     send_string(string);
     send_string(USB_NEWLINE);
