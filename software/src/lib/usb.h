@@ -49,6 +49,10 @@
 /// \brief      Newline character sequence
 #define USB_NEWLINE                 "\r\n"
 
+/// \brief      Maximum length for strings printed with the `usb_printf()` function
+/// \see        usb_printf
+#define USB_PRINTF_MAX_LENGTH   100
+
 
 //---------------- data types ---------------//
 
@@ -78,7 +82,10 @@ void usb_main_task(void);
 /// \details    Unlike the "real" `printf`, this function does not return the number of written
 ///             bytes, because it can not be guaranteed that the bytes really got sent over the
 ///             bus. After writing the string to the send buffer, it is flushed.
+///             Also, strings formatted and printed with this function may not exceed a certain
+///             length, defined by #USB_PRINTF_MAX_LENGTH.
 /// \see        man 3 printf
+/// \see        USB_PRINTF_MAX_LENGTH
 void usb_printf(const char* format, ...);
 
 /// \brief      Sends the given character over USB
