@@ -6,7 +6,7 @@
 ///             a stand-alone module but rather a component of those modules.
 
 /*
- * Copyright 2015 Sebastian Neuser
+ * Copyright 2015, 2016 Sebastian Neuser
  *
  * This file is part of the uMIDI firmware.
  *
@@ -30,21 +30,22 @@
 
 //---------------- includes ----------------//
 #include <stdint.h>
+#include <avr/pgmspace.h>
 
 
 //---------------- Lookup table declarations ----------------//
 
-/// \brief  Lookup table for an exponential function
-extern const uint16_t exp_table[];
-
-/// \brief  Lookup table for the natural logaritm function
-extern const uint16_t log_table[];
-
-/// \brief  Lookup table for the sine function
-extern const uint16_t sine_table[];
-
 /// \brief  Resolution (y-axis) of the lookup tables in bits
 extern const uint8_t  lookup_table_resolution;
+
+/// \brief  Lookup table for an exponential function
+extern const uint16_t exp_table[] PROGMEM;
+
+/// \brief  Lookup table for the natural logaritm function
+extern const uint16_t log_table[] PROGMEM;
+
+/// \brief  Lookup table for the sine function
+extern const uint16_t sine_table[] PROGMEM;
 
 
 //---------------- Inline functions to read out the tables ----------------//
@@ -56,7 +57,7 @@ extern const uint8_t  lookup_table_resolution;
 /// \return     the function value
 inline uint16_t lookup_exp(uint8_t x)
 {
-    return exp_table[x];
+    return pgm_read_word(&(exp_table[x]));
 }
 
 /// \brief      Looks up the natural log value in the corresponding table
@@ -66,7 +67,7 @@ inline uint16_t lookup_exp(uint8_t x)
 /// \return     the function value
 inline uint16_t lookup_log(uint8_t x)
 {
-    return log_table[x];
+    return pgm_read_word(&(log_table[x]));
 }
 
 /// \brief      Looks up a sine function value in the corresponding table
@@ -76,7 +77,7 @@ inline uint16_t lookup_log(uint8_t x)
 /// \return     the function value
 inline uint16_t lookup_sine(uint8_t x)
 {
-    return sine_table[x];
+    return pgm_read_word(&(sine_table[x]));
 }
 
 //---------------- EOF ----------------//

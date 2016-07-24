@@ -69,36 +69,31 @@ background_task_t low_frequency_tasks[] = {
 uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);
 
 //---------------- Commands ----------------//
+static const char cmd_string_cal[] PROGMEM = "cal";
+static const char help_string_cal[] PROGMEM = "<m>\n"
+    "Calibrate the pedal (in the following order):\n"
+    "<m> : \"adc\" calibrates the ADC offset\n"
+    "      \"min\" sets the minimum registered ADC value\n"
+    "      \"max\" sets the maximum registered ADC value\n"
+    "      \"dmp\" dumps currently active values\n"
+    "      \"sav\" saves active values to EEPROM\n";
+static const char cmd_string_echo[] PROGMEM = "echo";
+static const char help_string_echo[] PROGMEM = "<v>\n"
+    "Switch expression value console output on / off\n"
+    "<v> : \"on\" or \"off\"\n";
+static const char cmd_string_mute[] PROGMEM = "mute";
+static const char help_string_mute[] PROGMEM = "<v>\n"
+    "Mute CC message transmission when status LED is off.\n"
+    "Should only be enabled if there is an enable switch.\n"
+    "This setting is immediately stored to EEPROM.\n"
+    "<m> : \"on\" mute if not enabled\n"
+    "      \"off\" always transmit\n"
+    "      \"stat\" show current setting\n";
+
 struct serial_command serial_commands[] = {
-    {
-        .cmd_string = "cal",
-        .help_string = "<m>\n"
-                       "Calibrate the pedal (in the following order):\n"
-                       "<m> : \"adc\" calibrates the ADC offset\n"
-                       "      \"min\" sets the minimum registered ADC value\n"
-                       "      \"max\" sets the maximum registered ADC value\n"
-                       "      \"dmp\" dumps currently active values\n"
-                       "      \"sav\" saves active values to EEPROM\n",
-        .handler = &exec_cal
-    },
-    {
-        .cmd_string = "echo",
-        .help_string = "<v>\n"
-                       "Switch expression value console output on / off\n"
-                       "<v> : \"on\" or \"off\"\n",
-        .handler = &exec_echo
-    },
-    {
-        .cmd_string = "mute",
-        .help_string = "<v>\n"
-                       "Mute CC message transmission when status LED is off.\n"
-                       "Should only be enabled if there is an enable switch.\n"
-                       "This setting is immediately stored to EEPROM.\n"
-                       "<m> : \"on\" mute if not enabled\n"
-                       "      \"off\" always transmit\n"
-                       "      \"stat\" show current setting\n",
-        .handler = &exec_mute
-    },
+    { .cmd_string = cmd_string_cal,  .help_string = help_string_cal,  .handler = &exec_cal  },
+    { .cmd_string = cmd_string_echo, .help_string = help_string_echo, .handler = &exec_echo },
+    { .cmd_string = cmd_string_mute, .help_string = help_string_mute, .handler = &exec_mute },
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);
 

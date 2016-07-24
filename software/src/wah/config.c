@@ -82,37 +82,30 @@ background_task_t low_frequency_tasks[] = {
 uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);
 
 //---------------- Custom commands ----------------//
+static const char cmd_string_enable[] PROGMEM = "enable";
+static const char help_string_enable[] PROGMEM = "<a>\n"
+    "Enable or disable the effect:\n"
+    "<a> : action\n"
+    "      't' = enable\n"
+    "       ?  = disable";
+static const char cmd_string_speed[] PROGMEM = "speed";
+static const char help_string_speed[] PROGMEM = "<s>\n"
+    "Adjust the speed of the effect if in waveform mode:\n"
+    "<s> : wave speed\n";
+static const char cmd_string_tap[] PROGMEM = "tap";
+static const char help_string_tap[] PROGMEM = "\nSend this command repeatedly to tap in a tempo\n";
+static const char cmd_string_waveform[] PROGMEM = "waveform";
+static const char help_string_waveform[] PROGMEM = "<w>\n"
+    "En-/disable waveform mode and set waveform:\n"
+    "<w> : waveform\n"
+    "      \"next\" = switch to next waveform\n"
+    "      \"prev\" = switch to previous waveform\n"
+    "      \"off\"  = disable";
+
 struct serial_command serial_commands[] = {
-    {
-        .cmd_string = "enable",
-        .help_string = "<a>\n"
-            "Enable or disable the effect:\n"
-            "<a> : action\n"
-            "      't' = enable\n"
-            "       ?  = disable",
-        .handler = &exec_enable
-    },
-    {
-        .cmd_string = "speed",
-        .help_string = "<s>\n"
-            "Adjust the speed of the effect if in waveform mode:\n"
-            "<s> : wave speed\n",
-        .handler = &exec_speed
-    },
-    {
-        .cmd_string = "tap",
-        .help_string = "\nSend this command repeatedly to tap in a tempo\n",
-        .handler = &exec_tap
-    },
-    {
-        .cmd_string = "waveform",
-        .help_string = "<w>\n"
-            "En-/disable waveform mode and set waveform:\n"
-            "<w> : waveform\n"
-            "      \"next\" = switch to next waveform\n"
-            "      \"prev\" = switch to previous waveform\n"
-            "      \"off\"  = disable",
-        .handler = &exec_waveform
-    },
+    { .cmd_string = cmd_string_enable,   .help_string = help_string_enable,   .handler = &exec_enable   },
+    { .cmd_string = cmd_string_speed,    .help_string = help_string_speed,    .handler = &exec_speed    },
+    { .cmd_string = cmd_string_tap,      .help_string = help_string_tap,      .handler = &exec_tap      },
+    { .cmd_string = cmd_string_waveform, .help_string = help_string_waveform, .handler = &exec_waveform },
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);

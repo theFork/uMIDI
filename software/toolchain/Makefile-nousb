@@ -57,6 +57,7 @@ LOOKUP_TABLES_YRES = 10
 CFLAGS = -mmcu=$(MCU)
 CFLAGS += -std=gnu99
 CFLAGS += -Wall -Wstrict-prototypes
+CFLAGS += -Wl,-Map=$(TARGET).map
 CFLAGS += -O$(OPT)
 CFLAGS += -DF_CPU=$(F_CPU)UL
 
@@ -179,6 +180,7 @@ clean:
 	$(REMOVE) $(LOOKUP_TABLES_FILE)
 	$(REMOVE) $(DIR)/$(TARGET).elf
 	$(REMOVE) $(DIR)/$(TARGET).hex
+	$(REMOVE) $(DIR)/$(TARGET).map
 	$(REMOVE) $(OBJ)
 	$(REMOVE) $(ASM)
 

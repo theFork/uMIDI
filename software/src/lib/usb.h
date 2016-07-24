@@ -27,9 +27,11 @@
 
 
 //---------------- includes -----------------//
+
+#include <stdarg.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include <stdarg.h>
+#include <avr/pgmspace.h>
 
 #include "lufa/LUFA/Drivers/USB/USB.h"
 
@@ -51,7 +53,7 @@
 
 /// \brief      Maximum length for strings printed with the `usb_printf()` function
 /// \see        usb_printf
-#define USB_PRINTF_MAX_LENGTH   100
+#define USB_STRING_MAX_LENGTH       100
 
 
 //---------------- data types ---------------//
@@ -83,19 +85,43 @@ void usb_main_task(void);
 ///             bytes, because it can not be guaranteed that the bytes really got sent over the
 ///             bus. After writing the string to the send buffer, it is flushed.
 ///             Also, strings formatted and printed with this function may not exceed a certain
-///             length, defined by #USB_PRINTF_MAX_LENGTH.
+///             length, defined by #USB_STRING_MAX_LENGTH.
 /// \see        man 3 printf
-/// \see        USB_PRINTF_MAX_LENGTH
-void usb_printf(const char* format, ...);
+/// \see        USB_STRING_MAX_LENGTH
+void usb_printf(PGM_P format, ...);
+
+/// \brief      Does exactly what you would expect. ;-)
+/// \details    Unlike the "real" `printf`, this function does not return the number of written
+///             bytes, because it can not be guaranteed that the bytes really got sent over the
+///             bus. After writing the string to the send buffer, it is flushed.
+///             Also, strings formatted and printed with this function may not exceed a certain
+///             length, defined by #USB_STRING_MAX_LENGTH.
+///             You should only rarely need this function. A possible use case is printing the
+///             contents of a modifiable string buffer without appending a newline sequence.
+/// \see        man 3 printf
+/// \see        USB_STRING_MAX_LENGTH
+void usb_printf_S(const char* format, ...);
 
 /// \brief      Sends the given character over USB
 /// \details    Flushes the USB send buffer.
 void usb_putc(char c);
 
+/// \brief      Sends the given program space string and a newline sequence over USB
+/// \details    Flushes the USB send buffer.
+///             Strings printed with this function may not be longer than #USB_STRING_MAX_LENGTH.
+/// \see        USB_NEWLINE
+/// \see        USB_STRING_MAX_LENGTH
+/// \see        usb_puts_S
+void usb_puts(PGM_P string);
+
 /// \brief      Sends the given string and a newline sequence over USB
 /// \details    Flushes the USB send buffer.
+///             You should only rarely need this function - namely when you have to modify or
+///             dynamically generate strings. Whenever you want to print a constant string you
+///             should place it in program space and use #usb_puts instead.
 /// \see        USB_NEWLINE
-void usb_puts(const char* string);
+/// \see        usb_puts
+void usb_puts_S(const char* string);
 
 /// \brief      Enables / disables terminal echo
 /// \details    When the echo is enabled, every character received over USB is immediately sent

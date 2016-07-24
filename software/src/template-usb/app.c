@@ -46,7 +46,7 @@ bool exec_led(const char* command)
 {
     // Abort if the command is malformed
     if (strlen(command) != 7 || command[3] != ' ' || command[5] != ' ') {
-        usb_puts("Malformed command" USB_NEWLINE);
+        usb_puts(PSTR("Malformed command" USB_NEWLINE));
         return false;
     }
 
@@ -62,7 +62,7 @@ bool exec_led(const char* command)
         break;
 
     default:
-        usb_puts("No such LED" USB_NEWLINE);
+        usb_puts(PSTR("No such LED" USB_NEWLINE));
         return false;
     }
 
@@ -81,7 +81,7 @@ bool exec_led(const char* command)
         break;
 
     default:
-        usb_puts("No such action" USB_NEWLINE);
+        usb_puts(PSTR("No such action" USB_NEWLINE));
         return false;
     }
 
