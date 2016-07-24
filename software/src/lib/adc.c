@@ -59,18 +59,18 @@ static const struct adc_channel_regs adc_regs[] = {
         .result_register    = &ADCA.CH1RES
     },
     { // Channel 2
-        .control_register   = &ADCA_CH1_CTRL,
-        .mux_register       = &ADCA_CH1_MUXCTRL,
-        .interrupt_register = &ADCA_CH1_INTCTRL,
-        .interrupt_flag     = &ADCA_CH1_INTFLAGS,
-        .result_register    = &ADCA.CH1RES
+        .control_register   = &ADCA_CH2_CTRL,
+        .mux_register       = &ADCA_CH2_MUXCTRL,
+        .interrupt_register = &ADCA_CH2_INTCTRL,
+        .interrupt_flag     = &ADCA_CH2_INTFLAGS,
+        .result_register    = &ADCA.CH2RES
     },
     { // Channel 3
-        .control_register   = &ADCA_CH1_CTRL,
-        .mux_register       = &ADCA_CH1_MUXCTRL,
-        .interrupt_register = &ADCA_CH1_INTCTRL,
-        .interrupt_flag     = &ADCA_CH1_INTFLAGS,
-        .result_register    = &ADCA.CH1RES
+        .control_register   = &ADCA_CH3_CTRL,
+        .mux_register       = &ADCA_CH3_MUXCTRL,
+        .interrupt_register = &ADCA_CH3_INTCTRL,
+        .interrupt_flag     = &ADCA_CH3_INTFLAGS,
+        .result_register    = &ADCA.CH3RES
     },
 };
 
