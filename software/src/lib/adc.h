@@ -28,6 +28,8 @@
 #include <stdint.h>
 #include <avr/io.h>
 
+#include "math.h"
+
 
 //---------------- data types ----------------//
 
@@ -87,6 +89,7 @@ struct adc_config
 {
     enum adc_conversion_mode    mode;           ///< ADC conversion mode
     enum ADC_PRESCALER_enum     prescaler;      ///< ADC clock prescaler as defined in the AVR gcc headers
+    struct linear_range         input_range;    ///< A function that converts ADC samples to MIDI values
 };
 
 
@@ -130,6 +133,12 @@ void init_adc_conversion(const struct adc_conversion_config* config);
 /// \param      config
 ///                 the shared ADC configuration
 void init_adc_module(const struct adc_config* config);
+
+/// \brief      Defines the current ADC value as MIDI max value.
+void set_adc_channel0_max_value(void);
+
+/// \brief      Defines the current ADC value as MIDI min value.
+void set_adc_channel0_min_value(void);
 
 /// \brief      Sets the ADC offset
 /// \param      offset

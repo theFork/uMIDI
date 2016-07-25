@@ -25,8 +25,12 @@
 #include <avr/pgmspace.h>
 
 #include "adc.h"
+#include "math.h"
 #include "midi.h"
 #include "leds.h"
+
+#include "usb.h"
+
 
 
 ////////////////////////////////////////////////////////////////
@@ -91,28 +95,43 @@ static void (*callbacks_signed[sizeof(adc_regs)/sizeof(struct adc_channel_regs)]
 /// \details    Used in the interrupt service routines
 static void (*callbacks_unsigned[sizeof(adc_regs)/sizeof(struct adc_channel_regs)])(uint16_t);
 
+/// \brief      Conversion callbacks for unsigned values
+/// \details    Used in the interrupt service routines
+static struct linear_range* adc_input_range;
+
 
 
 ////////////////////////////////////////////////////////////////
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-uint16_t calibrate_adc_offset(enum adc_channel channel)
+static uint16_t compensate_offset(uint16_t sample)
 {
-    cli();
+    // Compensate offset and prevent integer overflow
+    sample -= offset;
+    if (sample >= 1<<ADC_RESOLUTION) {
+        sample = 0;
+    }
+    return sample;
+}
 
+static uint16_t perform_filtered_measurement(enum adc_channel channel)
+{
     adc_accumulator accumulator = 0;
-    uint8_t i;
-    for (i=0; i<ADC_SAMPLE_BUFFER_SIZE; i++) {
+    cli();
+    for (uint8_t i=0; i<ADC_SAMPLE_BUFFER_SIZE; i++) {
         trigger_adc(channel);
         while (!*adc_regs[channel].interrupt_flag);
         *adc_regs[channel].interrupt_flag = true;
         accumulator += *adc_regs[channel].result_register;
-        sample_buffer[i] = *adc_regs[channel].result_register;
     }
-    offset = accumulator / ADC_SAMPLE_BUFFER_SIZE;
-
     sei();
+    return accumulator / ADC_SAMPLE_BUFFER_SIZE;
+}
+
+uint16_t calibrate_adc_offset(enum adc_channel channel)
+{
+    offset = perform_filtered_measurement(channel);
     return offset;
 }
 
@@ -133,6 +152,10 @@ void init_adc_module(const struct adc_config* const config)
 
     // Prescale the ADC clock
     ADCA.PRESCALER = config->prescaler;
+
+    // Save pointer to input range and initialize it
+    adc_input_range = (struct linear_range*) &config->input_range;
+    init_linear_to_midi(adc_input_range);
 
     // Set conversion mode
     ADCA.CTRLB = config->mode << ADC_CONMODE_bp;
@@ -165,6 +188,18 @@ void init_adc_conversion(const struct adc_conversion_config* const config)
     trigger_adc(config->channel);
     while (!*adc_regs[config->channel].interrupt_flag);
     *adc_regs[config->channel].interrupt_flag = true;
+}
+
+void set_adc_channel0_max_value(void)
+{
+    adc_input_range->to = compensate_offset(perform_filtered_measurement(ADC_CHANNEL_0));
+    init_linear_to_midi(adc_input_range);
+}
+
+void set_adc_channel0_min_value(void)
+{
+    adc_input_range->from = compensate_offset(perform_filtered_measurement(ADC_CHANNEL_0));
+    init_linear_to_midi(adc_input_range);
 }
 
 void set_adc_offset(uint16_t new_offset)
@@ -206,15 +241,10 @@ ISR(ADCA_CH0_vect)
         accumulator += sample_buffer[i];
     }
     accumulator /= ADC_SAMPLE_BUFFER_SIZE;
-
-    // Compensate offset and prevent integer overflow
-    accumulator -= offset;
-    if (accumulator >= 1<<ADC_RESOLUTION) {
-        accumulator = 0;
-    }
+    accumulator  = compensate_offset(accumulator);
 
     // Convert to MIDI value and invoke callback
-    uint8_t midi_value = accumulator >> (ADC_RESOLUTION-7);
+    uint8_t midi_value = linear_to_midi(adc_input_range, accumulator);
     if (callbacks_unsigned[ADC_CHANNEL_0] != NULL) {
         callbacks_unsigned[ADC_CHANNEL_0](midi_value);
     }
@@ -230,7 +260,7 @@ ISR(ADCA_CH0_vect)
 ///                 the ADC conversion result
 static void invoke_callbacks(enum adc_channel channel, uint16_t value)
 {
-    value -= offset;
+    value = compensate_offset(value);
     if (callbacks_signed[channel] != NULL) {
         callbacks_signed[channel]((int16_t) value);
     }
