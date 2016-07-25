@@ -220,6 +220,13 @@ void init_expression_module(void)
     calibration_function.to = eeprom_read_word(&to_eemem);
     calibration_function.slope = eeprom_read_dword(&slope_eemem);
 
+    // Initialize ADC
+    init_adc_module(&adc_config);
+
+    // Configure ADC conversion
+    init_adc_conversion(&expression_conversion);
+    enable_adc_interrupt(expression_conversion.channel);
+
     // Read mute setting from EEPROM
     mute_enabled = eeprom_read_byte(&mute_enabled_eemem);
 }

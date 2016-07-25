@@ -57,8 +57,6 @@ int main( void )
     init_leds_module();
     init_gpio_module(gpio_mappings, gpio_mappings_size);
     init_midi_module(&midi_config);
-    init_adc_module(&adc_config);
-    init_adc_conversion(&expression_conversion);
     init_background_tasks(high_frequency_tasks, high_frequency_tasks_size,
                           mid_frequency_tasks, mid_frequency_tasks_size,
                           low_frequency_tasks, low_frequency_tasks_size);
@@ -72,9 +70,6 @@ int main( void )
     // enable interrupts
     PMIC.CTRL = PMIC_LOLVLEN_bm;
     sei();
-
-    // Enable the ADC interrupt on completion of a conversion
-    enable_adc_interrupt(expression_conversion.channel);
 
     // Blink green LED
     blink_led(LED_GREEN, F_TASK_SLOW);
