@@ -39,7 +39,7 @@
 ////////////////////////////////////////////////////////////////
 
 //---------------- ADC ----------------//
-const struct adc_config adc_config = {
+struct adc_config adc_config = {
     .mode       = ADC_MODE_UNSIGNED,
     .prescaler  = ADC_PRESCALER_DIV512_gc,
 };
@@ -81,10 +81,19 @@ static const char cmd_string_echo[] PROGMEM = "echo";
 static const char help_string_echo[] PROGMEM = "<v>\n"
     "Switch expression value console output on / off\n"
     "<v> : \"on\" or \"off\"\n";
+static const char cmd_string_mute[] PROGMEM = "mute";
+static const char help_string_mute[] PROGMEM = "<v>\n"
+    "Mute CC message transmission when status LED is off.\n"
+    "Should only be enabled if there is an enable switch.\n"
+    "This setting is immediately stored to EEPROM.\n"
+    "<m> : \"on\" mute if not enabled\n"
+    "      \"off\" always transmit\n"
+    "      \"stat\" show current setting\n";
 
 struct serial_command serial_commands[] = {
     { .cmd_string = cmd_string_cal,  .help_string = help_string_cal,  .handler = &exec_cal  },
     { .cmd_string = cmd_string_echo, .help_string = help_string_echo, .handler = &exec_echo },
+    { .cmd_string = cmd_string_mute, .help_string = help_string_mute, .handler = &exec_mute },
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);
 
