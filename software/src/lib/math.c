@@ -54,5 +54,12 @@ uint16_t linear_from_midi(const struct linear_range* const config, midi_value_t 
 
 midi_value_t linear_to_midi(const struct linear_range* config, uint16_t input)
 {
-    return fixed_to_int(config->slope * input + fixed_from_int(config->from));
+    if (config->from >= input) {
+        return 0;
+    }
+    uint16_t result = fixed_to_int(config->slope * (input - config->from));
+    if (result > MIDI_MAX_VALUE) {
+        return MIDI_MAX_VALUE;
+    }
+    return result;
 }
