@@ -39,7 +39,7 @@
 ////////////////////////////////////////////////////////////////
 
 //---------------- ADC ----------------//
-const struct adc_config adc_config = {
+struct adc_config adc_config = {
     .mode       = ADC_MODE_UNSIGNED,
     .prescaler  = ADC_PRESCALER_DIV512_gc,
 };

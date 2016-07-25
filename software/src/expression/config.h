@@ -45,7 +45,7 @@
 #define STATUS_LED_PIN      gpio.header3.pin6
 
 //---------------- constant declarations ----------------//
-extern const struct adc_config adc_config;
+extern struct adc_config adc_config;
 extern const struct adc_conversion_config expression_conversion;
 
 extern background_task_t high_frequency_tasks[];

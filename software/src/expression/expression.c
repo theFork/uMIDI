@@ -41,26 +41,16 @@
 /// \brief      The latest known expression value
 static uint8_t current_expression_value = 0;
 
-/// \brief      The latest known expression value
-static uint16_t last_adc_value = 0;
-
 /// \brief      Status variable for expression value console echo
 static bool echo = false;
 
 static bool switch_state = false;
-
-static struct linear_range calibration_function = {
-        .from = 0,
-        .to = 127,
-        .slope = 1L << 16 // fixed from int
-};
 
 uint16_t adc_offset = 0;
 
 uint16_t adc_offset_eemem EEMEM;
 uint16_t from_eemem EEMEM;
 uint16_t to_eemem EEMEM;
-uint32_t slope_eemem EEMEM;
 
 static uint8_t mute_enabled;
 uint8_t mute_enabled_eemem EEMEM;
@@ -103,33 +93,25 @@ bool exec_cal(const char* command)
     }
     else if (!strncmp(command+4, "dmp", 3)) {
         usb_printf(PSTR("Offset: %u" USB_NEWLINE), adc_offset);
-        usb_printf(PSTR("Min: %u" USB_NEWLINE), calibration_function.from);
-        usb_printf(PSTR("Max: %u" USB_NEWLINE), calibration_function.to);
+        usb_printf(PSTR("Min: %u" USB_NEWLINE), adc_config.input_range.from);
+        usb_printf(PSTR("Max: %u" USB_NEWLINE), adc_config.input_range.to);
     }
     else if (!strncmp(command+4, "max", 3)) {
         echo = false;
         usb_puts(PSTR("Updating max ADC value and updating linear function range..."));
-
-        calibration_function.to = last_adc_value;
-        init_linear_to_midi(&calibration_function);
-
+        set_adc_channel0_max_value();
         usb_puts(PSTR("done."));
     }
     else if (!strncmp(command+4, "min", 3)) {
         echo = false;
-        usb_puts(PSTR("Saving min ADC value and updating linear functino range..."));
-
-        calibration_function.from = last_adc_value;
-        init_linear_to_midi(&calibration_function);
-
-        usb_puts(PSTR("done."));
+        usb_puts(PSTR("Saving min ADC value and updating linear function range..."));
+        set_adc_channel0_min_value();
     }
     else if (!strncmp(command+4, "sav", 3)) {
         usb_puts(PSTR("Storing current calibration values..."));
         eeprom_write_word(&adc_offset_eemem, adc_offset);
-        eeprom_write_word(&from_eemem,       calibration_function.from);
-        eeprom_write_word(&to_eemem,         calibration_function.to);
-        eeprom_write_dword(&slope_eemem,     calibration_function.slope);
+        eeprom_write_word(&from_eemem,       adc_config.input_range.from);
+        eeprom_write_word(&to_eemem,         adc_config.input_range.to);
         usb_puts(PSTR("done."));
     }
     echo = echo_state;
@@ -215,10 +197,9 @@ void init_expression_module(void)
     adc_offset = eeprom_read_word(&adc_offset_eemem);
     set_adc_offset(adc_offset);
 
-    // Read calibration data from EEPROM
-    calibration_function.from = eeprom_read_word(&from_eemem);
-    calibration_function.to = eeprom_read_word(&to_eemem);
-    calibration_function.slope = eeprom_read_dword(&slope_eemem);
+    // Read calibration data from EEPROM and modify config
+    adc_config.input_range.from = eeprom_read_word(&from_eemem);
+    adc_config.input_range.to = eeprom_read_word(&to_eemem);
 
     // Initialize ADC
     init_adc_module(&adc_config);
@@ -236,14 +217,10 @@ void trigger_expression_conversion(void)
     trigger_adc(expression_conversion.channel);
 }
 
-void update_expression_value(uint16_t new_adc_value) {
-    if (new_adc_value != last_adc_value) {
-        // Update stored values
-        last_adc_value = new_adc_value;
-        current_expression_value = linear_to_midi(&calibration_function, new_adc_value);
-        if (current_expression_value > MIDI_MAX_VALUE) {
-            current_expression_value = MIDI_MAX_VALUE;
-        }
+void update_expression_value(uint16_t adc_value) {
+    if (adc_value != current_expression_value) {
+        // Update stored value
+        current_expression_value = adc_value;
 
         // If muting enabled only transmit if status LED is on
         if ((mute_enabled && status_led.state.active) || !mute_enabled) {
