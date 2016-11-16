@@ -29,12 +29,15 @@
 
 #include "lib/adc.h"
 #include "lib/background_tasks.h"
+#include "lib/i2c.h"
 #include "lib/midi.h"
 #include "lib/serial_communication.h"
 
 
 //---------------- constant declarations ----------------//
 extern struct midi_config midi_config;
+
+extern struct i2c_config i2c_config;
 
 extern background_task_t high_frequency_tasks[];
 extern uint8_t high_frequency_tasks_size;

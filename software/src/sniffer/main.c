@@ -25,6 +25,7 @@
 
 #include "lib/background_tasks.h"
 #include "lib/gpio.h"
+#include "lib/i2c.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
 #include "lib/serial_communication.h"
@@ -58,6 +59,7 @@ int main( void )
     init_background_tasks(high_frequency_tasks, high_frequency_tasks_size,
                           mid_frequency_tasks, mid_frequency_tasks_size,
                           low_frequency_tasks, low_frequency_tasks_size);
+    init_i2c_module(&i2c_config);
     init_usb_module();
     init_serial_communication(serial_commands, serial_commands_size);
 

@@ -23,6 +23,7 @@
 #include <stddef.h>
 
 #include "lib/background_tasks.h"
+#include "lib/i2c.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
 #include "lib/serial_communication.h"
@@ -35,19 +36,6 @@
 ////////////////////////////////////////////////////////////////
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
-
-//---------------- MIDI ----------------//
-struct midi_config midi_config = {
-    .event_handlers = {
-        .control_change = NULL,
-        .note_off       = NULL,
-        .note_on        = NULL,
-        .program_change = NULL
-    },
-    .rx_channel = MIDI_CHANNEL_01,
-    .tx_channel = MIDI_CHANNEL_01,
-    .omni_mode = true
-};
 
 //---------------- Background tasks ----------------//
 background_task_t high_frequency_tasks[] = {
@@ -65,14 +53,35 @@ background_task_t low_frequency_tasks[] = {
 };
 uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);
 
-//---------------- Custom commands ----------------//
+//---------------- Commands ----------------//
+static const char cmd_string_chan[] PROGMEM = "chan";
+static const char help_string_chan[] PROGMEM = "<n>\n"
+    "Sets the MIDI receive channel to sniff on:\n"
+    "<n> : channel number [1..16] or 'x' for Omni mode";
+static const char cmd_string_send[] PROGMEM = "send";
+static const char help_string_send[] PROGMEM = "<d> <d>\n"
+    "Sends arbitrary data via I2C interface:\n"
+    "<d> : the data bytes to send";
 struct serial_command serial_commands[] = {
-    {
-        .cmd_string = "channel",
-        .help_string = "<n>\n"
-                       "Sets the MIDI receive channel to sniff on:\n"
-                       "<n> : channel number [1..16] or 'x' for Omni mode",
-        .handler = &exec_channel
-    },
+    { .cmd_string = cmd_string_chan, .help_string = help_string_chan, .handler = &exec_channel },
+    { .cmd_string = cmd_string_send, .help_string = help_string_send, .handler = &exec_send    },
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);
+
+//---------------- I2C ----------------//
+struct i2c_config i2c_config = {
+    .baudrate = 100000L,
+};
+
+//---------------- MIDI ----------------//
+struct midi_config midi_config = {
+    .event_handlers = {
+        .control_change = NULL,
+        .note_off       = NULL,
+        .note_on        = NULL,
+        .program_change = NULL
+    },
+    .rx_channel = MIDI_CHANNEL_01,
+    .tx_channel = MIDI_CHANNEL_01,
+    .omni_mode = true
+};

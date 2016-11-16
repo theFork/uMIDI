@@ -38,6 +38,9 @@
 ///< \brief     Implementation of the `chan` command
 bool exec_channel(const char* command);
 
+///< \brief     Implementation of the `send` command
+bool exec_send(const char* command);
+
 
 //---------------- EOF ----------------//
 #endif // _APP_H
