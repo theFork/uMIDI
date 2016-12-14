@@ -24,10 +24,12 @@
 #include <string.h>
 
 #include "lib/i2c.h"
+#include "lib/led_matrix.h"
 #include "lib/midi.h"
 #include "lib/usb.h"
 
 #include "app.h"
+#include "config.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -80,4 +82,24 @@ bool exec_send(const char* command)
     i2c_stop();
 
     return true;
+}
+
+void i2c_housekeeping(void)
+{
+    uint8_t row    = rand() % 8;
+    uint8_t column = rand() % 8;
+    uint8_t color  = rand() % 4;
+    led_matrix_set_pixel(&led_matrix_a, row, column, color);
+    row    = rand() % 8;
+    column = rand() % 8;
+    color  = rand() % 4;
+    led_matrix_set_pixel(&led_matrix_b, row, column, color);
+    row    = rand() % 8;
+    column = rand() % 8;
+    color  = rand() % 4;
+    led_matrix_set_pixel(&led_matrix_c, row, column, color);
+
+    led_matrix_flush(&led_matrix_a);
+    led_matrix_flush(&led_matrix_b);
+    led_matrix_flush(&led_matrix_c);
 }

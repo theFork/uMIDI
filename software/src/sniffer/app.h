@@ -41,6 +41,9 @@ bool exec_channel(const char* command);
 ///< \brief     Implementation of the `send` command
 bool exec_send(const char* command);
 
+///< \brief     Performs I2C interface housekeeping tasks.
+void i2c_housekeeping(void);
+
 
 //---------------- EOF ----------------//
 #endif // _APP_H

@@ -24,6 +24,7 @@
 
 #include "lib/background_tasks.h"
 #include "lib/i2c.h"
+#include "lib/led_matrix.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
 #include "lib/serial_communication.h"
@@ -50,6 +51,7 @@ uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background
 
 background_task_t low_frequency_tasks[] = {
     &update_leds,
+    &i2c_housekeeping,
 };
 uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);
 
@@ -71,6 +73,31 @@ uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_co
 //---------------- I2C ----------------//
 struct i2c_config i2c_config = {
     .baudrate = 100000L,
+};
+
+//---------------- LED matrix ----------------//
+struct led_matrix led_matrix_a = {
+    .config = {
+        .address    = 0x71,
+        .mode       = LED_MATRIX_MODE_STATIC,
+        .brightness = LED_MATRIX_BRIGHTNESS_08_OF_16,
+    },
+};
+
+struct led_matrix led_matrix_b = {
+    .config = {
+        .address    = 0x72,
+        .mode       = LED_MATRIX_MODE_STATIC,
+        .brightness = LED_MATRIX_BRIGHTNESS_08_OF_16,
+    },
+};
+
+struct led_matrix led_matrix_c = {
+    .config = {
+        .address    = 0x73,
+        .mode       = LED_MATRIX_MODE_STATIC,
+        .brightness = LED_MATRIX_BRIGHTNESS_08_OF_16,
+    },
 };
 
 //---------------- MIDI ----------------//

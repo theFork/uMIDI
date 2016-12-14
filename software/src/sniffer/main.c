@@ -26,6 +26,7 @@
 #include "lib/background_tasks.h"
 #include "lib/gpio.h"
 #include "lib/i2c.h"
+#include "lib/led_matrix.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
 #include "lib/serial_communication.h"
@@ -60,6 +61,9 @@ int main( void )
                           mid_frequency_tasks, mid_frequency_tasks_size,
                           low_frequency_tasks, low_frequency_tasks_size);
     init_i2c_module(&i2c_config);
+    init_led_matrix_module(&led_matrix_a);
+    init_led_matrix_module(&led_matrix_b);
+    init_led_matrix_module(&led_matrix_c);
     init_usb_module();
     init_serial_communication(serial_commands, serial_commands_size);
 
