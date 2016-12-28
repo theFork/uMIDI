@@ -24,6 +24,7 @@
 
 #include "lib/background_tasks.h"
 #include "lib/i2c.h"
+#include "lib/led_bargraph.h"
 #include "lib/led_matrix.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
@@ -75,7 +76,15 @@ struct i2c_config i2c_config = {
     .baudrate = 100000L,
 };
 
-//---------------- LED matrix ----------------//
+//---------------- LED bar graph and matrices ----------------//
+struct led_bargraph led_bargraph = {
+    .config = {
+        .address    = 0x70,
+        .mode       = LED_MATRIX_MODE_STATIC,
+        .brightness = LED_MATRIX_BRIGHTNESS_08_OF_16,
+    },
+};
+
 struct led_matrix led_matrix_a = {
     .config = {
         .address    = 0x71,

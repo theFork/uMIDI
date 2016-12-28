@@ -24,6 +24,7 @@
 #include <string.h>
 
 #include "lib/i2c.h"
+#include "lib/led_bargraph.h"
 #include "lib/led_matrix.h"
 #include "lib/midi.h"
 #include "lib/usb.h"
@@ -86,6 +87,7 @@ bool exec_send(const char* command)
 
 void i2c_housekeeping(void)
 {
+    // Matrix
     uint8_t row    = rand() % 8;
     uint8_t column = rand() % 8;
     uint8_t color  = rand() % 4;
@@ -99,6 +101,29 @@ void i2c_housekeeping(void)
     color  = rand() % 4;
     led_matrix_set_pixel(&led_matrix_c, row, column, color);
 
+    // Bar graph
+    static uint8_t prescaler = 0;
+    ++prescaler;
+        if (prescaler < 4) {
+        return;
+    }
+    prescaler = 0;
+
+    static uint8_t bar_color = LED_MATRIX_COLOR_GREEN;
+    static uint8_t color_prescaler = -1;
+    ++color_prescaler;
+    if (color_prescaler >= 24) {
+        color_prescaler = 0;
+        bar_color += 1;
+        bar_color %= 4;
+    }
+
+    static uint8_t bar = -1;
+    bar += 1;
+    bar %= 24;
+    led_bargraph_set_pixel(&led_bargraph, bar, bar_color);
+
+    led_bargraph_flush(&led_bargraph);
     led_matrix_flush(&led_matrix_a);
     led_matrix_flush(&led_matrix_b);
     led_matrix_flush(&led_matrix_c);

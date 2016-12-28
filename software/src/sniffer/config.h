@@ -30,6 +30,7 @@
 #include "lib/adc.h"
 #include "lib/background_tasks.h"
 #include "lib/i2c.h"
+#include "lib/led_bargraph.h"
 #include "lib/led_matrix.h"
 #include "lib/midi.h"
 #include "lib/serial_communication.h"
@@ -48,6 +49,7 @@ extern uint8_t serial_commands_size;
 
 extern struct i2c_config i2c_config;
 
+extern struct led_bargraph led_bargraph;
 extern struct led_matrix led_matrix_a;
 extern struct led_matrix led_matrix_b;
 extern struct led_matrix led_matrix_c;
