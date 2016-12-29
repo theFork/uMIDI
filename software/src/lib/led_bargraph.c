@@ -64,7 +64,7 @@ void led_bargraph_flush(const struct led_bargraph * const bargraph)
 {
     i2c_start(bargraph->config.address, false);
     i2c_write_byte(0x0); // Start address: 0
-    for(uint8_t i=0; i<8; i++) {
+    for (uint8_t i=0; i<sizeof(bargraph->buffer.green); ++i) {
         i2c_write_byte(bargraph->buffer.green[i]);
         i2c_write_byte(bargraph->buffer.red[i]);
     }
@@ -72,7 +72,8 @@ void led_bargraph_flush(const struct led_bargraph * const bargraph)
 }
 
 void led_bargraph_set_pixel(struct led_bargraph * const bargraph,
-                            uint8_t bar, const enum led_bargraph_color color)
+                            uint8_t bar,
+                            const enum adafruit_display_color color)
 {
     // Compute coordinates
     bar = 23-bar;
@@ -92,21 +93,21 @@ void led_bargraph_set_pixel(struct led_bargraph * const bargraph,
 
     // Write color
     switch (color) {
-    case LED_BARGRAPH_COLOR_BLACK:
+    case ADAFRUIT_DISPLAY_COLOR_BLACK:
         bargraph->buffer.green[column] &=~ _BV(row);
         bargraph->buffer.red[column]   &=~ _BV(row);
         break;
-    case LED_BARGRAPH_COLOR_GREEN:
-        bargraph->buffer.green[column] |=  _BV(row);
-        bargraph->buffer.red[column]   &=~ _BV(row);
+    case ADAFRUIT_DISPLAY_COLOR_GREEN:
+        bargraph->buffer.green[column] &=~ _BV(row);
+        bargraph->buffer.red[column]   |=  _BV(row);
         break;
-    case LED_BARGRAPH_COLOR_ORANGE:
+    case ADAFRUIT_DISPLAY_COLOR_ORANGE:
         bargraph->buffer.green[column] |= _BV(row);
         bargraph->buffer.red[column]   |= _BV(row);
         break;
-    case LED_BARGRAPH_COLOR_RED:
-        bargraph->buffer.green[column] &=~ _BV(row);
-        bargraph->buffer.red[column]   |=  _BV(row);
+    case ADAFRUIT_DISPLAY_COLOR_RED:
+        bargraph->buffer.green[column] |=  _BV(row);
+        bargraph->buffer.red[column]   &=~ _BV(row);
         break;
     }
 }
