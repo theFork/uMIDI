@@ -22,6 +22,7 @@
 
 #include <stddef.h>
 
+#include "lib/adafruit_display.h"
 #include "lib/background_tasks.h"
 #include "lib/i2c.h"
 #include "lib/led_bargraph.h"
@@ -79,33 +80,33 @@ struct i2c_config i2c_config = {
 //---------------- LED bar graph and matrices ----------------//
 struct led_bargraph led_bargraph = {
     .config = {
-        .address    = 0x70,
-        .mode       = LED_MATRIX_MODE_STATIC,
-        .brightness = LED_MATRIX_BRIGHTNESS_08_OF_16,
+        .address    = ADAFRUIT_DISPLAY_ADDRESS(0),
+        .mode       = ADAFRUIT_DISPLAY_MODE_STATIC,
+        .brightness = ADAFRUIT_DISPLAY_BRIGHTNESS_08_OF_16,
     },
 };
 
 struct led_matrix led_matrix_a = {
     .config = {
-        .address    = 0x71,
-        .mode       = LED_MATRIX_MODE_STATIC,
-        .brightness = LED_MATRIX_BRIGHTNESS_08_OF_16,
+        .address    = ADAFRUIT_DISPLAY_ADDRESS(1),
+        .mode       = ADAFRUIT_DISPLAY_MODE_STATIC,
+        .brightness = ADAFRUIT_DISPLAY_BRIGHTNESS_08_OF_16,
     },
 };
 
 struct led_matrix led_matrix_b = {
     .config = {
-        .address    = 0x72,
-        .mode       = LED_MATRIX_MODE_STATIC,
-        .brightness = LED_MATRIX_BRIGHTNESS_08_OF_16,
+        .address    = ADAFRUIT_DISPLAY_ADDRESS(2),
+        .mode       = ADAFRUIT_DISPLAY_MODE_STATIC,
+        .brightness = ADAFRUIT_DISPLAY_BRIGHTNESS_08_OF_16,
     },
 };
 
 struct led_matrix led_matrix_c = {
     .config = {
-        .address    = 0x73,
-        .mode       = LED_MATRIX_MODE_STATIC,
-        .brightness = LED_MATRIX_BRIGHTNESS_08_OF_16,
+        .address    = ADAFRUIT_DISPLAY_ADDRESS(3),
+        .mode       = ADAFRUIT_DISPLAY_MODE_STATIC,
+        .brightness = ADAFRUIT_DISPLAY_BRIGHTNESS_08_OF_16,
     },
 };
 

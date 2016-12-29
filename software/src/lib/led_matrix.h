@@ -26,63 +26,15 @@
 
 //---------------- includes ----------------//
 
-#include <stdbool.h>
 #include <stdint.h>
 
-#include "gpio.h"
+#include "adafruit_display.h"
 
 
 //---------------- constants ----------------//
 
 
 //---------------- data types ----------------//
-
-/// \brief      Brightness of the LEDs
-enum led_matrix_brightness
-{
-    LED_MATRIX_BRIGHTNESS_01_OF_16, ///< 1/16th of maximum brightness
-    LED_MATRIX_BRIGHTNESS_02_OF_16, ///< 2/16th of maximum brightness
-    LED_MATRIX_BRIGHTNESS_03_OF_16, ///< 3/16th of maximum brightness
-    LED_MATRIX_BRIGHTNESS_04_OF_16, ///< 4/16th of maximum brightness
-    LED_MATRIX_BRIGHTNESS_05_OF_16, ///< 5/16th of maximum brightness
-    LED_MATRIX_BRIGHTNESS_06_OF_16, ///< 6/16th of maximum brightness
-    LED_MATRIX_BRIGHTNESS_07_OF_16, ///< 7/16th of maximum brightness
-    LED_MATRIX_BRIGHTNESS_08_OF_16, ///< 8/16th of maximum brightness
-    LED_MATRIX_BRIGHTNESS_09_OF_16, ///< 9/16th of maximum brightness
-    LED_MATRIX_BRIGHTNESS_10_OF_16, ///< 10/16th of maximum brightness
-    LED_MATRIX_BRIGHTNESS_11_OF_16, ///< 11/16th of maximum brightness
-    LED_MATRIX_BRIGHTNESS_12_OF_16, ///< 12/16th of maximum brightness
-    LED_MATRIX_BRIGHTNESS_13_OF_16, ///< 13/16th of maximum brightness
-    LED_MATRIX_BRIGHTNESS_14_OF_16, ///< 14/16th of maximum brightness
-    LED_MATRIX_BRIGHTNESS_15_OF_16, ///< 15/16th of maximum brightness
-    LED_MATRIX_BRIGHTNESS_16_OF_16  ///< maximum brightness
-};
-
-/// \brief      Possible LED colors
-enum led_matrix_color
-{
-    LED_MATRIX_COLOR_BLACK,     ///< Black (LED off)
-    LED_MATRIX_COLOR_GREEN,     ///< Green
-    LED_MATRIX_COLOR_ORANGE,    ///< Orange
-    LED_MATRIX_COLOR_RED,       ///< Red
-};
-
-/// \brief      Blinking mode of the LEDs
-enum led_matrix_mode
-{
-    LED_MATRIX_MODE_STATIC,     ///< LEDs are turned on statically
-    LED_MATRIX_MODE_BLINK_2HZ,  ///< LEDs blink with a frequency of 2 Hz
-    LED_MATRIX_MODE_BLINK_1HZ,  ///< LEDs blink with a frequency of 1 Hz
-    LED_MATRIX_MODE_BLINK_05HZ  ///< LEDs blink with a frequency of 0.5 Hz
-};
-
-/// \brief  Configuration of the LED matrix's I2C port
-struct led_matrix_config
-{
-    uint8_t                     address;        ///< I2C bus address of the device
-    enum led_matrix_brightness  brightness;     ///< Brightness of the LEDs
-    enum led_matrix_mode        mode;           ///< Blink mode
-};
 
 /// \brief      Frame buffer of an LED matrix
 /// \details    The buffer consists of two 8x8 bit fields that determine if the green and/or red
@@ -97,8 +49,8 @@ struct led_matrix_buffer
 /// \brief      Represents an LED matrix
 struct led_matrix
 {
-    struct led_matrix_config config;            ///< The LED matrix configuration
-    struct led_matrix_buffer buffer;            ///< The LED matrix's frame buffer
+    struct adafruit_display_config config;      ///< The LED matrix configuration
+    struct led_matrix_buffer       buffer;      ///< The LED matrix's frame buffer
 };
 
 
@@ -126,7 +78,7 @@ void led_matrix_flush(const struct led_matrix* matrix);
 ///                 column index
 /// \param      color
 ///                 the color to apply
-void led_matrix_set_pixel(struct led_matrix* matrix, uint8_t row, uint8_t column, enum led_matrix_color color);
+void led_matrix_set_pixel(struct led_matrix* matrix, uint8_t row, uint8_t column, enum adafruit_display_color color);
 
 
 //---------------- EOF ----------------//

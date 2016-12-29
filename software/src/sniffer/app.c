@@ -109,7 +109,7 @@ void i2c_housekeeping(void)
     }
     prescaler = 0;
 
-    static uint8_t bar_color = LED_MATRIX_COLOR_GREEN;
+    static uint8_t bar_color = ADAFRUIT_DISPLAY_COLOR_GREEN;
     static uint8_t color_prescaler = -1;
     ++color_prescaler;
     if (color_prescaler >= 24) {

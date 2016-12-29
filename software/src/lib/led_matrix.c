@@ -64,7 +64,7 @@ void led_matrix_flush(const struct led_matrix * const matrix)
 {
     i2c_start(matrix->config.address, false);
     i2c_write_byte(0x0); // Start address: 0
-    for(uint8_t i=0; i<8; i++) {
+    for (uint8_t i=0; i<sizeof(matrix->buffer.green); ++i) {
         i2c_write_byte(matrix->buffer.green[i]);
         i2c_write_byte(matrix->buffer.red[i]);
     }
@@ -72,26 +72,27 @@ void led_matrix_flush(const struct led_matrix * const matrix)
 }
 
 void led_matrix_set_pixel(struct led_matrix * const matrix,
-                          const uint8_t row, uint8_t column, const enum led_matrix_color color)
+                          const uint8_t row, uint8_t column,
+                          const enum adafruit_display_color color)
 {
     // Compute array index
     column = 7-column;
 
     // Write color
     switch (color) {
-    case LED_MATRIX_COLOR_BLACK:
+    case ADAFRUIT_DISPLAY_COLOR_BLACK:
         matrix->buffer.green[column] &=~ _BV(row);
         matrix->buffer.red[column]   &=~ _BV(row);
         break;
-    case LED_MATRIX_COLOR_GREEN:
+    case ADAFRUIT_DISPLAY_COLOR_GREEN:
         matrix->buffer.green[column] |=  _BV(row);
         matrix->buffer.red[column]   &=~ _BV(row);
         break;
-    case LED_MATRIX_COLOR_ORANGE:
+    case ADAFRUIT_DISPLAY_COLOR_ORANGE:
         matrix->buffer.green[column] |= _BV(row);
         matrix->buffer.red[column]   |= _BV(row);
         break;
-    case LED_MATRIX_COLOR_RED:
+    case ADAFRUIT_DISPLAY_COLOR_RED:
         matrix->buffer.green[column] &=~ _BV(row);
         matrix->buffer.red[column]   |=  _BV(row);
         break;

@@ -26,10 +26,9 @@
 
 //---------------- includes ----------------//
 
-#include <stdbool.h>
 #include <stdint.h>
 
-#include "gpio.h"
+#include "adafruit_display.h"
 
 
 //---------------- constants ----------------//
@@ -37,68 +36,21 @@
 
 //---------------- data types ----------------//
 
-/// \brief      Brightness of the LEDs
-enum led_bargraph_brightness
-{
-    LED_BARGRAPH_BRIGHTNESS_01_OF_16,   ///< 1/16th of maximum brightness
-    LED_BARGRAPH_BRIGHTNESS_02_OF_16,   ///< 2/16th of maximum brightness
-    LED_BARGRAPH_BRIGHTNESS_03_OF_16,   ///< 3/16th of maximum brightness
-    LED_BARGRAPH_BRIGHTNESS_04_OF_16,   ///< 4/16th of maximum brightness
-    LED_BARGRAPH_BRIGHTNESS_05_OF_16,   ///< 5/16th of maximum brightness
-    LED_BARGRAPH_BRIGHTNESS_06_OF_16,   ///< 6/16th of maximum brightness
-    LED_BARGRAPH_BRIGHTNESS_07_OF_16,   ///< 7/16th of maximum brightness
-    LED_BARGRAPH_BRIGHTNESS_08_OF_16,   ///< 8/16th of maximum brightness
-    LED_BARGRAPH_BRIGHTNESS_09_OF_16,   ///< 9/16th of maximum brightness
-    LED_BARGRAPH_BRIGHTNESS_10_OF_16,   ///< 10/16th of maximum brightness
-    LED_BARGRAPH_BRIGHTNESS_11_OF_16,   ///< 11/16th of maximum brightness
-    LED_BARGRAPH_BRIGHTNESS_12_OF_16,   ///< 12/16th of maximum brightness
-    LED_BARGRAPH_BRIGHTNESS_13_OF_16,   ///< 13/16th of maximum brightness
-    LED_BARGRAPH_BRIGHTNESS_14_OF_16,   ///< 14/16th of maximum brightness
-    LED_BARGRAPH_BRIGHTNESS_15_OF_16,   ///< 15/16th of maximum brightness
-    LED_BARGRAPH_BRIGHTNESS_16_OF_16    ///< maximum brightness
-};
-
-/// \brief      Possible LED colors
-enum led_bargraph_color
-{
-    LED_BARGRAPH_COLOR_BLACK,   ///< Black (LED off)
-    LED_BARGRAPH_COLOR_GREEN,   ///< Green
-    LED_BARGRAPH_COLOR_ORANGE,  ///< Orange
-    LED_BARGRAPH_COLOR_RED,     ///< Red
-};
-
-/// \brief      Blinking mode of the LEDs
-enum led_bargraph_mode
-{
-    LED_BARGRAPH_MODE_STATIC,    ///< LEDs are turned on statically
-    LED_BARGRAPH_MODE_BLINK_2HZ, ///< LEDs blink with a frequency of 2 Hz
-    LED_BARGRAPH_MODE_BLINK_1HZ, ///< LEDs blink with a frequency of 1 Hz
-    LED_BARGRAPH_MODE_BLINK_05HZ ///< LEDs blink with a frequency of 0.5 Hz
-};
-
-/// \brief  Configuration of the bar graph
-struct led_bargraph_config
-{
-    uint8_t                 address;        ///< I2C bus address of the device
-    enum led_bargraph_brightness brightness;     ///< Brightness of the LEDs
-    enum led_bargraph_mode       mode;           ///< Blink mode
-};
-
 /// \brief      Frame buffer of an LED bar graph
 /// \details    The buffer consists of two 8x8 bit fields that determine if the green and/or red
 ///             LED should be enabled. The array index determines the column, the bit offset
 ///             represents the row.
 struct led_bargraph_buffer
 {
-    uint8_t green[8];                           ///< Green LED enable bits
-    uint8_t red[8];                             ///< Red LED enable bits
+    uint8_t green[3];                           ///< Green LED enable bits
+    uint8_t red[3];                             ///< Red LED enable bits
 };
 
 /// \brief      Represents an LED bar graph
 struct led_bargraph
 {
-    struct led_bargraph_config config;            ///< The bar graph configuration
-    struct led_bargraph_buffer buffer;            ///< The bar graph's frame buffer
+    struct adafruit_display_config config;      ///< The bar graph configuration
+    struct led_bargraph_buffer     buffer;      ///< The bar graph's frame buffer
 };
 
 
@@ -124,7 +76,7 @@ void led_bargraph_flush(const struct led_bargraph* bargraph);
 ///                 bar index, starting from 0
 /// \param      color
 ///                 the color to apply
-void led_bargraph_set_pixel(struct led_bargraph* bargraph, uint8_t number, enum led_bargraph_color color);
+void led_bargraph_set_pixel(struct led_bargraph* bargraph, uint8_t number, enum adafruit_display_color color);
 
 
 //---------------- EOF ----------------//
