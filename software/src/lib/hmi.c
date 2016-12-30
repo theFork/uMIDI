@@ -62,33 +62,39 @@ void init_hmi_module(const struct hmi_config * const config)
     hmi_config = config;
 
     // Initialize GPIO ports
-    const struct gpio_pin* pin_pointer = &hmi_config->input_header->pin2;
-    for (uint8_t i=0; i<sizeof(struct gpio_header)/sizeof(struct gpio_pin); ++i) {
-        configure_gpio_pin(pin_pointer, GPIO_INPUT_PULLUP);
-        ++pin_pointer;
-    }
-    pin_pointer = &hmi_config->output_header->pin2;
-    for (uint8_t i=0; i<sizeof(struct gpio_header)/sizeof(struct gpio_pin); ++i) {
-        configure_gpio_pin(pin_pointer, GPIO_OUTPUT);
-        ++pin_pointer;
+    const struct gpio_pin* pin_pointer = NULL;
+    if (hmi_config->output_header != NULL) {
+        pin_pointer = &hmi_config->output_header->pin2;
+        for (uint8_t i=0; i<sizeof(struct gpio_header)/sizeof(struct gpio_pin); ++i) {
+            configure_gpio_pin(pin_pointer, GPIO_OUTPUT);
+            ++pin_pointer;
+        }
     }
 
-    // Configure encoders
-    encoder1.config.inputA = &hmi_config->input_header->pin5;
-    encoder1.config.inputB = &hmi_config->input_header->pin7;
-    encoder1.config.inputSwitch = &hmi_config->input_header->pin3;
-    encoder1.config.cw_callback = hmi_config->encoder1cw_handler;
-    encoder1.config.ccw_callback = hmi_config->encoder1ccw_handler;
-    encoder1.config.push_callback = hmi_config->encoder1push_handler;
-    init_encoder(&encoder1);
+    if (hmi_config->input_header != NULL) {
+        pin_pointer = &hmi_config->input_header->pin2;
+        for (uint8_t i=0; i<sizeof(struct gpio_header)/sizeof(struct gpio_pin); ++i) {
+            configure_gpio_pin(pin_pointer, GPIO_INPUT_PULLUP);
+            ++pin_pointer;
+        }
 
-    encoder2.config.inputA = &hmi_config->input_header->pin6;
-    encoder2.config.inputB = &hmi_config->input_header->pin4;
-    encoder2.config.inputSwitch = &hmi_config->input_header->pin2;
-    encoder2.config.cw_callback = hmi_config->encoder2cw_handler;
-    encoder2.config.ccw_callback = hmi_config->encoder2ccw_handler;
-    encoder2.config.push_callback = hmi_config->encoder2push_handler;
-    init_encoder(&encoder2);
+        // Configure encoders
+        encoder1.config.inputA = &hmi_config->input_header->pin5;
+        encoder1.config.inputB = &hmi_config->input_header->pin7;
+        encoder1.config.inputSwitch = &hmi_config->input_header->pin3;
+        encoder1.config.cw_callback = hmi_config->encoder1cw_handler;
+        encoder1.config.ccw_callback = hmi_config->encoder1ccw_handler;
+        encoder1.config.push_callback = hmi_config->encoder1push_handler;
+        init_encoder(&encoder1);
+
+        encoder2.config.inputA = &hmi_config->input_header->pin6;
+        encoder2.config.inputB = &hmi_config->input_header->pin4;
+        encoder2.config.inputSwitch = &hmi_config->input_header->pin2;
+        encoder2.config.cw_callback = hmi_config->encoder2cw_handler;
+        encoder2.config.ccw_callback = hmi_config->encoder2ccw_handler;
+        encoder2.config.push_callback = hmi_config->encoder2push_handler;
+        init_encoder(&encoder2);
+    }
 }
 
 void show_bar_graph(const enum hmi_bar_graph_percentage percentage)

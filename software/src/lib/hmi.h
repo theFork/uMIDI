@@ -78,6 +78,8 @@ enum hmi_bar_graph_percentage
 };
 
 /// \brief      Configuration structure for the HMI module
+/// \note       The #gpio_header pointers may be `NULL`, in which case the header will not be configured and hence can
+///             not be used. This is useful for example in situations where you need only the HMI's input capabilities.
 struct hmi_config
 {
     const struct gpio_header* input_header;     ///< the pin header that is connected to the HMI board's X2 header
