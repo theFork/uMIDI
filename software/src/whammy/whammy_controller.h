@@ -156,8 +156,8 @@ union whammy_ctrl_program {
 
 
 //---------------- functions and procedures ----------------//
-void adjust_amplitude(int8_t delta);
-void adjust_speed(int8_t delta);
+uint8_t adjust_amplitude(int8_t delta);
+uint8_t adjust_speed(int8_t delta);
 void adjust_whammy_mode(int8_t delta);
 void copy_whammy_ctrl_pattern(enum sequencer_pattern_number destination);
 void dump_current_pattern(void);

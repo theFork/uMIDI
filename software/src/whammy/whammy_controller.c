@@ -189,7 +189,7 @@ static void update_control_wave(void)
 /// \brief      Adjusts the amplitude of the control wave / the pitch bend target
 /// \param      delta
 ///                 difference from current amplitude
-void adjust_amplitude(int8_t delta)
+uint8_t adjust_amplitude(int8_t delta)
 {
     active_program.field.amplitude += delta;
     active_program.field.amplitude %= MIDI_MAX_VALUE+1;
@@ -199,13 +199,14 @@ void adjust_amplitude(int8_t delta)
     }
     usb_printf(PSTR("Set amplitude to %u" USB_NEWLINE), active_program.field.amplitude);
     // TODO Adjust pitch bend note
+    return active_program.field.amplitude;
 }
 
 
 /// \brief      Adjusts the speed of all control modes
 /// \param      delta
 ///                 difference from current speed
-void adjust_speed(int8_t delta)
+uint8_t adjust_speed(int8_t delta)
 {
     uint8_t speed = adjust_sequencer_speed(&sequencer, delta);
     // TODO Adjust pitch bend speed
@@ -213,6 +214,7 @@ void adjust_speed(int8_t delta)
     set_speed(&control_wave, speed);
     set_sequencer_speed(&sequencer, speed);
     usb_printf(PSTR("Set speed to %u" USB_NEWLINE), speed);
+    return active_program.field.speed;
 }
 
 /// \brief      Adjusts the whammy pedal mode

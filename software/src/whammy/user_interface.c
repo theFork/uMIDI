@@ -460,7 +460,8 @@ void value1_decrement(void)
     uint8_t number = 0;
     switch (hmi_layer) {
         case HMI_LAYER_DEFAULT:
-            adjust_amplitude(-1);
+            number = adjust_amplitude(-1);
+            display_number(number);
             break;
         case HMI_LAYER_MODE:
             select_previous_mode();
@@ -480,7 +481,8 @@ void value1_increment(void)
     uint8_t number = 0;
     switch (hmi_layer) {
         case HMI_LAYER_DEFAULT:
-            adjust_amplitude(1);
+            number = adjust_amplitude(1);
+            display_number(number);
             break;
         case HMI_LAYER_MODE:
             select_next_mode();
@@ -497,9 +499,11 @@ void value1_increment(void)
 
 void value2_decrement(void)
 {
+    uint8_t number = 0;
     switch (hmi_layer) {
         case HMI_LAYER_DEFAULT:
-            adjust_speed(-1);
+            number = adjust_speed(-1);
+            display_number(number);
             break;
         case HMI_LAYER_MODE:
             adjust_whammy_mode(-1);
@@ -513,9 +517,11 @@ void value2_decrement(void)
 
 void value2_increment(void)
 {
+    uint8_t number = 0;
     switch (hmi_layer) {
         case HMI_LAYER_DEFAULT:
-            adjust_speed(1);
+            number = adjust_speed(1);
+            display_number(number);
             break;
         case HMI_LAYER_MODE:
             adjust_whammy_mode(1);
