@@ -39,6 +39,7 @@
 ////////////////////////////////////////////////////////////////
 
 
+
 ////////////////////////////////////////////////////////////////
 //              P R I V A T E   T Y P E D E F S               //
 ////////////////////////////////////////////////////////////////
@@ -63,6 +64,19 @@ enum hmi_layer
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
+static const uint8_t digits[10][15] = {
+    CHARACTER_BITMAP_0,
+    CHARACTER_BITMAP_1,
+    CHARACTER_BITMAP_2,
+    CHARACTER_BITMAP_3,
+    CHARACTER_BITMAP_4,
+    CHARACTER_BITMAP_5,
+    CHARACTER_BITMAP_6,
+    CHARACTER_BITMAP_7,
+    CHARACTER_BITMAP_8,
+    CHARACTER_BITMAP_9
+};
+
 static enum hmi_layer hmi_layer = 0;
 
 
@@ -70,6 +84,57 @@ static enum hmi_layer hmi_layer = 0;
 ///////////////////////////////////////////////////////////////////
 // S T A T I C   F U N C T I O N S   A N D   P R O C E D U R E S //
 ///////////////////////////////////////////////////////////////////
+
+static void display_digit(const uint8_t position, const uint8_t digit)
+{
+    // Clear previous character or digit
+    uint8_t start_column = 0;
+    struct led_matrix* led_matrix = NULL;
+    switch (position) {
+        case 0: // rightmost
+            led_matrix = &led_matrix_r;
+            start_column = 4;
+            break;
+        case 1: // middle-right
+            led_matrix = &led_matrix_r;
+            start_column = 0;
+            break;
+        case 2: // middle-left
+            led_matrix = &led_matrix_l;
+            start_column = 4;
+            break;
+        case 3: // leftmost
+            led_matrix = &led_matrix_l;
+            start_column = 0;
+            break;
+        default:
+            // /o\ Something went terribly wrong
+            return;
+    }
+    for (uint8_t column=start_column; column<start_column+4; ++column) {
+        led_matrix_set_pixel(led_matrix, 0, column, ADAFRUIT_DISPLAY_COLOR_BLACK);
+        led_matrix_set_pixel(led_matrix, 1, column, ADAFRUIT_DISPLAY_COLOR_BLACK);
+        led_matrix_set_pixel(led_matrix, 2, column, ADAFRUIT_DISPLAY_COLOR_BLACK);
+        led_matrix_set_pixel(led_matrix, 3, column, ADAFRUIT_DISPLAY_COLOR_BLACK);
+        led_matrix_set_pixel(led_matrix, 4, column, ADAFRUIT_DISPLAY_COLOR_BLACK);
+    }
+
+    const uint8_t* const bitmap = digits[digit];
+    for (uint8_t bit=0; bit<15; ++bit) {
+        uint8_t column = start_column + 1 + bit % 3;
+        enum adafruit_display_color color = bitmap[bit]
+                                          ? hmi_layer+1
+                                          : ADAFRUIT_DISPLAY_COLOR_BLACK;
+        led_matrix_set_pixel(led_matrix, bit / 3, column, color);
+    }
+}
+
+static void display_number(const uint8_t number)
+{
+    display_digit(0,  number %  10       );
+    display_digit(1, (number % 100) /  10);
+    display_digit(2,  number        / 100);
+}
 
 static void visualize_value(uint8_t value)
 {
@@ -392,6 +457,7 @@ void update_displays(void)
 
 void value1_decrement(void)
 {
+    uint8_t number = 0;
     switch (hmi_layer) {
         case HMI_LAYER_DEFAULT:
             adjust_amplitude(-1);
@@ -400,7 +466,9 @@ void value1_decrement(void)
             select_previous_mode();
             break;
         case HMI_LAYER_PROGRAM:
-            usb_printf(PSTR("Selected program %u" USB_NEWLINE), adjust_program(-1)+1);
+            number = adjust_program(-1) + 1;
+            display_number(number);
+            usb_printf(PSTR("Selected program %u" USB_NEWLINE), number);
             break;
         default:
             break;
@@ -409,6 +477,7 @@ void value1_decrement(void)
 
 void value1_increment(void)
 {
+    uint8_t number = 0;
     switch (hmi_layer) {
         case HMI_LAYER_DEFAULT:
             adjust_amplitude(1);
@@ -417,7 +486,9 @@ void value1_increment(void)
             select_next_mode();
             break;
         case HMI_LAYER_PROGRAM:
-            usb_printf(PSTR("Selected program %u" USB_NEWLINE), adjust_program(1)+1);
+            number = adjust_program(1) + 1;
+            display_number(number);
+            usb_printf(PSTR("Selected program %u" USB_NEWLINE), number);
             break;
         default:
             break;
