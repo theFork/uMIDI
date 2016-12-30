@@ -22,11 +22,14 @@
 
 #include <stdlib.h>
 
+#include "lib/adafruit_display.h"
 #include "lib/hmi.h"
+#include "lib/led_matrix.h"
 #include "lib/program.h"
 #include "lib/sequencer.h"
 #include "lib/usb.h"
 
+#include "config.h"
 #include "user_interface.h"
 #include "whammy_controller.h"
 
@@ -68,24 +71,36 @@ static enum hmi_layer hmi_layer = 0;
 // S T A T I C   F U N C T I O N S   A N D   P R O C E D U R E S //
 ///////////////////////////////////////////////////////////////////
 
+static void visualize_value(uint8_t value)
+{
+    clear_displays();
+
+    struct led_matrix* led_matrix = &led_matrix_l;
+    if (value >= 8) {
+        value -= 8;
+        led_matrix = &led_matrix_r;
+    }
+    led_matrix_set_pixel(led_matrix, 7, value, hmi_layer+1);
+}
+
 
 
 ////////////////////////////////////////////////////////////////
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void clear_leds(void)
+void clear_displays(void)
 {
-    show_led_pattern(0x0);
-    set_hmi_led(HMI_LED1, hmi_layer == HMI_LAYER_MODE);
-    set_hmi_led(HMI_LED2, hmi_layer == HMI_LAYER_PROGRAM);
+    for (uint8_t column=0; column<8; ++column) {
+        led_matrix_set_pixel(&led_matrix_l, 7, column, ADAFRUIT_DISPLAY_COLOR_BLACK);
+        led_matrix_set_pixel(&led_matrix_r, 7, column, ADAFRUIT_DISPLAY_COLOR_BLACK);
+    }
 }
 
 void cycle_hmi_layer(void)
 {
     ++hmi_layer;
     hmi_layer %= HMI_LAYER_COUNT;
-    clear_leds();
 }
 
 bool exec_ampl(const char* command)
@@ -369,6 +384,12 @@ void store_setup(void)
     save_current_program();
 }
 
+void update_displays(void)
+{
+    led_matrix_flush(&led_matrix_l);
+    led_matrix_flush(&led_matrix_r);
+}
+
 void value1_decrement(void)
 {
     switch (hmi_layer) {
@@ -437,14 +458,10 @@ void value2_increment(void)
 
 void visualize_sequencer(const uint8_t value)
 {
-    if (hmi_layer == HMI_LAYER_DEFAULT) {
-        show_led_pattern(0x80 >> value);
-    }
+    visualize_value(value);
 }
 
 void visualize_wave(const uint8_t value)
 {
-    if (hmi_layer == HMI_LAYER_DEFAULT) {
-        show_led_pattern(_BV(value / 16));
-    }
+    visualize_value(value / 8);
 }

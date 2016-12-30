@@ -123,7 +123,7 @@ static void execute_program_callback(const uint32_t program_data)
     switch (active_program.field.ctrl_mode) {
         case WHAMMY_CTRL_MODE_WAVE:
             stop_sequencer(&sequencer);
-            clear_leds();
+            clear_displays();
 
             // Set up wave
             init_wave(&control_wave, active_program.field.waveform,
@@ -148,7 +148,7 @@ static void execute_program_callback(const uint32_t program_data)
 
         default:
             stop_sequencer(&sequencer);
-            clear_leds();
+            clear_displays();
             break;
     }
 
@@ -324,7 +324,7 @@ void enter_bypass_mode(void)
 {
     stop_sequencer(&sequencer);
     set_waveform(&control_wave, WAVE_OFF);
-    clear_leds();
+    clear_displays();
 
     usb_puts(PSTR("Enabling bypass"));
     active_program.field.ctrl_mode = WHAMMY_CTRL_MODE_BYPASS;
@@ -347,7 +347,7 @@ void enter_momentary_mode(void)
 {
     stop_sequencer(&sequencer);
     set_waveform(&control_wave, WAVE_OFF);
-    clear_leds();
+    clear_displays();
 
     usb_puts(PSTR("Entering momentary mode"));
     active_program.field.ctrl_mode = WHAMMY_CTRL_MODE_MOMENTARY;

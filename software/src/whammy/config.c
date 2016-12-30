@@ -30,6 +30,8 @@
 #include "lib/background_tasks.h"
 #include "lib/gpio.h"
 #include "lib/hmi.h"
+#include "lib/i2c.h"
+#include "lib/led_matrix.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
 #include "lib/sequencer.h"
@@ -138,8 +140,8 @@ uint8_t gpio_mappings_size = sizeof(gpio_mappings)/sizeof(struct gpio_mapping);
 
 //---------------- HMI ----------------//
 struct hmi_config hmi_config = {
-    .input_header = &gpio.header3,
-    .output_header = &gpio.header1,
+    .input_header = &gpio.header1,
+    .output_header = NULL,
     .long_input_threashold = 15,
     .button1_short_handler = &cycle_hmi_layer,
     .button1_long_handler = &store_setup,
@@ -152,6 +154,31 @@ struct hmi_config hmi_config = {
     .encoder2ccw_handler = &value2_decrement,
     .encoder2push_handler = NULL,
 };
+
+
+//---------------- I2C ----------------//
+struct i2c_config i2c_config = {
+    .baudrate = 100000L,
+};
+
+
+//---------------- LED matrix ----------------//
+struct led_matrix led_matrix_l = {
+    .config = {
+        .address    = ADAFRUIT_DISPLAY_ADDRESS(1),
+        .mode       = ADAFRUIT_DISPLAY_MODE_STATIC,
+        .brightness = ADAFRUIT_DISPLAY_BRIGHTNESS_08_OF_16,
+    },
+};
+
+struct led_matrix led_matrix_r = {
+    .config = {
+        .address    = ADAFRUIT_DISPLAY_ADDRESS(2),
+        .mode       = ADAFRUIT_DISPLAY_MODE_STATIC,
+        .brightness = ADAFRUIT_DISPLAY_BRIGHTNESS_08_OF_16,
+    },
+};
+
 
 //---------------- MIDI ----------------//
 struct midi_config midi_config = {
@@ -167,21 +194,23 @@ struct midi_config midi_config = {
     .tx_channel = MIDI_CHANNEL_01,
 };
 
+
 //---------------- State machine ----------------//
 background_task_t high_frequency_tasks[] = {
     &serial_communication_task,
+    &poll_hmi,
     &update_controller_value,
 };
 uint8_t high_frequency_tasks_size = sizeof(high_frequency_tasks)/sizeof(background_task_t);
 
 background_task_t mid_frequency_tasks[] = {
     &usb_main_task,
-    &poll_hmi,
 };
 uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background_task_t);
 
 background_task_t low_frequency_tasks[] = {
     &tap_tempo_task,
+    &update_displays,
     &update_leds,
 };
 uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);

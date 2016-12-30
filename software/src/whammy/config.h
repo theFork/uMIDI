@@ -31,6 +31,8 @@
 #include "lib/encoder.h"
 #include "lib/gpio.h"
 #include "lib/hmi.h"
+#include "lib/i2c.h"
+#include "lib/led_matrix.h"
 #include "lib/midi.h"
 #include "lib/serial_communication.h"
 
@@ -43,6 +45,11 @@ extern struct gpio_mapping gpio_mappings[];
 extern uint8_t gpio_mappings_size;
 
 extern struct hmi_config hmi_config;
+
+extern struct i2c_config i2c_config;
+
+extern struct led_matrix led_matrix_l;
+extern struct led_matrix led_matrix_r;
 
 extern struct midi_config midi_config;
 
