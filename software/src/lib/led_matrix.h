@@ -33,6 +33,222 @@
 
 //---------------- constants ----------------//
 
+#define CHARACTER_BITMAP_0      { 1, 1, 1, \
+                                  1, 0, 1, \
+                                  1, 0, 1, \
+                                  1, 0, 1, \
+                                  1, 1, 1  }
+
+#define CHARACTER_BITMAP_1      { 1, 1, 0, \
+                                  0, 1, 0, \
+                                  0, 1, 0, \
+                                  0, 1, 0, \
+                                  1, 1, 1  }
+
+#define CHARACTER_BITMAP_2      { 1, 1, 1, \
+                                  0, 0, 1, \
+                                  1, 1, 1, \
+                                  1, 0, 0, \
+                                  1, 1, 1  }
+
+#define CHARACTER_BITMAP_3      { 1, 1, 1, \
+                                  0, 0, 1, \
+                                  1, 1, 1, \
+                                  0, 0, 1, \
+                                  1, 1, 1  }
+
+#define CHARACTER_BITMAP_4      { 1, 0, 1, \
+                                  1, 0, 1, \
+                                  1, 1, 1, \
+                                  0, 0, 1, \
+                                  0, 0, 1  }
+
+#define CHARACTER_BITMAP_5      { 1, 1, 1, \
+                                  1, 0, 0, \
+                                  1, 1, 1, \
+                                  0, 0, 1, \
+                                  1, 1, 1  }
+
+#define CHARACTER_BITMAP_6      { 1, 0, 0, \
+                                  1, 0, 0, \
+                                  1, 1, 1, \
+                                  1, 0, 1, \
+                                  1, 1, 1  }
+
+#define CHARACTER_BITMAP_7      { 1, 1, 1, \
+                                  0, 0, 1, \
+                                  0, 1, 0, \
+                                  0, 1, 0, \
+                                  0, 1, 0  }
+
+#define CHARACTER_BITMAP_8      { 1, 1, 1, \
+                                  1, 0, 1, \
+                                  1, 1, 1, \
+                                  1, 0, 1, \
+                                  1, 1, 1  }
+
+#define CHARACTER_BITMAP_9      { 1, 1, 1, \
+                                  1, 0, 1, \
+                                  1, 1, 1, \
+                                  0, 0, 1, \
+                                  0, 0, 1  }
+
+#define CHARACTER_BITMAP_A      { 1, 1, 1, \
+                                  1, 0, 1, \
+                                  1, 1, 1, \
+                                  1, 0, 1, \
+                                  1, 0, 1  }
+
+#define CHARACTER_BITMAP_B      { 1, 1, 1, \
+                                  1, 0, 1, \
+                                  1, 1, 0, \
+                                  1, 0, 1, \
+                                  1, 1, 1  }
+
+#define CHARACTER_BITMAP_C      { 0, 1, 1, \
+                                  1, 0, 0, \
+                                  1, 0, 0, \
+                                  1, 0, 0, \
+                                  0, 1, 1  }
+
+#define CHARACTER_BITMAP_D      { 1, 1, 0, \
+                                  1, 0, 1, \
+                                  1, 0, 1, \
+                                  1, 0, 1, \
+                                  1, 1, 0  }
+
+#define CHARACTER_BITMAP_E      { 1, 1, 1, \
+                                  1, 0, 0, \
+                                  1, 1, 1, \
+                                  1, 0, 0, \
+                                  1, 1, 1  }
+
+#define CHARACTER_BITMAP_F      { 1, 1, 1, \
+                                  1, 0, 0, \
+                                  1, 1, 1, \
+                                  1, 0, 0, \
+                                  1, 0, 0  }
+
+#define CHARACTER_BITMAP_G      { 0, 1, 1, \
+                                  1, 0, 0, \
+                                  1, 1, 1, \
+                                  1, 0, 1, \
+                                  0, 1, 1  }
+
+#define CHARACTER_BITMAP_H      { 1, 0, 1, \
+                                  1, 0, 1, \
+                                  1, 1, 1, \
+                                  1, 0, 1, \
+                                  1, 0, 1  }
+
+#define CHARACTER_BITMAP_I      { 1, 1, 1, \
+                                  0, 1, 0, \
+                                  0, 1, 0, \
+                                  0, 1, 0, \
+                                  1, 1, 1  }
+
+#define CHARACTER_BITMAP_J      { 0, 0, 1, \
+                                  0, 0, 1, \
+                                  0, 0, 1, \
+                                  0, 0, 1, \
+                                  1, 1, 0  }
+
+#define CHARACTER_BITMAP_K      { 1, 0, 1, \
+                                  1, 0, 1, \
+                                  1, 1, 0, \
+                                  1, 0, 1, \
+                                  1, 0, 1  }
+
+#define CHARACTER_BITMAP_L      { 1, 0, 0, \
+                                  1, 0, 0, \
+                                  1, 0, 0, \
+                                  1, 0, 0, \
+                                  1, 1, 1  }
+
+#define CHARACTER_BITMAP_M      { 1, 0, 1, \
+                                  1, 1, 1, \
+                                  1, 0, 1, \
+                                  1, 0, 1, \
+                                  1, 0, 1  }
+
+#define CHARACTER_BITMAP_N      { 1, 0, 1, \
+                                  1, 1, 1, \
+                                  1, 1, 1, \
+                                  1, 0, 1, \
+                                  1, 0, 1  }
+
+#define CHARACTER_BITMAP_O      { 0, 1, 0, \
+                                  1, 0, 1, \
+                                  1, 0, 1, \
+                                  1, 0, 1, \
+                                  0, 1, 0  }
+
+#define CHARACTER_BITMAP_P      { 1, 1, 1, \
+                                  1, 0, 1, \
+                                  1, 1, 1, \
+                                  1, 0, 0, \
+                                  1, 0, 0  }
+
+#define CHARACTER_BITMAP_Q      { 1, 1, 1, \
+                                  1, 0, 1, \
+                                  1, 0, 1, \
+                                  0, 1, 0, \
+                                  1, 1, 0  }
+
+#define CHARACTER_BITMAP_R      { 1, 1, 1, \
+                                  1, 0, 1, \
+                                  1, 1, 0, \
+                                  1, 0, 1, \
+                                  1, 0, 1  }
+
+#define CHARACTER_BITMAP_S      { 1, 1, 1, \
+                                  1, 0, 0, \
+                                  0, 1, 0, \
+                                  0, 0, 1, \
+                                  1, 1, 1  }
+
+#define CHARACTER_BITMAP_T      { 1, 1, 1, \
+                                  0, 1, 0, \
+                                  0, 1, 0, \
+                                  0, 1, 0, \
+                                  0, 1, 0  }
+
+#define CHARACTER_BITMAP_U      { 1, 0, 1, \
+                                  1, 0, 1, \
+                                  1, 0, 1, \
+                                  1, 0, 1, \
+                                  1, 1, 1  }
+
+#define CHARACTER_BITMAP_V      { 1, 0, 1, \
+                                  1, 0, 1, \
+                                  1, 0, 1, \
+                                  1, 0, 1, \
+                                  0, 1, 0  }
+
+#define CHARACTER_BITMAP_W      { 1, 0, 1, \
+                                  1, 0, 1, \
+                                  1, 0, 1, \
+                                  1, 1, 1, \
+                                  1, 0, 1  }
+
+#define CHARACTER_BITMAP_X      { 1, 0, 1, \
+                                  1, 0, 1, \
+                                  0, 1, 0, \
+                                  1, 0, 1, \
+                                  1, 0, 1  }
+
+#define CHARACTER_BITMAP_Y      { 1, 0, 1, \
+                                  1, 0, 1, \
+                                  0, 1, 0, \
+                                  0, 1, 0, \
+                                  0, 1, 0  }
+
+#define CHARACTER_BITMAP_Z      { 1, 1, 1, \
+                                  0, 0, 1, \
+                                  0, 1, 0, \
+                                  1, 0, 0, \
+                                  1, 1, 1  }
+
 
 //---------------- data types ----------------//
 
