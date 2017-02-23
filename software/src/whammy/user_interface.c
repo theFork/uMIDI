@@ -85,6 +85,15 @@ static enum hmi_layer hmi_layer = 0;
 // S T A T I C   F U N C T I O N S   A N D   P R O C E D U R E S //
 ///////////////////////////////////////////////////////////////////
 
+/// \brief      Yields the display color to use for a HMI layer
+/// \param      layer
+///                 the layer whose color is desired
+/// \returns    the color
+enum adafruit_display_color get_layer_color(enum hmi_layer layer)
+{
+    return layer + 1;
+}
+
 static void display_digit(const uint8_t position, const uint8_t digit)
 {
     // Clear previous character or digit
@@ -123,7 +132,7 @@ static void display_digit(const uint8_t position, const uint8_t digit)
     for (uint8_t bit=0; bit<15; ++bit) {
         uint8_t column = start_column + 1 + bit % 3;
         enum adafruit_display_color color = bitmap[bit]
-                                          ? hmi_layer+1
+                                          ? get_layer_color(hmi_layer)
                                           : ADAFRUIT_DISPLAY_COLOR_BLACK;
         led_matrix_set_pixel(led_matrix, bit / 3, column, color);
     }
@@ -145,7 +154,7 @@ static void visualize_value(uint8_t value)
         value -= 8;
         led_matrix = &led_matrix_r;
     }
-    led_matrix_set_pixel(led_matrix, 7, value, hmi_layer+1);
+    led_matrix_set_pixel(led_matrix, 7, value, get_layer_color(hmi_layer));
 }
 
 
@@ -166,6 +175,8 @@ void cycle_hmi_layer(void)
 {
     ++hmi_layer;
     hmi_layer %= HMI_LAYER_COUNT;
+
+    led_matrix_set_pixel(&led_matrix_l, 5, 0, get_layer_color(hmi_layer));
 }
 
 bool exec_ampl(const char* command)
