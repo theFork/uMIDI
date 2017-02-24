@@ -38,6 +38,16 @@
 //               P R I V A T E   D E F I N E S                //
 ////////////////////////////////////////////////////////////////
 
+#define WAVE_BMP_XSIZE      7
+#define WAVE_BMP_YSIZE      5
+#define WAVE_BMP_XOFFS      1
+#define WAVE_BMP_YOFFS      0
+
+/// \brief      Common settings for waveform bitmaps
+/// \details    Intended for calls of led_matrix_set_bitmap
+#define WAVE_BMP_SETTINGS   WAVE_BMP_YSIZE, WAVE_BMP_XSIZE, WAVE_BMP_YOFFS, WAVE_BMP_XOFFS,\
+                            get_layer_color(hmi_layer)
+
 
 
 ////////////////////////////////////////////////////////////////
@@ -64,7 +74,7 @@ enum hmi_layer
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-static const uint8_t digits[10][15] = {
+static const uint8_t characters[36][15] = {
     CHARACTER_BITMAP_0,
     CHARACTER_BITMAP_1,
     CHARACTER_BITMAP_2,
@@ -74,7 +84,89 @@ static const uint8_t digits[10][15] = {
     CHARACTER_BITMAP_6,
     CHARACTER_BITMAP_7,
     CHARACTER_BITMAP_8,
-    CHARACTER_BITMAP_9
+    CHARACTER_BITMAP_9,
+    CHARACTER_BITMAP_A,
+    CHARACTER_BITMAP_B,
+    CHARACTER_BITMAP_C,
+    CHARACTER_BITMAP_D,
+    CHARACTER_BITMAP_E,
+    CHARACTER_BITMAP_F,
+    CHARACTER_BITMAP_G,
+    CHARACTER_BITMAP_H,
+    CHARACTER_BITMAP_I,
+    CHARACTER_BITMAP_J,
+    CHARACTER_BITMAP_K,
+    CHARACTER_BITMAP_L,
+    CHARACTER_BITMAP_M,
+    CHARACTER_BITMAP_N,
+    CHARACTER_BITMAP_O,
+    CHARACTER_BITMAP_P,
+    CHARACTER_BITMAP_Q,
+    CHARACTER_BITMAP_R,
+    CHARACTER_BITMAP_S,
+    CHARACTER_BITMAP_T,
+    CHARACTER_BITMAP_U,
+    CHARACTER_BITMAP_V,
+    CHARACTER_BITMAP_W,
+    CHARACTER_BITMAP_X,
+    CHARACTER_BITMAP_Y,
+    CHARACTER_BITMAP_Z
+};
+
+static const uint8_t wave_bitmap_sine[WAVE_BMP_YSIZE] = {
+    0b0000110,
+    0b0001001,
+    0b0001000,
+    0b1001000,
+    0b0110000
+};
+
+static const uint8_t wave_bitmap_triangle[WAVE_BMP_YSIZE] = {
+    0b0000010,
+    0b0000101,
+    0b0001000,
+    0b1010000,
+    0b0100000
+};
+
+static const uint8_t wave_bitmap_saw_up[WAVE_BMP_YSIZE] = {
+    0b0001000,
+    0b0011001,
+    0b0101010,
+    0b1001100,
+    0b0001000
+};
+
+static const uint8_t wave_bitmap_saw_down[WAVE_BMP_YSIZE] = {
+    0b0001000,
+    0b1001100,
+    0b0101010,
+    0b0011001,
+    0b0001000
+};
+
+static const uint8_t wave_bitmap_square[WAVE_BMP_YSIZE] = {
+    0b0001111,
+    0b0001000,
+    0b0001000,
+    0b0001000,
+    0b1111000
+};
+
+static const uint8_t wave_bitmap_stairs[WAVE_BMP_YSIZE] = {
+    0b0000111,
+    0b0000100,
+    0b0011100,
+    0b0010000,
+    0b1110000
+};
+
+static const uint8_t wave_bitmap_random[WAVE_BMP_YSIZE] = {
+    0b0000011,
+    0b0000010,
+    0b0001110,
+    0b1101000,
+    0b0111000
 };
 
 static enum hmi_layer hmi_layer = 0;
@@ -94,30 +186,29 @@ enum adafruit_display_color get_layer_color(enum hmi_layer layer)
     return layer + 1;
 }
 
-static void display_digit(const uint8_t position, const uint8_t digit)
+static void clear_character(const uint8_t position)
 {
-    // Clear previous character or digit
     uint8_t start_column = 0;
     struct led_matrix* led_matrix = NULL;
     switch (position) {
-        case 0: // rightmost
-            led_matrix = &led_matrix_r;
-            start_column = 4;
-            break;
-        case 1: // middle-right
-            led_matrix = &led_matrix_r;
+        case 0: // leftmost
+            led_matrix = &led_matrix_l;
             start_column = 0;
             break;
-        case 2: // middle-left
+        case 1: // middle-left
             led_matrix = &led_matrix_l;
             start_column = 4;
             break;
-        case 3: // leftmost
-            led_matrix = &led_matrix_l;
+        case 2: // middle-right
+            led_matrix = &led_matrix_r;
             start_column = 0;
+            break;
+        case 3: // rightmost
+            led_matrix = &led_matrix_r;
+            start_column = 4;
             break;
         default:
-            // /o\ Something went terribly wrong
+            // Abort if index is out of bounds
             return;
     }
     for (uint8_t column=start_column; column<start_column+4; ++column) {
@@ -127,8 +218,62 @@ static void display_digit(const uint8_t position, const uint8_t digit)
         led_matrix_set_pixel(led_matrix, 3, column, ADAFRUIT_DISPLAY_COLOR_BLACK);
         led_matrix_set_pixel(led_matrix, 4, column, ADAFRUIT_DISPLAY_COLOR_BLACK);
     }
+}
 
-    const uint8_t* const bitmap = digits[digit];
+static void display_character(const uint8_t position, const char character)
+{
+    // Check requested character and compute array index
+    uint8_t index = character;
+    if (index > 9) {
+        // Just clear the character if it is a whitespace
+        if (character == ' ') {
+            clear_character(position);
+            return;
+        }
+
+        // Abort for invalid characters
+        if (character < '0' || ('9' < character && character < 'A') || character > 'Z') {
+            return;
+        }
+
+        // Subtract offset to digits
+        index -= '0'-1;
+
+        if (index > 9) {
+            // Skip punctuation between digits and alphabetical characters
+            index -= 'A'-'9';
+        }
+    }
+
+    // Clear previous character or digit
+    clear_character(position);
+
+    // Write character to the pixelbuffer
+    uint8_t start_column = 0;
+    struct led_matrix* led_matrix = NULL;
+    switch (position) {
+        case 0: // leftmost
+            led_matrix = &led_matrix_l;
+            start_column = 0;
+            break;
+        case 1: // middle-left
+            led_matrix = &led_matrix_l;
+            start_column = 4;
+            break;
+        case 2: // middle-right
+            led_matrix = &led_matrix_r;
+            start_column = 0;
+            break;
+        case 3: // rightmost
+            led_matrix = &led_matrix_r;
+            start_column = 4;
+            break;
+        default:
+            // Abort if index is out of bounds
+            return;
+    }
+
+    const uint8_t* const bitmap = characters[index];
     for (uint8_t bit=0; bit<15; ++bit) {
         uint8_t column = start_column + 1 + bit % 3;
         enum adafruit_display_color color = bitmap[bit]
@@ -138,11 +283,68 @@ static void display_digit(const uint8_t position, const uint8_t digit)
     }
 }
 
+static void display_string(const char* const str)
+{
+    uint8_t length = MIN(4, strlen(str));
+    for (uint8_t i=0; i<length; ++i) {
+        display_character(i, str[i]);
+    }
+}
+
 static void display_number(const uint8_t number)
 {
-    display_digit(0,  number %  10       );
-    display_digit(1, (number % 100) /  10);
-    display_digit(2,  number        / 100);
+    display_character(3,  number %  10       );
+    display_character(2, (number % 100) /  10);
+    display_character(1,  number        / 100);
+}
+
+static void display_ctrl_mode(enum ui_ctrl_mode mode)
+{
+    switch (mode) {
+        case UI_CTRL_MODE_BYPASS:
+            display_string("OFF ");
+            break;
+        case UI_CTRL_MODE_DETUNE:
+            display_string("DET ");
+            break;
+        case UI_CTRL_MODE_MOMENTARY:
+            display_string("MOM ");
+            break;
+        case UI_CTRL_MODE_WAVE_SINE:
+            display_string("W ");
+            led_matrix_set_bitmap(&led_matrix_r, wave_bitmap_sine, WAVE_BMP_SETTINGS);
+            break;
+        case UI_CTRL_MODE_WAVE_TRIANGLE:
+            display_string("W ");
+            led_matrix_set_bitmap(&led_matrix_r, wave_bitmap_triangle, WAVE_BMP_SETTINGS);
+            break;
+        case UI_CTRL_MODE_WAVE_SAW_UP:
+            display_string("W ");
+            led_matrix_set_bitmap(&led_matrix_r, wave_bitmap_saw_up, WAVE_BMP_SETTINGS);
+            break;
+        case UI_CTRL_MODE_WAVE_SAW_DOWN:
+            display_string("W ");
+            led_matrix_set_bitmap(&led_matrix_r, wave_bitmap_saw_down, WAVE_BMP_SETTINGS);
+            break;
+        case UI_CTRL_MODE_WAVE_SQUARE:
+            display_string("W ");
+            led_matrix_set_bitmap(&led_matrix_r, wave_bitmap_square, WAVE_BMP_SETTINGS);
+            break;
+        case UI_CTRL_MODE_WAVE_STAIRS:
+            display_string("W ");
+            led_matrix_set_bitmap(&led_matrix_r, wave_bitmap_stairs, WAVE_BMP_SETTINGS);
+            break;
+        case UI_CTRL_MODE_WAVE_RANDOM:
+            display_string("W ");
+            led_matrix_set_bitmap(&led_matrix_r, wave_bitmap_random, WAVE_BMP_SETTINGS);
+            break;
+        default:
+            mode -= UI_CTRL_MODE_PATTERN_01 - 1;
+            display_string("P ");
+            display_character(2, mode/10);
+            display_character(3, mode%10);
+            break;
+    }
 }
 
 static void visualize_value(uint8_t value)
@@ -472,13 +674,16 @@ void value1_decrement(void)
     switch (hmi_layer) {
         case HMI_LAYER_DEFAULT:
             number = adjust_amplitude(-1);
+            display_character(0, 'A');
             display_number(number);
             break;
         case HMI_LAYER_MODE:
-            select_previous_mode();
+            number = select_previous_mode();
+            display_ctrl_mode(number);
             break;
         case HMI_LAYER_PROGRAM:
             number = adjust_program(-1) + 1;
+            display_character(0, 'P');
             display_number(number);
             usb_printf(PSTR("Selected program %u" USB_NEWLINE), number);
             break;
@@ -493,13 +698,16 @@ void value1_increment(void)
     switch (hmi_layer) {
         case HMI_LAYER_DEFAULT:
             number = adjust_amplitude(1);
+            display_character(0, 'A');
             display_number(number);
             break;
         case HMI_LAYER_MODE:
-            select_next_mode();
+            number = select_next_mode();
+            display_ctrl_mode(number);
             break;
         case HMI_LAYER_PROGRAM:
             number = adjust_program(1) + 1;
+            display_character(0, 'P');
             display_number(number);
             usb_printf(PSTR("Selected program %u" USB_NEWLINE), number);
             break;
@@ -514,10 +722,13 @@ void value2_decrement(void)
     switch (hmi_layer) {
         case HMI_LAYER_DEFAULT:
             number = adjust_speed(-1);
+            display_character(0, 'S');
             display_number(number);
             break;
         case HMI_LAYER_MODE:
-            adjust_whammy_mode(-1);
+            number = adjust_whammy_mode(-1);
+            display_character(0, 'W');
+            display_number(number);
             break;
         case HMI_LAYER_PROGRAM:
             break;
@@ -532,10 +743,13 @@ void value2_increment(void)
     switch (hmi_layer) {
         case HMI_LAYER_DEFAULT:
             number = adjust_speed(1);
+            display_character(0, 'S');
             display_number(number);
             break;
         case HMI_LAYER_MODE:
-            adjust_whammy_mode(1);
+            number = adjust_whammy_mode(1);
+            display_character(0, 'W');
+            display_number(number);
             break;
         case HMI_LAYER_PROGRAM:
             break;

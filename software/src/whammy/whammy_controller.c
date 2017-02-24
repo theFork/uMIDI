@@ -220,7 +220,7 @@ uint8_t adjust_speed(int8_t delta)
 /// \brief      Adjusts the whammy pedal mode
 /// \param      delta
 ///                 difference from current mode
-void adjust_whammy_mode(int8_t delta)
+enum whammy_mode adjust_whammy_mode(int8_t delta)
 {
     active_program.field.pedal_mode += delta;
 
@@ -242,6 +242,7 @@ void adjust_whammy_mode(int8_t delta)
 
     usb_printf(PSTR("Selecting Whammy pedal mode %d" USB_NEWLINE), active_program.field.pedal_mode+1);
     send_program_change(active_program.field.pedal_mode);
+    return active_program.field.pedal_mode + 1;
 }
 
 void copy_whammy_ctrl_pattern(enum sequencer_pattern_number destination)
@@ -405,83 +406,83 @@ void save_current_program(void)
     update_program(active_program.word);
 }
 
-void select_next_mode(void)
+uint8_t select_next_mode(void)
 {
     switch(active_program.field.ctrl_mode) {
         case WHAMMY_CTRL_MODE_BYPASS:
             enter_detune_mode();
-            break;
+            return UI_CTRL_MODE_DETUNE;
 
         case WHAMMY_CTRL_MODE_DETUNE:
             enter_momentary_mode();
-            break;
+            return UI_CTRL_MODE_MOMENTARY;
 
         case WHAMMY_CTRL_MODE_MOMENTARY:
             enter_wave_mode(WAVE_SINE);
-            break;
+            return UI_CTRL_MODE_WAVE_SINE;
 
         case WHAMMY_CTRL_MODE_WAVE:
             ++active_program.field.waveform;
             if (active_program.field.waveform > WAVE_RANDOM) {
                 enter_pattern_mode(SEQUENCER_PATTERN_01);
-                break;
+                return UI_CTRL_MODE_PATTERN_01;
             }
             set_waveform(&control_wave, active_program.field.waveform);
             usb_printf(PSTR("Waveform %d" USB_NEWLINE), active_program.field.waveform);
-            break;
+            return UI_CTRL_MODE_WAVE_SINE-WAVE_SINE+active_program.field.waveform;
 
         case WHAMMY_CTRL_MODE_PATTERN:
             adjust_sequencer_pattern(&sequencer, 1);
             active_program.field.waveform = sequencer.pattern;
             if (sequencer.pattern != SEQUENCER_PATTERN_01) {
                 usb_printf(PSTR("Pattern %d" USB_NEWLINE), sequencer.pattern+1);
-                break;
+                return UI_CTRL_MODE_PATTERN_01+sequencer.pattern;
             }
             // else fall through
 
         default:
             enter_bypass_mode();
-            break;
+            return UI_CTRL_MODE_BYPASS;
     }
 }
 
-void select_previous_mode(void)
+uint8_t select_previous_mode(void)
 {
     switch(active_program.field.ctrl_mode) {
         case WHAMMY_CTRL_MODE_BYPASS:
             enter_pattern_mode(SEQUENCER_PATTERN_20);
-            break;
+            return UI_CTRL_MODE_PATTERN_20;
 
         case WHAMMY_CTRL_MODE_DETUNE:
             enter_bypass_mode();
-            break;
+            return UI_CTRL_MODE_BYPASS;
 
         case WHAMMY_CTRL_MODE_MOMENTARY:
             enter_detune_mode();
-            break;
+            return UI_CTRL_MODE_DETUNE;
 
         case WHAMMY_CTRL_MODE_WAVE:
             --active_program.field.waveform;
             if (active_program.field.waveform == WAVE_OFF) {
                 enter_momentary_mode();
-                break;
+                return UI_CTRL_MODE_MOMENTARY;
             }
             set_waveform(&control_wave, active_program.field.waveform);
             usb_printf(PSTR("Waveform %d" USB_NEWLINE), active_program.field.waveform);
-            break;
+            return UI_CTRL_MODE_WAVE_SINE-WAVE_SINE+active_program.field.waveform;
 
         case WHAMMY_CTRL_MODE_PATTERN:
             adjust_sequencer_pattern(&sequencer, -1);
             if (sequencer.pattern == SEQUENCER_PATTERN_20) {
                 enter_wave_mode(WAVE_RANDOM);
-                break;
+                return UI_CTRL_MODE_WAVE_RANDOM;
             }
             usb_printf(PSTR("Pattern %d" USB_NEWLINE), sequencer.pattern+1);
-            break;
+            return UI_CTRL_MODE_PATTERN_01+sequencer.pattern;
 
         default:
             enter_bypass_mode();
-            break;
+            return UI_CTRL_MODE_BYPASS;
     }
 }
 

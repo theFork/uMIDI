@@ -158,7 +158,7 @@ union whammy_ctrl_program {
 //---------------- functions and procedures ----------------//
 uint8_t adjust_amplitude(int8_t delta);
 uint8_t adjust_speed(int8_t delta);
-void adjust_whammy_mode(int8_t delta);
+enum whammy_mode adjust_whammy_mode(int8_t delta);
 void copy_whammy_ctrl_pattern(enum sequencer_pattern_number destination);
 void dump_current_pattern(void);
 void dump_current_program(void);
@@ -171,8 +171,8 @@ void handle_midi_program_change(midi_value_t program);
 void init_whammy_controller(void);
 void reset_whammy_patterns(void);
 void save_current_program(void);
-void select_next_mode(void);
-void select_previous_mode(void);
+uint8_t select_next_mode(void);
+uint8_t select_previous_mode(void);
 void set_whammy_ctrl_amplitude(uint8_t amplitude);
 void set_whammy_ctrl_pattern_length(uint8_t length);
 void set_whammy_ctrl_pattern_step(uint8_t step_index, const struct sequencer_step* step);
