@@ -284,8 +284,29 @@ void init_led_matrix_module(struct led_matrix* matrix);
 ///                 the LED matrix
 void led_matrix_flush(const struct led_matrix* matrix);
 
+/// \brief      Displays a bitmap on the LED matrix.
+/// \details    Indexing starts at 0, with (0, 0) adressing the upper left LED.
+/// \param      matrix
+///                 the LED matrix to manipulate
+/// \param      bitmap
+///                 the bitmap data
+/// \param      y_size
+///                 number of rows in the bitmap
+/// \param      x_size
+///                 number of columns in the bitmap
+/// \param      y_offs
+///                 row offset (from top)
+/// \param      x_offs
+///                 column offset (from left)
+/// \param      color
+///                 the color to apply
+void led_matrix_set_bitmap(struct led_matrix* matrix, const uint8_t* bitmap,
+                           const uint8_t y_size, const uint8_t x_size,
+                           const uint8_t y_offs, const uint8_t x_offs,
+                           enum adafruit_display_color color);
+
 /// \brief      Sets the given color of an LED chosen by its coordinates on in the matrix.
-/// \details    Indexing starts with 0, with (0, 0) adressing the upper left LED.
+/// \details    Indexing starts at 0, with (0, 0) adressing the upper left LED.
 /// \param      matrix
 ///                 the LED matrix to manipulate
 /// \param      row
@@ -294,7 +315,8 @@ void led_matrix_flush(const struct led_matrix* matrix);
 ///                 column index
 /// \param      color
 ///                 the color to apply
-void led_matrix_set_pixel(struct led_matrix* matrix, uint8_t row, uint8_t column, enum adafruit_display_color color);
+void led_matrix_set_pixel(struct led_matrix* matrix, uint8_t row, uint8_t column,
+                          enum adafruit_display_color color);
 
 
 //---------------- EOF ----------------//

@@ -71,6 +71,23 @@ void led_matrix_flush(const struct led_matrix * const matrix)
     i2c_stop();
 }
 
+void led_matrix_set_bitmap(struct led_matrix * const matrix, const uint8_t * const bitmap,
+                           const uint8_t y_size, const uint8_t x_size,
+                           const uint8_t y_offs, const uint8_t x_offs,
+                           enum adafruit_display_color color)
+{
+    for (uint8_t y=0; y<y_size; ++y) {
+        for (uint8_t x=0; x<x_size; ++x) {
+            if (bitmap[y] & _BV(x_size-1-x)) {
+                led_matrix_set_pixel(matrix, y+y_offs, x+x_offs, color);
+            }
+            else {
+                led_matrix_set_pixel(matrix, y+y_offs, x+x_offs, ADAFRUIT_DISPLAY_COLOR_BLACK);
+            }
+        }
+    }
+}
+
 void led_matrix_set_pixel(struct led_matrix * const matrix,
                           const uint8_t row, uint8_t column,
                           const enum adafruit_display_color color)
