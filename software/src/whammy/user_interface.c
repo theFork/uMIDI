@@ -44,8 +44,8 @@
 #define WAVE_BMP_YOFFS      0
 
 /// \brief      Common settings for waveform bitmaps
-/// \details    Intended for calls of led_matrix_set_bitmap
-#define WAVE_BMP_SETTINGS   WAVE_BMP_YSIZE, WAVE_BMP_XSIZE, WAVE_BMP_YOFFS, WAVE_BMP_XOFFS,\
+/// \details    Intended for calls of led_matrix_show_bitmap
+#define WAVE_BMP_SETTINGS   WAVE_BMP_XOFFS, WAVE_BMP_YOFFS, WAVE_BMP_XSIZE, WAVE_BMP_YSIZE,\
                             get_layer_color(hmi_layer)
 
 
@@ -73,45 +73,6 @@ enum hmi_layer
 ////////////////////////////////////////////////////////////////
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
-
-static const uint8_t characters[36][15] = {
-    CHARACTER_BITMAP_0,
-    CHARACTER_BITMAP_1,
-    CHARACTER_BITMAP_2,
-    CHARACTER_BITMAP_3,
-    CHARACTER_BITMAP_4,
-    CHARACTER_BITMAP_5,
-    CHARACTER_BITMAP_6,
-    CHARACTER_BITMAP_7,
-    CHARACTER_BITMAP_8,
-    CHARACTER_BITMAP_9,
-    CHARACTER_BITMAP_A,
-    CHARACTER_BITMAP_B,
-    CHARACTER_BITMAP_C,
-    CHARACTER_BITMAP_D,
-    CHARACTER_BITMAP_E,
-    CHARACTER_BITMAP_F,
-    CHARACTER_BITMAP_G,
-    CHARACTER_BITMAP_H,
-    CHARACTER_BITMAP_I,
-    CHARACTER_BITMAP_J,
-    CHARACTER_BITMAP_K,
-    CHARACTER_BITMAP_L,
-    CHARACTER_BITMAP_M,
-    CHARACTER_BITMAP_N,
-    CHARACTER_BITMAP_O,
-    CHARACTER_BITMAP_P,
-    CHARACTER_BITMAP_Q,
-    CHARACTER_BITMAP_R,
-    CHARACTER_BITMAP_S,
-    CHARACTER_BITMAP_T,
-    CHARACTER_BITMAP_U,
-    CHARACTER_BITMAP_V,
-    CHARACTER_BITMAP_W,
-    CHARACTER_BITMAP_X,
-    CHARACTER_BITMAP_Y,
-    CHARACTER_BITMAP_Z
-};
 
 static const uint8_t wave_bitmap_sine[WAVE_BMP_YSIZE] = {
     0b0000110,
@@ -186,68 +147,8 @@ enum adafruit_display_color get_layer_color(enum hmi_layer layer)
     return layer + 1;
 }
 
-static void clear_character(const uint8_t position)
-{
-    uint8_t start_column = 0;
-    struct led_matrix* led_matrix = NULL;
-    switch (position) {
-        case 0: // leftmost
-            led_matrix = &led_matrix_l;
-            start_column = 0;
-            break;
-        case 1: // middle-left
-            led_matrix = &led_matrix_l;
-            start_column = 4;
-            break;
-        case 2: // middle-right
-            led_matrix = &led_matrix_r;
-            start_column = 0;
-            break;
-        case 3: // rightmost
-            led_matrix = &led_matrix_r;
-            start_column = 4;
-            break;
-        default:
-            // Abort if index is out of bounds
-            return;
-    }
-    for (uint8_t column=start_column; column<start_column+4; ++column) {
-        led_matrix_set_pixel(led_matrix, 0, column, ADAFRUIT_DISPLAY_COLOR_BLACK);
-        led_matrix_set_pixel(led_matrix, 1, column, ADAFRUIT_DISPLAY_COLOR_BLACK);
-        led_matrix_set_pixel(led_matrix, 2, column, ADAFRUIT_DISPLAY_COLOR_BLACK);
-        led_matrix_set_pixel(led_matrix, 3, column, ADAFRUIT_DISPLAY_COLOR_BLACK);
-        led_matrix_set_pixel(led_matrix, 4, column, ADAFRUIT_DISPLAY_COLOR_BLACK);
-    }
-}
-
 static void display_character(const uint8_t position, const char character)
 {
-    // Check requested character and compute array index
-    uint8_t index = character;
-    if (index > 9) {
-        // Just clear the character if it is a whitespace
-        if (character == ' ') {
-            clear_character(position);
-            return;
-        }
-
-        // Abort for invalid characters
-        if (character < '0' || ('9' < character && character < 'A') || character > 'Z') {
-            return;
-        }
-
-        // Subtract offset to digits
-        index -= '0'-1;
-
-        if (index > 9) {
-            // Skip punctuation between digits and alphabetical characters
-            index -= 'A'-'9';
-        }
-    }
-
-    // Clear previous character or digit
-    clear_character(position);
-
     // Write character to the pixelbuffer
     uint8_t start_column = 0;
     struct led_matrix* led_matrix = NULL;
@@ -273,14 +174,18 @@ static void display_character(const uint8_t position, const char character)
             return;
     }
 
-    const uint8_t* const bitmap = characters[index];
-    for (uint8_t bit=0; bit<15; ++bit) {
-        uint8_t column = start_column + 1 + bit % 3;
-        enum adafruit_display_color color = bitmap[bit]
-                                          ? get_layer_color(hmi_layer)
-                                          : ADAFRUIT_DISPLAY_COLOR_BLACK;
-        led_matrix_set_pixel(led_matrix, bit / 3, column, color);
+    // Clear previous character including padding to the left
+    uint8_t end_column = start_column + LED_MATRIX_CHAR_BITMAP_WIDTH;
+    led_matrix_clear_area(led_matrix, start_column, 0,
+                                      end_column, LED_MATRIX_CHAR_BITMAP_HEIGHT-1);
+
+    // If whitespace was requested, we're done
+    if (character == ' ') {
+        return;
     }
+
+    // Display character right-aligned in the cleared box
+    led_matrix_show_character(led_matrix, character, start_column+1, 0, get_layer_color(hmi_layer));
 }
 
 static void display_string(const char* const str)
@@ -312,31 +217,31 @@ static void display_ctrl_mode(enum ui_ctrl_mode mode)
             break;
         case UI_CTRL_MODE_WAVE_SINE:
             display_string("W ");
-            led_matrix_set_bitmap(&led_matrix_r, wave_bitmap_sine, WAVE_BMP_SETTINGS);
+            led_matrix_show_bitmap(&led_matrix_r, wave_bitmap_sine, WAVE_BMP_SETTINGS);
             break;
         case UI_CTRL_MODE_WAVE_TRIANGLE:
             display_string("W ");
-            led_matrix_set_bitmap(&led_matrix_r, wave_bitmap_triangle, WAVE_BMP_SETTINGS);
+            led_matrix_show_bitmap(&led_matrix_r, wave_bitmap_triangle, WAVE_BMP_SETTINGS);
             break;
         case UI_CTRL_MODE_WAVE_SAW_UP:
             display_string("W ");
-            led_matrix_set_bitmap(&led_matrix_r, wave_bitmap_saw_up, WAVE_BMP_SETTINGS);
+            led_matrix_show_bitmap(&led_matrix_r, wave_bitmap_saw_up, WAVE_BMP_SETTINGS);
             break;
         case UI_CTRL_MODE_WAVE_SAW_DOWN:
             display_string("W ");
-            led_matrix_set_bitmap(&led_matrix_r, wave_bitmap_saw_down, WAVE_BMP_SETTINGS);
+            led_matrix_show_bitmap(&led_matrix_r, wave_bitmap_saw_down, WAVE_BMP_SETTINGS);
             break;
         case UI_CTRL_MODE_WAVE_SQUARE:
             display_string("W ");
-            led_matrix_set_bitmap(&led_matrix_r, wave_bitmap_square, WAVE_BMP_SETTINGS);
+            led_matrix_show_bitmap(&led_matrix_r, wave_bitmap_square, WAVE_BMP_SETTINGS);
             break;
         case UI_CTRL_MODE_WAVE_STAIRS:
             display_string("W ");
-            led_matrix_set_bitmap(&led_matrix_r, wave_bitmap_stairs, WAVE_BMP_SETTINGS);
+            led_matrix_show_bitmap(&led_matrix_r, wave_bitmap_stairs, WAVE_BMP_SETTINGS);
             break;
         case UI_CTRL_MODE_WAVE_RANDOM:
             display_string("W ");
-            led_matrix_set_bitmap(&led_matrix_r, wave_bitmap_random, WAVE_BMP_SETTINGS);
+            led_matrix_show_bitmap(&led_matrix_r, wave_bitmap_random, WAVE_BMP_SETTINGS);
             break;
         default:
             mode -= UI_CTRL_MODE_PATTERN_01 - 1;

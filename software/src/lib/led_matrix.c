@@ -32,6 +32,223 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
+static const uint8_t characters[36][LED_MATRIX_CHAR_BITMAP_HEIGHT] = {
+    {0b111,
+     0b101,
+     0b101,
+     0b101,
+     0b111},
+
+    {0b110,
+     0b010,
+     0b010,
+     0b010,
+     0b111},
+
+    {0b111,
+     0b001,
+     0b111,
+     0b100,
+     0b111},
+
+    {0b111,
+     0b001,
+     0b111,
+     0b001,
+     0b111},
+
+    {0b101,
+     0b101,
+     0b111,
+     0b001,
+     0b001},
+
+    {0b111,
+     0b100,
+     0b111,
+     0b001,
+     0b111},
+
+    {0b100,
+     0b100,
+     0b111,
+     0b101,
+     0b111},
+
+    {0b111,
+     0b001,
+     0b010,
+     0b010,
+     0b010},
+
+    {0b111,
+     0b101,
+     0b111,
+     0b101,
+     0b111},
+
+    {0b111,
+     0b101,
+     0b111,
+     0b001,
+     0b001},
+
+    {0b111,
+     0b101,
+     0b111,
+     0b101,
+     0b101},
+
+    {0b111,
+     0b101,
+     0b110,
+     0b101,
+     0b111},
+
+    {0b011,
+     0b100,
+     0b100,
+     0b100,
+     0b011},
+
+    {0b110,
+     0b101,
+     0b101,
+     0b101,
+     0b110},
+
+    {0b111,
+     0b100,
+     0b111,
+     0b100,
+     0b111},
+
+    {0b111,
+     0b100,
+     0b111,
+     0b100,
+     0b100},
+
+    {0b011,
+     0b100,
+     0b111,
+     0b101,
+     0b011},
+
+    {0b101,
+     0b101,
+     0b111,
+     0b101,
+     0b101},
+
+    {0b111,
+     0b010,
+     0b010,
+     0b010,
+     0b111},
+
+    {0b001,
+     0b001,
+     0b001,
+     0b001,
+     0b110},
+
+    {0b101,
+     0b101,
+     0b110,
+     0b101,
+     0b101},
+
+    {0b100,
+     0b100,
+     0b100,
+     0b100,
+     0b111},
+
+    {0b101,
+     0b111,
+     0b101,
+     0b101,
+     0b101},
+
+    {0b101,
+     0b111,
+     0b111,
+     0b101,
+     0b101},
+
+    {0b010,
+     0b101,
+     0b101,
+     0b101,
+     0b010},
+
+    {0b111,
+     0b101,
+     0b111,
+     0b100,
+     0b100},
+
+    {0b111,
+     0b101,
+     0b101,
+     0b010,
+     0b110},
+
+    {0b111,
+     0b101,
+     0b110,
+     0b101,
+     0b101},
+
+    {0b111,
+     0b100,
+     0b010,
+     0b001,
+     0b111},
+
+    {0b111,
+     0b010,
+     0b010,
+     0b010,
+     0b010},
+
+    {0b101,
+     0b101,
+     0b101,
+     0b101,
+     0b111},
+
+    {0b101,
+     0b101,
+     0b101,
+     0b101,
+     0b010},
+
+    {0b101,
+     0b101,
+     0b101,
+     0b111,
+     0b101},
+
+    {0b101,
+     0b101,
+     0b010,
+     0b101,
+     0b101},
+
+    {0b101,
+     0b101,
+     0b010,
+     0b010,
+     0b010},
+
+    {0b111,
+     0b001,
+     0b010,
+     0b100,
+     0b111},
+};
 
 
 ////////////////////////////////////////////////////////////////
@@ -71,27 +288,78 @@ void led_matrix_flush(const struct led_matrix * const matrix)
     i2c_stop();
 }
 
-void led_matrix_set_bitmap(struct led_matrix * const matrix, const uint8_t * const bitmap,
-                           const uint8_t y_size, const uint8_t x_size,
-                           const uint8_t y_offs, const uint8_t x_offs,
-                           enum adafruit_display_color color)
+void led_matrix_clear_area(struct led_matrix * const matrix,
+                           const uint8_t x_top_left, const uint8_t y_top_left,
+                           const uint8_t x_bot_right, const uint8_t y_bot_right)
+{
+    uint8_t zeros[LED_MATRIX_RESOLUTION] = {0,};
+    uint8_t width = x_bot_right - x_top_left + 1;
+    uint8_t height = y_bot_right - y_top_left + 1;
+    led_matrix_show_bitmap(matrix, zeros,
+                           x_top_left, y_top_left, width, height,
+                           ADAFRUIT_DISPLAY_COLOR_BLACK);
+}
+
+void led_matrix_show_bitmap(struct led_matrix * const matrix, const uint8_t * const bitmap,
+                            const uint8_t x_start, const uint8_t y_start,
+                            const uint8_t x_size, const uint8_t y_size,
+                            const enum adafruit_display_color color)
 {
     for (uint8_t y=0; y<y_size; ++y) {
         for (uint8_t x=0; x<x_size; ++x) {
             if (bitmap[y] & _BV(x_size-1-x)) {
-                led_matrix_set_pixel(matrix, y+y_offs, x+x_offs, color);
+                led_matrix_set_pixel(matrix, y+y_start, x+x_start, color);
             }
             else {
-                led_matrix_set_pixel(matrix, y+y_offs, x+x_offs, ADAFRUIT_DISPLAY_COLOR_BLACK);
+                led_matrix_set_pixel(matrix, y+y_start, x+x_start, ADAFRUIT_DISPLAY_COLOR_BLACK);
             }
         }
     }
+}
+
+void led_matrix_show_character(struct led_matrix * const matrix, const char character,
+                               const uint8_t x_offs, const uint8_t y_offs,
+                               const enum adafruit_display_color color)
+{
+    // Check requested character and compute array index
+    uint8_t index = character;
+    if (index > 9 && character != ' ') {
+        // Abort for invalid characters
+        if (character < '0' || ('9' < character && character < 'A') || character > 'Z') {
+            return;
+        }
+
+        // Subtract offset to digits
+        index -= '0'-1;
+
+        if (index > 9) {
+            // Skip punctuation between digits and alphabetical characters
+            index -= 'A'-'9';
+        }
+    }
+
+    // Clear previous character and abort if whitespace was requested
+    uint8_t x_end = x_offs + LED_MATRIX_CHAR_BITMAP_WIDTH;
+    uint8_t y_end = y_offs + LED_MATRIX_CHAR_BITMAP_HEIGHT;
+    led_matrix_clear_area(matrix, x_offs, y_offs, x_end, y_end);
+    if (character == ' ') {
+        return;
+    }
+
+    const uint8_t* const bitmap = characters[index];
+    led_matrix_show_bitmap(matrix, bitmap, x_offs, y_offs,
+                           LED_MATRIX_CHAR_BITMAP_WIDTH, LED_MATRIX_CHAR_BITMAP_HEIGHT, color);
 }
 
 void led_matrix_set_pixel(struct led_matrix * const matrix,
                           const uint8_t row, uint8_t column,
                           const enum adafruit_display_color color)
 {
+    // Abort if an invalid column index was given
+    if (column >= LED_MATRIX_RESOLUTION) {
+        return;
+    }
+
     // Compute array index
     column = 7-column;
 

@@ -33,221 +33,14 @@
 
 //---------------- constants ----------------//
 
-#define CHARACTER_BITMAP_0      { 1, 1, 1, \
-                                  1, 0, 1, \
-                                  1, 0, 1, \
-                                  1, 0, 1, \
-                                  1, 1, 1  }
+/// \brief  Number of vertical pixels in pre-defined character bitmaps
+#define LED_MATRIX_CHAR_BITMAP_HEIGHT   5
 
-#define CHARACTER_BITMAP_1      { 1, 1, 0, \
-                                  0, 1, 0, \
-                                  0, 1, 0, \
-                                  0, 1, 0, \
-                                  1, 1, 1  }
+/// \brief  Number of horizontal pixels in pre-defined character bitmaps
+#define LED_MATRIX_CHAR_BITMAP_WIDTH    3
 
-#define CHARACTER_BITMAP_2      { 1, 1, 1, \
-                                  0, 0, 1, \
-                                  1, 1, 1, \
-                                  1, 0, 0, \
-                                  1, 1, 1  }
-
-#define CHARACTER_BITMAP_3      { 1, 1, 1, \
-                                  0, 0, 1, \
-                                  1, 1, 1, \
-                                  0, 0, 1, \
-                                  1, 1, 1  }
-
-#define CHARACTER_BITMAP_4      { 1, 0, 1, \
-                                  1, 0, 1, \
-                                  1, 1, 1, \
-                                  0, 0, 1, \
-                                  0, 0, 1  }
-
-#define CHARACTER_BITMAP_5      { 1, 1, 1, \
-                                  1, 0, 0, \
-                                  1, 1, 1, \
-                                  0, 0, 1, \
-                                  1, 1, 1  }
-
-#define CHARACTER_BITMAP_6      { 1, 0, 0, \
-                                  1, 0, 0, \
-                                  1, 1, 1, \
-                                  1, 0, 1, \
-                                  1, 1, 1  }
-
-#define CHARACTER_BITMAP_7      { 1, 1, 1, \
-                                  0, 0, 1, \
-                                  0, 1, 0, \
-                                  0, 1, 0, \
-                                  0, 1, 0  }
-
-#define CHARACTER_BITMAP_8      { 1, 1, 1, \
-                                  1, 0, 1, \
-                                  1, 1, 1, \
-                                  1, 0, 1, \
-                                  1, 1, 1  }
-
-#define CHARACTER_BITMAP_9      { 1, 1, 1, \
-                                  1, 0, 1, \
-                                  1, 1, 1, \
-                                  0, 0, 1, \
-                                  0, 0, 1  }
-
-#define CHARACTER_BITMAP_A      { 1, 1, 1, \
-                                  1, 0, 1, \
-                                  1, 1, 1, \
-                                  1, 0, 1, \
-                                  1, 0, 1  }
-
-#define CHARACTER_BITMAP_B      { 1, 1, 1, \
-                                  1, 0, 1, \
-                                  1, 1, 0, \
-                                  1, 0, 1, \
-                                  1, 1, 1  }
-
-#define CHARACTER_BITMAP_C      { 0, 1, 1, \
-                                  1, 0, 0, \
-                                  1, 0, 0, \
-                                  1, 0, 0, \
-                                  0, 1, 1  }
-
-#define CHARACTER_BITMAP_D      { 1, 1, 0, \
-                                  1, 0, 1, \
-                                  1, 0, 1, \
-                                  1, 0, 1, \
-                                  1, 1, 0  }
-
-#define CHARACTER_BITMAP_E      { 1, 1, 1, \
-                                  1, 0, 0, \
-                                  1, 1, 1, \
-                                  1, 0, 0, \
-                                  1, 1, 1  }
-
-#define CHARACTER_BITMAP_F      { 1, 1, 1, \
-                                  1, 0, 0, \
-                                  1, 1, 1, \
-                                  1, 0, 0, \
-                                  1, 0, 0  }
-
-#define CHARACTER_BITMAP_G      { 0, 1, 1, \
-                                  1, 0, 0, \
-                                  1, 1, 1, \
-                                  1, 0, 1, \
-                                  0, 1, 1  }
-
-#define CHARACTER_BITMAP_H      { 1, 0, 1, \
-                                  1, 0, 1, \
-                                  1, 1, 1, \
-                                  1, 0, 1, \
-                                  1, 0, 1  }
-
-#define CHARACTER_BITMAP_I      { 1, 1, 1, \
-                                  0, 1, 0, \
-                                  0, 1, 0, \
-                                  0, 1, 0, \
-                                  1, 1, 1  }
-
-#define CHARACTER_BITMAP_J      { 0, 0, 1, \
-                                  0, 0, 1, \
-                                  0, 0, 1, \
-                                  0, 0, 1, \
-                                  1, 1, 0  }
-
-#define CHARACTER_BITMAP_K      { 1, 0, 1, \
-                                  1, 0, 1, \
-                                  1, 1, 0, \
-                                  1, 0, 1, \
-                                  1, 0, 1  }
-
-#define CHARACTER_BITMAP_L      { 1, 0, 0, \
-                                  1, 0, 0, \
-                                  1, 0, 0, \
-                                  1, 0, 0, \
-                                  1, 1, 1  }
-
-#define CHARACTER_BITMAP_M      { 1, 0, 1, \
-                                  1, 1, 1, \
-                                  1, 0, 1, \
-                                  1, 0, 1, \
-                                  1, 0, 1  }
-
-#define CHARACTER_BITMAP_N      { 1, 0, 1, \
-                                  1, 1, 1, \
-                                  1, 1, 1, \
-                                  1, 0, 1, \
-                                  1, 0, 1  }
-
-#define CHARACTER_BITMAP_O      { 0, 1, 0, \
-                                  1, 0, 1, \
-                                  1, 0, 1, \
-                                  1, 0, 1, \
-                                  0, 1, 0  }
-
-#define CHARACTER_BITMAP_P      { 1, 1, 1, \
-                                  1, 0, 1, \
-                                  1, 1, 1, \
-                                  1, 0, 0, \
-                                  1, 0, 0  }
-
-#define CHARACTER_BITMAP_Q      { 1, 1, 1, \
-                                  1, 0, 1, \
-                                  1, 0, 1, \
-                                  0, 1, 0, \
-                                  1, 1, 0  }
-
-#define CHARACTER_BITMAP_R      { 1, 1, 1, \
-                                  1, 0, 1, \
-                                  1, 1, 0, \
-                                  1, 0, 1, \
-                                  1, 0, 1  }
-
-#define CHARACTER_BITMAP_S      { 1, 1, 1, \
-                                  1, 0, 0, \
-                                  0, 1, 0, \
-                                  0, 0, 1, \
-                                  1, 1, 1  }
-
-#define CHARACTER_BITMAP_T      { 1, 1, 1, \
-                                  0, 1, 0, \
-                                  0, 1, 0, \
-                                  0, 1, 0, \
-                                  0, 1, 0  }
-
-#define CHARACTER_BITMAP_U      { 1, 0, 1, \
-                                  1, 0, 1, \
-                                  1, 0, 1, \
-                                  1, 0, 1, \
-                                  1, 1, 1  }
-
-#define CHARACTER_BITMAP_V      { 1, 0, 1, \
-                                  1, 0, 1, \
-                                  1, 0, 1, \
-                                  1, 0, 1, \
-                                  0, 1, 0  }
-
-#define CHARACTER_BITMAP_W      { 1, 0, 1, \
-                                  1, 0, 1, \
-                                  1, 0, 1, \
-                                  1, 1, 1, \
-                                  1, 0, 1  }
-
-#define CHARACTER_BITMAP_X      { 1, 0, 1, \
-                                  1, 0, 1, \
-                                  0, 1, 0, \
-                                  1, 0, 1, \
-                                  1, 0, 1  }
-
-#define CHARACTER_BITMAP_Y      { 1, 0, 1, \
-                                  1, 0, 1, \
-                                  0, 1, 0, \
-                                  0, 1, 0, \
-                                  0, 1, 0  }
-
-#define CHARACTER_BITMAP_Z      { 1, 1, 1, \
-                                  0, 0, 1, \
-                                  0, 1, 0, \
-                                  1, 0, 0, \
-                                  1, 1, 1  }
+/// \brief      X- and Y-resolution of the LED matrix
+#define LED_MATRIX_RESOLUTION           8
 
 
 //---------------- data types ----------------//
@@ -258,8 +51,8 @@
 ///             represents the row.
 struct led_matrix_buffer
 {
-    uint8_t green[8];                           ///< Green LED enable bits
-    uint8_t red[8];                             ///< Red LED enable bits
+    uint8_t green[LED_MATRIX_RESOLUTION];       ///< Green LED enable bits
+    uint8_t red[LED_MATRIX_RESOLUTION];         ///< Red LED enable bits
 };
 
 /// \brief      Represents an LED matrix
@@ -284,26 +77,64 @@ void init_led_matrix_module(struct led_matrix* matrix);
 ///                 the LED matrix
 void led_matrix_flush(const struct led_matrix* matrix);
 
+/// \brief      Clears out an area of the LED matrix
+/// \details    Disables green and red LEDs in a rectangle defined by two points.
+/// \param      matrix
+///                 the LED matrix to manipulate
+/// \param      x_top_left
+///                 X-coordinate of the upper left corner
+/// \param      y_top_left
+///                 X-coordinate of the upper left corner
+/// \param      x_bot_right
+///                 Y-coordinate of the lower right corner
+/// \param      y_bot_right
+///                 Y-coordinate of the lower right corner
+void led_matrix_clear_area(struct led_matrix* matrix, uint8_t x_top_left, uint8_t y_top_left,
+                                                      uint8_t x_bot_right, uint8_t y_bot_right);
+
 /// \brief      Displays a bitmap on the LED matrix.
 /// \details    Indexing starts at 0, with (0, 0) adressing the upper left LED.
 /// \param      matrix
 ///                 the LED matrix to manipulate
 /// \param      bitmap
 ///                 the bitmap data
-/// \param      y_size
-///                 number of rows in the bitmap
+/// \param      x_start
+///                 column offset (from left)
+/// \param      y_start
+///                 row offset (from top)
 /// \param      x_size
 ///                 number of columns in the bitmap
-/// \param      y_offs
-///                 row offset (from top)
-/// \param      x_offs
-///                 column offset (from left)
+/// \param      y_size
+///                 number of rows in the bitmap
 /// \param      color
 ///                 the color to apply
-void led_matrix_set_bitmap(struct led_matrix* matrix, const uint8_t* bitmap,
-                           const uint8_t y_size, const uint8_t x_size,
-                           const uint8_t y_offs, const uint8_t x_offs,
-                           enum adafruit_display_color color);
+void led_matrix_show_bitmap(struct led_matrix* matrix, const uint8_t* bitmap,
+                            const uint8_t x_start, const uint8_t y_start,
+                            const uint8_t x_size, const uint8_t y_size,
+                            enum adafruit_display_color color);
+
+
+/// \brief      Displays a character at the chosen position
+/// \details    Currently, characters '0'-'9' and 'A'-'Z' are available.
+///             For convenience, '0'-'9' can also be accessed by their corresponding integers, so
+///             \code
+///             led_matrix_show_character(matrix, 7, 0, 0, ADAFRUIT_DISPLAY_COLOR_GREEN);
+///             \endcode
+///             will show a green '7' at the upper left corner of the display.
+/// \param      matrix
+///                 the LED matrix to manipulate
+/// \param      character
+///                 the character to show
+///                 Valid values: {0-9, '0'-'9', 'A'-'Z'}
+/// \param      x_offs
+///                 left offset
+/// \param      y_offs
+///                 top offset
+/// \param      color
+///                 the color to use
+void led_matrix_show_character(struct led_matrix* matrix, char character,
+                               uint8_t x_offs, uint8_t y_offs,
+                               enum adafruit_display_color color);
 
 /// \brief      Sets the given color of an LED chosen by its coordinates on in the matrix.
 /// \details    Indexing starts at 0, with (0, 0) adressing the upper left LED.

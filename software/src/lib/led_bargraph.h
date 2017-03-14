@@ -58,13 +58,13 @@ struct led_bargraph
 
 /// \brief      Configures the LED bar graph
 /// \details    Writes all common configuration registers and turns the display on.
-/// \param      bar
+/// \param      bargraph
 ///                 the data structure of an LED bar to initialize
 void init_led_bargraph_module(struct led_bargraph* bargraph);
 
 /// \brief      Pushes data currently in the LED buffer to the display
 /// \details    This function should be placed in a background task.
-/// \param      bar
+/// \param      bargraph
 ///                 the LED bar
 void led_bargraph_flush(const struct led_bargraph* bargraph);
 
@@ -72,7 +72,7 @@ void led_bargraph_flush(const struct led_bargraph* bargraph);
 /// \details    Indexing starts with 0, with (0, 0) adressing the upper left LED.
 /// \param      bargraph
 ///                 the LED bar to manipulate
-/// \param      bar
+/// \param      number
 ///                 bar index, starting from 0
 /// \param      color
 ///                 the color to apply
