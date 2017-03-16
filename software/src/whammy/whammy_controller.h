@@ -28,6 +28,7 @@
 #include <stdint.h>
 #include "lib/gpio.h"
 #include "lib/wave.h"
+#include "user_interface.h"
 
 
 //---------------- constants ----------------//
@@ -167,12 +168,16 @@ void enter_detune_mode(void);
 void enter_momentary_mode(void);
 void enter_pattern_mode(const enum sequencer_pattern_number pattern);
 void enter_wave_mode(const enum waveform waveform);
+uint8_t get_current_amplitude(void);
+enum ui_ctrl_mode get_current_ctrl_mode(void);
+uint8_t get_current_speed(void);
+enum whammy_mode get_current_whammy_mode(void);
 void handle_midi_program_change(midi_value_t program);
 void init_whammy_controller(void);
 void reset_whammy_patterns(void);
 void save_current_program(void);
-uint8_t select_next_mode(void);
-uint8_t select_previous_mode(void);
+enum ui_ctrl_mode select_next_ctrl_mode(void);
+enum ui_ctrl_mode select_previous_ctrl_mode(void);
 void set_whammy_ctrl_amplitude(uint8_t amplitude);
 void set_whammy_ctrl_pattern_length(uint8_t length);
 void set_whammy_ctrl_pattern_step(uint8_t step_index, const struct sequencer_step* step);

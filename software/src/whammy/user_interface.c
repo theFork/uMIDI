@@ -46,7 +46,7 @@
 /// \brief      Common settings for waveform bitmaps
 /// \details    Intended for calls of led_matrix_show_bitmap
 #define WAVE_BMP_SETTINGS   WAVE_BMP_XOFFS, WAVE_BMP_YOFFS, WAVE_BMP_XSIZE, WAVE_BMP_YSIZE,\
-                            get_layer_color(hmi_layer)
+                            ADAFRUIT_DISPLAY_COLOR_ORANGE
 
 
 
@@ -54,12 +54,14 @@
 //              P R I V A T E   T Y P E D E F S               //
 ////////////////////////////////////////////////////////////////
 
-enum hmi_layer
+enum setting
 {
-    HMI_LAYER_DEFAULT,
-    HMI_LAYER_MODE,
-    HMI_LAYER_PROGRAM,
-    HMI_LAYER_COUNT
+    SETTING_PROGRAM,
+    SETTING_SPEED,
+    SETTING_AMPLITUDE,
+    SETTING_CONTROL_MODE,
+    SETTING_WHAMMY_MODE,
+    SETTING_COUNT
 };
 
 
@@ -130,7 +132,7 @@ static const uint8_t wave_bitmap_random[WAVE_BMP_YSIZE] = {
     0b0111000
 };
 
-static enum hmi_layer hmi_layer = 0;
+static enum setting setting = SETTING_PROGRAM;
 
 
 
@@ -138,24 +140,17 @@ static enum hmi_layer hmi_layer = 0;
 // S T A T I C   F U N C T I O N S   A N D   P R O C E D U R E S //
 ///////////////////////////////////////////////////////////////////
 
-/// \brief      Yields the display color to use for a HMI layer
-/// \param      layer
-///                 the layer whose color is desired
-/// \returns    the color
-enum adafruit_display_color get_layer_color(enum hmi_layer layer)
-{
-    return layer + 1;
-}
-
 static void display_character(const uint8_t position, const char character)
 {
     // Write character to the pixelbuffer
     uint8_t start_column = 0;
     struct led_matrix* led_matrix = NULL;
+    enum adafruit_display_color color = ADAFRUIT_DISPLAY_COLOR_ORANGE;
     switch (position) {
         case 0: // leftmost
             led_matrix = &led_matrix_l;
             start_column = 0;
+            color = ADAFRUIT_DISPLAY_COLOR_RED;
             break;
         case 1: // middle-left
             led_matrix = &led_matrix_l;
@@ -185,7 +180,7 @@ static void display_character(const uint8_t position, const char character)
     }
 
     // Display character right-aligned in the cleared box
-    led_matrix_show_character(led_matrix, character, start_column+1, 0, get_layer_color(hmi_layer));
+    led_matrix_show_character(led_matrix, character, start_column+1, 0, color);
 }
 
 static void display_string(const char* const str)
@@ -207,47 +202,80 @@ static void display_ctrl_mode(enum ui_ctrl_mode mode)
 {
     switch (mode) {
         case UI_CTRL_MODE_BYPASS:
-            display_string("OFF ");
+            display_string("MOFF ");
             break;
         case UI_CTRL_MODE_DETUNE:
-            display_string("DET ");
+            display_string("MDET ");
             break;
         case UI_CTRL_MODE_MOMENTARY:
-            display_string("MOM ");
+            display_string("MMOM ");
             break;
         case UI_CTRL_MODE_WAVE_SINE:
-            display_string("W ");
+            display_string("MW ");
             led_matrix_show_bitmap(&led_matrix_r, wave_bitmap_sine, WAVE_BMP_SETTINGS);
             break;
         case UI_CTRL_MODE_WAVE_TRIANGLE:
-            display_string("W ");
+            display_string("MW");
             led_matrix_show_bitmap(&led_matrix_r, wave_bitmap_triangle, WAVE_BMP_SETTINGS);
             break;
         case UI_CTRL_MODE_WAVE_SAW_UP:
-            display_string("W ");
+            display_string("MW");
             led_matrix_show_bitmap(&led_matrix_r, wave_bitmap_saw_up, WAVE_BMP_SETTINGS);
             break;
         case UI_CTRL_MODE_WAVE_SAW_DOWN:
-            display_string("W ");
+            display_string("MW");
             led_matrix_show_bitmap(&led_matrix_r, wave_bitmap_saw_down, WAVE_BMP_SETTINGS);
             break;
         case UI_CTRL_MODE_WAVE_SQUARE:
-            display_string("W ");
+            display_string("MW");
             led_matrix_show_bitmap(&led_matrix_r, wave_bitmap_square, WAVE_BMP_SETTINGS);
             break;
         case UI_CTRL_MODE_WAVE_STAIRS:
-            display_string("W ");
+            display_string("MW");
             led_matrix_show_bitmap(&led_matrix_r, wave_bitmap_stairs, WAVE_BMP_SETTINGS);
             break;
         case UI_CTRL_MODE_WAVE_RANDOM:
-            display_string("W ");
+            display_string("MW");
             led_matrix_show_bitmap(&led_matrix_r, wave_bitmap_random, WAVE_BMP_SETTINGS);
             break;
         default:
             mode -= UI_CTRL_MODE_PATTERN_01 - 1;
-            display_string("P ");
+            display_string("MP");
             display_character(2, mode/10);
             display_character(3, mode%10);
+            break;
+    }
+}
+
+static void display_setting(enum setting setting)
+{
+    uint8_t number = 0;
+    switch (setting) {
+        case SETTING_AMPLITUDE:
+            number = get_current_amplitude();
+            display_character(0, 'A');
+            display_number(number);
+            break;
+        case SETTING_CONTROL_MODE:
+            number = get_current_ctrl_mode();
+            display_ctrl_mode(number);
+            break;
+        case SETTING_PROGRAM:
+            number = get_current_program_number()+1;
+            display_character(0, 'P');
+            display_number(number);
+            break;
+        case SETTING_SPEED:
+            number = get_current_speed();
+            display_character(0, 'S');
+            display_number(number);
+            break;
+        case SETTING_WHAMMY_MODE:
+            number = get_current_whammy_mode();
+            display_character(0, 'W');
+            display_number(number);
+            break;
+        default:
             break;
     }
 }
@@ -261,7 +289,7 @@ static void visualize_value(uint8_t value)
         value -= 8;
         led_matrix = &led_matrix_r;
     }
-    led_matrix_set_pixel(led_matrix, 7, value, get_layer_color(hmi_layer));
+    led_matrix_set_pixel(led_matrix, 7, value, ADAFRUIT_DISPLAY_COLOR_GREEN);
 }
 
 
@@ -276,14 +304,6 @@ void clear_displays(void)
         led_matrix_set_pixel(&led_matrix_l, 7, column, ADAFRUIT_DISPLAY_COLOR_BLACK);
         led_matrix_set_pixel(&led_matrix_r, 7, column, ADAFRUIT_DISPLAY_COLOR_BLACK);
     }
-}
-
-void cycle_hmi_layer(void)
-{
-    ++hmi_layer;
-    hmi_layer %= HMI_LAYER_COUNT;
-
-    led_matrix_set_pixel(&led_matrix_l, 5, 0, get_layer_color(hmi_layer));
 }
 
 bool exec_ampl(const char* command)
@@ -367,11 +387,11 @@ bool exec_mode(const char* command)
 
     switch (*(command+5)) {
         case 'N':
-            select_next_mode();
+            select_next_ctrl_mode();
             return true;
 
         case 'P':
-            select_previous_mode();
+            select_previous_ctrl_mode();
             return true;
 
         case 'b':
@@ -575,67 +595,50 @@ void update_displays(void)
 
 void value1_decrement(void)
 {
-    uint8_t number = 0;
-    switch (hmi_layer) {
-        case HMI_LAYER_DEFAULT:
-            number = adjust_amplitude(-1);
-            display_character(0, 'A');
-            display_number(number);
-            break;
-        case HMI_LAYER_MODE:
-            number = select_previous_mode();
-            display_ctrl_mode(number);
-            break;
-        case HMI_LAYER_PROGRAM:
-            number = adjust_program(-1) + 1;
-            display_character(0, 'P');
-            display_number(number);
-            usb_printf(PSTR("Selected program %u" USB_NEWLINE), number);
-            break;
-        default:
-            break;
+    // Cyclicly decrement HMI layer
+    if (setting == 0) {
+        setting = SETTING_COUNT;
     }
+    --setting;
+    display_setting(setting);
 }
 
 void value1_increment(void)
 {
-    uint8_t number = 0;
-    switch (hmi_layer) {
-        case HMI_LAYER_DEFAULT:
-            number = adjust_amplitude(1);
-            display_character(0, 'A');
-            display_number(number);
-            break;
-        case HMI_LAYER_MODE:
-            number = select_next_mode();
-            display_ctrl_mode(number);
-            break;
-        case HMI_LAYER_PROGRAM:
-            number = adjust_program(1) + 1;
-            display_character(0, 'P');
-            display_number(number);
-            usb_printf(PSTR("Selected program %u" USB_NEWLINE), number);
-            break;
-        default:
-            break;
-    }
+    // Cyclicly increment HMI layer
+    ++setting;
+    setting %= SETTING_COUNT;
+    display_setting(setting);
 }
 
 void value2_decrement(void)
 {
     uint8_t number = 0;
-    switch (hmi_layer) {
-        case HMI_LAYER_DEFAULT:
+    switch (setting) {
+        case SETTING_AMPLITUDE:
+            number = adjust_amplitude(-1);
+            display_character(0, 'A');
+            display_number(number);
+            break;
+        case SETTING_CONTROL_MODE:
+            number = select_previous_ctrl_mode();
+            display_ctrl_mode(number);
+            break;
+        case SETTING_PROGRAM:
+            number = adjust_program(-1) + 1;
+            display_character(0, 'P');
+            display_number(number);
+            usb_printf(PSTR("Selected program %u" USB_NEWLINE), number);
+            break;
+        case SETTING_SPEED:
             number = adjust_speed(-1);
             display_character(0, 'S');
             display_number(number);
             break;
-        case HMI_LAYER_MODE:
+        case SETTING_WHAMMY_MODE:
             number = adjust_whammy_mode(-1);
             display_character(0, 'W');
             display_number(number);
-            break;
-        case HMI_LAYER_PROGRAM:
             break;
         default:
             break;
@@ -645,18 +648,31 @@ void value2_decrement(void)
 void value2_increment(void)
 {
     uint8_t number = 0;
-    switch (hmi_layer) {
-        case HMI_LAYER_DEFAULT:
+    switch (setting) {
+        case SETTING_AMPLITUDE:
+            number = adjust_amplitude(1);
+            display_character(0, 'A');
+            display_number(number);
+            break;
+        case SETTING_CONTROL_MODE:
+            number = select_next_ctrl_mode();
+            display_ctrl_mode(number);
+            break;
+        case SETTING_PROGRAM:
+            number = adjust_program(1) + 1;
+            display_character(0, 'P');
+            display_number(number);
+            usb_printf(PSTR("Selected program %u" USB_NEWLINE), number);
+            break;
+        case SETTING_SPEED:
             number = adjust_speed(1);
             display_character(0, 'S');
             display_number(number);
             break;
-        case HMI_LAYER_MODE:
+        case SETTING_WHAMMY_MODE:
             number = adjust_whammy_mode(1);
             display_character(0, 'W');
             display_number(number);
-            break;
-        case HMI_LAYER_PROGRAM:
             break;
         default:
             break;

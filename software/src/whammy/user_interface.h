@@ -71,6 +71,7 @@ enum ui_ctrl_mode
 
 
 //---------------- functions and procedures ----------------//
+void clear_displays(void);
 bool exec_ampl(const char* command);
 bool exec_backup(const char* command);
 bool exec_dump(const char* command);
@@ -85,8 +86,6 @@ bool exec_speed(const char* command);
 bool exec_store(const char* command);
 bool exec_tap(const char* command);
 bool exec_wham(const char* command);
-void clear_displays(void);
-void cycle_hmi_layer(void);
 void store_setup(void);
 void update_displays(void);
 void value1_decrement(void);

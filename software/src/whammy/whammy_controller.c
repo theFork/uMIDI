@@ -382,6 +382,41 @@ void enter_wave_mode(const enum waveform waveform)
     usb_printf(PSTR("Waveform %d" USB_NEWLINE), waveform);
 }
 
+uint8_t get_current_amplitude(void)
+{
+    return active_program.field.amplitude;
+}
+
+enum ui_ctrl_mode get_current_ctrl_mode(void)
+{
+    switch(active_program.field.ctrl_mode) {
+        case WHAMMY_CTRL_MODE_DETUNE:
+            return UI_CTRL_MODE_DETUNE;
+
+        case WHAMMY_CTRL_MODE_MOMENTARY:
+            return UI_CTRL_MODE_MOMENTARY;
+
+        case WHAMMY_CTRL_MODE_WAVE:
+            return UI_CTRL_MODE_WAVE_SINE-WAVE_SINE+active_program.field.waveform;
+
+        case WHAMMY_CTRL_MODE_PATTERN:
+            return UI_CTRL_MODE_PATTERN_01+sequencer.pattern;
+
+        default:
+            return UI_CTRL_MODE_BYPASS;
+    }
+}
+
+uint8_t get_current_speed(void)
+{
+    return active_program.field.speed;
+}
+
+enum whammy_mode get_current_whammy_mode(void)
+{
+    return active_program.field.pedal_mode + 1;
+}
+
 void handle_midi_program_change(midi_value_t program)
 {
     usb_printf(PSTR("Entering program #%u" USB_NEWLINE), program+1);
@@ -406,7 +441,7 @@ void save_current_program(void)
     update_program(active_program.word);
 }
 
-uint8_t select_next_mode(void)
+enum ui_ctrl_mode select_next_ctrl_mode(void)
 {
     switch(active_program.field.ctrl_mode) {
         case WHAMMY_CTRL_MODE_BYPASS:
@@ -446,7 +481,7 @@ uint8_t select_next_mode(void)
     }
 }
 
-uint8_t select_previous_mode(void)
+enum ui_ctrl_mode select_previous_ctrl_mode(void)
 {
     switch(active_program.field.ctrl_mode) {
         case WHAMMY_CTRL_MODE_BYPASS:
