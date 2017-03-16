@@ -64,6 +64,13 @@ enum setting
     SETTING_COUNT
 };
 
+enum hmi_layer
+{
+    HMI_LAYER_NORMAL,
+    HMI_LAYER_PATTERN,
+    HMI_LAYER_COUNT
+};
+
 
 
 ////////////////////////////////////////////////////////////////
@@ -132,7 +139,8 @@ static const uint8_t wave_bitmap_random[WAVE_BMP_YSIZE] = {
     0b0111000
 };
 
-static enum setting setting = SETTING_PROGRAM;
+static enum setting current_setting = SETTING_PROGRAM;
+static enum hmi_layer current_hmi_layer = HMI_LAYER_NORMAL;
 
 
 
@@ -247,10 +255,10 @@ static void display_ctrl_mode(enum ui_ctrl_mode mode)
     }
 }
 
-static void display_setting(enum setting setting)
+static void display_current_setting(void)
 {
     uint8_t number = 0;
-    switch (setting) {
+    switch (current_setting) {
         case SETTING_AMPLITUDE:
             number = get_current_amplitude();
             display_character(0, 'A');
@@ -303,6 +311,16 @@ void clear_displays(void)
     for (uint8_t column=0; column<8; ++column) {
         led_matrix_set_pixel(&led_matrix_l, 7, column, ADAFRUIT_DISPLAY_COLOR_BLACK);
         led_matrix_set_pixel(&led_matrix_r, 7, column, ADAFRUIT_DISPLAY_COLOR_BLACK);
+    }
+}
+
+void toggle_hmi_layer(void)
+{
+    ++current_hmi_layer;
+    current_hmi_layer %= HMI_LAYER_COUNT;
+
+    if (current_hmi_layer == HMI_LAYER_NORMAL) {
+        display_current_setting();
     }
 }
 
@@ -596,25 +614,25 @@ void update_displays(void)
 void value1_decrement(void)
 {
     // Cyclicly decrement HMI layer
-    if (setting == 0) {
-        setting = SETTING_COUNT;
+    if (current_setting == 0) {
+        current_setting = SETTING_COUNT;
     }
-    --setting;
-    display_setting(setting);
+    --current_setting;
+    display_current_setting();
 }
 
 void value1_increment(void)
 {
     // Cyclicly increment HMI layer
-    ++setting;
-    setting %= SETTING_COUNT;
-    display_setting(setting);
+    ++current_setting;
+    current_setting %= SETTING_COUNT;
+    display_current_setting();
 }
 
 void value2_decrement(void)
 {
     uint8_t number = 0;
-    switch (setting) {
+    switch (current_setting) {
         case SETTING_AMPLITUDE:
             number = adjust_amplitude(-1);
             display_character(0, 'A');
@@ -648,7 +666,7 @@ void value2_decrement(void)
 void value2_increment(void)
 {
     uint8_t number = 0;
-    switch (setting) {
+    switch (current_setting) {
         case SETTING_AMPLITUDE:
             number = adjust_amplitude(1);
             display_character(0, 'A');

@@ -87,6 +87,7 @@ bool exec_store(const char* command);
 bool exec_tap(const char* command);
 bool exec_wham(const char* command);
 void store_setup(void);
+void toggle_hmi_layer(void);
 void update_displays(void);
 void value1_decrement(void);
 void value1_increment(void);
