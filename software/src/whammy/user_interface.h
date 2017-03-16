@@ -1,5 +1,5 @@
 /// \file
-/// \brief      API for the user interface (using console and HMI) of the whammy controller.
+/// \brief      API for the main user interface of the whammy controller.
 
 /*
  * Copyright 2015, 2016 Sebastian Neuser
@@ -72,20 +72,6 @@ enum ui_ctrl_mode
 
 //---------------- functions and procedures ----------------//
 void clear_displays(void);
-bool exec_ampl(const char* command);
-bool exec_backup(const char* command);
-bool exec_dump(const char* command);
-bool exec_factory_reset(const char* command);
-bool exec_mode(const char* command);
-bool exec_patcpy(const char* command);
-bool exec_patlen(const char* command);
-bool exec_patmod(const char* command);
-bool exec_patwipe(const char* command);
-bool exec_pgm(const char* command);
-bool exec_speed(const char* command);
-bool exec_store(const char* command);
-bool exec_tap(const char* command);
-bool exec_wham(const char* command);
 void store_setup(void);
 void toggle_hmi_layer(void);
 void update_displays(void);

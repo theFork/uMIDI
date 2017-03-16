@@ -40,6 +40,7 @@
 #include "lib/wave.h"
 
 #include "config.h"
+#include "cli.h"
 #include "user_interface.h"
 #include "whammy_controller.h"
 
