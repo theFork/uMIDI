@@ -102,6 +102,31 @@ bool exec_backup(const char* command)
     return true;
 }
 
+bool exec_cpy(const char* command)
+{
+    if (strlen(command) < 5 || command[3] != ' ') {
+        usb_puts(PSTR("Malformed command"));
+        return false;
+    }
+
+    uint8_t number = atoi(command+6);
+    switch (command[4]) {
+        case 'p':
+            copy_current_program_to(number);
+            break;
+
+        case 'P':
+            copy_whammy_ctrl_pattern(number);
+            break;
+
+        default:
+            usb_puts(PSTR("Malformed command"));
+            return false;
+    }
+
+    return true;
+}
+
 bool exec_dump(const char* command)
 {
     if (strlen(command) != 6 || command[4] != ' ') {
@@ -187,19 +212,6 @@ bool exec_mode(const char* command)
     return false;
 }
 
-bool exec_patcpy(const char* command)
-{
-    if (strlen(command) < 8 || command[6] != ' ') {
-        usb_puts(PSTR("Malformed command"));
-        return false;
-    }
-
-    uint8_t number = atoi(command+7);
-    copy_whammy_ctrl_pattern(number);
-
-    return true;
-}
-
 bool exec_patlen(const char* command)
 {
     if (strlen(command) < 8 || command[6] != ' ') {
@@ -249,18 +261,6 @@ bool exec_patmod(const char* command)
     step.data1 = atoi(command+19);
 
     set_whammy_ctrl_pattern_step(step_index, &step);
-
-    return true;
-}
-
-bool exec_patwipe(const char* command)
-{
-    if (strlen(command) != 7) {
-        usb_puts(PSTR("Malformed command"));
-        return false;
-    }
-
-    wipe_whammy_ctrl_pattern();
 
     return true;
 }
@@ -326,6 +326,30 @@ bool exec_store(const char* command)
 bool exec_tap(const char* command)
 {
     register_tap();
+    return true;
+}
+
+bool exec_wipe(const char* command)
+{
+    if (strlen(command) != 6 || command[4] != ' ') {
+        usb_puts(PSTR("Malformed command"));
+        return false;
+    }
+
+    switch (command[5]) {
+        case 'p':
+            wipe_current_program();
+            break;
+
+        case 'P':
+            wipe_whammy_ctrl_pattern();
+            break;
+
+        default:
+            usb_puts(PSTR("Malformed command"));
+            return false;
+    }
+
     return true;
 }
 

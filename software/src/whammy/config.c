@@ -51,13 +51,18 @@
 
 //---------------- Commands ----------------//
 static const char cmd_string_ampl[] PROGMEM = "ampl";
-static const char help_string_ampl[] PROGMEM = "<a>\n"
+static const char help_string_ampl[] PROGMEM = "a\n"
     "Adjust the amplitude of the wave / pitch bend:\n"
     "<a> : amplitude [0, 127]\n";
 static const char cmd_string_backup[] PROGMEM = "backup";
 static const char help_string_backup[] PROGMEM = "Dumps all data stored in EEPROM";
+static const char cmd_string_cpy[] PROGMEM = "cpy";
+static const char help_string_cpy[] PROGMEM = "t i\n"
+    "Copies the selected pattern or program to the specified slot:\n"
+    "<t> : 'P' for pattern or 'p' for program\n"
+    "<i> : target pattern index [0, 19] or program number [0, 119]\n";
 static const char cmd_string_dump[] PROGMEM = "dump";
-static const char help_string_dump[] PROGMEM = "\n"
+static const char help_string_dump[] PROGMEM = "t\n"
     "Shows information about the selected pattern or program\n"
     "<t> : 'P' for pattern or 'p' for program\n";
 static const char cmd_string_reset[] PROGMEM = "factoryreset";
@@ -73,10 +78,6 @@ static const char help_string_mode[] PROGMEM = "p\n"
     "      'm'     = momentary pitch bend mode\n"
     "      'w' <n> = specified wave n [1, 7]\n"
     "      'p' <n> = specified pattern n [1, 20]\n";
-static const char cmd_string_patcpy[] PROGMEM = "patcpy";
-static const char help_string_patcpy[] PROGMEM = "i\n"
-    "Copies the selected pattern to the specified slot:\n"
-    "<i> : target pattern index [0, 19]\n";
 static const char cmd_string_patlen[] PROGMEM = "patlen";
 static const char help_string_patlen[] PROGMEM = "l\n"
     "Set the selected pattern's length:\n"
@@ -93,14 +94,12 @@ static const char help_string_patmod[] PROGMEM = "s c t d e\n"
     "      'p' program change\n"
     "<d> : MIDI data byte 0 (3 digits, zero-padded)\n"
     "<e> : MIDI data byte 1 (3 digits, zero-padded)\n";
-static const char cmd_string_patwipe[] PROGMEM = "patwipe";
-static const char help_string_patwipe[] PROGMEM = "Wipes the selected pattern";
 static const char cmd_string_pgm[] PROGMEM = "pgm";
-static const char help_string_pgm[] PROGMEM = "<p>\n"
+static const char help_string_pgm[] PROGMEM = "p\n"
     "Select or update program:\n"
     "<p> : program number [1, 120] or 'u' to overwrite the current program\n";
 static const char cmd_string_speed[] PROGMEM = "speed";
-static const char help_string_speed[] PROGMEM = "<s>\n"
+static const char help_string_speed[] PROGMEM = "s\n"
     "Adjust the speed of the effect:\n"
     "<s> : bend/pattern/wave speed [0, 127]\n";
 static const char cmd_string_store[] PROGMEM = "store";
@@ -111,25 +110,29 @@ static const char help_string_store[] PROGMEM = "t n d\n"
     "<d> : data in hexadecimal format\n";
 static const char cmd_string_tap[] PROGMEM = "tap";
 static const char help_string_tap[] PROGMEM = "\nSend this command repeatedly to tap in a tempo\n";
+static const char cmd_string_wipe[] PROGMEM = "wipe";
+static const char help_string_wipe[] PROGMEM = "t\n"
+    "Wipes the selected pattern or program\n"
+    "<t> : 'P' for pattern or 'p' for program\n";
 static const char cmd_string_wham[] PROGMEM = "wham";
-static const char help_string_wham[] PROGMEM = "<m>\n"
+static const char help_string_wham[] PROGMEM = "m\n"
     "Select whammy pedal mode:\n"
     "<m> : mode {1..21, 43..63}\n";
 
 struct serial_command serial_commands[] = {
     { .cmd_string = cmd_string_ampl,    .help_string = help_string_ampl,    .handler = &exec_ampl          },
     { .cmd_string = cmd_string_backup,  .help_string = help_string_backup,  .handler = &exec_backup        },
+    { .cmd_string = cmd_string_cpy,     .help_string = help_string_cpy,     .handler = &exec_cpy           },
     { .cmd_string = cmd_string_dump,    .help_string = help_string_dump,    .handler = &exec_dump          },
     { .cmd_string = cmd_string_reset,   .help_string = help_string_reset,   .handler = &exec_factory_reset },
     { .cmd_string = cmd_string_mode,    .help_string = help_string_mode,    .handler = &exec_mode          },
-    { .cmd_string = cmd_string_patcpy,  .help_string = help_string_patcpy,  .handler = &exec_patcpy        },
     { .cmd_string = cmd_string_patlen,  .help_string = help_string_patlen,  .handler = &exec_patlen        },
     { .cmd_string = cmd_string_patmod,  .help_string = help_string_patmod,  .handler = &exec_patmod        },
-    { .cmd_string = cmd_string_patwipe, .help_string = help_string_patwipe, .handler = &exec_patwipe       },
     { .cmd_string = cmd_string_pgm,     .help_string = help_string_pgm,     .handler = &exec_pgm           },
     { .cmd_string = cmd_string_speed,   .help_string = help_string_speed,   .handler = &exec_speed         },
     { .cmd_string = cmd_string_store,   .help_string = help_string_store,   .handler = &exec_store         },
     { .cmd_string = cmd_string_tap,     .help_string = help_string_tap,     .handler = &exec_tap           },
+    { .cmd_string = cmd_string_wipe,    .help_string = help_string_wipe,    .handler = &exec_wipe          },
     { .cmd_string = cmd_string_wham,    .help_string = help_string_wham,    .handler = &exec_wham          },
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);

@@ -36,17 +36,17 @@
 //---------------- functions and procedures ----------------//
 bool exec_ampl(const char* command);
 bool exec_backup(const char* command);
+bool exec_cpy(const char* command);
 bool exec_dump(const char* command);
 bool exec_factory_reset(const char* command);
 bool exec_mode(const char* command);
-bool exec_patcpy(const char* command);
 bool exec_patlen(const char* command);
 bool exec_patmod(const char* command);
-bool exec_patwipe(const char* command);
 bool exec_pgm(const char* command);
 bool exec_speed(const char* command);
 bool exec_store(const char* command);
 bool exec_tap(const char* command);
+bool exec_wipe(const char* command);
 bool exec_wham(const char* command);
 
 //---------------- EOF ----------------//
