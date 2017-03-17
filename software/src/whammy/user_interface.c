@@ -302,7 +302,7 @@ void visualize_pattern_step(uint8_t index, const midi_value_t value)
         led_matrix = &led_matrix_r;
     }
 
-    uint8_t height = value / 16;
+    uint8_t height = value / 16 + 1;
     led_matrix_clear_area(led_matrix, index, 0, index, 8);
     led_matrix_draw_rectangle(led_matrix, index, 8-height, index, 8, color);
 }
@@ -315,7 +315,7 @@ static void adjust_current_pattern_step_value(int8_t delta)
         step.type = MIDI_MSG_TYPE_CONTROL_CHANGE;
         step.data0 = WHAMMY_MIDI_CC_NUMBER;
         step.data1 += delta;
-        usb_printf(PSTR("%u -> %u" USB_NEWLINE), current_pattern_step_index, step.data1);
+        step.data1 %= MIDI_MAX_VALUE + 1;
         set_whammy_ctrl_pattern_step(current_pattern_step_index, &step);
         visualize_pattern_step(current_pattern_step_index, step.data1);
 }
@@ -327,10 +327,28 @@ static void display_current_pattern(void)
     led_matrix_clear_area(&led_matrix_r, 0, 0, 7, 7);
 
     enum sequencer_pattern_number pattern_number = get_current_pattern_number();
+    uint8_t length = get_pattern_length(pattern_number);
     for (uint8_t index=0; index < get_pattern_length(pattern_number); ++index) {
         struct sequencer_step step = get_pattern_step(pattern_number, index);
         visualize_pattern_step(index, step.data1);
     }
+}
+
+static void adjust_pattern_setting(int8_t delta)
+{
+    uint8_t pattern_number = get_current_pattern_number();
+    uint8_t length = get_pattern_length(pattern_number);
+    current_pattern_step_index += delta;
+    if (current_pattern_step_index == 0xff) {
+        current_pattern_step_index = 0;
+        if (length > 2) {
+            set_pattern_length(pattern_number, length-1);
+        }
+    }
+    if (current_pattern_step_index == length) {
+        set_pattern_length(pattern_number, length+1);
+    }
+    display_current_pattern();
 }
 
 static void visualize_value(uint8_t value)
@@ -389,12 +407,7 @@ void update_displays(void)
 void value1_decrement(void)
 {
     if (current_hmi_layer == HMI_LAYER_PATTERN) {
-        // Cyclicly decrement pattern step index and update display
-        if (current_pattern_step_index == 0) {
-            current_pattern_step_index = SEQUENCER_STEPS_PER_PATTERN;
-        }
-        --current_pattern_step_index;
-        display_current_pattern();
+        adjust_pattern_setting(-1);
         return;
     }
 
@@ -409,10 +422,7 @@ void value1_decrement(void)
 void value1_increment(void)
 {
     if (current_hmi_layer == HMI_LAYER_PATTERN) {
-        // Cyclicly increment pattern step index and update display
-        ++current_pattern_step_index;
-        current_pattern_step_index %= SEQUENCER_STEPS_PER_PATTERN;
-        display_current_pattern();
+        adjust_pattern_setting(1);
         return;
     }
 
