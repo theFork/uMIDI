@@ -179,16 +179,24 @@ bool exec_mode(const char* command)
             select_previous_ctrl_mode();
             return true;
 
-        case 'b':
-            enter_bypass_mode();
-            return true;
-
         case 'd':
             enter_detune_mode();
             return true;
 
+        case 'l':
+            enter_limit_mode();
+            return true;
+
         case 'm':
             enter_momentary_mode();
+            return true;
+
+        case 'n':
+            enter_normal_mode();
+            return true;
+
+        case 'o':
+            enter_bypass_mode();
             return true;
 
         case 'p': {

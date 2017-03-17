@@ -43,12 +43,14 @@
 /// \brief      Available modes of the Whammy controller
 enum whammy_ctrl_mode
 {
-    WHAMMY_CTRL_MODE_BYPASS,    ///< The controller does not send CC messages
+    WHAMMY_CTRL_MODE_OFF,       ///< The controller does not send CC messages
     WHAMMY_CTRL_MODE_DETUNE,    ///< The controller selects a program and a static pitch
-    WHAMMY_CTRL_MODE_WAVE,      ///< The controller sends CC messages following a waveform
-    WHAMMY_CTRL_MODE_PATTERN,   ///< The controller sends CC messages following a sequencer pattern
+    WHAMMY_CTRL_MODE_NORMAL,    ///< The controller passes on CC messages it receives
+    WHAMMY_CTRL_MODE_LIMIT,     ///< The controller scales and passes on CC messages it receives
     WHAMMY_CTRL_MODE_MOMENTARY, ///< The controller sends CC messages that achieve a momentary pitch
                                 ///< bend on reception of note on / off messages.
+    WHAMMY_CTRL_MODE_WAVE,      ///< The controller sends CC messages following a waveform
+    WHAMMY_CTRL_MODE_PATTERN,   ///< The controller sends CC messages following a sequencer pattern
 };
 
 /// \brief      Available modes of the Whammy pedal
@@ -143,15 +145,14 @@ enum whammy_note
 };
 
 /// \brief      Data structure overlay for program dwords
-/// \details    Note: The enum bit fields deliberately have one excess bit each to avoid future
-///                   errors due to additional enum values.
 union whammy_ctrl_program {
     uint32_t word;                                  ///< The bare 32-bit dword stored in EEPROM
     struct {
         enum whammy_ctrl_mode ctrl_mode     : 3;    ///< Whammy controller mode
         enum whammy_mode      pedal_mode    : 7;    ///< Whammy pedal mode
-        uint8_t               speed         : 8;    ///< Speed of the waveform / sequencer / pitch bend
-        uint8_t               amplitude     : 7;    ///< Wave amplitude / bend interval, depending on #ctrl_mode
+        uint8_t               speed         : 8;    ///< Speed of the waveform / sequencer / bend
+        uint8_t               range         : 7;    ///< Wave amplitude / bend interval / limit,
+                                                    ///  depending on #ctrl_mode
         uint8_t               waveform      : 7;    ///< Waveform or pattern, depending on #ctrl_mode
     } field;                                        ///< A struct with data fields contained in the dword
 };
@@ -166,7 +167,9 @@ void dump_current_pattern(void);
 void dump_current_program(void);
 void enter_bypass_mode(void);
 void enter_detune_mode(void);
+void enter_limit_mode(void);
 void enter_momentary_mode(void);
+void enter_normal_mode(void);
 void enter_pattern_mode(const enum sequencer_pattern_number pattern);
 void enter_wave_mode(const enum waveform waveform);
 uint8_t get_current_amplitude(void);

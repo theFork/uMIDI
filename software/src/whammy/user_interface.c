@@ -210,11 +210,17 @@ static void display_number(const uint8_t number)
 static void display_ctrl_mode(enum ui_ctrl_mode mode)
 {
     switch (mode) {
-        case UI_CTRL_MODE_BYPASS:
+        case UI_CTRL_MODE_OFF:
             display_string("MOFF ");
             break;
         case UI_CTRL_MODE_DETUNE:
             display_string("MDET ");
+            break;
+        case UI_CTRL_MODE_NORMAL:
+            display_string("MNRM ");
+            break;
+        case UI_CTRL_MODE_LIMIT:
+            display_string("MLIM ");
             break;
         case UI_CTRL_MODE_MOMENTARY:
             display_string("MMOM ");

@@ -106,7 +106,7 @@ static struct sequencer_channel sequencer = {
 static struct wave control_wave;
 
 static union whammy_ctrl_program active_program = {
-    .field.ctrl_mode = WHAMMY_CTRL_MODE_BYPASS,
+    .field.ctrl_mode = WHAMMY_CTRL_MODE_OFF,
 };
 
 
@@ -122,19 +122,6 @@ static void execute_program_callback(const uint32_t program_data)
 
     // Apply Whammy controller mode
     switch (active_program.field.ctrl_mode) {
-        case WHAMMY_CTRL_MODE_WAVE:
-            stop_sequencer(&sequencer);
-            clear_value_display();
-
-            // Set up wave
-            init_wave(&control_wave, active_program.field.waveform,
-                      active_program.field.speed, active_program.field.amplitude, 0);
-            configure_tap_tempo_wave(&control_wave);
-
-            // Update sequencer speed for seamless speed adjustment via HMI
-            set_sequencer_speed(&sequencer, active_program.field.speed);
-            break;
-
         case WHAMMY_CTRL_MODE_PATTERN:
             // Set up sequencer according to the loaded program
             set_sequencer_pattern(&sequencer, active_program.field.waveform);
@@ -143,18 +130,29 @@ static void execute_program_callback(const uint32_t program_data)
             start_sequencer(&sequencer);
             break;
 
+        case WHAMMY_CTRL_MODE_WAVE:
+            // Set up wave
+            init_wave(&control_wave, active_program.field.waveform,
+                      active_program.field.speed, active_program.field.range, 0);
+            configure_tap_tempo_wave(&control_wave);
+
+            // Update sequencer speed for seamless speed adjustment via HMI
+            set_sequencer_speed(&sequencer, active_program.field.speed);
+            goto cleanup;
+
         case WHAMMY_CTRL_MODE_DETUNE:
-            send_control_change(WHAMMY_MIDI_CC_NUMBER, active_program.field.amplitude);
+            send_control_change(WHAMMY_MIDI_CC_NUMBER, active_program.field.range);
             // intentional fall-through
 
         default:
+cleanup:
             stop_sequencer(&sequencer);
             clear_value_display();
             break;
     }
 
     // Update Whammy pedal mode
-    if (active_program.field.ctrl_mode == WHAMMY_CTRL_MODE_BYPASS
+    if (active_program.field.ctrl_mode == WHAMMY_CTRL_MODE_OFF
     ||  active_program.field.ctrl_mode == WHAMMY_CTRL_MODE_MOMENTARY) {
         send_program_change(WHAMMY_MODE_OFF);
     }
@@ -167,6 +165,13 @@ static void execute_program_callback(const uint32_t program_data)
 static void sequencer_tick_handler(void)
 {
     visualize_sequencer(sequencer.step_index);
+}
+
+static void stop_modulation(void)
+{
+    stop_sequencer(&sequencer);
+    set_waveform(&control_wave, WAVE_OFF);
+    clear_value_display();
 }
 
 /// \brief      Updates the HMI led bar to visualize the current waveform
@@ -192,15 +197,16 @@ static void update_control_wave(void)
 ///                 difference from current amplitude
 uint8_t adjust_amplitude(int8_t delta)
 {
-    active_program.field.amplitude += delta;
-    active_program.field.amplitude %= MIDI_MAX_VALUE+1;
-    control_wave.settings.amplitude = active_program.field.amplitude;
+    active_program.field.range += delta;
+    active_program.field.range %= MIDI_MAX_VALUE+1;
+    control_wave.settings.amplitude = active_program.field.range;
     if (active_program.field.ctrl_mode == WHAMMY_CTRL_MODE_DETUNE) {
-        send_control_change(WHAMMY_MIDI_CC_NUMBER, active_program.field.amplitude);
+        send_control_change(WHAMMY_MIDI_CC_NUMBER, active_program.field.range);
     }
-    usb_printf(PSTR("Set amplitude to %u" USB_NEWLINE), active_program.field.amplitude);
+    usb_printf(PSTR("Set amplitude to %u" USB_NEWLINE), active_program.field.range);
     // TODO Adjust pitch bend note
-    return active_program.field.amplitude;
+    // TODO Adjust limit max value
+    return active_program.field.range;
 }
 
 
@@ -298,11 +304,17 @@ void dump_current_program(void)
     // Prepare pretty output strings
     char* mode_string = "";
     switch (active_program.field.ctrl_mode) {
-        case WHAMMY_CTRL_MODE_BYPASS:
+        case WHAMMY_CTRL_MODE_OFF:
             mode_string = "OFF";
             break;
         case WHAMMY_CTRL_MODE_DETUNE:
             mode_string = "DET";
+            break;
+        case WHAMMY_CTRL_MODE_NORMAL:
+            mode_string = "NRM";
+            break;
+        case WHAMMY_CTRL_MODE_LIMIT:
+            mode_string = "LIM";
             break;
         case WHAMMY_CTRL_MODE_MOMENTARY:
             mode_string = "MOM";
@@ -320,42 +332,50 @@ void dump_current_program(void)
 
     usb_printf(PSTR("%4s %4u %4u %4u %4u" USB_NEWLINE),
                mode_string, active_program.field.pedal_mode, active_program.field.speed,
-               active_program.field.amplitude, active_program.field.waveform);
+               active_program.field.range, active_program.field.waveform);
 }
 
 /// \brief      Enters bypass (off) mode
 void enter_bypass_mode(void)
 {
-    stop_sequencer(&sequencer);
-    set_waveform(&control_wave, WAVE_OFF);
-    clear_value_display();
-
+    stop_modulation();
     usb_puts(PSTR("Enabling bypass"));
-    active_program.field.ctrl_mode = WHAMMY_CTRL_MODE_BYPASS;
+    active_program.field.ctrl_mode = WHAMMY_CTRL_MODE_OFF;
     send_program_change(WHAMMY_MODE_OFF);
 }
 
 /// \brief      Enters static detune mode
 void enter_detune_mode(void)
 {
-    stop_sequencer(&sequencer);
-    set_waveform(&control_wave, WAVE_OFF);
-
+    stop_modulation();
     usb_puts(PSTR("Entering detune mode"));
     active_program.field.ctrl_mode = WHAMMY_CTRL_MODE_DETUNE;
-    send_control_change(WHAMMY_MIDI_CC_NUMBER, active_program.field.amplitude);
+    send_control_change(WHAMMY_MIDI_CC_NUMBER, active_program.field.range);
+}
+
+/// \brief      Enters limit (CC scaling) mode
+void enter_limit_mode(void)
+{
+    stop_modulation();
+    usb_puts(PSTR("Entering limit mode"));
+    active_program.field.ctrl_mode = WHAMMY_CTRL_MODE_LIMIT;
 }
 
 /// \brief      Enters momentary (pitch bend) mode
 void enter_momentary_mode(void)
 {
-    stop_sequencer(&sequencer);
-    set_waveform(&control_wave, WAVE_OFF);
-    clear_value_display();
-
+    stop_modulation();
     usb_puts(PSTR("Entering momentary mode"));
     active_program.field.ctrl_mode = WHAMMY_CTRL_MODE_MOMENTARY;
     send_program_change(WHAMMY_MODE_OFF);
+}
+
+/// \brief      Enters normal (CC thru) mode
+void enter_normal_mode(void)
+{
+    stop_modulation();
+    usb_puts(PSTR("Entering normal mode"));
+    active_program.field.ctrl_mode = WHAMMY_CTRL_MODE_NORMAL;
 }
 
 /// \brief      Enters pattern mode
@@ -385,7 +405,7 @@ void enter_wave_mode(const enum waveform waveform)
 
 uint8_t get_current_amplitude(void)
 {
-    return active_program.field.amplitude;
+    return active_program.field.range;
 }
 
 enum ui_ctrl_mode get_current_ctrl_mode(void)
@@ -394,8 +414,14 @@ enum ui_ctrl_mode get_current_ctrl_mode(void)
         case WHAMMY_CTRL_MODE_DETUNE:
             return UI_CTRL_MODE_DETUNE;
 
+        case WHAMMY_CTRL_MODE_LIMIT:
+            return UI_CTRL_MODE_LIMIT;
+
         case WHAMMY_CTRL_MODE_MOMENTARY:
             return UI_CTRL_MODE_MOMENTARY;
+
+        case WHAMMY_CTRL_MODE_NORMAL:
+            return UI_CTRL_MODE_NORMAL;
 
         case WHAMMY_CTRL_MODE_WAVE:
             return UI_CTRL_MODE_WAVE_SINE-WAVE_SINE+active_program.field.waveform;
@@ -404,7 +430,7 @@ enum ui_ctrl_mode get_current_ctrl_mode(void)
             return UI_CTRL_MODE_PATTERN_01+sequencer.pattern;
 
         default:
-            return UI_CTRL_MODE_BYPASS;
+            return UI_CTRL_MODE_OFF;
     }
 }
 
@@ -450,11 +476,19 @@ void save_current_program(void)
 enum ui_ctrl_mode select_next_ctrl_mode(void)
 {
     switch(active_program.field.ctrl_mode) {
-        case WHAMMY_CTRL_MODE_BYPASS:
+        case WHAMMY_CTRL_MODE_OFF:
             enter_detune_mode();
             return UI_CTRL_MODE_DETUNE;
 
         case WHAMMY_CTRL_MODE_DETUNE:
+            enter_normal_mode();
+            return UI_CTRL_MODE_NORMAL;
+
+        case WHAMMY_CTRL_MODE_NORMAL:
+            enter_limit_mode();
+            return UI_CTRL_MODE_LIMIT;
+
+        case WHAMMY_CTRL_MODE_LIMIT:
             enter_momentary_mode();
             return UI_CTRL_MODE_MOMENTARY;
 
@@ -483,24 +517,32 @@ enum ui_ctrl_mode select_next_ctrl_mode(void)
 
         default:
             enter_bypass_mode();
-            return UI_CTRL_MODE_BYPASS;
+            return UI_CTRL_MODE_OFF;
     }
 }
 
 enum ui_ctrl_mode select_previous_ctrl_mode(void)
 {
     switch(active_program.field.ctrl_mode) {
-        case WHAMMY_CTRL_MODE_BYPASS:
+        case WHAMMY_CTRL_MODE_OFF:
             enter_pattern_mode(SEQUENCER_PATTERN_20);
             return UI_CTRL_MODE_PATTERN_20;
 
         case WHAMMY_CTRL_MODE_DETUNE:
             enter_bypass_mode();
-            return UI_CTRL_MODE_BYPASS;
+            return UI_CTRL_MODE_OFF;
 
-        case WHAMMY_CTRL_MODE_MOMENTARY:
+        case WHAMMY_CTRL_MODE_NORMAL:
             enter_detune_mode();
             return UI_CTRL_MODE_DETUNE;
+
+        case WHAMMY_CTRL_MODE_LIMIT:
+            enter_normal_mode();
+            return UI_CTRL_MODE_NORMAL;
+
+        case WHAMMY_CTRL_MODE_MOMENTARY:
+            enter_limit_mode();
+            return UI_CTRL_MODE_LIMIT;
 
         case WHAMMY_CTRL_MODE_WAVE:
             --active_program.field.waveform;
@@ -523,7 +565,7 @@ enum ui_ctrl_mode select_previous_ctrl_mode(void)
 
         default:
             enter_bypass_mode();
-            return UI_CTRL_MODE_BYPASS;
+            return UI_CTRL_MODE_OFF;
     }
 }
 
@@ -531,9 +573,10 @@ void set_whammy_ctrl_amplitude(uint8_t amplitude)
 {
     usb_printf(PSTR("Setting amplitude to %u" USB_NEWLINE), amplitude);
     // TODO Adjust pitch bend note
-    active_program.field.amplitude = amplitude;
+    // TODO Adjust limit max value
+    active_program.field.range = amplitude;
     if (active_program.field.ctrl_mode == WHAMMY_CTRL_MODE_DETUNE) {
-        send_control_change(WHAMMY_MIDI_CC_NUMBER, active_program.field.amplitude);
+        send_control_change(WHAMMY_MIDI_CC_NUMBER, active_program.field.range);
     }
     control_wave.settings.amplitude = amplitude;
 }
@@ -570,10 +613,8 @@ void update_controller_value(void)
             update_sequencer();
             break;
         case WHAMMY_CTRL_MODE_WAVE:
-        {
             update_control_wave();
             break;
-        }
         default:
             break;
     }

@@ -73,11 +73,13 @@ static const char help_string_mode[] PROGMEM = "p\n"
     "<p> : mode\n"
     "      'N' = switch to next mode\n"
     "      'P' = switch to previous mode\n"
-    "      'b'     = enable bypass (turn effect off)\n"
     "      'd'     = static detune mode\n"
+    "      'l'     = limit (CC down-scaling) mode\n"
     "      'm'     = momentary pitch bend mode\n"
-    "      'w' <n> = specified wave n [1, 7]\n"
-    "      'p' <n> = specified pattern n [1, 20]\n";
+    "      'n'     = normal (CC forward) mode\n"
+    "      'o'     = enable bypass (turn effect off)\n"
+    "      'p' <n> = specified pattern n [1, 20]\n"
+    "      'w' <n> = specified wave n [1, 7]\n";
 static const char cmd_string_patlen[] PROGMEM = "patlen";
 static const char help_string_patlen[] PROGMEM = "l\n"
     "Set the selected pattern's length:\n"
