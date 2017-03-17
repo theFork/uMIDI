@@ -28,6 +28,7 @@
 #include <stdint.h>
 #include "lib/gpio.h"
 #include "lib/wave.h"
+#include "lib/sequencer.h"
 #include "user_interface.h"
 
 
@@ -170,6 +171,7 @@ void enter_pattern_mode(const enum sequencer_pattern_number pattern);
 void enter_wave_mode(const enum waveform waveform);
 uint8_t get_current_amplitude(void);
 enum ui_ctrl_mode get_current_ctrl_mode(void);
+enum sequencer_pattern_number get_current_pattern_number(void);
 uint8_t get_current_speed(void);
 enum whammy_mode get_current_whammy_mode(void);
 void handle_midi_program_change(midi_value_t program);

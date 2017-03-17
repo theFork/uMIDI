@@ -26,7 +26,6 @@
 #include "lib/hmi.h"
 #include "lib/led_matrix.h"
 #include "lib/program.h"
-#include "lib/sequencer.h"
 #include "lib/usb.h"
 
 #include "config.h"
@@ -139,8 +138,9 @@ static const uint8_t wave_bitmap_random[WAVE_BMP_YSIZE] = {
     0b0111000
 };
 
-static enum setting current_setting = SETTING_PROGRAM;
 static enum hmi_layer current_hmi_layer = HMI_LAYER_NORMAL;
+static uint8_t current_pattern_step_index = 0;
+static enum setting current_setting = SETTING_PROGRAM;
 
 
 
@@ -288,9 +288,54 @@ static void display_current_setting(void)
     }
 }
 
+void visualize_pattern_step(uint8_t index, const midi_value_t value)
+{
+    // Highlight selected step
+    enum adafruit_display_color color = ADAFRUIT_DISPLAY_COLOR_GREEN;
+    if (index == current_pattern_step_index) {
+        color = ADAFRUIT_DISPLAY_COLOR_ORANGE;
+    }
+
+    struct led_matrix* led_matrix = &led_matrix_l;
+    if (index >= 8) {
+        index -= 8;
+        led_matrix = &led_matrix_r;
+    }
+
+    uint8_t height = value / 16;
+    led_matrix_clear_area(led_matrix, index, 0, index, 8);
+    led_matrix_draw_rectangle(led_matrix, index, 8-height, index, 8, color);
+}
+
+static void adjust_current_pattern_step_value(int8_t delta)
+{
+        uint8_t pattern_number = get_current_pattern_number();
+        struct sequencer_step step = get_pattern_step(pattern_number, current_pattern_step_index);
+        step.channel = WHAMMY_CTRL_MIDI_CHANNEL;
+        step.type = MIDI_MSG_TYPE_CONTROL_CHANGE;
+        step.data0 = WHAMMY_MIDI_CC_NUMBER;
+        step.data1 += delta;
+        usb_printf(PSTR("%u -> %u" USB_NEWLINE), current_pattern_step_index, step.data1);
+        set_whammy_ctrl_pattern_step(current_pattern_step_index, &step);
+        visualize_pattern_step(current_pattern_step_index, step.data1);
+}
+
+static void display_current_pattern(void)
+{
+    // Clear settings display
+    led_matrix_clear_area(&led_matrix_l, 0, 0, 7, 7);
+    led_matrix_clear_area(&led_matrix_r, 0, 0, 7, 7);
+
+    enum sequencer_pattern_number pattern_number = get_current_pattern_number();
+    for (uint8_t index=0; index < get_pattern_length(pattern_number); ++index) {
+        struct sequencer_step step = get_pattern_step(pattern_number, index);
+        visualize_pattern_step(index, step.data1);
+    }
+}
+
 static void visualize_value(uint8_t value)
 {
-    clear_displays();
+    clear_value_display();
 
     struct led_matrix* led_matrix = &led_matrix_l;
     if (value >= 8) {
@@ -301,26 +346,17 @@ static void visualize_value(uint8_t value)
 }
 
 
-
 ////////////////////////////////////////////////////////////////
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void clear_displays(void)
+void clear_value_display(void)
 {
     for (uint8_t column=0; column<8; ++column) {
+        led_matrix_set_pixel(&led_matrix_l, 6, column, ADAFRUIT_DISPLAY_COLOR_BLACK);
+        led_matrix_set_pixel(&led_matrix_r, 6, column, ADAFRUIT_DISPLAY_COLOR_BLACK);
         led_matrix_set_pixel(&led_matrix_l, 7, column, ADAFRUIT_DISPLAY_COLOR_BLACK);
         led_matrix_set_pixel(&led_matrix_r, 7, column, ADAFRUIT_DISPLAY_COLOR_BLACK);
-    }
-}
-
-void toggle_hmi_layer(void)
-{
-    ++current_hmi_layer;
-    current_hmi_layer %= HMI_LAYER_COUNT;
-
-    if (current_hmi_layer == HMI_LAYER_NORMAL) {
-        display_current_setting();
     }
 }
 
@@ -328,6 +364,20 @@ void store_setup(void)
 {
     usb_puts(PSTR("Storing current setup"));
     save_current_program();
+}
+
+void toggle_hmi_layer(void)
+{
+    ++current_hmi_layer;
+    current_hmi_layer %= HMI_LAYER_COUNT;
+
+    clear_value_display();
+    if (current_hmi_layer == HMI_LAYER_NORMAL) {
+        display_current_setting();
+    }
+    else {
+        display_current_pattern();
+    }
 }
 
 void update_displays(void)
@@ -338,7 +388,17 @@ void update_displays(void)
 
 void value1_decrement(void)
 {
-    // Cyclicly decrement HMI layer
+    if (current_hmi_layer == HMI_LAYER_PATTERN) {
+        // Cyclicly decrement pattern step index and update display
+        if (current_pattern_step_index == 0) {
+            current_pattern_step_index = SEQUENCER_STEPS_PER_PATTERN;
+        }
+        --current_pattern_step_index;
+        display_current_pattern();
+        return;
+    }
+
+    // Cyclicly decrement selected setting and update display
     if (current_setting == 0) {
         current_setting = SETTING_COUNT;
     }
@@ -348,7 +408,15 @@ void value1_decrement(void)
 
 void value1_increment(void)
 {
-    // Cyclicly increment HMI layer
+    if (current_hmi_layer == HMI_LAYER_PATTERN) {
+        // Cyclicly increment pattern step index and update display
+        ++current_pattern_step_index;
+        current_pattern_step_index %= SEQUENCER_STEPS_PER_PATTERN;
+        display_current_pattern();
+        return;
+    }
+
+    // Cyclicly increment selected setting and update display
     ++current_setting;
     current_setting %= SETTING_COUNT;
     display_current_setting();
@@ -356,6 +424,11 @@ void value1_increment(void)
 
 void value2_decrement(void)
 {
+    if (current_hmi_layer == HMI_LAYER_PATTERN) {
+        adjust_current_pattern_step_value(-1);
+        return;
+    }
+
     uint8_t number = 0;
     switch (current_setting) {
         case SETTING_AMPLITUDE:
@@ -390,6 +463,11 @@ void value2_decrement(void)
 
 void value2_increment(void)
 {
+    if (current_hmi_layer == HMI_LAYER_PATTERN) {
+        adjust_current_pattern_step_value(1);
+        return;
+    }
+
     uint8_t number = 0;
     switch (current_setting) {
         case SETTING_AMPLITUDE:
@@ -424,10 +502,16 @@ void value2_increment(void)
 
 void visualize_sequencer(const uint8_t value)
 {
+    if (current_hmi_layer != HMI_LAYER_NORMAL) {
+        return;
+    }
     visualize_value(value);
 }
 
 void visualize_wave(const uint8_t value)
 {
+    if (current_hmi_layer != HMI_LAYER_NORMAL) {
+        return;
+    }
     visualize_value(value / 8);
 }

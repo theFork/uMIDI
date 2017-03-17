@@ -25,6 +25,7 @@
 #include "lib/usb.h"
 #include "lib/wave.h"
 
+#include "config.h"
 #include "user_interface.h"
 #include "whammy_controller.h"
 
@@ -55,41 +56,41 @@ static const struct sequencer_pattern factory_patterns[] = {
     { // SEQUENCER_PATTERN_01
         .length     = 8,
         .steps      = {
-            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_UNISON, },
-            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_OCTAVE, },
-            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_UNISON, },
-            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_OCTAVE, },
-            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_UNISON, },
-            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_OCTAVE, },
-            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_UNISON, },
-            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_OCTAVE, },
+            { .channel = WHAMMY_CTRL_MIDI_CHANNEL, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_UNISON, },
+            { .channel = WHAMMY_CTRL_MIDI_CHANNEL, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_OCTAVE, },
+            { .channel = WHAMMY_CTRL_MIDI_CHANNEL, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_UNISON, },
+            { .channel = WHAMMY_CTRL_MIDI_CHANNEL, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_OCTAVE, },
+            { .channel = WHAMMY_CTRL_MIDI_CHANNEL, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_UNISON, },
+            { .channel = WHAMMY_CTRL_MIDI_CHANNEL, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_OCTAVE, },
+            { .channel = WHAMMY_CTRL_MIDI_CHANNEL, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_UNISON, },
+            { .channel = WHAMMY_CTRL_MIDI_CHANNEL, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_OCTAVE, },
         }
     },
 
     { // SEQUENCER_PATTERN_02
         .length     = 8,
         .steps      = {
-            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_UNISON, },
-            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_1ST_PERFECT_FIFTH, },
-            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_1ST_OCTAVE, },
-            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_2ND_PERFECT_FIFTH, },
-            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_2ND_OCTAVE, },
-            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_2ND_PERFECT_FIFTH, },
-            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_1ST_OCTAVE, },
-            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_1ST_PERFECT_FIFTH, },
+            { .channel = WHAMMY_CTRL_MIDI_CHANNEL, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_UNISON, },
+            { .channel = WHAMMY_CTRL_MIDI_CHANNEL, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_1ST_PERFECT_FIFTH, },
+            { .channel = WHAMMY_CTRL_MIDI_CHANNEL, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_1ST_OCTAVE, },
+            { .channel = WHAMMY_CTRL_MIDI_CHANNEL, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_2ND_PERFECT_FIFTH, },
+            { .channel = WHAMMY_CTRL_MIDI_CHANNEL, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_2ND_OCTAVE, },
+            { .channel = WHAMMY_CTRL_MIDI_CHANNEL, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_2ND_PERFECT_FIFTH, },
+            { .channel = WHAMMY_CTRL_MIDI_CHANNEL, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_1ST_OCTAVE, },
+            { .channel = WHAMMY_CTRL_MIDI_CHANNEL, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_1ST_PERFECT_FIFTH, },
         }
     },
     { // SEQUENCER_PATTERN_03
         .length     = 8,
         .steps      = {
-            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_UNISON, },
-            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_OCTAVE, },
-            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_OCTAVE, },
-            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_UNISON, },
-            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_OCTAVE, },
-            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_OCTAVE, },
-            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_UNISON, },
-            { .channel = MIDI_CHANNEL_01, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_OCTAVE, },
+            { .channel = WHAMMY_CTRL_MIDI_CHANNEL, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_UNISON, },
+            { .channel = WHAMMY_CTRL_MIDI_CHANNEL, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_OCTAVE, },
+            { .channel = WHAMMY_CTRL_MIDI_CHANNEL, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_OCTAVE, },
+            { .channel = WHAMMY_CTRL_MIDI_CHANNEL, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_UNISON, },
+            { .channel = WHAMMY_CTRL_MIDI_CHANNEL, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_OCTAVE, },
+            { .channel = WHAMMY_CTRL_MIDI_CHANNEL, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_OCTAVE, },
+            { .channel = WHAMMY_CTRL_MIDI_CHANNEL, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_UNISON, },
+            { .channel = WHAMMY_CTRL_MIDI_CHANNEL, .type = MIDI_MSG_TYPE_CONTROL_CHANGE, .data0 = 11, .data1 = WHAMMY_NOTE_OCTAVE, },
         }
     },
 };
@@ -123,7 +124,7 @@ static void execute_program_callback(const uint32_t program_data)
     switch (active_program.field.ctrl_mode) {
         case WHAMMY_CTRL_MODE_WAVE:
             stop_sequencer(&sequencer);
-            clear_displays();
+            clear_value_display();
 
             // Set up wave
             init_wave(&control_wave, active_program.field.waveform,
@@ -148,7 +149,7 @@ static void execute_program_callback(const uint32_t program_data)
 
         default:
             stop_sequencer(&sequencer);
-            clear_displays();
+            clear_value_display();
             break;
     }
 
@@ -327,7 +328,7 @@ void enter_bypass_mode(void)
 {
     stop_sequencer(&sequencer);
     set_waveform(&control_wave, WAVE_OFF);
-    clear_displays();
+    clear_value_display();
 
     usb_puts(PSTR("Enabling bypass"));
     active_program.field.ctrl_mode = WHAMMY_CTRL_MODE_BYPASS;
@@ -350,7 +351,7 @@ void enter_momentary_mode(void)
 {
     stop_sequencer(&sequencer);
     set_waveform(&control_wave, WAVE_OFF);
-    clear_displays();
+    clear_value_display();
 
     usb_puts(PSTR("Entering momentary mode"));
     active_program.field.ctrl_mode = WHAMMY_CTRL_MODE_MOMENTARY;
@@ -405,6 +406,11 @@ enum ui_ctrl_mode get_current_ctrl_mode(void)
         default:
             return UI_CTRL_MODE_BYPASS;
     }
+}
+
+enum sequencer_pattern_number get_current_pattern_number(void)
+{
+    return sequencer.pattern;
 }
 
 uint8_t get_current_speed(void)

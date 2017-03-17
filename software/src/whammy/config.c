@@ -190,9 +190,9 @@ struct midi_config midi_config = {
         .program_change = handle_midi_program_change
     },
     .omni_mode  = true,
-    .rx_channel = MIDI_CHANNEL_01,
+    .rx_channel = WHAMMY_CTRL_MIDI_CHANNEL,
     .signal_rx  = true,
-    .tx_channel = MIDI_CHANNEL_01,
+    .tx_channel = WHAMMY_CTRL_MIDI_CHANNEL,
 };
 
 

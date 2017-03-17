@@ -71,7 +71,7 @@ enum ui_ctrl_mode
 
 
 //---------------- functions and procedures ----------------//
-void clear_displays(void);
+void clear_value_display(void);
 void store_setup(void);
 void toggle_hmi_layer(void);
 void update_displays(void);

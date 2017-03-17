@@ -292,12 +292,18 @@ void led_matrix_clear_area(struct led_matrix * const matrix,
                            const uint8_t x_top_left, const uint8_t y_top_left,
                            const uint8_t x_bot_right, const uint8_t y_bot_right)
 {
-    uint8_t zeros[LED_MATRIX_RESOLUTION] = {0,};
+    led_matrix_draw_rectangle(matrix, x_top_left, y_top_left, x_bot_right, y_bot_right,
+                              ADAFRUIT_DISPLAY_COLOR_BLACK);
+}
+
+void led_matrix_draw_rectangle(struct led_matrix* matrix, uint8_t x_top_left, uint8_t y_top_left,
+                                                          uint8_t x_bot_right, uint8_t y_bot_right,
+                                                          enum adafruit_display_color color)
+{
+    uint8_t fill_pattern[LED_MATRIX_RESOLUTION] = {0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
     uint8_t width = x_bot_right - x_top_left + 1;
     uint8_t height = y_bot_right - y_top_left + 1;
-    led_matrix_show_bitmap(matrix, zeros,
-                           x_top_left, y_top_left, width, height,
-                           ADAFRUIT_DISPLAY_COLOR_BLACK);
+    led_matrix_show_bitmap(matrix, fill_pattern, x_top_left, y_top_left, width, height, color);
 }
 
 void led_matrix_show_bitmap(struct led_matrix * const matrix, const uint8_t * const bitmap,

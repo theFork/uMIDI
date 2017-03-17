@@ -40,6 +40,12 @@
 
 
 
+//---------------- constants ----------------//
+
+#define WHAMMY_CTRL_MIDI_CHANNEL        MIDI_CHANNEL_01
+
+
+
 //---------------- constant declarations ----------------//
 extern struct gpio_mapping gpio_mappings[];
 extern uint8_t gpio_mappings_size;

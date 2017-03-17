@@ -92,6 +92,24 @@ void led_matrix_flush(const struct led_matrix* matrix);
 void led_matrix_clear_area(struct led_matrix* matrix, uint8_t x_top_left, uint8_t y_top_left,
                                                       uint8_t x_bot_right, uint8_t y_bot_right);
 
+/// \brief      Draws a rectangle on the LED matrix
+/// \details    Configures green and red LEDs in a rectangle defined by two points.
+/// \param      matrix
+///                 the LED matrix to manipulate
+/// \param      x_top_left
+///                 X-coordinate of the upper left corner
+/// \param      y_top_left
+///                 X-coordinate of the upper left corner
+/// \param      x_bot_right
+///                 Y-coordinate of the lower right corner
+/// \param      y_bot_right
+///                 Y-coordinate of the lower right corner
+/// \param      color
+///                 the color to use
+void led_matrix_draw_rectangle(struct led_matrix* matrix, uint8_t x_top_left, uint8_t y_top_left,
+                                                          uint8_t x_bot_right, uint8_t y_bot_right,
+                                                          enum adafruit_display_color color);
+
 /// \brief      Displays a bitmap on the LED matrix.
 /// \details    Indexing starts at 0, with (0, 0) adressing the upper left LED.
 /// \param      matrix
