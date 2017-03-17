@@ -138,9 +138,9 @@ static const uint8_t wave_bitmap_random[WAVE_BMP_YSIZE] = {
     0b0111000
 };
 
-static enum hmi_layer current_hmi_layer = HMI_LAYER_NORMAL;
-static uint8_t current_pattern_step_index = 0;
-static enum setting current_setting = SETTING_PROGRAM;
+static enum hmi_layer selected_hmi_layer = HMI_LAYER_NORMAL;
+static uint8_t selected_pattern_step = 0;
+static enum setting selected_setting = SETTING_PROGRAM;
 
 
 
@@ -255,10 +255,10 @@ static void display_ctrl_mode(enum ui_ctrl_mode mode)
     }
 }
 
-static void display_current_setting(void)
+static void display_selected_setting(void)
 {
     uint8_t number = 0;
-    switch (current_setting) {
+    switch (selected_setting) {
         case SETTING_AMPLITUDE:
             number = get_current_amplitude();
             display_character(0, 'A');
@@ -292,7 +292,7 @@ void visualize_pattern_step(uint8_t index, const midi_value_t value)
 {
     // Highlight selected step
     enum adafruit_display_color color = ADAFRUIT_DISPLAY_COLOR_GREEN;
-    if (index == current_pattern_step_index) {
+    if (index == selected_pattern_step) {
         color = ADAFRUIT_DISPLAY_COLOR_ORANGE;
     }
 
@@ -310,14 +310,14 @@ void visualize_pattern_step(uint8_t index, const midi_value_t value)
 static void adjust_current_pattern_step_value(int8_t delta)
 {
         uint8_t pattern_number = get_current_pattern_number();
-        struct sequencer_step step = get_pattern_step(pattern_number, current_pattern_step_index);
+        struct sequencer_step step = get_pattern_step(pattern_number, selected_pattern_step);
         step.channel = WHAMMY_CTRL_MIDI_CHANNEL;
         step.type = MIDI_MSG_TYPE_CONTROL_CHANGE;
         step.data0 = WHAMMY_MIDI_CC_NUMBER;
         step.data1 += delta;
         step.data1 %= MIDI_MAX_VALUE + 1;
-        set_whammy_ctrl_pattern_step(current_pattern_step_index, &step);
-        visualize_pattern_step(current_pattern_step_index, step.data1);
+        set_whammy_ctrl_pattern_step(selected_pattern_step, &step);
+        visualize_pattern_step(selected_pattern_step, step.data1);
 }
 
 static void display_current_pattern(void)
@@ -327,7 +327,6 @@ static void display_current_pattern(void)
     led_matrix_clear_area(&led_matrix_r, 0, 0, 7, 7);
 
     enum sequencer_pattern_number pattern_number = get_current_pattern_number();
-    uint8_t length = get_pattern_length(pattern_number);
     for (uint8_t index=0; index < get_pattern_length(pattern_number); ++index) {
         struct sequencer_step step = get_pattern_step(pattern_number, index);
         visualize_pattern_step(index, step.data1);
@@ -338,14 +337,14 @@ static void adjust_pattern_setting(int8_t delta)
 {
     uint8_t pattern_number = get_current_pattern_number();
     uint8_t length = get_pattern_length(pattern_number);
-    current_pattern_step_index += delta;
-    if (current_pattern_step_index == 0xff) {
-        current_pattern_step_index = 0;
+    selected_pattern_step += delta;
+    if (selected_pattern_step == 0xff) {
+        selected_pattern_step = 0;
         if (length > 2) {
             set_pattern_length(pattern_number, length-1);
         }
     }
-    if (current_pattern_step_index == length) {
+    if (selected_pattern_step == length) {
         set_pattern_length(pattern_number, length+1);
     }
     display_current_pattern();
@@ -386,12 +385,12 @@ void store_setup(void)
 
 void toggle_hmi_layer(void)
 {
-    ++current_hmi_layer;
-    current_hmi_layer %= HMI_LAYER_COUNT;
+    ++selected_hmi_layer;
+    selected_hmi_layer %= HMI_LAYER_COUNT;
 
     clear_value_display();
-    if (current_hmi_layer == HMI_LAYER_NORMAL) {
-        display_current_setting();
+    if (selected_hmi_layer == HMI_LAYER_NORMAL) {
+        display_selected_setting();
     }
     else {
         display_current_pattern();
@@ -406,41 +405,41 @@ void update_displays(void)
 
 void value1_decrement(void)
 {
-    if (current_hmi_layer == HMI_LAYER_PATTERN) {
+    if (selected_hmi_layer == HMI_LAYER_PATTERN) {
         adjust_pattern_setting(-1);
         return;
     }
 
     // Cyclicly decrement selected setting and update display
-    if (current_setting == 0) {
-        current_setting = SETTING_COUNT;
+    if (selected_setting == 0) {
+        selected_setting = SETTING_COUNT;
     }
-    --current_setting;
-    display_current_setting();
+    --selected_setting;
+    display_selected_setting();
 }
 
 void value1_increment(void)
 {
-    if (current_hmi_layer == HMI_LAYER_PATTERN) {
+    if (selected_hmi_layer == HMI_LAYER_PATTERN) {
         adjust_pattern_setting(1);
         return;
     }
 
     // Cyclicly increment selected setting and update display
-    ++current_setting;
-    current_setting %= SETTING_COUNT;
-    display_current_setting();
+    ++selected_setting;
+    selected_setting %= SETTING_COUNT;
+    display_selected_setting();
 }
 
 void value2_decrement(void)
 {
-    if (current_hmi_layer == HMI_LAYER_PATTERN) {
+    if (selected_hmi_layer == HMI_LAYER_PATTERN) {
         adjust_current_pattern_step_value(-1);
         return;
     }
 
     uint8_t number = 0;
-    switch (current_setting) {
+    switch (selected_setting) {
         case SETTING_AMPLITUDE:
             number = adjust_amplitude(-1);
             display_character(0, 'A');
@@ -473,13 +472,13 @@ void value2_decrement(void)
 
 void value2_increment(void)
 {
-    if (current_hmi_layer == HMI_LAYER_PATTERN) {
+    if (selected_hmi_layer == HMI_LAYER_PATTERN) {
         adjust_current_pattern_step_value(1);
         return;
     }
 
     uint8_t number = 0;
-    switch (current_setting) {
+    switch (selected_setting) {
         case SETTING_AMPLITUDE:
             number = adjust_amplitude(1);
             display_character(0, 'A');
@@ -512,7 +511,7 @@ void value2_increment(void)
 
 void visualize_sequencer(const uint8_t value)
 {
-    if (current_hmi_layer != HMI_LAYER_NORMAL) {
+    if (selected_hmi_layer != HMI_LAYER_NORMAL) {
         return;
     }
     visualize_value(value);
@@ -520,7 +519,7 @@ void visualize_sequencer(const uint8_t value)
 
 void visualize_wave(const uint8_t value)
 {
-    if (current_hmi_layer != HMI_LAYER_NORMAL) {
+    if (selected_hmi_layer != HMI_LAYER_NORMAL) {
         return;
     }
     visualize_value(value / 8);
