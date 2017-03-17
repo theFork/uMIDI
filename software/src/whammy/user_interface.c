@@ -139,6 +139,7 @@ static const uint8_t wave_bitmap_random[WAVE_BMP_YSIZE] = {
 };
 
 static enum hmi_layer selected_hmi_layer = HMI_LAYER_NORMAL;
+static uint8_t active_pattern_step = 0;
 static uint8_t selected_pattern_step = 0;
 static enum setting selected_setting = SETTING_PROGRAM;
 
@@ -292,7 +293,10 @@ void visualize_pattern_step(uint8_t index, const midi_value_t value)
 {
     // Highlight selected step
     enum adafruit_display_color color = ADAFRUIT_DISPLAY_COLOR_GREEN;
-    if (index == selected_pattern_step) {
+    if (index == active_pattern_step) {
+        color = ADAFRUIT_DISPLAY_COLOR_RED;
+    }
+    else if (index == selected_pattern_step) {
         color = ADAFRUIT_DISPLAY_COLOR_ORANGE;
     }
 
@@ -512,6 +516,8 @@ void value2_increment(void)
 void visualize_sequencer(const uint8_t value)
 {
     if (selected_hmi_layer != HMI_LAYER_NORMAL) {
+        active_pattern_step = value;
+        display_current_pattern();
         return;
     }
     visualize_value(value);
