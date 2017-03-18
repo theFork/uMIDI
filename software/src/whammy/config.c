@@ -191,7 +191,7 @@ struct led_matrix led_matrix_r = {
 //---------------- MIDI ----------------//
 struct midi_config midi_config = {
     .event_handlers = {
-        .control_change = NULL,
+        .control_change = handle_midi_control_change,
         .note_off       = handle_midi_note_off,
         .note_on        = handle_midi_note_on,
         .program_change = handle_midi_program_change
