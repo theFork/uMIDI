@@ -449,6 +449,32 @@ enum whammy_mode get_current_whammy_mode(void)
     return active_program.field.pedal_mode + 1;
 }
 
+void handle_midi_note_off(midi_value_t note, midi_value_t velocity)
+{
+    if (active_program.field.ctrl_mode != WHAMMY_CTRL_MODE_MOMENTARY) {
+        return;
+    }
+
+    // Release pitch bend
+    send_control_change(WHAMMY_MIDI_CC_NUMBER, 0);
+
+    // Turn off Whammy pedal
+    send_program_change(WHAMMY_MODE_OFF);
+}
+
+void handle_midi_note_on(midi_value_t note, midi_value_t velocity)
+{
+    if (active_program.field.ctrl_mode != WHAMMY_CTRL_MODE_MOMENTARY) {
+        return;
+    }
+
+    // Enable Whammy pedal
+    send_program_change(active_program.field.pedal_mode);
+
+    // Pitch bend
+    send_control_change(WHAMMY_MIDI_CC_NUMBER, active_program.field.range);
+}
+
 void handle_midi_program_change(midi_value_t program)
 {
     usb_printf(PSTR("Entering program #%u" USB_NEWLINE), program+1);
