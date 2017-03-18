@@ -177,6 +177,7 @@ enum ui_ctrl_mode get_current_ctrl_mode(void);
 enum sequencer_pattern_number get_current_pattern_number(void);
 uint8_t get_current_speed(void);
 enum whammy_mode get_current_whammy_mode(void);
+void handle_midi_control_change(midi_value_t controller, midi_value_t value);
 void handle_midi_note_off(midi_value_t note, midi_value_t velocity);
 void handle_midi_note_on(midi_value_t note, midi_value_t velocity);
 void handle_midi_program_change(midi_value_t program);

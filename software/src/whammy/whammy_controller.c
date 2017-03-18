@@ -205,7 +205,6 @@ uint8_t adjust_amplitude(int8_t delta)
     }
     usb_printf(PSTR("Set amplitude to %u" USB_NEWLINE), active_program.field.range);
     // TODO Adjust pitch bend note
-    // TODO Adjust limit max value
     return active_program.field.range;
 }
 
@@ -449,6 +448,21 @@ enum whammy_mode get_current_whammy_mode(void)
     return active_program.field.pedal_mode + 1;
 }
 
+void handle_midi_control_change(const midi_value_t controller, const midi_value_t orig_value)
+{
+    uint16_t value = orig_value;
+    switch (active_program.field.ctrl_mode) {
+        case WHAMMY_CTRL_MODE_LIMIT:
+            value *= active_program.field.range;
+            value /= MIDI_MAX_VALUE;
+        case WHAMMY_CTRL_MODE_NORMAL:
+            break;
+        default:
+            return;
+    }
+    send_control_change(WHAMMY_MIDI_CC_NUMBER, value);
+}
+
 void handle_midi_note_off(midi_value_t note, midi_value_t velocity)
 {
     if (active_program.field.ctrl_mode != WHAMMY_CTRL_MODE_MOMENTARY) {
@@ -599,7 +613,6 @@ void set_whammy_ctrl_amplitude(uint8_t amplitude)
 {
     usb_printf(PSTR("Setting amplitude to %u" USB_NEWLINE), amplitude);
     // TODO Adjust pitch bend note
-    // TODO Adjust limit max value
     active_program.field.range = amplitude;
     if (active_program.field.ctrl_mode == WHAMMY_CTRL_MODE_DETUNE) {
         send_control_change(WHAMMY_MIDI_CC_NUMBER, active_program.field.range);
