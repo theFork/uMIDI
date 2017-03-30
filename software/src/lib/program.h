@@ -107,6 +107,10 @@ void enter_program(uint8_t number);
 /// \returns    the programs stored in EEPROM as a hex-string
 char* export_bank(const uint8_t number);
 
+/// \brief      Guess what!? ;-)
+/// \returns    The program index [0..#PROGRAM_COUNT-1].
+uint8_t get_current_program_number(void);
+
 /// \brief      Imports and stores a program bank given as a hex-string
 /// \details    Overwrites stored program data!
 /// \param      number

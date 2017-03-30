@@ -31,6 +31,7 @@
 #include "math.h"
 #include "midi.h"
 #include "sequencer.h"
+#include "system.h"
 #include "wave.h"
 
 
@@ -270,9 +271,7 @@ void update_sequencer(void)
                           eeprom_read_byte(&step->data0), eeprom_read_byte(&step->data1));
 
         // Call the clock tick handler if it is set
-        if (channel->tick_callback != NULL) {
-            channel->tick_callback();
-        }
+        call(channel->tick_callback);
 
         // Cyclically implement step index
         ++channel->step_index;

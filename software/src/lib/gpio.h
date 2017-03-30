@@ -41,6 +41,23 @@ enum gpio_input_event
     GPIO_INPUT_EVENT_LONG,          ///< A GPIO input pin was seen logical "high" for some time
 };
 
+/// \brief      TODO
+/// \see        configure_gpio_interrupt
+enum gpio_input_sense
+{
+    GPIO_INPUT_SENSE_BOTH,          ///< Sense both edges
+    GPIO_INPUT_SENSE_RISING,        ///< Sense rising edge
+    GPIO_INPUT_SENSE_FALLING        ///< Sense falling edge
+};
+
+/// \brief      TODO
+/// \see        configure_gpio_interrupt
+enum gpio_interrupt
+{
+    GPIO_INTERRUPT_0,          ///< Nothing happened :-(
+    GPIO_INTERRUPT_1,          ///< Nothing happened :-(
+};
+
 /// \brief      Function / type of a GPIO pin
 enum gpio_type
 {
@@ -115,6 +132,9 @@ extern const struct gpio gpio;
 
 
 //---------------- functions and procedures ----------------//
+
+void configure_gpio_interrupt(const struct gpio_pin* pin, enum gpio_input_sense sense,
+                              enum gpio_interrupt type, void (* callback)(void));
 
 /// \brief      Configures a GPIO pin
 /// \param      pin

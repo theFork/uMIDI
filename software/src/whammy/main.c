@@ -26,6 +26,8 @@
 #include "lib/background_tasks.h"
 #include "lib/gpio.h"
 #include "lib/hmi.h"
+#include "lib/i2c.h"
+#include "lib/led_matrix.h"
 #include "lib/leds.h"
 #include "lib/midi.h"
 #include "lib/sequencer.h"
@@ -34,7 +36,7 @@
 #include "lib/usb.h"
 
 #include "config.h"
-#include "whammy.h"
+#include "whammy_controller.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -64,7 +66,10 @@ int main( void )
     init_usb_module();
     init_serial_communication(serial_commands, serial_commands_size);
     init_hmi_module(&hmi_config);
-    init_whammy_module();
+    init_i2c_module(&i2c_config);
+    init_led_matrix_module(&led_matrix_l);
+    init_led_matrix_module(&led_matrix_r);
+    init_whammy_controller();
 
     // set watchdog for 128ms
     wdt_enable(WDT_PER_128CLK_gc);

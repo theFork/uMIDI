@@ -38,7 +38,6 @@
 /// \brief      Configures the system clock
 /// \details    Activates and selects the internal 32 MHz RC oscillator as system clock source.
 void configure_system_clock(void);
-
 /// \brief      Configures the PLL for USB operation
 /// \details    Sets the PLL output frequency to 48 MHz, enables the PLL and waits until it has
 ///             successfully locked.
@@ -54,6 +53,20 @@ void panic(uint16_t delay_red_ms, uint16_t delay_green_ms);
 
 /// \brief      Re-enables the watchdog
 void wdt_reenable(void);
+
+
+//---------------- static inline functions and procedures ----------------//
+
+/// \brief      Safely calls a callback function
+/// \details    Aborts if the provided function pointer points to NULL.
+/// \param      callback
+///                 pointer to the function to call
+static inline void call(void (* const callback)(void))
+{
+    if (callback) {
+        callback();
+    }
+}
 
 
 //---------------- EOF ----------------//

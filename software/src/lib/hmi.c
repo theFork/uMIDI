@@ -25,6 +25,7 @@
 #include "encoder.h"
 #include "gpio.h"
 #include "hmi.h"
+#include "system.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -72,10 +73,17 @@ void init_hmi_module(const struct hmi_config * const config)
     }
 
     if (hmi_config->input_header != NULL) {
-        pin_pointer = &hmi_config->input_header->pin2;
-        for (uint8_t i=0; i<sizeof(struct gpio_header)/sizeof(struct gpio_pin); ++i) {
-            configure_gpio_pin(pin_pointer, GPIO_INPUT_PULLUP);
-            ++pin_pointer;
+        // Configure buttons
+        configure_gpio_pin(&hmi_config->input_header->pin9, GPIO_INPUT_PULLUP);
+        if (hmi_config->button1_interrupt_handler != NULL) {
+            configure_gpio_interrupt(&hmi_config->input_header->pin9, GPIO_INPUT_SENSE_FALLING,
+                                     GPIO_INTERRUPT_0, hmi_config->button1_interrupt_handler);
+        }
+
+        configure_gpio_pin(&hmi_config->input_header->pin8, GPIO_INPUT_PULLUP);
+        if (hmi_config->button2_interrupt_handler != NULL) {
+            configure_gpio_interrupt(&hmi_config->input_header->pin8, GPIO_INPUT_SENSE_FALLING,
+                                     GPIO_INTERRUPT_1, hmi_config->button2_interrupt_handler);
         }
 
         // Configure encoders
@@ -129,14 +137,10 @@ void poll_hmi(void)
         switch (poll_gpio_input_timeout(hmi_config->input_header->pin9, GPIO_INPUT_PULLUP,
                                         hmi_config->long_input_threashold)) {
         case GPIO_INPUT_EVENT_SHORT:
-            if (hmi_config->button1_short_handler) {
-                hmi_config->button1_short_handler();
-            }
+            call(hmi_config->button1_short_handler);
             break;
         case GPIO_INPUT_EVENT_LONG:
-            if (hmi_config->button1_long_handler != NULL) {
-                hmi_config->button1_long_handler();
-            }
+            call(hmi_config->button1_long_handler);
             break;
         default:
             break;
@@ -147,14 +151,10 @@ void poll_hmi(void)
         switch (poll_gpio_input_timeout(hmi_config->input_header->pin8, GPIO_INPUT_PULLUP,
                                         hmi_config->long_input_threashold)) {
         case GPIO_INPUT_EVENT_SHORT:
-            if (hmi_config->button2_short_handler) {
-                hmi_config->button2_short_handler();
-            }
+            call(hmi_config->button2_short_handler);
             break;
         case GPIO_INPUT_EVENT_LONG:
-            if (hmi_config->button2_long_handler != NULL) {
-                hmi_config->button2_long_handler();
-            }
+            call(hmi_config->button2_long_handler);
             break;
         default:
             break;

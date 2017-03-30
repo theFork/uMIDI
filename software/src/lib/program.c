@@ -141,6 +141,11 @@ char* export_bank(const uint8_t bank)
     return result_string;
 }
 
+uint8_t get_current_program_number()
+{
+    return current_program.number;
+}
+
 bool import_bank(const uint8_t bank, const char* data)
 {
     // Abort if the supplied string is too short
