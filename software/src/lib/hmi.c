@@ -25,6 +25,7 @@
 #include "encoder.h"
 #include "gpio.h"
 #include "hmi.h"
+#include "system.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -129,14 +130,10 @@ void poll_hmi(void)
         switch (poll_gpio_input_timeout(hmi_config->input_header->pin9, GPIO_INPUT_PULLUP,
                                         hmi_config->long_input_threashold)) {
         case GPIO_INPUT_EVENT_SHORT:
-            if (hmi_config->button1_short_handler) {
-                hmi_config->button1_short_handler();
-            }
+            call(hmi_config->button1_short_handler);
             break;
         case GPIO_INPUT_EVENT_LONG:
-            if (hmi_config->button1_long_handler != NULL) {
-                hmi_config->button1_long_handler();
-            }
+            call(hmi_config->button1_long_handler);
             break;
         default:
             break;
@@ -147,14 +144,10 @@ void poll_hmi(void)
         switch (poll_gpio_input_timeout(hmi_config->input_header->pin8, GPIO_INPUT_PULLUP,
                                         hmi_config->long_input_threashold)) {
         case GPIO_INPUT_EVENT_SHORT:
-            if (hmi_config->button2_short_handler) {
-                hmi_config->button2_short_handler();
-            }
+            call(hmi_config->button2_short_handler);
             break;
         case GPIO_INPUT_EVENT_LONG:
-            if (hmi_config->button2_long_handler != NULL) {
-                hmi_config->button2_long_handler();
-            }
+            call(hmi_config->button2_long_handler);
             break;
         default:
             break;

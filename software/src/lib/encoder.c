@@ -24,6 +24,7 @@
 
 #include "encoder.h"
 #include "gpio.h"
+#include "system.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -118,11 +119,11 @@ void init_encoder(struct encoder* const encoder)
 enum encoder_action poll_encoder(struct encoder* const encoder)
 {
     // Poll switch
-    if (poll_gpio_input(*encoder->config.inputSwitch, GPIO_INPUT_PULLUP)) {
-        if (encoder->config.push_callback != NULL) {
-            encoder->config.push_callback();
+    if (encoder->config.inputSwitch != NULL) {
+        if (poll_gpio_input(*encoder->config.inputSwitch, GPIO_INPUT_PULLUP)) {
+            call(encoder->config.push_callback);
+            return ENCODER_ACTION_PUSH;
         }
-        return ENCODER_ACTION_PUSH;
     }
 
     // Abort if encoder position is unchanged
@@ -147,17 +148,13 @@ enum encoder_action poll_encoder(struct encoder* const encoder)
     if (encoder->state.counter <= -encoder->config.type) {
         encoder->state.counter = 0;
         action = ENCODER_ACTION_CCW;
-        if (encoder->config.ccw_callback != NULL) {
-            encoder->config.ccw_callback();
-        }
+        call(encoder->config.ccw_callback);
     }
 
     if (encoder->state.counter >= encoder->config.type) {
         encoder->state.counter = 0;
         action = ENCODER_ACTION_CW;
-        if (encoder->config.cw_callback != NULL) {
-            encoder->config.cw_callback();
-        }
+        call(encoder->config.cw_callback);
     }
 
     return action;
