@@ -73,10 +73,17 @@ void init_hmi_module(const struct hmi_config * const config)
     }
 
     if (hmi_config->input_header != NULL) {
-        pin_pointer = &hmi_config->input_header->pin2;
-        for (uint8_t i=0; i<sizeof(struct gpio_header)/sizeof(struct gpio_pin); ++i) {
-            configure_gpio_pin(pin_pointer, GPIO_INPUT_PULLUP);
-            ++pin_pointer;
+        // Configure buttons
+        configure_gpio_pin(&hmi_config->input_header->pin9, GPIO_INPUT_PULLUP);
+        if (hmi_config->button1_interrupt_handler != NULL) {
+            configure_gpio_interrupt(&hmi_config->input_header->pin9, GPIO_INPUT_SENSE_FALLING,
+                                     GPIO_INTERRUPT_0, hmi_config->button1_interrupt_handler);
+        }
+
+        configure_gpio_pin(&hmi_config->input_header->pin8, GPIO_INPUT_PULLUP);
+        if (hmi_config->button2_interrupt_handler != NULL) {
+            configure_gpio_interrupt(&hmi_config->input_header->pin8, GPIO_INPUT_SENSE_FALLING,
+                                     GPIO_INTERRUPT_1, hmi_config->button2_interrupt_handler);
         }
 
         // Configure encoders

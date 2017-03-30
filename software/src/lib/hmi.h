@@ -87,8 +87,10 @@ struct hmi_config
     uint8_t long_input_threashold;              ///< the time in [s/10] after which a button press is considered "long"
     void (* button1_short_handler)(void);       ///< this handler is called when button 1 is pressed briefly
     void (* button1_long_handler)(void);        ///< this handler is called when button 1 is pressed long
+    void (* button1_interrupt_handler)(void);   ///< this handler is called when button 1 is pressed
     void (* button2_short_handler)(void);       ///< this handler is called when button 2 is pressed briefly
     void (* button2_long_handler)(void);        ///< this handler is called when button 2 is pressed long
+    void (* button2_interrupt_handler)(void);   ///< this handler is called when button 2 is pressed
     void (* encoder1cw_handler)(void);          ///< this handler is called when encoder 1 is rotated clockwise
     void (* encoder1ccw_handler)(void);         ///< this handler is called when encoder 1 is rotated counter-clockwise
     void (* encoder1push_handler)(void);        ///< this handler is called when the switch in encoder 1 is pressed
