@@ -74,7 +74,12 @@ enum ui_ctrl_mode
 
 //---------------- functions and procedures ----------------//
 void clear_value_display(void);
+void signal_midi_rx(void);
+void signal_usb_rx(void);
+void signal_store(void);
+void signal_tap_tempo(void);
 void store_setup(void);
+void tap_tempo(void);
 void toggle_hmi_layer(void);
 void update_displays(void);
 void value1_decrement(void);
