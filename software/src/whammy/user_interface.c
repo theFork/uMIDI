@@ -357,7 +357,6 @@ static void adjust_pattern_setting(int8_t delta)
     if (selected_pattern_step == length) {
         set_pattern_length(pattern_number, length+1);
     }
-    display_current_pattern();
 }
 
 static void visualize_value(uint8_t value)
@@ -399,16 +398,16 @@ void toggle_hmi_layer(void)
     selected_hmi_layer %= HMI_LAYER_COUNT;
 
     clear_value_display();
+}
+
+void update_displays(void)
+{
     if (selected_hmi_layer == HMI_LAYER_NORMAL) {
         display_selected_setting();
     }
     else {
         display_current_pattern();
     }
-}
-
-void update_displays(void)
-{
     led_matrix_flush(&led_matrix_l);
     led_matrix_flush(&led_matrix_r);
 }
@@ -425,7 +424,6 @@ void value1_decrement(void)
         selected_setting = SETTING_COUNT;
     }
     --selected_setting;
-    display_selected_setting();
 }
 
 void value1_increment(void)
@@ -438,7 +436,6 @@ void value1_increment(void)
     // Cyclicly increment selected setting and update display
     ++selected_setting;
     selected_setting %= SETTING_COUNT;
-    display_selected_setting();
 }
 
 void value2_decrement(void)
@@ -523,7 +520,6 @@ void visualize_sequencer(const uint8_t value)
 {
     if (selected_hmi_layer != HMI_LAYER_NORMAL) {
         active_pattern_step = value;
-        display_current_pattern();
         return;
     }
     visualize_value(value);
