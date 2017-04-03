@@ -461,6 +461,8 @@ void handle_midi_control_change(const midi_value_t controller, const midi_value_
             return;
     }
     send_control_change(WHAMMY_MIDI_CC_NUMBER, value);
+
+    signal_midi_rx();
 }
 
 void handle_midi_note_off(midi_value_t note, midi_value_t velocity)
@@ -474,6 +476,8 @@ void handle_midi_note_off(midi_value_t note, midi_value_t velocity)
 
     // Turn off Whammy pedal
     send_program_change(WHAMMY_MODE_OFF);
+
+    signal_midi_rx();
 }
 
 void handle_midi_note_on(midi_value_t note, midi_value_t velocity)
@@ -487,12 +491,16 @@ void handle_midi_note_on(midi_value_t note, midi_value_t velocity)
 
     // Pitch bend
     send_control_change(WHAMMY_MIDI_CC_NUMBER, active_program.field.range);
+
+    signal_midi_rx();
 }
 
 void handle_midi_program_change(midi_value_t program)
 {
     usb_printf(PSTR("Entering program #%u" USB_NEWLINE), program+1);
     enter_program(program);
+
+    signal_midi_rx();
 }
 
 void init_whammy_controller(void)

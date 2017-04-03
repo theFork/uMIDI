@@ -53,6 +53,13 @@
 //              P R I V A T E   T Y P E D E F S               //
 ////////////////////////////////////////////////////////////////
 
+enum hmi_layer
+{
+    HMI_LAYER_NORMAL,
+    HMI_LAYER_PATTERN,
+    HMI_LAYER_COUNT
+};
+
 enum setting
 {
     SETTING_PROGRAM,
@@ -63,11 +70,13 @@ enum setting
     SETTING_COUNT
 };
 
-enum hmi_layer
+enum status_flag
 {
-    HMI_LAYER_NORMAL,
-    HMI_LAYER_PATTERN,
-    HMI_LAYER_COUNT
+    STATUS_FLAG_MIDI_RX,
+    STATUS_FLAG_STORE,
+    STATUS_FLAG_TAPPING,
+    STATUS_FLAG_USB_RX,
+    STATUS_FLAG_COUNT
 };
 
 
@@ -142,6 +151,7 @@ static enum hmi_layer selected_hmi_layer = HMI_LAYER_NORMAL;
 static uint8_t active_pattern_step = 0;
 static uint8_t selected_pattern_step = 0;
 static enum setting selected_setting = SETTING_PROGRAM;
+static bool status_flags[STATUS_FLAG_COUNT] = { false, };
 
 
 
@@ -295,6 +305,25 @@ static void display_selected_setting(void)
     }
 }
 
+static void update_status_leds(void)
+{
+    static uint16_t led_ttl[STATUS_FLAG_COUNT] = { 0, };
+    for (enum status_flag flag = STATUS_FLAG_MIDI_RX; flag < STATUS_FLAG_COUNT; ++flag) {
+        // Reset TTL and acknowledge the flag if set
+        if (status_flags[flag]) {
+            status_flags[flag] = false;
+            // "tapping"-LED is synchronized with the tap-tempo timeout and red on-board LED
+            led_ttl[flag] = flag == STATUS_FLAG_TAPPING ? 400 : 10;
+        }
+
+        // Display flag and reduce TTL
+        if (led_ttl[flag] > 0) {
+            --led_ttl[flag];
+            led_matrix_set_pixel(&led_matrix_l, flag, 0, ADAFRUIT_DISPLAY_COLOR_GREEN);
+        }
+    }
+}
+
 void visualize_pattern_step(uint8_t index, const midi_value_t value)
 {
     // Highlight selected step
@@ -386,8 +415,30 @@ void clear_value_display(void)
     }
 }
 
+void signal_midi_rx(void)
+{
+    status_flags[STATUS_FLAG_MIDI_RX] = true;
+}
+
+void signal_usb_rx(void)
+{
+    status_flags[STATUS_FLAG_USB_RX] = true;
+}
+
+void signal_store(void)
+{
+    status_flags[STATUS_FLAG_STORE] = true;
+}
+
+void signal_tap_tempo(void)
+{
+    status_flags[STATUS_FLAG_TAPPING] = true;
+}
+
 void store_setup(void)
 {
+    signal_store();
+    update_displays();
     usb_puts(PSTR("Storing current setup"));
     save_current_program();
 }
@@ -400,10 +451,17 @@ void toggle_hmi_layer(void)
     clear_value_display();
 }
 
+void tap_tempo(void)
+{
+    register_tap();
+    signal_tap_tempo();
+}
+
 void update_displays(void)
 {
     if (selected_hmi_layer == HMI_LAYER_NORMAL) {
         display_selected_setting();
+        update_status_leds();
     }
     else {
         display_current_pattern();
