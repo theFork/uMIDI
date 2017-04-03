@@ -77,6 +77,7 @@ bool exec_ampl(const char* command)
     midi_value_t amplitude = atoi(command+5);
     amplitude %= MIDI_MAX_VALUE + 1;
     set_whammy_ctrl_amplitude(amplitude);
+    signal_usb_rx();
     return true;
 }
 
@@ -124,6 +125,7 @@ bool exec_cpy(const char* command)
             return false;
     }
 
+    signal_usb_rx();
     return true;
 }
 
@@ -160,6 +162,7 @@ bool exec_factory_reset(const char* command)
     }
 
     reset_whammy_patterns();
+    signal_usb_rx();
     return true;
 }
 
@@ -171,57 +174,65 @@ bool exec_mode(const char* command)
     }
 
     switch (*(command+5)) {
-        case 'N':
-            select_next_ctrl_mode();
-            return true;
+    case 'N':
+        select_next_ctrl_mode();
+        break;
 
-        case 'P':
-            select_previous_ctrl_mode();
-            return true;
+    case 'P':
+        select_previous_ctrl_mode();
+        break;
 
-        case 'd':
-            enter_detune_mode();
-            return true;
+    case 'd':
+        enter_detune_mode();
+        break;
 
-        case 'l':
-            enter_limit_mode();
-            return true;
+    case 'l':
+        enter_limit_mode();
+        break;
 
-        case 'm':
-            enter_momentary_mode();
-            return true;
+    case 'm':
+        enter_momentary_mode();
+        break;
 
-        case 'n':
-            enter_normal_mode();
-            return true;
+    case 'n':
+        enter_normal_mode();
+        break;
 
-        case 'o':
-            enter_bypass_mode();
-            return true;
+    case 'o':
+        enter_bypass_mode();
+        break;
 
-        case 'p': {
-            uint8_t number = atoi(command+7) - 1;
-            if (number < SEQUENCER_PATTERNS) {
-                enter_pattern_mode(number);
-                return true;
-            }
+    case 'p': {
+        uint8_t number = atoi(command+7) - 1;
+        if (number < SEQUENCER_PATTERNS) {
+            enter_pattern_mode(number);
+            break;
         }
-
-        case 'w': {
-            uint8_t number = atoi(command+7);
-            if (number <= WAVE_RANDOM) {
-                enter_wave_mode(number);
-                return true;
-            }
-        }
+        goto fail;
     }
 
-    usb_puts(PSTR("Unknown parameter" USB_NEWLINE));
+    case 'w': {
+        uint8_t number = atoi(command+7);
+        if (number <= WAVE_RANDOM) {
+            enter_wave_mode(number);
+            break;
+        }
+        goto fail;
+    }
+
+    default:
+        goto fail;
+    }
+
+    signal_usb_rx();
+    return true;
+
+fail:
+    usb_puts(PSTR("Invalid parameter" USB_NEWLINE));
     return false;
 }
 
-bool exec_patlen(const char* command)
-{
+bool exec_patlen(const char* command) {
     if (strlen(command) < 8 || command[6] != ' ') {
         usb_puts(PSTR("Malformed command"));
         return false;
@@ -230,6 +241,7 @@ bool exec_patlen(const char* command)
     uint8_t length = atoi(command+7);
     set_whammy_ctrl_pattern_length(length);
 
+    signal_usb_rx();
     return true;
 }
 
@@ -270,6 +282,7 @@ bool exec_patmod(const char* command)
 
     set_whammy_ctrl_pattern_step(step_index, &step);
 
+    signal_usb_rx();
     return true;
 }
 
@@ -284,12 +297,14 @@ bool exec_pgm(const char* command)
     // Update current program if 'u' was given as argument
     if (command[4] == 'u') {
         save_current_program();
+        signal_usb_rx();
         return true;
     }
 
     uint8_t program = atoi(command+4);
     usb_printf(PSTR("Entering program #%u" USB_NEWLINE), program);
     enter_program(program-1);
+    signal_usb_rx();
     return true;
 }
 
@@ -303,6 +318,7 @@ bool exec_speed(const char* command)
     midi_value_t speed = atoi(command+6);
     speed %= MIDI_MAX_VALUE + 1;
     set_whammy_ctrl_speed(speed);
+    signal_usb_rx();
     return true;
 }
 
@@ -328,12 +344,15 @@ bool exec_store(const char* command)
         write_program(number, strtol(&command[10], NULL, 16));
     }
 
+    signal_store();
+    signal_usb_rx();
     return true;
 }
 
 bool exec_tap(const char* command)
 {
-    register_tap();
+    tap_tempo();
+    signal_usb_rx();
     return true;
 }
 
@@ -358,6 +377,7 @@ bool exec_wipe(const char* command)
             return false;
     }
 
+    signal_usb_rx();
     return true;
 }
 
@@ -370,5 +390,6 @@ bool exec_wham(const char* command)
     }
 
     set_whammy_mode(atoi(command+5));
+    signal_usb_rx();
     return true;
 }
