@@ -41,6 +41,9 @@
 /// \brief      Handler for the serial command 'cal'
 bool exec_cal(const char* command);
 
+/// \brief      Handler for the serial command 'ctrl'
+bool exec_ctrl(const char* command);
+
 /// \brief      Handler for the serial command 'echo'
 bool exec_echo(const char* command);
 
