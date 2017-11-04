@@ -23,6 +23,7 @@
 #include <stdlib.h>
 
 #include "lib/adafruit_display.h"
+#include "lib/gpio.h"
 #include "lib/hmi.h"
 #include "lib/led_matrix.h"
 #include "lib/program.h"
@@ -321,6 +322,8 @@ static void update_status_leds(void)
             --led_ttl[flag];
             led_matrix_set_pixel(&led_matrix_l, flag, 0, ADAFRUIT_DISPLAY_COLOR_GREEN);
         }
+        gpio_set(STORE_LED_PIN, led_ttl[STATUS_FLAG_STORE]);
+        gpio_set(TEMPO_LED_PIN, led_ttl[STATUS_FLAG_TAPPING]);
     }
 }
 

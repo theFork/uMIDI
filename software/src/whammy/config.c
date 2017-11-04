@@ -141,6 +141,8 @@ uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_co
 
 //---------------- GPIO ----------------//
 struct gpio_mapping gpio_mappings[] = {
+    { .pin = &STORE_LED_PIN, .type = GPIO_OUTPUT },             // Store LED
+    { .pin = &TEMPO_LED_PIN, .type = GPIO_OUTPUT },             // Tempo LED
 };
 uint8_t gpio_mappings_size = sizeof(gpio_mappings)/sizeof(struct gpio_mapping);
 
