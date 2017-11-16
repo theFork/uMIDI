@@ -86,7 +86,7 @@ midi_value_t linear_to_midi(const struct linear_range* config, uint16_t input);
 /// \param      value
 ///                 the integer value to convert
 /// \returns    the value as fixed point number
-inline fixed_t fixed_from_int(const uint16_t value)
+static inline fixed_t fixed_from_int(const uint16_t value)
 {
     fixed_t result = value;
     result <<= FIXED_POINT;
@@ -102,7 +102,7 @@ inline fixed_t fixed_from_int(const uint16_t value)
 /// \param      b
 ///                 the divisor
 /// \returns    the quotient as fixed point number
-inline fixed_t fixed_div(const fixed_t a, const fixed_t b)
+static inline fixed_t fixed_div(const fixed_t a, const fixed_t b)
 {
     fixed_accu_t accu = a;
     accu <<= FIXED_POINT;
@@ -119,7 +119,7 @@ inline fixed_t fixed_div(const fixed_t a, const fixed_t b)
 /// \param      b
 ///                 the second operand
 /// \returns    the product as fixed point number
-inline fixed_t fixed_mpy(const fixed_t a, const fixed_t b)
+static inline fixed_t fixed_mpy(const fixed_t a, const fixed_t b)
 {
     fixed_accu_t accu = a;
     accu *= b;
@@ -131,7 +131,7 @@ inline fixed_t fixed_mpy(const fixed_t a, const fixed_t b)
 /// \param      value
 ///                 the fixed point number to convert
 /// \returns    the rounded integer part of the fixed point number
-inline uint16_t fixed_to_int(fixed_t value)
+static inline uint16_t fixed_to_int(fixed_t value)
 {
     // Round
     if (value & 0x00008000) {
