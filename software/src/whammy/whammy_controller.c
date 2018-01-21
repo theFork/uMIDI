@@ -402,6 +402,11 @@ void enter_wave_mode(const enum waveform waveform)
     usb_printf(PSTR("Waveform %d" USB_NEWLINE), waveform);
 }
 
+union whammy_ctrl_program get_active_program(void)
+{
+    return active_program;
+}
+
 uint8_t get_current_amplitude(void)
 {
     return active_program.field.range;
@@ -446,61 +451,6 @@ uint8_t get_current_speed(void)
 enum whammy_mode get_current_whammy_mode(void)
 {
     return active_program.field.pedal_mode + 1;
-}
-
-void handle_midi_control_change(const midi_value_t controller, const midi_value_t orig_value)
-{
-    uint16_t value = orig_value;
-    switch (active_program.field.ctrl_mode) {
-        case WHAMMY_CTRL_MODE_LIMIT:
-            value *= active_program.field.range;
-            value /= MIDI_MAX_VALUE;
-        case WHAMMY_CTRL_MODE_NORMAL:
-            break;
-        default:
-            return;
-    }
-    send_control_change(WHAMMY_MIDI_CC_NUMBER, value);
-
-    signal_midi_rx();
-}
-
-void handle_midi_note_off(midi_value_t note, midi_value_t velocity)
-{
-    if (active_program.field.ctrl_mode != WHAMMY_CTRL_MODE_MOMENTARY) {
-        return;
-    }
-
-    // Release pitch bend
-    send_control_change(WHAMMY_MIDI_CC_NUMBER, 0);
-
-    // Turn off Whammy pedal
-    send_program_change(WHAMMY_MODE_OFF);
-
-    signal_midi_rx();
-}
-
-void handle_midi_note_on(midi_value_t note, midi_value_t velocity)
-{
-    if (active_program.field.ctrl_mode != WHAMMY_CTRL_MODE_MOMENTARY) {
-        return;
-    }
-
-    // Enable Whammy pedal
-    send_program_change(active_program.field.pedal_mode);
-
-    // Pitch bend
-    send_control_change(WHAMMY_MIDI_CC_NUMBER, active_program.field.range);
-
-    signal_midi_rx();
-}
-
-void handle_midi_program_change(midi_value_t program)
-{
-    usb_printf(PSTR("Entering program #%u" USB_NEWLINE), program+1);
-    enter_program(program);
-
-    signal_midi_rx();
 }
 
 void init_whammy_controller(void)
