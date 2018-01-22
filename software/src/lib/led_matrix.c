@@ -387,5 +387,7 @@ void led_matrix_set_pixel(struct led_matrix * const matrix,
         matrix->buffer.green[column] &=~ _BV(row);
         matrix->buffer.red[column]   |=  _BV(row);
         break;
+    default:
+        break;
     }
 }

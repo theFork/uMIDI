@@ -30,6 +30,7 @@
 #include "lib/usb.h"
 
 #include "whammy_controller.h"
+#include "wah.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -353,6 +354,17 @@ bool exec_tap(const char* command)
 {
     tap_tempo();
     signal_usb_rx();
+    return true;
+}
+
+bool exec_wah(const char* command)
+{
+    if (strlen(command) != 5) {
+        usb_puts(PSTR("Malformed command" USB_NEWLINE));
+        return false;
+    }
+
+    enable_wah(command[4] == 'e');
     return true;
 }
 

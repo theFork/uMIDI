@@ -44,6 +44,7 @@
 #include "midi_handlers.h"
 #include "user_interface.h"
 #include "whammy_controller.h"
+#include "wah.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -113,6 +114,12 @@ static const char help_string_store[] PROGMEM = "t n d\n"
     "<d> : data in hexadecimal format\n";
 static const char cmd_string_tap[] PROGMEM = "tap";
 static const char help_string_tap[] PROGMEM = "\nSend this command repeatedly to tap in a tempo\n";
+static const char cmd_string_wah[] PROGMEM = "wah";
+static const char help_string_wah[] PROGMEM = "<a>\n"
+    "Enable or disable the Wah-Wah effect:\n"
+    "<a> : action\n"
+    "      'e' = enable\n"
+    "       ?  = disable";
 static const char cmd_string_wipe[] PROGMEM = "wipe";
 static const char help_string_wipe[] PROGMEM = "t\n"
     "Wipes the selected pattern or program\n"
@@ -135,6 +142,7 @@ struct serial_command serial_commands[] = {
     { .cmd_string = cmd_string_speed,   .help_string = help_string_speed,   .handler = &exec_speed         },
     { .cmd_string = cmd_string_store,   .help_string = help_string_store,   .handler = &exec_store         },
     { .cmd_string = cmd_string_tap,     .help_string = help_string_tap,     .handler = &exec_tap           },
+    { .cmd_string = cmd_string_wah,     .help_string = help_string_wah,     .handler = &exec_wah           },
     { .cmd_string = cmd_string_wipe,    .help_string = help_string_wipe,    .handler = &exec_wipe          },
     { .cmd_string = cmd_string_wham,    .help_string = help_string_wham,    .handler = &exec_wham          },
 };
@@ -142,8 +150,10 @@ uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_co
 
 //---------------- GPIO ----------------//
 struct gpio_mapping gpio_mappings[] = {
-    { .pin = &STORE_LED_PIN, .type = GPIO_OUTPUT },             // Store LED
-    { .pin = &TEMPO_LED_PIN, .type = GPIO_OUTPUT },             // Tempo LED
+    { .pin = &STORE_LED_PIN,  .type = GPIO_OUTPUT },            // Store LED
+    { .pin = &TEMPO_LED_PIN,  .type = GPIO_OUTPUT },            // Tempo LED
+    { .pin = &WAH_BYPASS_PIN, .type = GPIO_OUTPUT },            // Wah bypass relais
+    { .pin = &WAH_LED_PIN,    .type = GPIO_OUTPUT },            // Wah LED (PWM)
 };
 uint8_t gpio_mappings_size = sizeof(gpio_mappings)/sizeof(struct gpio_mapping);
 
@@ -155,7 +165,7 @@ struct hmi_config hmi_config = {
     .button1_short_handler = NULL,
     .button1_long_handler = NULL,
     .button1_interrupt_handler = &tap_tempo,
-    .button2_short_handler = &toggle_hmi_layer,
+    .button2_short_handler = &toggle_wah,
     .button2_long_handler = &store_setup,
     .button2_interrupt_handler = NULL,
     .encoder1cw_handler = &value2_increment,
@@ -163,7 +173,7 @@ struct hmi_config hmi_config = {
     .encoder1push_handler = NULL,
     .encoder2cw_handler = &value1_increment,
     .encoder2ccw_handler = &value1_decrement,
-    .encoder2push_handler = NULL,
+    .encoder2push_handler = &toggle_hmi_layer,
 };
 
 

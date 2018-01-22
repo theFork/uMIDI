@@ -24,10 +24,12 @@
 
 #include "lib/midi.h"
 #include "lib/program.h"
+#include "lib/pwm.h"
 #include "lib/usb.h"
 
 #include "config.h"
 #include "user_interface.h"
+#include "wah.h"
 #include "whammy_controller.h"
 
 
@@ -67,6 +69,9 @@
 
 void handle_midi_control_change(const midi_value_t controller, const midi_value_t orig_value)
 {
+    // Set Wah PWM duty cycle
+    set_pwm_duty_cycle(WAH_PWM, orig_value);
+
     uint16_t value = orig_value;
     switch (get_active_program().field.ctrl_mode) {
         case WHAMMY_CTRL_MODE_LIMIT:
@@ -84,6 +89,11 @@ void handle_midi_control_change(const midi_value_t controller, const midi_value_
 
 void handle_midi_note_off(midi_value_t note, midi_value_t velocity)
 {
+    if (note == MIDI_NOTE_ENABLE_WAH) {
+        enable_wah(false);
+        return;
+    }
+
     if (get_active_program().field.ctrl_mode != WHAMMY_CTRL_MODE_MOMENTARY) {
         return;
     }
@@ -99,6 +109,11 @@ void handle_midi_note_off(midi_value_t note, midi_value_t velocity)
 
 void handle_midi_note_on(midi_value_t note, midi_value_t velocity)
 {
+    if (note == MIDI_NOTE_ENABLE_WAH) {
+        enable_wah(true);
+        return;
+    }
+
     if (get_active_program().field.ctrl_mode != WHAMMY_CTRL_MODE_MOMENTARY) {
         return;
     }
@@ -119,4 +134,3 @@ void handle_midi_program_change(midi_value_t program)
 
     signal_midi_rx();
 }
-

@@ -109,5 +109,7 @@ void led_bargraph_set_pixel(struct led_bargraph * const bargraph,
         bargraph->buffer.green[column] |=  _BV(row);
         bargraph->buffer.red[column]   &=~ _BV(row);
         break;
+    default:
+        break;
     }
 }

@@ -36,6 +36,7 @@
 #include "lib/usb.h"
 
 #include "config.h"
+#include "wah.h"
 #include "whammy_controller.h"
 
 
@@ -70,6 +71,7 @@ int main( void )
     init_led_matrix_module(&led_matrix_l);
     init_led_matrix_module(&led_matrix_r);
     init_whammy_controller();
+    init_wah_module();
 
     // set watchdog for 128ms
     wdt_enable(WDT_PER_128CLK_gc);

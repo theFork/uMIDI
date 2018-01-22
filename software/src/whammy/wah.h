@@ -1,8 +1,8 @@
 /// \file
-/// \brief      API for the command line interface of the whammy controller.
+/// \brief      Wah-wah module API
 
 /*
- * Copyright 2015, 2016 Sebastian Neuser
+ * Copyright 2015 Sebastian Neuser
  *
  * This file is part of the uMIDI firmware.
  *
@@ -20,36 +20,42 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CMDLINE_INTERFACE_H
-#define _CMDLINE_INTERFACE_H
+#ifndef _WAH_H
+#define _WAH_H
 
 
 //---------------- includes ----------------//
+#include <stdint.h>
+#include "lib/pwm.h"
 
 
 //---------------- constants ----------------//
+/// \brief      The MIDI note that represents uMIDI wah's enable / bypass state
+#define MIDI_NOTE_ENABLE_WAH            42
+
+/// \brief      PWM output used for the Wah LED
+#define WAH_PWM                         PWM_PIN8
+
+/// \brief      Maximum PWM duty cycle for the Wah LED
+#define WAH_PWM_MAX_DUTY                (PWM_MAX_DUTY-250)
+
+/// \brief      Minimum PWM duty cycle for the Wah LED
+#define WAH_PWM_MIN_DUTY                600
+
+/// \brief      Minimum PWM duty cycle for the Wah LED
+#define WAH_PWM_RANGE                   (WAH_PWM_MAX_DUTY - WAH_PWM_MIN_DUTY)
 
 
 //---------------- data types ----------------//
 
 
 //---------------- functions and procedures ----------------//
-bool exec_ampl(const char* command);
-bool exec_backup(const char* command);
-bool exec_cpy(const char* command);
-bool exec_dump(const char* command);
-bool exec_factory_reset(const char* command);
-bool exec_mode(const char* command);
-bool exec_patlen(const char* command);
-bool exec_patmod(const char* command);
-bool exec_pgm(const char* command);
-bool exec_speed(const char* command);
-bool exec_store(const char* command);
-bool exec_tap(const char* command);
-bool exec_wah(const char* command);
-bool exec_wipe(const char* command);
-bool exec_wham(const char* command);
+void enable_wah(bool enable);
+void init_wah_module(void);
+bool is_wah_enabled(void);
+void toggle_wah(void);
+
 
 //---------------- EOF ----------------//
-#endif // _CMDLINE_INTERFACE_H
+#endif // _WAH_H
 

@@ -32,6 +32,7 @@
 #include "config.h"
 #include "user_interface.h"
 #include "whammy_controller.h"
+#include "wah.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -74,9 +75,9 @@ enum setting
 enum status_flag
 {
     STATUS_FLAG_MIDI_RX,
+    STATUS_FLAG_USB_RX,
     STATUS_FLAG_STORE,
     STATUS_FLAG_TAPPING,
-    STATUS_FLAG_USB_RX,
     STATUS_FLAG_COUNT
 };
 
@@ -320,10 +321,9 @@ static void update_status_leds(void)
         // Display flag and reduce TTL
         if (led_ttl[flag] > 0) {
             --led_ttl[flag];
-            led_matrix_set_pixel(&led_matrix_l, flag, 0, ADAFRUIT_DISPLAY_COLOR_GREEN);
+            enum adafruit_display_color color = flag % (ADAFRUIT_DISPLAY_COLOR_COUNT - 1) + 1;
+            led_matrix_set_pixel(&led_matrix_l, flag, 0, color);
         }
-        gpio_set(STORE_LED_PIN, led_ttl[STATUS_FLAG_STORE]);
-        gpio_set(TEMPO_LED_PIN, led_ttl[STATUS_FLAG_TAPPING]);
     }
 }
 
@@ -471,6 +471,7 @@ void update_displays(void)
     }
     led_matrix_flush(&led_matrix_l);
     led_matrix_flush(&led_matrix_r);
+    gpio_set(STORE_LED_PIN, is_wah_enabled());
 }
 
 void value1_decrement(void)

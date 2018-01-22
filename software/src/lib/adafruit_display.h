@@ -68,6 +68,7 @@ enum adafruit_display_color
     ADAFRUIT_DISPLAY_COLOR_GREEN,       ///< Green
     ADAFRUIT_DISPLAY_COLOR_ORANGE,      ///< Orange
     ADAFRUIT_DISPLAY_COLOR_RED,         ///< Red
+    ADAFRUIT_DISPLAY_COLOR_COUNT,       ///< Number of available colors
 };
 
 /// \brief      Blinking mode of the LEDs
