@@ -32,6 +32,9 @@
 /// \brief      The MIDI note that represents uMIDI wah's enable / bypass state
 #define MIDI_NOTE_ENABLE_WAH            42
 
+/// \brief      The PWM output used for the Wah LED
+#define WAH_PWM                         PWM_PIN8
+
 
 
 //---------------- data types ----------------//

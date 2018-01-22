@@ -142,7 +142,7 @@ exec:
 
 void handle_midi_cc(midi_value_t controller, midi_value_t value)
 {
-    set_pwm_duty_cycle(value);
+    set_pwm_duty_cycle(WAH_PWM, value);
 }
 
 void handle_midi_note_off(midi_value_t note, midi_value_t velocity) {
@@ -177,8 +177,8 @@ void init_wah_module(void)
     pwm_range.from = 570;
     pwm_range.to = PWM_MAX_DUTY-190;
     init_linear_from_midi(&pwm_range);
-    init_pwm_module(&linear_function);
-    set_pwm_duty_cycle(pwm_range.from);
+    init_pwm(WAH_PWM, &linear_function);
+    set_pwm_duty_cycle(WAH_PWM, pwm_range.from);
 
     // Setup wave module
     configure_tap_tempo_wave(&pwm_wave);
@@ -188,6 +188,6 @@ void init_wah_module(void)
 void update_wah_pwm(void)
 {
     if (pwm_wave.settings.waveform != WAVE_OFF) {
-        set_pwm_duty_cycle(update_wave(&pwm_wave));
+        set_pwm_duty_cycle(WAH_PWM, update_wave(&pwm_wave));
     }
 }
