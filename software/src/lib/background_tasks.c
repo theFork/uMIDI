@@ -55,10 +55,10 @@ static uint8_t low_frequency_tasks_size;
 
 void process_background_tasks(void)
 {
-    if (!TCC0.INTFLAGS & TC0_OVFIF_bm) {
+    if (!TCE0.INTFLAGS & TC0_OVFIF_bm) {
         return;
     }
-    TCC0.INTFLAGS |= TC0_OVFIF_bm;
+    TCE0.INTFLAGS |= TC0_OVFIF_bm;
 
     ////
     // High frequency tasks
@@ -105,10 +105,10 @@ void init_background_tasks(background_task_t * const high_freq_tasks, uint8_t hi
                            background_task_t * const low_freq_tasks, uint8_t low_freq_tasks_size)
 {
     // Prescale clock to 500 kHz
-    TCC0.CTRLA = TC_CLKSEL_DIV64_gc;
+    TCE0.CTRLA = TC_CLKSEL_DIV64_gc;
 
     // Set TOP value to achieve desired clock
-    TCC0.PER = 500000 / F_TIMER - 1;
+    TCE0.PER = 500000 / F_TIMER - 1;
 
     // Save pointers to and size of task arrays
     high_frequency_tasks = high_freq_tasks;
