@@ -72,11 +72,10 @@ struct led_matrix
 ///                 the data structure of an LED matrix to initialize
 void init_led_matrix_module(struct led_matrix* matrix);
 
-/// \brief      Pushes data currently in the LED buffer to the display
-/// \details    This function should be placed in a background task.
+/// \brief      Clears out an the LED matrix
 /// \param      matrix
-///                 the LED matrix
-void led_matrix_flush(const struct led_matrix* matrix);
+///                 the LED matrix to manipulate
+void led_matrix_clear(struct led_matrix* matrix);
 
 /// \brief      Clears out an area of the LED matrix
 /// \details    Disables green and red LEDs in a rectangle defined by two points.
@@ -90,8 +89,9 @@ void led_matrix_flush(const struct led_matrix* matrix);
 ///                 Y-coordinate of the lower right corner
 /// \param      y_bot_right
 ///                 Y-coordinate of the lower right corner
-void led_matrix_clear_area(struct led_matrix* matrix, uint8_t x_top_left, uint8_t y_top_left,
-                                                      uint8_t x_bot_right, uint8_t y_bot_right);
+void led_matrix_clear_area(struct led_matrix* matrix,
+                           uint8_t x_top_left, uint8_t y_top_left,
+                           uint8_t x_bot_right, uint8_t y_bot_right);
 
 /// \brief      Draws a rectangle on the LED matrix
 /// \details    Configures green and red LEDs in a rectangle defined by two points.
@@ -110,6 +110,25 @@ void led_matrix_clear_area(struct led_matrix* matrix, uint8_t x_top_left, uint8_
 void led_matrix_draw_rectangle(struct led_matrix* matrix, uint8_t x_top_left, uint8_t y_top_left,
                                                           uint8_t x_bot_right, uint8_t y_bot_right,
                                                           enum adafruit_display_color color);
+
+/// \brief      Pushes data currently in the LED buffer to the display
+/// \details    This function should be placed in a background task.
+/// \param      matrix
+///                 the LED matrix
+void led_matrix_flush(const struct led_matrix* matrix);
+
+/// \brief      Sets the given color of an LED chosen by its coordinates on in the matrix.
+/// \details    Indexing starts at 0, with (0, 0) adressing the upper left LED.
+/// \param      matrix
+///                 the LED matrix to manipulate
+/// \param      row
+///                 row index
+/// \param      column
+///                 column index
+/// \param      color
+///                 the color to apply
+void led_matrix_set_pixel(struct led_matrix* matrix, uint8_t row, uint8_t column,
+                          enum adafruit_display_color color);
 
 /// \brief      Displays a bitmap on the LED matrix.
 /// \details    Indexing starts at 0, with (0, 0) adressing the upper left LED.
@@ -154,19 +173,6 @@ void led_matrix_show_bitmap(struct led_matrix* matrix, const uint8_t* bitmap,
 void led_matrix_show_character(struct led_matrix* matrix, char character,
                                uint8_t x_offs, uint8_t y_offs,
                                enum adafruit_display_color color);
-
-/// \brief      Sets the given color of an LED chosen by its coordinates on in the matrix.
-/// \details    Indexing starts at 0, with (0, 0) adressing the upper left LED.
-/// \param      matrix
-///                 the LED matrix to manipulate
-/// \param      row
-///                 row index
-/// \param      column
-///                 column index
-/// \param      color
-///                 the color to apply
-void led_matrix_set_pixel(struct led_matrix* matrix, uint8_t row, uint8_t column,
-                          enum adafruit_display_color color);
 
 
 //---------------- EOF ----------------//
