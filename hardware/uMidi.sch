@@ -1210,7 +1210,7 @@ U 1 1 546CD5B3
 P 5000 5350
 F 0 "C6" V 4850 5300 40  0000 L CNN
 F 1 "4.7n" V 5150 5300 40  0000 L CNN
-F 2 "" H 5038 5200 30  0001 C CNN
+F 2 "Capacitors_SMD:C_0603" H 5038 5200 30  0001 C CNN
 F 3 "" H 5000 5350 60  0001 C CNN
 F 4 "490-1506-1-ND" V 4850 5300 40  0001 L CNN "Supplier Part Number"
 F 5 "Digikey" V 4850 5300 40  0001 L CNN "Supplier"
@@ -1405,14 +1405,14 @@ L LED-RESCUE-uMidi D7
 U 1 1 546F2E09
 P 6350 3300
 F 0 "D7" H 6350 3400 50  0000 C CNN
-F 1 "LED Green" H 6350 3200 50  0000 C CNN
+F 1 "LED Red" H 6350 3200 50  0000 C CNN
 F 2 "" H 6350 3300 60  0001 C CNN
-F 3 "http://optoelectronics.liteon.com/upload/download/DS22-2000-228/S_110_LTST-C191KGKT.pdf" H 6350 3300 60  0001 C CNN
-F 4 "LTST-C191KGKT" H 6350 3400 50  0001 C CNN "Manufacturer Part Number"
+F 3 "http://optoelectronics.liteon.com/upload/download/DS22-2000-223/S_110_LTST-C191KRKT.pdf" H 6350 3300 60  0001 C CNN
+F 4 "LTST-C191KRKT" H 6350 3400 50  0001 C CNN "Manufacturer Part Number"
 F 5 "Digikey" H 6350 3400 50  0001 C CNN "Supplier"
-F 6 "https://www.digikey.de/product-detail/de/LTST-C191KGKT/160-1446-1-ND/386834" H 6350 3400 50  0001 C CNN "Supplier Link"
+F 6 "https://www.digikey.de/product-detail/de/LTST-C191KRKT/160-1447-1-ND/386836" H 6350 3400 50  0001 C CNN "Supplier Link"
 F 7 "Lite-On Inc." H 6350 3400 50  0001 C CNN "Manufacturer"
-F 8 "160-1446-1-ND" H 6350 3400 50  0001 C CNN "Supplier Part Number"
+F 8 "160-1447-1-ND" H 6350 3400 50  0001 C CNN "Supplier Part Number"
 	1    6350 3300
 	-1   0    0    1   
 $EndComp
@@ -1421,12 +1421,12 @@ L LED-RESCUE-uMidi D8
 U 1 1 546F2EDE
 P 6350 3600
 F 0 "D8" H 6350 3700 50  0000 C CNN
-F 1 "LED Red" H 6350 3500 50  0000 C CNN
+F 1 "LED Green" H 6350 3500 50  0000 C CNN
 F 2 "" H 6350 3600 60  0001 C CNN
-F 3 "http://optoelectronics.liteon.com/upload/download/DS22-2000-223/S_110_LTST-C191KRKT.pdf" H 6350 3600 60  0001 C CNN
-F 4 "LTST-C191KRKT" H 6350 3700 50  0001 C CNN "Manufacturer Part Number"
-F 5 "160-1447-1-ND" H 6350 3700 50  0001 C CNN "Supplier Part Number"
-F 6 "https://www.digikey.de/product-detail/de/LTST-C191KRKT/160-1447-1-ND/386836" H 6350 3700 50  0001 C CNN "Supplier Link"
+F 3 "http://optoelectronics.liteon.com/upload/download/DS22-2000-228/S_110_LTST-C191KGKT.pdf" H 6350 3600 60  0001 C CNN
+F 4 "LTST-C191KGKT" H 6350 3700 50  0001 C CNN "Manufacturer Part Number"
+F 5 "160-1446-1-ND" H 6350 3700 50  0001 C CNN "Supplier Part Number"
+F 6 "https://www.digikey.de/product-detail/de/LTST-C191KGKT/160-1446-1-ND/386834" H 6350 3700 50  0001 C CNN "Supplier Link"
 F 7 "Lite-On Inc." H 6350 3700 50  0001 C CNN "Manufacturer"
 F 8 "Digikey" H 6350 3700 50  0001 C CNN "Supplier"
 	1    6350 3600

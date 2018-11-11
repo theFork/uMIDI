@@ -22,12 +22,31 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <string.h>
 
+#include <avr/interrupt.h>
 #include <avr/io.h>
 #include <avr/wdt.h>
 #include <util/delay.h>
 
 #include "gpio.h"
+#include "system.h"
+
+
+
+////////////////////////////////////////////////////////////////
+//                    D A T A   T Y P E S                     //
+////////////////////////////////////////////////////////////////
+
+enum gpio_port
+{
+    GPIO_PORT_A,
+    GPIO_PORT_B,
+    GPIO_PORT_C,
+    GPIO_PORT_D,
+    GPIO_PORT_R,
+    GPIO_PORT_NUMBER
+};
 
 
 ////////////////////////////////////////////////////////////////
@@ -73,13 +92,38 @@ const struct gpio gpio = {
     }
 };
 
+static void (*callbacks[GPIO_PORT_NUMBER][2])(void);
+
 
 ////////////////////////////////////////////////////////////////
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
+static enum gpio_port get_port_index(PORT_t* port)
+{
+    switch ((uint16_t) port) {
+        case (uint16_t) &PORTB:
+            return GPIO_PORT_B;
+
+        case (uint16_t) &PORTC:
+            return GPIO_PORT_C;
+
+        case (uint16_t) &PORTD:
+            return GPIO_PORT_D;
+
+        case (uint16_t) &PORTR:
+            return GPIO_PORT_R;
+
+        default:
+        case (uint16_t) &PORTA:
+            return GPIO_PORT_A;
+    }
+}
+
 void init_gpio_module(const struct gpio_mapping * const mappings, const uint8_t mappings_size)
 {
+    memset(callbacks, 0, sizeof(callbacks));
+
     // Iterate pins in GPIO config and initialize default configuration
     const struct gpio_pin* pin_pointer = &gpio.header1.pin2;
     for (uint8_t i=0; i<sizeof(struct gpio)/sizeof(struct gpio_pin); ++i) {
@@ -104,10 +148,33 @@ void init_gpio_module(const struct gpio_mapping * const mappings, const uint8_t 
     }
 }
 
+void configure_gpio_interrupt(const struct gpio_pin* const pin, const enum gpio_input_sense sense,
+                              const enum gpio_interrupt type, void (* const callback)(void))
+{
+    register8_t* const pin_ctrl_register = &pin->port->PIN0CTRL + pin->bit;
+
+    // Configure input sensing
+    // Enum values are defined such that we can directly write them
+    *pin_ctrl_register |= sense;
+
+    // Configure interrupt
+    if (type == GPIO_INTERRUPT_0) {
+        pin->port->INT0MASK |= _BV(pin->bit);
+        pin->port->INTCTRL  |= PORT_INT0LVL_LO_gc;
+    }
+    else {
+        pin->port->INT1MASK |= _BV(pin->bit);
+        pin->port->INTCTRL  |= PORT_INT1LVL_LO_gc;
+    }
+
+    // Save callback
+    callbacks[get_port_index(pin->port)][type] = callback;
+}
+
 void configure_gpio_pin(const struct gpio_pin* const pin, const enum gpio_type type)
 {
     // Configure pin based on the provided type
-    register8_t * const pin_ctrl_register = &pin->port->PIN0CTRL + pin->bit;
+    register8_t* const pin_ctrl_register = &pin->port->PIN0CTRL + pin->bit;
     switch (type) {
     case GPIO_INPUT:
         pin->port->DIRCLR = _BV(pin->bit);
@@ -130,6 +197,7 @@ void configure_gpio_pin(const struct gpio_pin* const pin, const enum gpio_type t
         break;
     }
 }
+
 
 bool poll_gpio_input(const struct gpio_pin pin, const enum gpio_type type)
 {
@@ -159,18 +227,78 @@ enum gpio_input_event poll_gpio_input_timeout(const struct gpio_pin pin, const e
     }
 
     // De-bounce
-    _delay_ms(25);
+    _delay_ms(10);
+    wdt_reset();
 
     // Wait for timeout
+    static bool returning_from_long_press = false;
     uint8_t timeout_counter = 0;
     while (gpio_get(pin) ^ type_mask) {
-        if (timeout != 0 && timeout_counter == timeout) {
+        if (timeout == 0) {
+            wdt_reset();
+            continue;
+        }
+
+        if (timeout_counter == timeout) {
+            returning_from_long_press = true;
             return GPIO_INPUT_EVENT_LONG;
         }
 
-        wdt_reset();
         _delay_ms(100);
+        wdt_reset();
         ++timeout_counter;
     }
+
+    if (returning_from_long_press) {
+        returning_from_long_press = false;
+        return GPIO_INPUT_EVENT_NONE;
+    }
+
     return GPIO_INPUT_EVENT_SHORT;
+}
+
+
+
+////////////////////////////////////////////////////////////////
+//                    I N T E R R U P T S                     //
+////////////////////////////////////////////////////////////////
+
+ISR(PORTA_INT0_vect) {
+    call(callbacks[GPIO_PORT_A][0]);
+}
+
+ISR(PORTA_INT1_vect) {
+    call(callbacks[GPIO_PORT_A][1]);
+}
+
+ISR(PORTB_INT0_vect) {
+    call(callbacks[GPIO_PORT_B][0]);
+}
+
+ISR(PORTB_INT1_vect) {
+    call(callbacks[GPIO_PORT_B][1]);
+}
+
+ISR(PORTC_INT0_vect) {
+    call(callbacks[GPIO_PORT_C][0]);
+}
+
+ISR(PORTC_INT1_vect) {
+    call(callbacks[GPIO_PORT_C][1]);
+}
+
+ISR(PORTD_INT0_vect) {
+    call(callbacks[GPIO_PORT_D][0]);
+}
+
+ISR(PORTD_INT1_vect) {
+    call(callbacks[GPIO_PORT_D][1]);
+}
+
+ISR(PORTR_INT0_vect) {
+    call(callbacks[GPIO_PORT_R][0]);
+}
+
+ISR(PORTR_INT1_vect) {
+    call(callbacks[GPIO_PORT_R][1]);
 }

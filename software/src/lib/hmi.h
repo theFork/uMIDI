@@ -78,12 +78,19 @@ enum hmi_bar_graph_percentage
 };
 
 /// \brief      Configuration structure for the HMI module
+/// \note       The #gpio_header pointers may be `NULL`, in which case the header will not be configured and hence can
+///             not be used. This is useful for example in situations where you need only the HMI's input capabilities.
 struct hmi_config
 {
     const struct gpio_header* input_header;     ///< the pin header that is connected to the HMI board's X2 header
     const struct gpio_header* output_header;    ///< the pin header that is connected to the HMI board's X1 header
-    void (* button1_handler)(void);             ///< this handler is called when button 1 is pressed
-    void (* button2_handler)(void);             ///< this handler is called when button 2 is pressed
+    uint8_t long_input_threashold;              ///< the time in [s/10] after which a button press is considered "long"
+    void (* button1_short_handler)(void);       ///< this handler is called when button 1 is pressed briefly
+    void (* button1_long_handler)(void);        ///< this handler is called when button 1 is pressed long
+    void (* button1_interrupt_handler)(void);   ///< this handler is called when button 1 is pressed
+    void (* button2_short_handler)(void);       ///< this handler is called when button 2 is pressed briefly
+    void (* button2_long_handler)(void);        ///< this handler is called when button 2 is pressed long
+    void (* button2_interrupt_handler)(void);   ///< this handler is called when button 2 is pressed
     void (* encoder1cw_handler)(void);          ///< this handler is called when encoder 1 is rotated clockwise
     void (* encoder1ccw_handler)(void);         ///< this handler is called when encoder 1 is rotated counter-clockwise
     void (* encoder1push_handler)(void);        ///< this handler is called when the switch in encoder 1 is pressed

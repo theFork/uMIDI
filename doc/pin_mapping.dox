@@ -29,7 +29,7 @@ All pins of this connector can be used for analog-digital-conversion.
 | GND           | 10                |
 
 ### GPIO 2
-The TWI / I2C interface is accessible here.
+The TWI / I2C interface of Port C (TWIC) is accessible here.
 
 | Pin              | GPIO Header Pin   |
 |------------------|-------------------|
@@ -38,8 +38,8 @@ The TWI / I2C interface is accessible here.
 | PB1              | 3                 |
 | PB2 (DACB::DAC0) | 4                 |
 | PB3 (DACB::DAC1) | 5                 |
-| PC0 (SDA)        | 6                 |
-| PC1 (SCL)        | 7                 |
+| PC0 (SDA, TWIC)  | 6                 |
+| PC1 (SCL, TWIC)  | 7                 |
 | PC2 (C0::RXD0)   | 8                 |
 | PC3 (C0::TXD0)   | 9                 |
 | GND              | 10                |

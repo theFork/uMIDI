@@ -265,6 +265,7 @@ void tap_tempo_task(void)
     ++counter;
 
     if (!tap_arrived) {
+        // Wait: 100 Hz / 400 = 0.25 Hz = 15 bpm
         if (counter < 400) {
             return;
         }
@@ -277,6 +278,18 @@ void tap_tempo_task(void)
         return;
     }
     tap_arrived = false;
+
+    // Abort if the tap frequency is too high
+    // Limit: 100 Hz / 20 = 5 Hz = 300 bpm
+    if (counter < 20) {
+        // Allow taps which are only slightly too fast
+        if (counter > 15) {
+            counter = 20;
+        }
+        else {
+            return;
+        }
+    }
 
     // Increment tap counter to buffer size
     if (taps < TAP_TEMPO_BUFFER_SIZE) {

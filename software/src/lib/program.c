@@ -33,6 +33,7 @@
 
 #include "gpio.h"
 #include "program.h"
+#include "midi.h"
 
 
 
@@ -57,6 +58,24 @@ static void (*execute_program)(uint32_t);
 ////////////////////////////////////////////////////////////////
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
+
+uint8_t adjust_program(const int8_t delta)
+{
+    uint8_t number = current_program.number + delta;
+
+    // Clamp to valid values
+    if (number > PROGRAM_COUNT-1) {
+        if (delta < 0) {
+            number = PROGRAM_COUNT-1;
+        }
+        else if (delta > 0) {
+            number = 0;
+        }
+    }
+
+    enter_program(number);
+    return number;
+}
 
 void copy_current_bank_to(uint8_t target_bank)
 {
@@ -93,6 +112,19 @@ void copy_current_program_to(uint8_t target_program)
     write_program(target_program, current_program.data);
 }
 
+void enter_program(uint8_t number)
+{
+    // If the program has not changed, do nothing
+    if (current_program.number == number) {
+        return;
+    }
+
+    // Load program and execute program
+    current_program.number = number;
+    current_program.data = read_program_data(number);
+    execute_program(current_program.data);
+}
+
 char* export_bank(const uint8_t bank)
 {
     // Allocate static (!) string buffer:
@@ -109,17 +141,9 @@ char* export_bank(const uint8_t bank)
     return result_string;
 }
 
-void enter_program(uint8_t number)
+uint8_t get_current_program_number()
 {
-    // If the program has not changed, do nothing
-    if (current_program.number == number) {
-        return;
-    }
-
-    // Load program and execute program
-    current_program.number = number;
-    current_program.data = read_program_data(number);
-    execute_program(current_program.data);
+    return current_program.number;
 }
 
 bool import_bank(const uint8_t bank, const char* data)
@@ -190,4 +214,9 @@ void wipe_current_program(void)
 void write_program(uint8_t number, uint32_t data)
 {
     eeprom_write_dword(&program_data_storage[number], data);
+}
+
+void update_program(uint32_t data)
+{
+    write_program(current_program.number, data);
 }

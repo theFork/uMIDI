@@ -25,6 +25,7 @@
 #include "encoder.h"
 #include "gpio.h"
 #include "hmi.h"
+#include "system.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -62,33 +63,46 @@ void init_hmi_module(const struct hmi_config * const config)
     hmi_config = config;
 
     // Initialize GPIO ports
-    const struct gpio_pin* pin_pointer = &hmi_config->input_header->pin2;
-    for (uint8_t i=0; i<sizeof(struct gpio_header)/sizeof(struct gpio_pin); ++i) {
-        configure_gpio_pin(pin_pointer, GPIO_INPUT_PULLUP);
-        ++pin_pointer;
-    }
-    pin_pointer = &hmi_config->output_header->pin2;
-    for (uint8_t i=0; i<sizeof(struct gpio_header)/sizeof(struct gpio_pin); ++i) {
-        configure_gpio_pin(pin_pointer, GPIO_OUTPUT);
-        ++pin_pointer;
+    const struct gpio_pin* pin_pointer = NULL;
+    if (hmi_config->output_header != NULL) {
+        pin_pointer = &hmi_config->output_header->pin2;
+        for (uint8_t i=0; i<sizeof(struct gpio_header)/sizeof(struct gpio_pin); ++i) {
+            configure_gpio_pin(pin_pointer, GPIO_OUTPUT);
+            ++pin_pointer;
+        }
     }
 
-    // Configure encoders
-    encoder1.config.inputA = &hmi_config->input_header->pin5;
-    encoder1.config.inputB = &hmi_config->input_header->pin7;
-    encoder1.config.inputSwitch = &hmi_config->input_header->pin3;
-    encoder1.config.cw_callback = hmi_config->encoder1cw_handler;
-    encoder1.config.ccw_callback = hmi_config->encoder1ccw_handler;
-    encoder1.config.push_callback = hmi_config->encoder1push_handler;
-    init_encoder(&encoder1);
+    if (hmi_config->input_header != NULL) {
+        // Configure buttons
+        configure_gpio_pin(&hmi_config->input_header->pin9, GPIO_INPUT_PULLUP);
+        if (hmi_config->button1_interrupt_handler != NULL) {
+            configure_gpio_interrupt(&hmi_config->input_header->pin9, GPIO_INPUT_SENSE_FALLING,
+                                     GPIO_INTERRUPT_0, hmi_config->button1_interrupt_handler);
+        }
 
-    encoder2.config.inputA = &hmi_config->input_header->pin6;
-    encoder2.config.inputB = &hmi_config->input_header->pin4;
-    encoder2.config.inputSwitch = &hmi_config->input_header->pin2;
-    encoder2.config.cw_callback = hmi_config->encoder2cw_handler;
-    encoder2.config.ccw_callback = hmi_config->encoder2ccw_handler;
-    encoder2.config.push_callback = hmi_config->encoder2push_handler;
-    init_encoder(&encoder2);
+        configure_gpio_pin(&hmi_config->input_header->pin8, GPIO_INPUT_PULLUP);
+        if (hmi_config->button2_interrupt_handler != NULL) {
+            configure_gpio_interrupt(&hmi_config->input_header->pin8, GPIO_INPUT_SENSE_FALLING,
+                                     GPIO_INTERRUPT_1, hmi_config->button2_interrupt_handler);
+        }
+
+        // Configure encoders
+        encoder1.config.inputA = &hmi_config->input_header->pin5;
+        encoder1.config.inputB = &hmi_config->input_header->pin7;
+        encoder1.config.inputSwitch = &hmi_config->input_header->pin3;
+        encoder1.config.cw_callback = hmi_config->encoder1cw_handler;
+        encoder1.config.ccw_callback = hmi_config->encoder1ccw_handler;
+        encoder1.config.push_callback = hmi_config->encoder1push_handler;
+        init_encoder(&encoder1);
+
+        encoder2.config.inputA = &hmi_config->input_header->pin6;
+        encoder2.config.inputB = &hmi_config->input_header->pin4;
+        encoder2.config.inputSwitch = &hmi_config->input_header->pin2;
+        encoder2.config.cw_callback = hmi_config->encoder2cw_handler;
+        encoder2.config.ccw_callback = hmi_config->encoder2ccw_handler;
+        encoder2.config.push_callback = hmi_config->encoder2push_handler;
+        init_encoder(&encoder2);
+    }
 }
 
 void show_bar_graph(const enum hmi_bar_graph_percentage percentage)
@@ -119,15 +133,31 @@ void set_hmi_led(const enum hmi_led led, const bool value)
 void poll_hmi(void)
 {
     // Poll switches
-    if (hmi_config->button1_handler != NULL) {
-        if (poll_gpio_input(hmi_config->input_header->pin9, GPIO_INPUT_PULLUP)) {
-            hmi_config->button1_handler();
+    if (hmi_config->button1_short_handler != NULL || hmi_config->button1_long_handler != NULL) {
+        switch (poll_gpio_input_timeout(hmi_config->input_header->pin9, GPIO_INPUT_PULLUP,
+                                        hmi_config->long_input_threashold)) {
+        case GPIO_INPUT_EVENT_SHORT:
+            call(hmi_config->button1_short_handler);
+            break;
+        case GPIO_INPUT_EVENT_LONG:
+            call(hmi_config->button1_long_handler);
+            break;
+        default:
+            break;
         }
     }
 
-    if (hmi_config->button2_handler != NULL) {
-        if (poll_gpio_input(hmi_config->input_header->pin8, GPIO_INPUT_PULLUP)) {
-            hmi_config->button2_handler();
+    if (hmi_config->button2_short_handler != NULL || hmi_config->button2_long_handler != NULL) {
+        switch (poll_gpio_input_timeout(hmi_config->input_header->pin8, GPIO_INPUT_PULLUP,
+                                        hmi_config->long_input_threashold)) {
+        case GPIO_INPUT_EVENT_SHORT:
+            call(hmi_config->button2_short_handler);
+            break;
+        case GPIO_INPUT_EVENT_LONG:
+            call(hmi_config->button2_long_handler);
+            break;
+        default:
+            break;
         }
     }
 
