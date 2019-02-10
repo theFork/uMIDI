@@ -32,6 +32,7 @@
 
 #include "config.h"
 #include "expression.h"
+#include "midi_handlers.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -125,10 +126,10 @@ struct led status_led = {
 //---------------- MIDI ----------------//
 struct midi_config midi_config = {
     .event_handlers = {
-        .control_change = NULL,
-        .note_off       = NULL,
-        .note_on        = NULL,
-        .program_change = NULL
+        .control_change = handle_midi_control_change,
+        .note_off       = handle_midi_note_off,
+        .note_on        = handle_midi_note_on,
+        .program_change = handle_midi_program_change,
     },
     .omni_mode  = false,
     .rx_channel = MIDI_CHANNEL_01,

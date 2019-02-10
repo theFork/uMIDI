@@ -264,7 +264,8 @@ void trigger_expression_conversion(void)
     trigger_adc(expression_conversion.channel);
 }
 
-void update_expression_value(uint16_t adc_value) {
+void update_expression_value(uint16_t adc_value)
+{
     if (adc_value != current_expression_value) {
         // Update stored value
         current_expression_value = adc_value;
