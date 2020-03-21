@@ -84,30 +84,28 @@ void handle_midi_control_change(const midi_value_t controller, const midi_value_
 
 void handle_midi_note_off(midi_value_t note, midi_value_t velocity)
 {
-    if (get_active_program().field.ctrl_mode != WHAMMY_CTRL_MODE_MOMENTARY) {
-        return;
-    }
-
-    // Release pitch bend
-    send_control_change(WHAMMY_MIDI_CC_NUMBER, 0);
-
-    // Turn off Whammy pedal
-    send_program_change(WHAMMY_MODE_OFF);
-
-    signal_midi_rx();
+    usb_printf(PSTR("Received MIDI note off num: %u, vel: %u" USB_NEWLINE), note, velocity);
 }
 
 void handle_midi_note_on(midi_value_t note, midi_value_t velocity)
 {
-    if (get_active_program().field.ctrl_mode != WHAMMY_CTRL_MODE_MOMENTARY) {
-        return;
+    usb_printf(PSTR("Received MIDI note on num: %u, vel: %u" USB_NEWLINE), note, velocity);
+
+    static bool bending = false;
+    if (!bending) {
+        // Enable Whammy pedal
+        send_program_change(get_active_program().field.pedal_mode);
+        // Pitch bend
+        send_control_change(WHAMMY_MIDI_CC_NUMBER, get_active_program().field.range);
+        bending = true;
     }
-
-    // Enable Whammy pedal
-    send_program_change(get_active_program().field.pedal_mode);
-
-    // Pitch bend
-    send_control_change(WHAMMY_MIDI_CC_NUMBER, get_active_program().field.range);
+    else {
+        // Release pitch bend
+        bending = false;
+        send_control_change(WHAMMY_MIDI_CC_NUMBER, 0);
+        // Turn off Whammy pedal
+        send_program_change(WHAMMY_MODE_OFF);
+    }
 
     signal_midi_rx();
 }
@@ -119,4 +117,3 @@ void handle_midi_program_change(midi_value_t program)
 
     signal_midi_rx();
 }
-
