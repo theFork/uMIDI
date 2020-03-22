@@ -162,7 +162,7 @@ bool exec_ctrl(const char* command)
     }
     else if (!strncmp(command+5, "set", 3)) {
         control = atoi(command+9);
-        eeprom_write_byte(&control_eemem, true);
+        eeprom_write_byte(&control_eemem, control);
         usb_printf(PSTR("Switching to MIDI control number %2u" USB_NEWLINE), control);
     }
     else {
