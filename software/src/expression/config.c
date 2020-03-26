@@ -32,6 +32,7 @@
 
 #include "config.h"
 #include "expression.h"
+#include "midi_handlers.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -77,6 +78,12 @@ static const char help_string_cal[] PROGMEM = "<m>\n"
     "      \"max\" sets the maximum registered ADC value\n"
     "      \"dmp\" dumps currently active values\n"
     "      \"sav\" saves active values to EEPROM\n";
+static const char cmd_string_ctrl[] PROGMEM = "ctrl";
+static const char help_string_ctrl[] PROGMEM = "<a> [<n>]\n"
+    "Read or set the MIDI control number:\n"
+    "<a> : \"get\" returns the configured control number\n"
+    "      \"set\" sets the control number <n>\n"
+    "<n> : the control number [1..16]\n";
 static const char cmd_string_echo[] PROGMEM = "echo";
 static const char help_string_echo[] PROGMEM = "<v>\n"
     "Switch expression value console output on / off\n"
@@ -92,6 +99,7 @@ static const char help_string_mute[] PROGMEM = "<v>\n"
 
 struct serial_command serial_commands[] = {
     { .cmd_string = cmd_string_cal,  .help_string = help_string_cal,  .handler = &exec_cal  },
+    { .cmd_string = cmd_string_ctrl, .help_string = help_string_ctrl, .handler = &exec_ctrl },
     { .cmd_string = cmd_string_echo, .help_string = help_string_echo, .handler = &exec_echo },
     { .cmd_string = cmd_string_mute, .help_string = help_string_mute, .handler = &exec_mute },
 };
@@ -118,10 +126,10 @@ struct led status_led = {
 //---------------- MIDI ----------------//
 struct midi_config midi_config = {
     .event_handlers = {
-        .control_change = NULL,
-        .note_off       = NULL,
-        .note_on        = NULL,
-        .program_change = NULL
+        .control_change = handle_midi_control_change,
+        .note_off       = handle_midi_note_off,
+        .note_on        = handle_midi_note_on,
+        .program_change = handle_midi_program_change,
     },
     .omni_mode  = false,
     .rx_channel = MIDI_CHANNEL_01,

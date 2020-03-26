@@ -21,6 +21,7 @@
  */
 
 #include <stdbool.h>
+#include <stdlib.h>
 #include <string.h>
 #include <avr/eeprom.h>
 
@@ -52,6 +53,9 @@ uint16_t adc_offset_eemem EEMEM;
 uint16_t from_eemem EEMEM;
 uint16_t to_eemem EEMEM;
 
+static uint8_t control;
+uint8_t control_eemem EEMEM;
+
 static uint8_t mute_enabled;
 uint8_t mute_enabled_eemem EEMEM;
 
@@ -81,8 +85,7 @@ static void send_enable_message(bool enable)
 bool exec_cal(const char* command)
 {
     if (strlen(command) != 7) {
-        usb_puts(PSTR("Malformed command"));
-        return false;
+        goto cal_fail;
     }
 
     bool echo_state = echo;
@@ -114,16 +117,21 @@ bool exec_cal(const char* command)
         eeprom_write_word(&to_eemem,         adc_config.input_range.to);
         usb_puts(PSTR("done."));
     }
+    else {
+        goto cal_fail;
+    }
     echo = echo_state;
-
     return true;
+
+cal_fail:
+    usb_puts(PSTR("Malformed command"));
+    return false;
 }
 
 bool exec_echo(const char* command)
 {
     if (strlen(command) < 7 || strlen(command) > 8) {
-        usb_puts(PSTR("Malformed command" USB_NEWLINE));
-        return false;
+        goto echo_fail;
     }
 
     // Enable echo via global variable
@@ -133,15 +141,44 @@ bool exec_echo(const char* command)
     else if (!strncmp(command+5, "off", 2)) {
         echo = false;
     }
-
+    else {
+        goto echo_fail;
+    }
     return true;
+
+echo_fail:
+    usb_puts(PSTR("Malformed command" USB_NEWLINE));
+    return false;
+}
+
+bool exec_ctrl(const char* command)
+{
+    if (strlen(command) < 8 || strlen(command) > 11) {
+        goto ctrl_fail;
+    }
+
+    if (!strncmp(command+5, "get", 3)) {
+        usb_printf(PSTR("MIDI control number: %2u" USB_NEWLINE), control);
+    }
+    else if (!strncmp(command+5, "set", 3)) {
+        control = atoi(command+9);
+        eeprom_write_byte(&control_eemem, control);
+        usb_printf(PSTR("Switching to MIDI control number %2u" USB_NEWLINE), control);
+    }
+    else {
+        goto ctrl_fail;
+    }
+    return true;
+
+ctrl_fail:
+    usb_puts(PSTR("Malformed command" USB_NEWLINE));
+    return false;
 }
 
 bool exec_mute(const char* command)
 {
     if (strlen(command) < 7 || strlen(command) > 9) {
-        usb_puts(PSTR("Malformed command" USB_NEWLINE));
-        return false;
+        goto mute_fail;
     }
 
     if (!strncmp(command+5, "on", 2)) {
@@ -161,7 +198,14 @@ bool exec_mute(const char* command)
             usb_puts(PSTR("Muting currently disabled." USB_NEWLINE));
         }
     }
+    else {
+        goto mute_fail;
+    }
     return true;
+
+mute_fail:
+    usb_puts(PSTR("Malformed command" USB_NEWLINE));
+    return false;
 }
 
 void handle_enable_switch(void)
@@ -208,6 +252,9 @@ void init_expression_module(void)
     init_adc_conversion(&expression_conversion);
     enable_adc_interrupt(expression_conversion.channel);
 
+    // Read MIDI control setting from EEPROM
+    control = eeprom_read_byte(&control_eemem);
+
     // Read mute setting from EEPROM
     mute_enabled = eeprom_read_byte(&mute_enabled_eemem);
 }
@@ -217,14 +264,15 @@ void trigger_expression_conversion(void)
     trigger_adc(expression_conversion.channel);
 }
 
-void update_expression_value(uint16_t adc_value) {
+void update_expression_value(uint16_t adc_value)
+{
     if (adc_value != current_expression_value) {
         // Update stored value
         current_expression_value = adc_value;
 
         // If muting enabled only transmit if status LED is on
         if ((mute_enabled && status_led.state.active) || !mute_enabled) {
-            send_control_change(69, current_expression_value);
+            send_control_change(control, current_expression_value);
             flash_led(LED_RED);
         }
 
