@@ -119,7 +119,7 @@ const USB_Descriptor_Configuration_t PROGMEM ConfigurationDescriptor =
 
     .CDC_Functional_Header =
         {
-            .Header                 = {.Size = sizeof(USB_CDC_Descriptor_FunctionalHeader_t), .Type = DTYPE_CSInterface},
+            .Header                 = {.Size = sizeof(USB_CDC_Descriptor_FunctionalHeader_t), .Type = CDC_DTYPE_CSInterface},
             .Subtype                = CDC_DSUBTYPE_CSInterface_Header,
 
             .CDCSpecification       = VERSION_BCD(0,1,0),
@@ -127,7 +127,7 @@ const USB_Descriptor_Configuration_t PROGMEM ConfigurationDescriptor =
 
     .CDC_Functional_ACM =
         {
-            .Header                 = {.Size = sizeof(USB_CDC_Descriptor_FunctionalACM_t), .Type = DTYPE_CSInterface},
+            .Header                 = {.Size = sizeof(USB_CDC_Descriptor_FunctionalACM_t), .Type = CDC_DTYPE_CSInterface},
             .Subtype                = CDC_DSUBTYPE_CSInterface_ACM,
 
             .Capabilities           = 0x06,
@@ -135,7 +135,7 @@ const USB_Descriptor_Configuration_t PROGMEM ConfigurationDescriptor =
 
     .CDC_Functional_Union =
         {
-            .Header                 = {.Size = sizeof(USB_CDC_Descriptor_FunctionalUnion_t), .Type = DTYPE_CSInterface},
+            .Header                 = {.Size = sizeof(USB_CDC_Descriptor_FunctionalUnion_t), .Type = CDC_DTYPE_CSInterface},
             .Subtype                = CDC_DSUBTYPE_CSInterface_Union,
 
             .MasterInterfaceNumber  = 0,
@@ -239,6 +239,7 @@ const USB_Descriptor_String_t PROGMEM ProductString =
 uint16_t CALLBACK_USB_GetDescriptor(const uint16_t wValue,
                                     const uint16_t wIndex,
                                     const void** const DescriptorAddress)
+                                    //uint8_t* const DescriptorMemorySpace)
 {
     const uint8_t  DescriptorType   = (wValue >> 8);
     const uint8_t  DescriptorNumber = (wValue & 0xFF);

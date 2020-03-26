@@ -54,7 +54,7 @@ LOOKUP_TABLES_FILE = lib/lookup_tables.c
 LOOKUP_TABLES_YRES = 10
 
 # LUFA submodule directory
-LUFA_PATH = lib/lufa
+LUFA_PATH = lib/lufa/LUFA
 
 # LUFA configuration
 ARCH = XMEGA
@@ -132,14 +132,13 @@ MSG_PACKAGE     = *** Creating firmware update file...
 MSG_UPDATE      = *** Uploading new firmware...
 
 # Create the LUFA source path variables by including the LUFA root makefile
-include $(LUFA_PATH)/LUFA/makefile
-.DEFAULT_GOAL =
+include $(LUFA_PATH)/Build/LUFA/lufa-sources.mk
 
 # Determine the list of C source files
 SRC  = $(LOOKUP_TABLES_FILE)
 SRC += $(filter-out $(LOOKUP_TABLES_FILE),$(wildcard lib/*.c)) $(wildcard *.c)
 SRC += $(XBOOT_PATH)/xbootapi.c
-SRC += $(LUFA_SRC_USB_DEVICE) $(LUFA_PATH)/LUFA/Drivers/USB/Class/Device/CDCClassDevice.c
+SRC += $(LUFA_SRC_USB_DEVICE) $(LUFA_PATH)/Drivers/USB/Class/Device/CDCClassDevice.c
 
 # Generate software ID string and predefine it for the preprocessor
 SOFTWARE_ID  = $(shell date +%F)
