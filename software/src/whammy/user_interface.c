@@ -92,62 +92,6 @@ enum status_flag
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-static const uint8_t wave_bitmap_sine[WAVE_BMP_YSIZE] = {
-    0b0000110,
-    0b0001001,
-    0b0001000,
-    0b1001000,
-    0b0110000
-};
-
-static const uint8_t wave_bitmap_triangle[WAVE_BMP_YSIZE] = {
-    0b0000010,
-    0b0000101,
-    0b0001000,
-    0b1010000,
-    0b0100000
-};
-
-static const uint8_t wave_bitmap_saw_up[WAVE_BMP_YSIZE] = {
-    0b0001000,
-    0b0011001,
-    0b0101010,
-    0b1001100,
-    0b0001000
-};
-
-static const uint8_t wave_bitmap_saw_down[WAVE_BMP_YSIZE] = {
-    0b0001000,
-    0b1001100,
-    0b0101010,
-    0b0011001,
-    0b0001000
-};
-
-static const uint8_t wave_bitmap_square[WAVE_BMP_YSIZE] = {
-    0b0001111,
-    0b0001000,
-    0b0001000,
-    0b0001000,
-    0b1111000
-};
-
-static const uint8_t wave_bitmap_stairs[WAVE_BMP_YSIZE] = {
-    0b0000111,
-    0b0000100,
-    0b0011100,
-    0b0010000,
-    0b1110000
-};
-
-static const uint8_t wave_bitmap_random[WAVE_BMP_YSIZE] = {
-    0b0000011,
-    0b0000010,
-    0b0001110,
-    0b1101000,
-    0b0111000
-};
-
 static enum hmi_layer selected_hmi_layer = HMI_LAYER_NORMAL;
 static uint8_t active_pattern_step = 0;
 static uint8_t selected_pattern_step = 0;
@@ -221,24 +165,23 @@ static void display_number(const uint8_t number)
 static void display_ctrl_mode(enum ui_ctrl_mode mode)
 {
     switch (mode) {
-        case UI_CTRL_MODE_OFF:
-            display_string("MOFF ");
-            break;
-        case UI_CTRL_MODE_DETUNE:
-            display_string("MDET ");
-            break;
-        case UI_CTRL_MODE_NORMAL:
-            display_string("MNRM ");
-            break;
-        case UI_CTRL_MODE_LIMIT:
-            display_string("MLIM ");
+        case UI_CTRL_MODE_RANDOM:
+            display_string("MRAN");
             break;
         case UI_CTRL_MODE_MOMENTARY:
-            display_string("MMOM ");
+            display_string("MBND");
             break;
-        case UI_CTRL_MODE_RANDOM:
-            display_string("MW");
-            led_matrix_show_bitmap(&led_matrix_r, wave_bitmap_random, WAVE_BMP_SETTINGS);
+        case UI_CTRL_MODE_OFF:
+            display_string("MOFF");
+            break;
+        case UI_CTRL_MODE_NORMAL:
+            display_string("MNRM");
+            break;
+        case UI_CTRL_MODE_LIMIT:
+            display_string("MLIM");
+            break;
+        case UI_CTRL_MODE_DETUNE:
+            display_string("MFIX");
             break;
         default:
             mode -= UI_CTRL_MODE_PATTERN_01 - 1;
