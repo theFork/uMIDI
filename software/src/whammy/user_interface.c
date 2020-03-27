@@ -236,31 +236,7 @@ static void display_ctrl_mode(enum ui_ctrl_mode mode)
         case UI_CTRL_MODE_MOMENTARY:
             display_string("MMOM ");
             break;
-        case UI_CTRL_MODE_WAVE_SINE:
-            display_string("MW ");
-            led_matrix_show_bitmap(&led_matrix_r, wave_bitmap_sine, WAVE_BMP_SETTINGS);
-            break;
-        case UI_CTRL_MODE_WAVE_TRIANGLE:
-            display_string("MW");
-            led_matrix_show_bitmap(&led_matrix_r, wave_bitmap_triangle, WAVE_BMP_SETTINGS);
-            break;
-        case UI_CTRL_MODE_WAVE_SAW_UP:
-            display_string("MW");
-            led_matrix_show_bitmap(&led_matrix_r, wave_bitmap_saw_up, WAVE_BMP_SETTINGS);
-            break;
-        case UI_CTRL_MODE_WAVE_SAW_DOWN:
-            display_string("MW");
-            led_matrix_show_bitmap(&led_matrix_r, wave_bitmap_saw_down, WAVE_BMP_SETTINGS);
-            break;
-        case UI_CTRL_MODE_WAVE_SQUARE:
-            display_string("MW");
-            led_matrix_show_bitmap(&led_matrix_r, wave_bitmap_square, WAVE_BMP_SETTINGS);
-            break;
-        case UI_CTRL_MODE_WAVE_STAIRS:
-            display_string("MW");
-            led_matrix_show_bitmap(&led_matrix_r, wave_bitmap_stairs, WAVE_BMP_SETTINGS);
-            break;
-        case UI_CTRL_MODE_WAVE_RANDOM:
+        case UI_CTRL_MODE_RANDOM:
             display_string("MW");
             led_matrix_show_bitmap(&led_matrix_r, wave_bitmap_random, WAVE_BMP_SETTINGS);
             break;

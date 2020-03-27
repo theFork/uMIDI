@@ -211,13 +211,9 @@ bool exec_mode(const char* command)
         goto fail;
     }
 
-    case 'w': {
-        uint8_t number = atoi(command+7);
-        if (number <= WAVE_RANDOM) {
-            enter_wave_mode(number);
-            break;
-        }
-        goto fail;
+    case 'r': {
+        enter_random_mode();
+        break;
     }
 
     default:

@@ -124,15 +124,15 @@ static void execute_program_callback(const uint32_t program_data)
     switch (active_program.field.ctrl_mode) {
         case WHAMMY_CTRL_MODE_PATTERN:
             // Set up sequencer according to the loaded program
-            set_sequencer_pattern(&sequencer, active_program.field.waveform);
+            set_sequencer_pattern(&sequencer, active_program.field.pattern);
             set_sequencer_speed(&sequencer, active_program.field.speed);
             configure_tap_tempo_wave(&sequencer.wave);
             start_sequencer(&sequencer);
             break;
 
-        case WHAMMY_CTRL_MODE_WAVE:
+        case WHAMMY_CTRL_MODE_RANDOM:
             // Set up wave
-            init_wave(&control_wave, active_program.field.waveform,
+            init_wave(&control_wave, WAVE_RANDOM,
                       active_program.field.speed, active_program.field.range, 0);
             configure_tap_tempo_wave(&control_wave);
 
@@ -321,7 +321,7 @@ void dump_current_program(void)
         case WHAMMY_CTRL_MODE_PATTERN:
             mode_string = "PAT";
             break;
-        case WHAMMY_CTRL_MODE_WAVE:
+        case WHAMMY_CTRL_MODE_RANDOM:
             mode_string = "WAV";
             break;
         default:
@@ -331,7 +331,7 @@ void dump_current_program(void)
 
     usb_printf(PSTR("%4s %4u %4u %4u %4u" USB_NEWLINE),
                mode_string, active_program.field.pedal_mode, active_program.field.speed,
-               active_program.field.range, active_program.field.waveform);
+               active_program.field.range, active_program.field.pattern);
 }
 
 /// \brief      Enters bypass (off) mode
@@ -384,22 +384,20 @@ void enter_pattern_mode(const enum sequencer_pattern_number pattern)
 
     usb_puts(PSTR("Entering pattern mode"));
     active_program.field.ctrl_mode = WHAMMY_CTRL_MODE_PATTERN;
-    active_program.field.waveform = pattern;
+    active_program.field.pattern = pattern;
     set_sequencer_pattern(&sequencer, pattern);
     start_sequencer(&sequencer);
     usb_printf(PSTR("Pattern %d" USB_NEWLINE), pattern+1);
 }
 
 /// \brief      Enters wave mode
-void enter_wave_mode(const enum waveform waveform)
+void enter_random_mode(void)
 {
     stop_sequencer(&sequencer);
 
-    usb_puts(PSTR("Entering wave mode"));
-    active_program.field.ctrl_mode = WHAMMY_CTRL_MODE_WAVE;
-    active_program.field.waveform = waveform;
-    set_waveform(&control_wave, waveform);
-    usb_printf(PSTR("Waveform %d" USB_NEWLINE), waveform);
+    usb_puts(PSTR("Entering random mode"));
+    active_program.field.ctrl_mode = WHAMMY_CTRL_MODE_RANDOM;
+    set_waveform(&control_wave, WAVE_RANDOM);
 }
 
 union whammy_ctrl_program get_active_program(void)
@@ -427,8 +425,8 @@ enum ui_ctrl_mode get_current_ctrl_mode(void)
         case WHAMMY_CTRL_MODE_NORMAL:
             return UI_CTRL_MODE_NORMAL;
 
-        case WHAMMY_CTRL_MODE_WAVE:
-            return UI_CTRL_MODE_WAVE_SINE-WAVE_SINE+active_program.field.waveform;
+        case WHAMMY_CTRL_MODE_RANDOM:
+            return UI_CTRL_MODE_RANDOM;
 
         case WHAMMY_CTRL_MODE_PATTERN:
             return UI_CTRL_MODE_PATTERN_01+sequencer.pattern;
@@ -491,22 +489,16 @@ enum ui_ctrl_mode select_next_ctrl_mode(void)
             return UI_CTRL_MODE_MOMENTARY;
 
         case WHAMMY_CTRL_MODE_MOMENTARY:
-            enter_wave_mode(WAVE_SINE);
-            return UI_CTRL_MODE_WAVE_SINE;
+            enter_random_mode();
+            return UI_CTRL_MODE_RANDOM;
 
-        case WHAMMY_CTRL_MODE_WAVE:
-            ++active_program.field.waveform;
-            if (active_program.field.waveform > WAVE_RANDOM) {
-                enter_pattern_mode(SEQUENCER_PATTERN_01);
-                return UI_CTRL_MODE_PATTERN_01;
-            }
-            set_waveform(&control_wave, active_program.field.waveform);
-            usb_printf(PSTR("Waveform %d" USB_NEWLINE), active_program.field.waveform);
-            return UI_CTRL_MODE_WAVE_SINE-WAVE_SINE+active_program.field.waveform;
+        case WHAMMY_CTRL_MODE_RANDOM:
+            enter_pattern_mode(SEQUENCER_PATTERN_01);
+            return UI_CTRL_MODE_PATTERN_01;
 
         case WHAMMY_CTRL_MODE_PATTERN:
             adjust_sequencer_pattern(&sequencer, 1);
-            active_program.field.waveform = sequencer.pattern;
+            active_program.field.pattern = sequencer.pattern;
             if (sequencer.pattern != SEQUENCER_PATTERN_01) {
                 usb_printf(PSTR("Pattern %d" USB_NEWLINE), sequencer.pattern+1);
                 return UI_CTRL_MODE_PATTERN_01+sequencer.pattern;
@@ -542,21 +534,15 @@ enum ui_ctrl_mode select_previous_ctrl_mode(void)
             enter_limit_mode();
             return UI_CTRL_MODE_LIMIT;
 
-        case WHAMMY_CTRL_MODE_WAVE:
-            --active_program.field.waveform;
-            if (active_program.field.waveform == WAVE_OFF) {
-                enter_momentary_mode();
-                return UI_CTRL_MODE_MOMENTARY;
-            }
-            set_waveform(&control_wave, active_program.field.waveform);
-            usb_printf(PSTR("Waveform %d" USB_NEWLINE), active_program.field.waveform);
-            return UI_CTRL_MODE_WAVE_SINE-WAVE_SINE+active_program.field.waveform;
+        case WHAMMY_CTRL_MODE_RANDOM:
+            enter_momentary_mode();
+            return UI_CTRL_MODE_MOMENTARY;
 
         case WHAMMY_CTRL_MODE_PATTERN:
             adjust_sequencer_pattern(&sequencer, -1);
             if (sequencer.pattern == SEQUENCER_PATTERN_20) {
-                enter_wave_mode(WAVE_RANDOM);
-                return UI_CTRL_MODE_WAVE_RANDOM;
+                enter_random_mode();
+                return UI_CTRL_MODE_RANDOM;
             }
             usb_printf(PSTR("Pattern %d" USB_NEWLINE), sequencer.pattern+1);
             return UI_CTRL_MODE_PATTERN_01+sequencer.pattern;
@@ -609,7 +595,7 @@ void update_controller_value(void)
         case WHAMMY_CTRL_MODE_PATTERN:
             update_sequencer();
             break;
-        case WHAMMY_CTRL_MODE_WAVE:
+        case WHAMMY_CTRL_MODE_RANDOM:
             update_control_wave();
             break;
         default:
