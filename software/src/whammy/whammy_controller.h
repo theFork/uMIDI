@@ -49,8 +49,8 @@ enum whammy_ctrl_mode
     WHAMMY_CTRL_MODE_LIMIT,     ///< The controller scales and passes on CC messages it receives
     WHAMMY_CTRL_MODE_MOMENTARY, ///< The controller sends CC messages that achieve a momentary pitch
                                 ///< bend on reception of note on / off messages.
-    WHAMMY_CTRL_MODE_WAVE,      ///< The controller sends CC messages following a waveform
     WHAMMY_CTRL_MODE_PATTERN,   ///< The controller sends CC messages following a sequencer pattern
+    WHAMMY_CTRL_MODE_RANDOM,    ///< The controller sends CC messages following a waveform
 };
 
 /// \brief      Available modes of the Whammy pedal
@@ -153,7 +153,7 @@ union whammy_ctrl_program {
         uint8_t               speed         : 8;    ///< Speed of the waveform / sequencer / bend
         uint8_t               range         : 7;    ///< Wave amplitude / bend interval / limit,
                                                     ///  depending on #ctrl_mode
-        uint8_t               waveform      : 7;    ///< Waveform or pattern, depending on #ctrl_mode
+        uint8_t               pattern       : 5;    ///< Waveform or pattern, depending on #ctrl_mode
     } field;                                        ///< A struct with data fields contained in the dword
 };
 
@@ -171,7 +171,7 @@ void enter_limit_mode(void);
 void enter_momentary_mode(void);
 void enter_normal_mode(void);
 void enter_pattern_mode(const enum sequencer_pattern_number pattern);
-void enter_wave_mode(const enum waveform waveform);
+void enter_random_mode(void);
 union whammy_ctrl_program get_active_program(void);
 uint8_t get_current_amplitude(void);
 enum ui_ctrl_mode get_current_ctrl_mode(void);

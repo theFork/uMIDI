@@ -80,7 +80,7 @@ static const char help_string_mode[] PROGMEM = "p\n"
     "      'n'     = normal (CC forward) mode\n"
     "      'o'     = enable bypass (turn effect off)\n"
     "      'p' <n> = specified pattern n [1, 20]\n"
-    "      'w' <n> = specified wave n [1, 7]\n";
+    "      'r'     = random mode\n";
 static const char cmd_string_patlen[] PROGMEM = "patlen";
 static const char help_string_patlen[] PROGMEM = "l\n"
     "Set the selected pattern's length:\n"
