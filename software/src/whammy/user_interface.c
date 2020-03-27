@@ -258,14 +258,15 @@ void visualize_pattern_step(uint8_t index, const midi_value_t value)
     }
 
     struct led_matrix* led_matrix = &led_matrix_l;
+    index *= 2;
     if (index >= 8) {
         index -= 8;
         led_matrix = &led_matrix_r;
     }
 
     uint8_t height = value / 16 + 1;
-    led_matrix_clear_area(led_matrix, index, 0, index, 8);
-    led_matrix_draw_rectangle(led_matrix, index, 8-height, index, 8, color);
+    led_matrix_clear_area(led_matrix, index, 0, index+1, 8);
+    led_matrix_draw_rectangle(led_matrix, index, 8-height, index+1, 8, color);
 }
 
 static void adjust_current_pattern_step_value(int8_t delta)
@@ -308,18 +309,6 @@ static void adjust_pattern_setting(int8_t delta)
     if (selected_pattern_step == length) {
         set_pattern_length(pattern_number, length+1);
     }
-}
-
-static void visualize_value(uint8_t value)
-{
-    clear_value_display();
-
-    struct led_matrix* led_matrix = &led_matrix_l;
-    if (value >= 8) {
-        value -= 8;
-        led_matrix = &led_matrix_r;
-    }
-    led_matrix_set_pixel(led_matrix, 7, value, ADAFRUIT_DISPLAY_COLOR_GREEN);
 }
 
 
@@ -496,19 +485,39 @@ void value2_increment(void)
     }
 }
 
-void visualize_sequencer(const uint8_t value)
+void visualize_sequencer(uint8_t value)
 {
     if (selected_hmi_layer != HMI_LAYER_NORMAL) {
         active_pattern_step = value;
         return;
     }
-    visualize_value(value);
+    struct led_matrix* led_matrix = &led_matrix_l;
+    value *= 2;
+    if (value >= 8) {
+        value -= 8;
+        led_matrix = &led_matrix_r;
+    }
+
+    clear_value_display();
+    led_matrix_set_pixel(led_matrix, 6, value,   ADAFRUIT_DISPLAY_COLOR_GREEN);
+    led_matrix_set_pixel(led_matrix, 6, value+1, ADAFRUIT_DISPLAY_COLOR_GREEN);
+    led_matrix_set_pixel(led_matrix, 7, value,   ADAFRUIT_DISPLAY_COLOR_GREEN);
+    led_matrix_set_pixel(led_matrix, 7, value+1, ADAFRUIT_DISPLAY_COLOR_GREEN);
 }
 
-void visualize_wave(const uint8_t value)
+void visualize_wave(uint8_t value)
 {
     if (selected_hmi_layer != HMI_LAYER_NORMAL) {
         return;
     }
-    visualize_value(value / 8);
+
+    struct led_matrix* led_matrix = &led_matrix_l;
+    value /= 8; // 128/16
+    if (value >= 8) {
+        value -= 8;
+        led_matrix = &led_matrix_r;
+    }
+
+    clear_value_display();
+    led_matrix_set_pixel(led_matrix, 7, value, ADAFRUIT_DISPLAY_COLOR_GREEN);
 }

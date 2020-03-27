@@ -37,7 +37,7 @@
 //---------------- constants ----------------//
 
 /// \brief      Number of steps in a sequencer pattern
-#define SEQUENCER_STEPS_PER_PATTERN     16
+#define SEQUENCER_STEPS_PER_PATTERN     8
 
 
 //---------------- data types ----------------//
