@@ -303,11 +303,14 @@ void dump_current_program(void)
     // Prepare pretty output strings
     char* mode_string = "";
     switch (active_program.field.ctrl_mode) {
+        case WHAMMY_CTRL_MODE_RANDOM:
+            mode_string = "RAN";
+            break;
+        case WHAMMY_CTRL_MODE_MOMENTARY:
+            mode_string = "BND";
+            break;
         case WHAMMY_CTRL_MODE_OFF:
             mode_string = "OFF";
-            break;
-        case WHAMMY_CTRL_MODE_DETUNE:
-            mode_string = "DET";
             break;
         case WHAMMY_CTRL_MODE_NORMAL:
             mode_string = "NRM";
@@ -315,14 +318,11 @@ void dump_current_program(void)
         case WHAMMY_CTRL_MODE_LIMIT:
             mode_string = "LIM";
             break;
-        case WHAMMY_CTRL_MODE_MOMENTARY:
-            mode_string = "MOM";
+        case WHAMMY_CTRL_MODE_DETUNE:
+            mode_string = "FIX";
             break;
         case WHAMMY_CTRL_MODE_PATTERN:
             mode_string = "PAT";
-            break;
-        case WHAMMY_CTRL_MODE_RANDOM:
-            mode_string = "WAV";
             break;
         default:
             mode_string = "INV";
@@ -472,11 +472,15 @@ void save_current_program(void)
 enum ui_ctrl_mode select_next_ctrl_mode(void)
 {
     switch(active_program.field.ctrl_mode) {
-        case WHAMMY_CTRL_MODE_OFF:
-            enter_detune_mode();
-            return UI_CTRL_MODE_DETUNE;
+        case WHAMMY_CTRL_MODE_RANDOM:
+            enter_momentary_mode();
+            return UI_CTRL_MODE_MOMENTARY;
 
-        case WHAMMY_CTRL_MODE_DETUNE:
+        case WHAMMY_CTRL_MODE_MOMENTARY:
+            enter_bypass_mode();
+            return UI_CTRL_MODE_OFF;
+
+        case WHAMMY_CTRL_MODE_OFF:
             enter_normal_mode();
             return UI_CTRL_MODE_NORMAL;
 
@@ -485,71 +489,60 @@ enum ui_ctrl_mode select_next_ctrl_mode(void)
             return UI_CTRL_MODE_LIMIT;
 
         case WHAMMY_CTRL_MODE_LIMIT:
-            enter_momentary_mode();
-            return UI_CTRL_MODE_MOMENTARY;
+            enter_detune_mode();
+            return UI_CTRL_MODE_DETUNE;
 
-        case WHAMMY_CTRL_MODE_MOMENTARY:
-            enter_random_mode();
-            return UI_CTRL_MODE_RANDOM;
-
-        case WHAMMY_CTRL_MODE_RANDOM:
+        case WHAMMY_CTRL_MODE_DETUNE:
             enter_pattern_mode(SEQUENCER_PATTERN_01);
             return UI_CTRL_MODE_PATTERN_01;
 
         case WHAMMY_CTRL_MODE_PATTERN:
             adjust_sequencer_pattern(&sequencer, 1);
             active_program.field.pattern = sequencer.pattern;
-            if (sequencer.pattern != SEQUENCER_PATTERN_01) {
-                usb_printf(PSTR("Pattern %d" USB_NEWLINE), sequencer.pattern+1);
-                return UI_CTRL_MODE_PATTERN_01+sequencer.pattern;
+            if (sequencer.pattern == SEQUENCER_PATTERN_01) {
+                enter_random_mode();
+                return UI_CTRL_MODE_RANDOM;
             }
-            // else fall through
-
-        default:
-            enter_bypass_mode();
-            return UI_CTRL_MODE_OFF;
+            usb_printf(PSTR("Pattern %d" USB_NEWLINE), sequencer.pattern+1);
+            return UI_CTRL_MODE_PATTERN_01+sequencer.pattern;
     }
 }
 
 enum ui_ctrl_mode select_previous_ctrl_mode(void)
 {
     switch(active_program.field.ctrl_mode) {
-        case WHAMMY_CTRL_MODE_OFF:
+        case WHAMMY_CTRL_MODE_RANDOM:
             enter_pattern_mode(SEQUENCER_PATTERN_20);
             return UI_CTRL_MODE_PATTERN_20;
 
-        case WHAMMY_CTRL_MODE_DETUNE:
-            enter_bypass_mode();
-            return UI_CTRL_MODE_OFF;
+        case WHAMMY_CTRL_MODE_MOMENTARY:
+            enter_random_mode();
+            return UI_CTRL_MODE_RANDOM;
+
+        case WHAMMY_CTRL_MODE_OFF:
+            enter_momentary_mode();
+            return UI_CTRL_MODE_MOMENTARY;
 
         case WHAMMY_CTRL_MODE_NORMAL:
-            enter_detune_mode();
-            return UI_CTRL_MODE_DETUNE;
+            enter_bypass_mode();
+            return UI_CTRL_MODE_OFF;
 
         case WHAMMY_CTRL_MODE_LIMIT:
             enter_normal_mode();
             return UI_CTRL_MODE_NORMAL;
 
-        case WHAMMY_CTRL_MODE_MOMENTARY:
+        case WHAMMY_CTRL_MODE_DETUNE:
             enter_limit_mode();
             return UI_CTRL_MODE_LIMIT;
-
-        case WHAMMY_CTRL_MODE_RANDOM:
-            enter_momentary_mode();
-            return UI_CTRL_MODE_MOMENTARY;
 
         case WHAMMY_CTRL_MODE_PATTERN:
             adjust_sequencer_pattern(&sequencer, -1);
             if (sequencer.pattern == SEQUENCER_PATTERN_20) {
-                enter_random_mode();
-                return UI_CTRL_MODE_RANDOM;
+                enter_detune_mode();
+                return UI_CTRL_MODE_DETUNE;
             }
             usb_printf(PSTR("Pattern %d" USB_NEWLINE), sequencer.pattern+1);
             return UI_CTRL_MODE_PATTERN_01+sequencer.pattern;
-
-        default:
-            enter_bypass_mode();
-            return UI_CTRL_MODE_OFF;
     }
 }
 
