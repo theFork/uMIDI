@@ -192,20 +192,6 @@ static void update_control_wave(void)
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-/// \brief      Adjusts the speed of all control modes
-/// \param      delta
-///                 difference from current speed
-uint8_t adjust_speed(int8_t delta)
-{
-    uint8_t speed = adjust_sequencer_speed(&sequencer, delta);
-    // TODO Adjust pitch bend speed
-    active_program.field.speed = speed;
-    set_speed(&control_wave, speed);
-    set_sequencer_speed(&sequencer, speed);
-    usb_printf(PSTR("Set speed to %u" USB_NEWLINE), speed);
-    return active_program.field.speed;
-}
-
 /// \brief      Adjusts the whammy pedal mode
 /// \param      delta
 ///                 difference from current mode
@@ -552,7 +538,6 @@ midi_value_t set_whammy_ctrl_range(int8_t range, bool adjust)
     uint16_t value = active_program.field.range;
     switch (active_program.field.ctrl_mode) {
         case WHAMMY_CTRL_MODE_DETUNE:
-        case WHAMMY_CTRL_MODE_MOMENTARY:
         case WHAMMY_CTRL_MODE_NORMAL:
             break;
         case WHAMMY_CTRL_MODE_LIMIT:
@@ -568,13 +553,18 @@ midi_value_t set_whammy_ctrl_range(int8_t range, bool adjust)
     return active_program.field.range;
 }
 
-void set_whammy_ctrl_speed(uint8_t speed)
+midi_value_t set_whammy_ctrl_speed(int8_t speed, bool adjust)
 {
-    usb_printf(PSTR("Setting waveform speed to %u" USB_NEWLINE), speed);
-    // TODO Adjust pitch bend speed
+    if (adjust) {
+        speed = adjust_sequencer_speed(&sequencer, speed);
+    }
+    else {
+        set_sequencer_speed(&sequencer, speed);
+    }
     active_program.field.speed = speed;
     set_speed(&control_wave, speed);
-    set_sequencer_speed(&sequencer, speed);
+    usb_printf(PSTR("Set speed to %u" USB_NEWLINE), speed);
+    return active_program.field.speed;
 }
 
 void set_whammy_mode(enum whammy_mode mode)

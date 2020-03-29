@@ -160,7 +160,6 @@ union whammy_ctrl_program {
 
 
 //---------------- functions and procedures ----------------//
-uint8_t adjust_speed(int8_t delta);
 enum whammy_mode adjust_whammy_mode(int8_t delta);
 void copy_whammy_ctrl_pattern(enum sequencer_pattern_number destination);
 void dump_current_pattern(void);
@@ -186,7 +185,7 @@ enum ui_ctrl_mode select_previous_ctrl_mode(void);
 void set_whammy_ctrl_pattern_length(uint8_t length);
 void set_whammy_ctrl_pattern_step(uint8_t step_index, const struct sequencer_step* step);
 midi_value_t set_whammy_ctrl_range(int8_t range, bool adjust);
-void set_whammy_ctrl_speed(uint8_t speed);
+midi_value_t set_whammy_ctrl_speed(int8_t speed, bool adjust);
 void set_whammy_mode(enum whammy_mode mode);
 void update_controller_value(void);
 void wipe_whammy_ctrl_pattern(void);
