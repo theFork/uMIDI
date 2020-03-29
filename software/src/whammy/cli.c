@@ -76,7 +76,7 @@ bool exec_ampl(const char* command)
 
     midi_value_t amplitude = atoi(command+5);
     amplitude %= MIDI_MAX_VALUE + 1;
-    set_whammy_ctrl_amplitude(amplitude);
+    set_whammy_ctrl_range(amplitude, false);
     signal_usb_rx();
     return true;
 }

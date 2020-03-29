@@ -417,7 +417,7 @@ void value2_decrement(void)
     uint8_t number = 0;
     switch (selected_setting) {
         case SETTING_AMPLITUDE:
-            number = adjust_amplitude(-1);
+            number = set_whammy_ctrl_range(-1, true);
             display_character(0, 'A');
             display_number(number);
             break;
@@ -456,7 +456,7 @@ void value2_increment(void)
     uint8_t number = 0;
     switch (selected_setting) {
         case SETTING_AMPLITUDE:
-            number = adjust_amplitude(1);
+            number = set_whammy_ctrl_range(1, true);
             display_character(0, 'A');
             display_number(number);
             break;
