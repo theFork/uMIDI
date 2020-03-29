@@ -313,7 +313,7 @@ bool exec_speed(const char* command)
 
     midi_value_t speed = atoi(command+6);
     speed %= MIDI_MAX_VALUE + 1;
-    set_whammy_ctrl_speed(speed);
+    set_whammy_ctrl_speed(speed, false);
     signal_usb_rx();
     return true;
 }

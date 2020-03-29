@@ -432,7 +432,7 @@ void value2_decrement(void)
             usb_printf(PSTR("Selected program %u" USB_NEWLINE), number);
             break;
         case SETTING_SPEED:
-            number = adjust_speed(-1);
+            number = set_whammy_ctrl_speed(-1, true);
             display_character(0, 'S');
             display_number(number);
             break;
@@ -471,7 +471,7 @@ void value2_increment(void)
             usb_printf(PSTR("Selected program %u" USB_NEWLINE), number);
             break;
         case SETTING_SPEED:
-            number = adjust_speed(1);
+            number = set_whammy_ctrl_speed(1, true);
             display_character(0, 'S');
             display_number(number);
             break;
