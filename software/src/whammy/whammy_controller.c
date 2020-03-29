@@ -192,23 +192,6 @@ static void update_control_wave(void)
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-/// \brief      Adjusts the amplitude of the control wave / the pitch bend target
-/// \param      delta
-///                 difference from current amplitude
-uint8_t adjust_amplitude(int8_t delta)
-{
-    active_program.field.range += delta;
-    active_program.field.range %= MIDI_MAX_VALUE+1;
-    control_wave.settings.amplitude = active_program.field.range;
-    if (active_program.field.ctrl_mode == WHAMMY_CTRL_MODE_DETUNE) {
-        send_control_change(WHAMMY_MIDI_CC_NUMBER, active_program.field.range);
-    }
-    usb_printf(PSTR("Set amplitude to %u" USB_NEWLINE), active_program.field.range);
-    // TODO Adjust pitch bend note
-    return active_program.field.range;
-}
-
-
 /// \brief      Adjusts the speed of all control modes
 /// \param      delta
 ///                 difference from current speed
@@ -546,17 +529,6 @@ enum ui_ctrl_mode select_previous_ctrl_mode(void)
     }
 }
 
-void set_whammy_ctrl_amplitude(uint8_t amplitude)
-{
-    usb_printf(PSTR("Setting amplitude to %u" USB_NEWLINE), amplitude);
-    // TODO Adjust pitch bend note
-    active_program.field.range = amplitude;
-    if (active_program.field.ctrl_mode == WHAMMY_CTRL_MODE_DETUNE) {
-        send_control_change(WHAMMY_MIDI_CC_NUMBER, active_program.field.range);
-    }
-    control_wave.settings.amplitude = amplitude;
-}
-
 void set_whammy_ctrl_pattern_length(uint8_t length)
 {
     set_pattern_length(sequencer.pattern, length);
@@ -565,6 +537,35 @@ void set_whammy_ctrl_pattern_length(uint8_t length)
 void set_whammy_ctrl_pattern_step(uint8_t step_index, const struct sequencer_step * const step)
 {
     set_pattern_step(sequencer.pattern, step_index, step);
+}
+
+midi_value_t set_whammy_ctrl_range(int8_t range, bool adjust)
+{
+    if (adjust) {
+        active_program.field.range += range;
+        active_program.field.range %= MIDI_MAX_VALUE+1;
+    }
+    else {
+        active_program.field.range = range;
+    }
+
+    uint16_t value = active_program.field.range;
+    switch (active_program.field.ctrl_mode) {
+        case WHAMMY_CTRL_MODE_DETUNE:
+        case WHAMMY_CTRL_MODE_MOMENTARY:
+        case WHAMMY_CTRL_MODE_NORMAL:
+            break;
+        case WHAMMY_CTRL_MODE_LIMIT:
+            value *= active_program.field.range;
+            value /= MIDI_MAX_VALUE;
+            break;
+        default:
+            return active_program.field.range;
+    }
+    send_control_change(WHAMMY_MIDI_CC_NUMBER, value);
+    control_wave.settings.amplitude = range;
+    usb_printf(PSTR("Set range to %u" USB_NEWLINE), active_program.field.range);
+    return active_program.field.range;
 }
 
 void set_whammy_ctrl_speed(uint8_t speed)
