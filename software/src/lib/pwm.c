@@ -66,7 +66,7 @@ void init_pwm(const enum pwm pwm, uint16_t (* const conversion_function)(midi_va
     PWMS[pwm].tcc->CTRLA = TC_CLKSEL_DIV1_gc;
 
     // Select dual slope PWM mode and enable OC output
-    PWMS[pwm].tcc->CTRLB = TC_WGMODE_DSBOTH_gc | PWMS[pwm].ccen_mask;
+    PWMS[pwm].tcc->CTRLB |= TC_WGMODE_DSBOTH_gc | PWMS[pwm].ccen_mask;
 
     // Set TOP value
     PWMS[pwm].tcc->PER = PWM_MAX_DUTY;
