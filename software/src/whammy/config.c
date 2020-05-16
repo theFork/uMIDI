@@ -166,7 +166,7 @@ struct hmi_config hmi_config = {
 
 //---------------- I2C ----------------//
 struct i2c_config i2c_config = {
-    .baudrate = 100000L,
+    .baudrate = 400000L,
 };
 
 
