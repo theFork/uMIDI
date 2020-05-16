@@ -279,6 +279,16 @@ void init_led_matrix_module(struct led_matrix * const matrix)
 
 void led_matrix_flush(const struct led_matrix * const matrix)
 {
+    bool green_changed = memcmp(&matrix->last_buffer.green,
+                                &matrix->buffer.green,
+                                sizeof(matrix->buffer.green));
+    bool red_changed = memcmp(&matrix->last_buffer.red,
+                              &matrix->buffer.red,
+                              sizeof(matrix->buffer.red));
+    if (!green_changed && !red_changed) {
+        return;
+    }
+
     i2c_start(matrix->config.address, false);
     i2c_write_byte(0x0); // Start address: 0
     for (uint8_t i=0; i<sizeof(matrix->buffer.green); ++i) {
@@ -286,6 +296,8 @@ void led_matrix_flush(const struct led_matrix * const matrix)
         i2c_write_byte(matrix->buffer.red[i]);
     }
     i2c_stop();
+    memcpy((void*) &matrix->last_buffer.green, &matrix->buffer.green, sizeof(matrix->buffer.green));
+    memcpy((void*) &matrix->last_buffer.red, &matrix->buffer.red, sizeof(matrix->buffer.red));
 }
 
 void led_matrix_clear_area(struct led_matrix * const matrix,

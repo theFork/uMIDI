@@ -60,6 +60,7 @@ struct led_matrix
 {
     struct adafruit_display_config config;      ///< The LED matrix configuration
     struct led_matrix_buffer       buffer;      ///< The LED matrix's frame buffer
+    struct led_matrix_buffer       last_buffer; ///< The last frame buffer that was sent
 };
 
 
