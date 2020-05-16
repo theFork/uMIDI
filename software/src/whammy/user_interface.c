@@ -65,7 +65,7 @@ enum setting
 {
     SETTING_PROGRAM,
     SETTING_SPEED,
-    SETTING_AMPLITUDE,
+    SETTING_RANGE,
     SETTING_CONTROL_MODE,
     SETTING_WHAMMY_MODE,
     SETTING_COUNT
@@ -196,8 +196,8 @@ static void display_selected_setting(void)
 {
     uint8_t number = 0;
     switch (selected_setting) {
-        case SETTING_AMPLITUDE:
-            number = get_current_amplitude();
+        case SETTING_RANGE:
+            number = get_current_range();
             display_character(0, 'A');
             display_number(number);
             break;
@@ -232,8 +232,7 @@ static void update_status_leds(void)
         // Reset TTL and acknowledge the flag if set
         if (status_flags[flag]) {
             status_flags[flag] = false;
-            // "tapping"-LED is synchronized with the tap-tempo timeout and red on-board LED
-            led_ttl[flag] = flag == STATUS_FLAG_TAPPING ? 400 : 10;
+            led_ttl[flag] = 10;
         }
 
         // Display flag and reduce TTL
@@ -341,11 +340,6 @@ void signal_store(void)
     status_flags[STATUS_FLAG_STORE] = true;
 }
 
-void signal_tap_tempo(void)
-{
-    status_flags[STATUS_FLAG_TAPPING] = true;
-}
-
 void store_setup(void)
 {
     signal_store();
@@ -360,12 +354,6 @@ void toggle_hmi_layer(void)
     selected_hmi_layer %= HMI_LAYER_COUNT;
 
     clear_value_display();
-}
-
-void tap_tempo(void)
-{
-    register_tap();
-    signal_tap_tempo();
 }
 
 void update_displays(void)
@@ -416,7 +404,7 @@ void value2_decrement(void)
 
     uint8_t number = 0;
     switch (selected_setting) {
-        case SETTING_AMPLITUDE:
+        case SETTING_RANGE:
             number = set_whammy_ctrl_range(-1, true);
             display_character(0, 'A');
             display_number(number);
@@ -455,7 +443,7 @@ void value2_increment(void)
 
     uint8_t number = 0;
     switch (selected_setting) {
-        case SETTING_AMPLITUDE:
+        case SETTING_RANGE:
             number = set_whammy_ctrl_range(1, true);
             display_character(0, 'A');
             display_number(number);

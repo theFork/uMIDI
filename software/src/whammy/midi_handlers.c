@@ -91,17 +91,25 @@ void handle_midi_note_on(midi_value_t note, midi_value_t velocity)
 {
     usb_printf(PSTR("Received MIDI note on num: %u, vel: %u" USB_NEWLINE), note, velocity);
 
-    static bool bending = false;
-    if (!bending) {
+    if (get_active_program().field.ctrl_mode == WHAMMY_CTRL_MODE_PATTERN) {
+        if (velocity) {
+            update_pattern_step();
+        }
+        return;
+    }
+
+    if (get_active_program().field.ctrl_mode != WHAMMY_CTRL_MODE_MOMENTARY) {
+        return;
+    }
+
+    if (velocity) {
         // Enable Whammy pedal
         send_program_change(get_active_program().field.pedal_mode);
         // Pitch bend
         send_control_change(WHAMMY_MIDI_CC_NUMBER, get_active_program().field.range);
-        bending = true;
     }
     else {
         // Release pitch bend
-        bending = false;
         send_control_change(WHAMMY_MIDI_CC_NUMBER, 0);
         // Turn off Whammy pedal
         send_program_change(WHAMMY_MODE_OFF);

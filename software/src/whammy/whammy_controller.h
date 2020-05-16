@@ -172,7 +172,7 @@ void enter_normal_mode(void);
 void enter_pattern_mode(const enum sequencer_pattern_number pattern);
 void enter_random_mode(void);
 union whammy_ctrl_program get_active_program(void);
-uint8_t get_current_amplitude(void);
+uint8_t get_current_range(void);
 enum ui_ctrl_mode get_current_ctrl_mode(void);
 enum sequencer_pattern_number get_current_pattern_number(void);
 uint8_t get_current_speed(void);
@@ -188,6 +188,7 @@ midi_value_t set_whammy_ctrl_range(int8_t range, bool adjust);
 midi_value_t set_whammy_ctrl_speed(int8_t speed, bool adjust);
 void set_whammy_mode(enum whammy_mode mode);
 void update_controller_value(void);
+void update_pattern_step(void);
 void wipe_whammy_ctrl_pattern(void);
 
 //---------------- EOF ----------------//
