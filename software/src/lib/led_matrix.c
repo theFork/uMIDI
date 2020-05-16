@@ -192,8 +192,8 @@ static const uint8_t characters[36][LED_MATRIX_CHAR_BITMAP_HEIGHT] = {
     {0b111,
      0b101,
      0b101,
-     0b010,
-     0b110},
+     0b110,
+     0b011},
 
     {0b111,
      0b101,
