@@ -100,6 +100,7 @@ bool exec_backup(const char* command)
         usb_puts_S(export_pattern(i));
     }
 
+    signal_usb_rx();
     return true;
 }
 
@@ -150,6 +151,7 @@ bool exec_dump(const char* command)
             return false;
     }
 
+    signal_usb_rx();
     return true;
 }
 
