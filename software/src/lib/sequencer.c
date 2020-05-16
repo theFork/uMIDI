@@ -174,6 +174,26 @@ void init_sequencer_patterns(const struct sequencer_pattern * const factory_patt
     }
 }
 
+void next_sequencer_step(struct sequencer_channel* channel)
+{
+    // Send MIDI message with new value
+    const struct sequencer_step * const step = &patterns[channel->pattern].steps[channel->step_index];
+    send_midi_message(eeprom_read_byte((uint8_t*) &step->channel), eeprom_read_byte((uint8_t*) &step->type),
+                      eeprom_read_byte(&step->data0), eeprom_read_byte(&step->data1));
+
+    // Call the clock tick handler if it is set
+    call(channel->tick_callback);
+
+    // Cyclically implement step index
+    ++channel->step_index;
+    channel->step_index %= eeprom_read_byte(&patterns[channel->pattern].length);
+
+    // Disable the channel if the end of a one-shot pattern was reached
+    if (channel->mode == SEQUENCER_CHANNEL_MODE_ONE_SHOT && channel->step_index == 0) {
+        stop_sequencer(channel);
+    }
+}
+
 void overwrite_pattern(const enum sequencer_pattern_number pattern_index, const struct sequencer_pattern * const pattern)
 {
     // Store pattern length
@@ -265,22 +285,7 @@ void update_sequencer(void)
             return;
         }
 
-        // Read MIDI message from program space and send it
-        const struct sequencer_step * const step = &patterns[channel->pattern].steps[channel->step_index];
-        send_midi_message(eeprom_read_byte((uint8_t*) &step->channel), eeprom_read_byte((uint8_t*) &step->type),
-                          eeprom_read_byte(&step->data0), eeprom_read_byte(&step->data1));
-
-        // Call the clock tick handler if it is set
-        call(channel->tick_callback);
-
-        // Cyclically implement step index
-        ++channel->step_index;
-        channel->step_index %= eeprom_read_byte(&patterns[channel->pattern].length);
-
-        // Disable the channel if the end of a one-shot pattern was reached
-        if (channel->mode == SEQUENCER_CHANNEL_MODE_ONE_SHOT && channel->step_index == 0) {
-            stop_sequencer(channel);
-        }
+        next_sequencer_step(channel);
     }
 }
 
