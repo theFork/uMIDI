@@ -111,8 +111,6 @@ static const char help_string_store[] PROGMEM = "t n d\n"
     "<t> : 'P' for pattern or 'p' for program\n"
     "<n> : pattern  or program number (counting from 1)\n"
     "<d> : data in hexadecimal format\n";
-static const char cmd_string_tap[] PROGMEM = "tap";
-static const char help_string_tap[] PROGMEM = "\nSend this command repeatedly to tap in a tempo\n";
 static const char cmd_string_wipe[] PROGMEM = "wipe";
 static const char help_string_wipe[] PROGMEM = "t\n"
     "Wipes the selected pattern or program\n"
@@ -134,7 +132,6 @@ struct serial_command serial_commands[] = {
     { .cmd_string = cmd_string_pgm,     .help_string = help_string_pgm,     .handler = &exec_pgm           },
     { .cmd_string = cmd_string_speed,   .help_string = help_string_speed,   .handler = &exec_speed         },
     { .cmd_string = cmd_string_store,   .help_string = help_string_store,   .handler = &exec_store         },
-    { .cmd_string = cmd_string_tap,     .help_string = help_string_tap,     .handler = &exec_tap           },
     { .cmd_string = cmd_string_wipe,    .help_string = help_string_wipe,    .handler = &exec_wipe          },
     { .cmd_string = cmd_string_wham,    .help_string = help_string_wham,    .handler = &exec_wham          },
 };
@@ -154,8 +151,8 @@ struct hmi_config hmi_config = {
     .long_input_threashold = 15,
     .button1_short_handler = NULL,
     .button1_long_handler = NULL,
-    .button1_interrupt_handler = &tap_tempo,
-    .button2_short_handler = &toggle_hmi_layer,
+    .button1_interrupt_handler = NULL,
+    .button2_short_handler = NULL,
     .button2_long_handler = &store_setup,
     .button2_interrupt_handler = NULL,
     .encoder1cw_handler = &value2_increment,
@@ -220,7 +217,6 @@ background_task_t mid_frequency_tasks[] = {
 uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background_task_t);
 
 background_task_t low_frequency_tasks[] = {
-    &tap_tempo_task,
     &update_displays,
     &update_leds,
 };

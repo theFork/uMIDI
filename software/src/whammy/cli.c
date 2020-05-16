@@ -345,13 +345,6 @@ bool exec_store(const char* command)
     return true;
 }
 
-bool exec_tap(const char* command)
-{
-    tap_tempo();
-    signal_usb_rx();
-    return true;
-}
-
 bool exec_wipe(const char* command)
 {
     if (strlen(command) != 6 || command[4] != ' ') {
