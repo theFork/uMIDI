@@ -30,6 +30,9 @@
 
 //---------------- constants ----------------//
 
+/// \brief      The PWM output used to enable the device
+#define ENABLE_PIN                      gpio.header3.pin2
+
 
 //---------------- data types ----------------//
 

@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "lib/gpio.h"
 #include "lib/leds.h"
 #include "lib/usb.h"
 
@@ -50,7 +51,11 @@ bool exec_enable(const char* command)
         return false;
     }
 
-    enable_wah(command[7] == 't');
+    bool enable = command[7] == 't';
+    configure_gpio_pin(&ENABLE_PIN, GPIO_OUTPUT);
+    gpio_set(ENABLE_PIN, false);
+    _delay_ms(100);
+    configure_gpio_pin(&ENABLE_PIN, GPIO_INPUT_PULLUP);
     return true;
 }
 

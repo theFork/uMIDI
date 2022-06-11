@@ -92,8 +92,14 @@ static const char help_string_duty[] PROGMEM = "<d>\n"
     "Sets the PWM duty cycle:\n"
     "<d> : Duty cycle as MIDI value {0, 1, 127}";
 
+static const char cmd_string_enable[] PROGMEM = "enable";
+static const char help_string_enable[] PROGMEM = "<d>\n"
+    "Enables the device:\n"
+    "<d> : Boolean {'t', 'f'}";
+
 struct serial_command serial_commands[] = {
-    { .cmd_string = cmd_string_led,  .help_string = help_string_led,  .handler = &exec_led  },
-    { .cmd_string = cmd_string_duty, .help_string = help_string_duty, .handler = &exec_duty },
+    { .cmd_string = cmd_string_led,    .help_string = help_string_led,    .handler = &exec_led  },
+    { .cmd_string = cmd_string_duty,   .help_string = help_string_duty,   .handler = &exec_duty },
+    { .cmd_string = cmd_string_enable, .help_string = help_string_enable, .handler = &exec_enable },
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);
