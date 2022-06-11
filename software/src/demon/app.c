@@ -37,11 +37,25 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
+static bool enable_state = false;
+
 
 
 ////////////////////////////////////////////////////////////////
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
+
+void enable_wah(bool enable)
+{
+    if (enable_state == enable) {
+        return;
+    }
+    configure_gpio_pin(&ENABLE_PIN, GPIO_OUTPUT);
+    gpio_set(ENABLE_PIN, false);
+    _delay_ms(100);
+    configure_gpio_pin(&ENABLE_PIN, GPIO_INPUT_PULLUP);
+    enable_state = enable;
+}
 
 /// \brief      Handler for the `enable` command
 bool exec_enable(const char* command)
@@ -51,11 +65,7 @@ bool exec_enable(const char* command)
         return false;
     }
 
-    bool enable = command[7] == 't';
-    configure_gpio_pin(&ENABLE_PIN, GPIO_OUTPUT);
-    gpio_set(ENABLE_PIN, false);
-    _delay_ms(100);
-    configure_gpio_pin(&ENABLE_PIN, GPIO_INPUT_PULLUP);
+    enable_wah(command[7] == 't');
     return true;
 }
 

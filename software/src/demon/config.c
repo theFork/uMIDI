@@ -41,6 +41,7 @@
 
 //---------------- GPIO ----------------//
 struct gpio_mapping gpio_mappings[] = {
+    { .pin = &gpio.header3.pin2, .type = GPIO_INPUT_PULLUP },   // Enable output
     { .pin = &gpio.header3.pin8, .type = GPIO_OUTPUT       },   // Wah LED
 };
 uint8_t gpio_mappings_size = sizeof(gpio_mappings)/sizeof(struct gpio_mapping);
