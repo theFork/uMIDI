@@ -40,8 +40,6 @@
 
 
 //---------------- functions and procedures ----------------//
-void enable_wah(bool enable);
-bool exec_enable(const char* command);
 bool exec_duty(const char* command);
 void handle_midi_cc(midi_value_t controller, midi_value_t value);
 void init_wah_module(void);

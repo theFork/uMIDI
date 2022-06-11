@@ -36,8 +36,6 @@
 
 static struct linear_range pwm_range;
 
-static bool enable_state = false;
-
 
 
 ////////////////////////////////////////////////////////////////
@@ -47,11 +45,6 @@ static bool enable_state = false;
 static inline uint16_t linear_function(uint8_t midi_value)
 {
     return linear_from_midi(&pwm_range, midi_value);
-}
-
-void enable_wah(bool enable)
-{
-    enable_state = enable;
 }
 
 bool exec_duty(const char* command)
