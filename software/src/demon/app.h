@@ -30,21 +30,14 @@
 
 //---------------- constants ----------------//
 
-/// \brief      The PWM output used to enable the device
-#define ENABLE_PIN                      gpio.header3.pin2
-
-/// \brief      The PWM output used to disable the device
-#define DISABLE_PIN                     gpio.header3.pin3
-
 
 //---------------- data types ----------------//
 
 
 //---------------- functions and procedures ----------------//
-void enable_wah(bool enable);
+bool exec_duty(const char* command);
 bool exec_enable(const char* command);
 bool exec_led(const char* command);
-
 
 
 //---------------- EOF ----------------//

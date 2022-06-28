@@ -24,7 +24,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "lib/gpio.h"
 #include "lib/leds.h"
 #include "lib/usb.h"
 
@@ -37,30 +36,19 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-static bool enable_state = false;
-
 
 
 ////////////////////////////////////////////////////////////////
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void enable_wah(bool enable)
+/// \brief      Handler for the `duty` command
+bool exec_duty(const char* command)
 {
-    if (enable_state == enable) {
-        return;
-    }
-
-    if (enable) {
-        gpio_set(ENABLE_PIN, true);
-        _delay_ms(4);
-        gpio_set(ENABLE_PIN, false);
-    } else {
-        gpio_set(DISABLE_PIN, true);
-        _delay_ms(4);
-        gpio_set(DISABLE_PIN, false);
-    }
-    enable_state = enable;
+    midi_value_t duty = atoi(command+5);
+    duty %= MIDI_MAX_VALUE + 1;
+    set_wah_frequency(duty);
+    return true;
 }
 
 /// \brief      Handler for the `enable` command

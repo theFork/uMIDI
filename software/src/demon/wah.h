@@ -25,12 +25,19 @@
 
 
 //---------------- includes ----------------//
-#include <stdint.h>
+#include <stdbool.h>
 
+#include "lib/gpio.h"
 #include "lib/pwm.h"
 
 
 //---------------- constants ----------------//
+/// \brief      The PWM output used to enable the device
+#define ENABLE_PIN                      gpio.header3.pin2
+
+/// \brief      The PWM output used to disable the device
+#define DISABLE_PIN                     gpio.header3.pin3
+
 /// \brief      The PWM output used for the Wah LED
 #define WAH_PWM                         PWM_PIN8
 
@@ -40,8 +47,9 @@
 
 
 //---------------- functions and procedures ----------------//
-bool exec_duty(const char* command);
+void enable_wah(bool enable);
 void handle_midi_cc(midi_value_t controller, midi_value_t value);
+void set_wah_frequency(midi_value_t value);
 void init_wah_module(void);
 
 
