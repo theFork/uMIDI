@@ -20,11 +20,11 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <stdbool.h>
-#include <stdlib.h>
+#include <util/delay.h>
 
+#include "lib/gpio.h"
 #include "lib/math.h"
 #include "lib/midi.h"
-#include "lib/usb.h"
 
 #include "config.h"
 #include "wah.h"
@@ -33,6 +33,8 @@
 ////////////////////////////////////////////////////////////////
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
+
+static bool enable_state = false;
 
 static struct linear_range pwm_range;
 
@@ -47,17 +49,27 @@ static inline uint16_t linear_function(uint8_t midi_value)
     return linear_from_midi(&pwm_range, midi_value);
 }
 
-bool exec_duty(const char* command)
+void enable_wah(bool enable)
 {
-    midi_value_t duty = atoi(command+5);
-    duty %= MIDI_MAX_VALUE + 1;
-    set_pwm_duty_cycle(WAH_PWM, duty);
-    return true;
+    if (enable_state == enable) {
+        return;
+    }
+
+    if (enable) {
+        gpio_set(ENABLE_PIN, true);
+        _delay_ms(4);
+        gpio_set(ENABLE_PIN, false);
+    } else {
+        gpio_set(DISABLE_PIN, true);
+        _delay_ms(4);
+        gpio_set(DISABLE_PIN, false);
+    }
+    enable_state = enable;
 }
 
 void handle_midi_cc(midi_value_t controller, midi_value_t value)
 {
-    set_pwm_duty_cycle(WAH_PWM, value);
+    set_wah_frequency(value);
 }
 
 void init_wah_module(void)
@@ -70,4 +82,9 @@ void init_wah_module(void)
     // Initialize wah PWM
     init_pwm(WAH_PWM, &linear_function);
     set_pwm_duty_cycle(WAH_PWM, pwm_range.to);
+}
+
+void set_wah_frequency(midi_value_t value)
+{
+    set_pwm_duty_cycle(WAH_PWM, value);
 }
