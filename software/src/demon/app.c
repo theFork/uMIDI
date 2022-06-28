@@ -50,10 +50,16 @@ void enable_wah(bool enable)
     if (enable_state == enable) {
         return;
     }
-    configure_gpio_pin(&ENABLE_PIN, GPIO_OUTPUT);
-    gpio_set(ENABLE_PIN, false);
-    _delay_ms(100);
-    configure_gpio_pin(&ENABLE_PIN, GPIO_INPUT_PULLUP);
+
+    if (enable) {
+        gpio_set(ENABLE_PIN, true);
+        _delay_ms(4);
+        gpio_set(ENABLE_PIN, false);
+    } else {
+        gpio_set(DISABLE_PIN, true);
+        _delay_ms(4);
+        gpio_set(DISABLE_PIN, false);
+    }
     enable_state = enable;
 }
 

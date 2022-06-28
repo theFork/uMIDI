@@ -33,6 +33,9 @@
 /// \brief      The PWM output used to enable the device
 #define ENABLE_PIN                      gpio.header3.pin2
 
+/// \brief      The PWM output used to disable the device
+#define DISABLE_PIN                     gpio.header3.pin3
+
 
 //---------------- data types ----------------//
 
