@@ -65,21 +65,22 @@
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void handle_midi_control_change(const midi_value_t controller, const midi_value_t orig_value)
+void handle_midi_control_change(const midi_value_t controller, const midi_value_t value)
 {
+    usb_printf(PSTR("Received MIDI control change num: %u, val: %u" USB_NEWLINE), controller, value);
     signal_midi_rx();
 
-    uint16_t value = orig_value;
+    uint16_t accu = value;
     switch (get_active_program().field.ctrl_mode) {
         case WHAMMY_CTRL_MODE_LIMIT:
-            value *= get_active_program().field.range;
-            value /= MIDI_MAX_VALUE;
+            accu *= get_active_program().field.range;
+            accu /= MIDI_MAX_VALUE;
         case WHAMMY_CTRL_MODE_NORMAL:
             break;
         default:
             return;
     }
-    send_control_change(WHAMMY_MIDI_CC_NUMBER, value);
+    send_control_change(WHAMMY_MIDI_CC_NUMBER, accu);
 }
 
 void handle_midi_note_off(midi_value_t note, midi_value_t velocity)

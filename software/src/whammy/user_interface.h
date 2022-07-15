@@ -32,6 +32,12 @@
 
 //---------------- constants ----------------//
 
+/// \brief  The GPIO pin connected to the store led
+#define STORE_LED_PIN       gpio.header3.pin6
+
+/// \brief  The GPIO pin connected to the tempo led
+#define TEMPO_LED_PIN       gpio.header3.pin4
+
 
 //---------------- data types ----------------//
 

@@ -36,19 +36,9 @@
 #include "lib/midi.h"
 #include "lib/serial_communication.h"
 
-#include "whammy_controller.h"
-
 
 
 //---------------- constants ----------------//
-
-#define WHAMMY_CTRL_MIDI_CHANNEL        MIDI_CHANNEL_01
-
-/// \brief  The GPIO pin connected to the store led
-#define STORE_LED_PIN       gpio.header3.pin6
-
-/// \brief  The GPIO pin connected to the tempo led
-#define TEMPO_LED_PIN       gpio.header3.pin4
 
 
 

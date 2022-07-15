@@ -38,6 +38,9 @@
 /// \brief      The MIDI controller number used by the Whammy pedal to modify the pitch
 #define WHAMMY_MIDI_CC_NUMBER   11
 
+/// \brief      The MIDI channel the Whammy controller listens on
+#define WHAMMY_MIDI_CHANNEL     MIDI_CHANNEL_01
+
 
 //---------------- data types ----------------//
 
