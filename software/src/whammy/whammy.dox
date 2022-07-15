@@ -1,5 +1,5 @@
 /**
 \dir
-\brief      A special MIDI sequencer for the DigiTech Whammy pedal
-\details    The software sends MIDI messages and remote-controls the pedal.
+\brief      A special MIDI sequencer for the DigiTech Whammy pedal and a modified Weeping Demon Wah from Ibanez
+\details    The software sends MIDI messages to the Whammy pedal and outputs a PWM to remote-control the Wah LED.
 */

@@ -99,6 +99,17 @@ static const char help_string_store[] PROGMEM = "t n d\n"
     "<t> : 'P' for pattern or 'p' for program\n"
     "<n> : pattern  or program number (counting from 1)\n"
     "<d> : data in hexadecimal format\n";
+
+static const char cmd_string_wahfrq[] PROGMEM = "wahfrq";
+static const char help_string_wahfrq[] PROGMEM = "<d>\n"
+    "Sets the Wah filter frequency:\n"
+    "<d> : PWM duty cycle as MIDI value {0, 1 ... 127}";
+
+static const char cmd_string_wahon[] PROGMEM = "wahon";
+static const char help_string_wahon[] PROGMEM = "<d>\n"
+    "Enables the Wah device:\n"
+    "<d> : Boolean {'t', 'f'}";
+
 static const char cmd_string_wipe[] PROGMEM = "wipe";
 static const char help_string_wipe[] PROGMEM = "t\n"
     "Wipes the selected pattern or program\n"
@@ -126,6 +137,8 @@ bool exec_pgm(const char* command);
 bool exec_speed(const char* command);
 bool exec_store(const char* command);
 bool exec_tap(const char* command);
+bool exec_wahfrq(const char* command);
+bool exec_wahon(const char* command);
 bool exec_wipe(const char* command);
 bool exec_wham(const char* command);
 

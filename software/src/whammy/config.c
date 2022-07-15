@@ -44,6 +44,7 @@
 #include "midi_handlers.h"
 #include "user_interface.h"
 #include "whammy_controller.h"
+#include "wah.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -63,17 +64,24 @@ struct serial_command serial_commands[] = {
     { .cmd_string = cmd_string_reset,   .help_string = help_string_reset,   .handler = &exec_reset  },
     { .cmd_string = cmd_string_speed,   .help_string = help_string_speed,   .handler = &exec_speed  },
     { .cmd_string = cmd_string_store,   .help_string = help_string_store,   .handler = &exec_store  },
+    { .cmd_string = cmd_string_wahfrq,  .help_string = help_string_wahfrq,  .handler = &exec_wahfrq },
+    { .cmd_string = cmd_string_wahon,   .help_string = help_string_wahon,   .handler = &exec_wahon  },
     { .cmd_string = cmd_string_wipe,    .help_string = help_string_wipe,    .handler = &exec_wipe   },
     { .cmd_string = cmd_string_wham,    .help_string = help_string_wham,    .handler = &exec_wham   },
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);
 
+
 //---------------- GPIO ----------------//
 struct gpio_mapping gpio_mappings[] = {
-    { .pin = &STORE_LED_PIN, .type = GPIO_OUTPUT },             // Store LED
-    { .pin = &TEMPO_LED_PIN, .type = GPIO_OUTPUT },             // Tempo LED
+    { .pin = &STORE_LED_PIN,     .type = GPIO_OUTPUT },   // Store LED
+    { .pin = &TEMPO_LED_PIN,     .type = GPIO_OUTPUT },   // Tempo LED
+    { .pin = &WAH_ENABLE_PIN,    .type = GPIO_OUTPUT },   // Wah enable output
+    { .pin = &WAH_DISABLE_PIN,   .type = GPIO_OUTPUT },   // Wah disable output
+    { .pin = &WAH_PWM_PIN,       .type = GPIO_OUTPUT },   // Wah LED
 };
 uint8_t gpio_mappings_size = sizeof(gpio_mappings)/sizeof(struct gpio_mapping);
+
 
 //---------------- HMI ----------------//
 struct hmi_config hmi_config = {
