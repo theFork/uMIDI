@@ -30,6 +30,7 @@
 #include "lib/usb.h"
 
 #include "whammy_controller.h"
+#include "wah.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -344,6 +345,27 @@ bool exec_store(const char* command)
 
     signal_store();
     signal_usb_rx();
+    return true;
+}
+
+/// \brief      Handler for the `wahfrq` command
+bool exec_wahfrq(const char* command)
+{
+    midi_value_t duty = atoi(command+7);
+    duty %= MIDI_MAX_VALUE + 1;
+    set_wah_frequency(duty);
+    return true;
+}
+
+/// \brief      Handler for the `wahon` command
+bool exec_wahon(const char* command)
+{
+    if (strlen(command) != 7) {
+        usb_puts(PSTR("Malformed command" USB_NEWLINE));
+        return false;
+    }
+
+    enable_wah(command[6] == 't');
     return true;
 }
 

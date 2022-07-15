@@ -37,6 +37,7 @@
 
 #include "config.h"
 #include "whammy_controller.h"
+#include "wah.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -70,6 +71,7 @@ int main( void )
     init_led_matrix_module(&led_matrix_l);
     init_led_matrix_module(&led_matrix_r);
     init_whammy_controller();
+    init_wah_module();
 
     // set watchdog for 128ms
     wdt_enable(WDT_PER_128CLK_gc);
