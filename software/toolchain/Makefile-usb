@@ -143,7 +143,7 @@ SRC += $(LUFA_SRC_USB_DEVICE) $(LUFA_PATH)/Drivers/USB/Class/Device/CDCClassDevi
 # Generate software ID string and predefine it for the preprocessor
 SOFTWARE_ID  = $(shell date +%F)
 SOFTWARE_ID += $(shell pwd | sed 's:.*/::')
-SOFTWARE_ID += $(shell git describe --all --long --dirty --always | sed 's:heads/::; s:-0-g:-:')
+SOFTWARE_ID += $(shell git describe --all --long --dirty --always | sed 's:tags/\([^-]*\)-\([.0-9]*\).*:\1 \2:; s:heads/app/::; s:-0-g:-:')
 CFLAGS += -D UMIDI_SOFTWARE_ID="\"$(SOFTWARE_ID)\""
 
 # Default target.

@@ -210,27 +210,21 @@ mute_fail:
 
 void handle_enable_switch(void)
 {
-    // Save switch state on first run to ensure the switch is
-    // initially off
-    static bool first_run = true;
-    if (first_run) {
-        switch_state = gpio_get(ENABLE_SWITCH_PIN);
-        first_run = false;
-        return;
-    }
-
     // Poll switch
-    bool current_switch_state = gpio_get(gpio.header3.pin7);
+    bool current_switch_state = gpio_get(ENABLE_SWITCH_PIN);
 
-    // If switch has changed...
+    // If switch has changed
     if (switch_state != current_switch_state) {
         switch_state = current_switch_state;
+        if (!switch_state) {
+            return;
+        }
 
-        // ... toggle status LED
+        // Use LED state to remember current toggle status
         status_led.state.active = !status_led.state.active;
-        gpio_set(STATUS_LED_PIN, status_led.state.active);
 
-        // Use LED state to remember current status
+        // Toggle status LED and send MIDI note on/off message
+        gpio_set(STATUS_LED_PIN, status_led.state.active);
         send_enable_message(status_led.state.active);
     }
 }
