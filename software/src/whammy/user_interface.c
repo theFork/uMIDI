@@ -272,7 +272,7 @@ static void adjust_current_pattern_step_value(int8_t delta)
 {
         uint8_t pattern_number = get_current_pattern_number();
         struct sequencer_step step = get_pattern_step(pattern_number, selected_pattern_step);
-        step.channel = WHAMMY_CTRL_MIDI_CHANNEL;
+        step.channel = WHAMMY_MIDI_CHANNEL;
         step.type = MIDI_MSG_TYPE_CONTROL_CHANGE;
         step.data0 = WHAMMY_MIDI_CC_NUMBER;
         step.data1 += delta;

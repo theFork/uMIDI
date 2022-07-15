@@ -155,10 +155,10 @@ bool exec_dump(const char* command)
     return true;
 }
 
-bool exec_factory_reset(const char* command)
+bool exec_reset(const char* command)
 {
     // Abort if the command is malformed
-    if (strlen(command) != 12) {
+    if (strlen(command) != 5) {
         usb_puts(PSTR("Malformed command"));
         return false;
     }
@@ -347,6 +347,19 @@ bool exec_store(const char* command)
     return true;
 }
 
+bool exec_wham(const char* command)
+{
+    // Abort if the command is malformed
+    if (strlen(command) < 6 || command[4] != ' ') {
+        usb_puts(PSTR("Malformed command"));
+        return false;
+    }
+
+    set_whammy_mode(atoi(command+5));
+    signal_usb_rx();
+    return true;
+}
+
 bool exec_wipe(const char* command)
 {
     if (strlen(command) != 6 || command[4] != ' ') {
@@ -368,19 +381,6 @@ bool exec_wipe(const char* command)
             return false;
     }
 
-    signal_usb_rx();
-    return true;
-}
-
-bool exec_wham(const char* command)
-{
-    // Abort if the command is malformed
-    if (strlen(command) < 6 || command[4] != ' ') {
-        usb_puts(PSTR("Malformed command"));
-        return false;
-    }
-
-    set_whammy_mode(atoi(command+5));
     signal_usb_rx();
     return true;
 }
