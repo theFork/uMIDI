@@ -60,7 +60,7 @@ extern const uint16_t sine_table[] PROGMEM;
 /// \param      x
 ///                 index of the value in the table
 /// \return     the function value
-inline uint16_t lookup_exp(uint8_t x)
+static inline uint16_t lookup_exp(uint8_t x)
 {
     return pgm_read_word(&(exp_table[x]));
 }
@@ -70,7 +70,7 @@ inline uint16_t lookup_exp(uint8_t x)
 /// \param      x
 ///                 index of the value in the table
 /// \return     the function value
-inline uint16_t lookup_log(uint8_t x)
+static inline uint16_t lookup_log(uint8_t x)
 {
     return pgm_read_word(&(log_table[x]));
 }
@@ -80,7 +80,7 @@ inline uint16_t lookup_log(uint8_t x)
 /// \param      x
 ///                 index of the value in the table
 /// \return     the function value
-inline uint16_t lookup_sine(uint8_t x)
+static inline uint16_t lookup_sine(uint8_t x)
 {
     return pgm_read_word(&(sine_table[x]));
 }
