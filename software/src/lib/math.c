@@ -22,7 +22,11 @@
 
 //---------------- includes ----------------//
 #include "math.h"
+#ifndef UNIT_TEST
 #include "midi.h"
+#else
+#define MIDI_MAX_VALUE 127
+#endif
 
 
 ////////////////////////////////////////////////////////////////

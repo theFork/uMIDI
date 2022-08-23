@@ -27,7 +27,11 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#ifndef UNIT_TEST
 #include "midi.h"
+#else
+#define midi_value_t uint8_t
+#endif
 
 
 //---------------- constants ----------------//
