@@ -172,7 +172,9 @@ sub print_header
  */
 
 #include <stdint.h>
+#ifndef UNIT_TEST
 #include <avr/pgmspace.h>
+#endif
 
 #include \"lookup_tables.h\"\n\n", basename($0));
 }

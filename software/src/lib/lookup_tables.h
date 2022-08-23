@@ -30,7 +30,12 @@
 
 //---------------- includes ----------------//
 #include <stdint.h>
+#ifndef UNIT_TEST
 #include <avr/pgmspace.h>
+#else
+#define pgm_read_word(x) (*x)
+#define PROGMEM
+#endif
 
 
 //---------------- Lookup table declarations ----------------//
