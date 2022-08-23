@@ -26,7 +26,6 @@
 #include <avr/interrupt.h>
 
 #include "gpio.h"
-#include "lookup_tables.h"
 #include "math.h"
 #include "midi.h"
 #include "pwm.h"
