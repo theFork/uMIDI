@@ -1,9 +1,9 @@
-<map id="/home/haggl/repositories/uMIDI/software/src/lib/tests.c" name="/home/haggl/repositories/uMIDI/software/src/lib/tests.c">
-<area shape="rect" id="node4" href="$background__tasks_8h.html" title="Background task scheduler. " alt="" coords="655,184,794,211"/>
-<area shape="rect" id="node6" href="$gpio_8h.html" title="GPIO configuration and service functions. " alt="" coords="232,184,289,211"/>
-<area shape="rect" id="node9" href="$leds_8h.html" title="Handling of the on&#45;board LEDs. " alt="" coords="216,109,273,136"/>
-<area shape="rect" id="node10" href="$midi_8h.html" title="MIDI message transceiver. " alt="" coords="349,109,407,136"/>
-<area shape="rect" id="node11" href="$pwm_8h.html" title="PWM configuration and service functions. " alt="" coords="462,109,523,136"/>
-<area shape="rect" id="node13" href="$tests_8h.html" title="tests.h" alt="" coords="599,109,661,136"/>
-<area shape="rect" id="node12" href="$lookup__tables_8h.html" title="Lookup tables for the uMIDI firmware. " alt="" coords="467,184,580,211"/>
+<map id="/mnt/c/repositories/stuff/uMIDI/software/src/lib/tests.c" name="/mnt/c/repositories/stuff/uMIDI/software/src/lib/tests.c">
+<area shape="rect" id="node4" href="$background__tasks_8h.html" title="Background task scheduler. " alt="" coords="485,184,637,211"/>
+<area shape="rect" id="node6" href="$gpio_8h.html" title="GPIO configuration and service functions. " alt="" coords="246,184,309,211"/>
+<area shape="rect" id="node9" href="$leds_8h.html" title="Handling of the on&#45;board LEDs. " alt="" coords="229,109,291,136"/>
+<area shape="rect" id="node10" href="$midi_8h.html" title="MIDI message transceiver. " alt="" coords="366,109,429,136"/>
+<area shape="rect" id="node11" href="$pwm_8h.html" title="PWM configuration and service functions. " alt="" coords="596,109,663,136"/>
+<area shape="rect" id="node14" href="$tests_8h.html" title="tests.h" alt="" coords="687,109,753,136"/>
+<area shape="rect" id="node12" href="$lookup__tables_8h.html" title="Lookup tables for the uMIDI firmware. " alt="" coords="712,184,837,211"/>
 </map>

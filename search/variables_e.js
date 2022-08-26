@@ -15,7 +15,7 @@ var searchData=
   ['port',['port',['../structgpio__pin.html#a89731d4b41ae76b9bb7350f94b1eed25',1,'gpio_pin']]],
   ['power_5fled',['power_led',['../expression_2config_8c.html#a80d9cb5c9c027efe3219816ac0a1c5bf',1,'power_led():&#160;config.c'],['../expression_2config_8h.html#a80d9cb5c9c027efe3219816ac0a1c5bf',1,'power_led():&#160;config.c']]],
   ['prescaler',['prescaler',['../structadc__config.html#aa1a1870a77606c2efcbc22c42dbf850d',1,'adc_config::prescaler()'],['../structled__state.html#aee45b7dafe747161b8a51e12a536c546',1,'led_state::prescaler()']]],
-  ['productstring',['ProductString',['../usb__descriptors_8c.html#ad68575f70b5d6ab576068eec9d59fafb',1,'usb_descriptors.c']]],
+  ['productstring',['ProductString',['../usb__descriptors_8c.html#a8e0e3f9f3beab42d693f676fdcaebe7d',1,'usb_descriptors.c']]],
   ['program_5fchange',['program_change',['../structmidi__event__handlers.html#ad227e28bd588bf5442a7225c7b2f33d5',1,'midi_event_handlers']]],
   ['program_5finitializer',['program_initializer',['../program_8c.html#a5749e93cd0d439e3382aacfc0a7bf1f5',1,'program.c']]],
   ['push_5fcallback',['push_callback',['../structencoder__config.html#a73c35f3e28289be6dd2acda53787e559',1,'encoder_config']]],

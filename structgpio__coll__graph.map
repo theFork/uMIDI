@@ -1,5 +1,5 @@
 <map id="gpio" name="gpio">
-<area shape="rect" id="node2" href="$structjumpers.html" title="This struct represents the four solder jumpers on the bottom side of the PCB. " alt="" coords="5,263,73,340"/>
-<area shape="rect" id="node3" href="$structgpio__pin.html" title="Configuration of a single GPIO pin. " alt="" coords="60,5,131,97"/>
-<area shape="rect" id="node4" href="$structgpio__header.html" title="Configurations of the GPIO pins contained in one 10&#45;pin header. " alt="" coords="97,263,189,340"/>
+<area shape="rect" id="node2" href="$structjumpers.html" title="This struct represents the four solder jumpers on the bottom side of the PCB. " alt="" coords="5,263,80,340"/>
+<area shape="rect" id="node3" href="$structgpio__pin.html" title="Configuration of a single GPIO pin. " alt="" coords="60,5,137,97"/>
+<area shape="rect" id="node4" href="$structgpio__header.html" title="Configurations of the GPIO pins contained in one 10&#45;pin header. " alt="" coords="105,263,207,340"/>
 </map>

@@ -1,5 +1,5 @@
-<map id="/home/haggl/repositories/uMIDI/software/src/expression/expression.h" name="/home/haggl/repositories/uMIDI/software/src/expression/expression.h">
-<area shape="rect" id="node2" href="$expression_2config_8c.html" title="Device configuration. " alt="" coords="5,109,211,165"/>
-<area shape="rect" id="node3" href="$expression_8c.html" title="Expression pedal implementation. " alt="" coords="235,109,440,165"/>
-<area shape="rect" id="node4" href="$expression_2main_8c.html" title="Entry point and main loop of the uMIDI firmware. " alt="" coords="464,117,712,158"/>
+<map id="/mnt/c/repositories/stuff/uMIDI/software/src/expression/expression.h" name="/mnt/c/repositories/stuff/uMIDI/software/src/expression/expression.h">
+<area shape="rect" id="node2" href="$expression_2config_8c.html" title="Device configuration. " alt="" coords="5,109,180,165"/>
+<area shape="rect" id="node3" href="$expression_8c.html" title="Expression pedal implementation. " alt="" coords="204,109,411,165"/>
+<area shape="rect" id="node4" href="$expression_2main_8c.html" title="Entry point and main loop of the uMIDI firmware. " alt="" coords="435,109,603,165"/>
 </map>

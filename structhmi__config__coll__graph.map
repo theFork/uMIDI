@@ -1,4 +1,4 @@
 <map id="hmi_config" name="hmi_config">
-<area shape="rect" id="node2" href="$structgpio__header.html" title="Configurations of the GPIO pins contained in one 10&#45;pin header. " alt="" coords="41,263,133,340"/>
-<area shape="rect" id="node3" href="$structgpio__pin.html" title="Configuration of a single GPIO pin. " alt="" coords="52,5,123,97"/>
+<area shape="rect" id="node2" href="$structgpio__header.html" title="Configurations of the GPIO pins contained in one 10&#45;pin header. " alt="" coords="46,263,149,340"/>
+<area shape="rect" id="node3" href="$structgpio__pin.html" title="Configuration of a single GPIO pin. " alt="" coords="59,5,136,97"/>
 </map>

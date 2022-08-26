@@ -4,7 +4,7 @@ var searchData=
   ['data0',['data0',['../structsequencer__step.html#af92d2d7c3ca1716e912121577525ecc5',1,'sequencer_step']]],
   ['data1',['data1',['../structsequencer__step.html#ada0a60b9b5b8e5de2cc9be6db90dc7e1',1,'sequencer_step']]],
   ['decrease_5fspeed',['decrease_speed',['../whammy_8c.html#a549cb9e6cbc8ad0d4588c94472bb0525',1,'decrease_speed(void):&#160;whammy.c'],['../whammy_8h.html#a549cb9e6cbc8ad0d4588c94472bb0525',1,'decrease_speed(void):&#160;whammy.c']]],
-  ['devicedescriptor',['DeviceDescriptor',['../usb__descriptors_8c.html#addd196cc2b517282c4dc2a694313b6ac',1,'usb_descriptors.c']]],
+  ['devicedescriptor',['DeviceDescriptor',['../usb__descriptors_8c.html#a0459e2e95322791f208b3ec95eeacd67',1,'usb_descriptors.c']]],
   ['direction',['direction',['../wave_8h.html#a99f26e6ee9fcd62f75203b5402df8098',1,'wave.h']]],
   ['direction_5fdown',['DIRECTION_DOWN',['../wave_8h.html#a99f26e6ee9fcd62f75203b5402df8098a56d7e58d244b905d940d3524ba575edb',1,'wave.h']]],
   ['direction_5fup',['DIRECTION_UP',['../wave_8h.html#a99f26e6ee9fcd62f75203b5402df8098a6c1eae28e7db0d37e0e8a3140926b7f0',1,'wave.h']]],

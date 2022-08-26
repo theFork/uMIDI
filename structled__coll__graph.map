@@ -1,4 +1,4 @@
 <map id="led" name="led">
-<area shape="rect" id="node2" href="$structgpio__pin.html" title="Configuration of a single GPIO pin. " alt="" coords="5,20,76,112"/>
-<area shape="rect" id="node3" href="$structled__state.html" title="Internal state of an LED. " alt="" coords="100,5,187,127"/>
+<area shape="rect" id="node2" href="$structgpio__pin.html" title="Configuration of a single GPIO pin. " alt="" coords="5,20,83,112"/>
+<area shape="rect" id="node3" href="$structled__state.html" title="Internal state of an LED. " alt="" coords="107,5,205,127"/>
 </map>

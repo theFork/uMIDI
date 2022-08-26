@@ -1,6 +1,7 @@
 var searchData=
 [
   ['panic',['panic',['../system_8c.html#a562177841c06c4a611cd4bc74b66ac4c',1,'panic(uint16_t delay_red_ms, uint16_t delay_green_ms):&#160;system.c'],['../system_8h.html#a562177841c06c4a611cd4bc74b66ac4c',1,'panic(uint16_t delay_red_ms, uint16_t delay_green_ms):&#160;system.c']]],
+  ['perform_5ffiltered_5fmeasurement',['perform_filtered_measurement',['../adc_8c.html#a1c21cd00f3491acd3e44574d43a1fd08',1,'adc.c']]],
   ['poll_5fencoder',['poll_encoder',['../encoder_8c.html#a077df11c625842da2b83dd6d854abe6c',1,'poll_encoder(struct encoder *const encoder):&#160;encoder.c'],['../encoder_8h.html#ac8153190ac028575d5145012f47d95e0',1,'poll_encoder(struct encoder *encoder):&#160;encoder.c']]],
   ['poll_5fgpio_5finput',['poll_gpio_input',['../gpio_8c.html#a2acd88d2a450772dafa7607409e46859',1,'poll_gpio_input(const struct gpio_pin pin, const enum gpio_type type):&#160;gpio.c'],['../gpio_8h.html#ace1809dc3c6683d6c4e1771f2415f3fd',1,'poll_gpio_input(const struct gpio_pin pin, enum gpio_type type):&#160;gpio.c']]],
   ['poll_5fgpio_5finput_5ftimeout',['poll_gpio_input_timeout',['../gpio_8c.html#aa3de98633077557c82d5c32ba81ea261',1,'poll_gpio_input_timeout(const struct gpio_pin pin, const enum gpio_type type, uint8_t timeout):&#160;gpio.c'],['../gpio_8h.html#aed044c25abe0b1df0c393b202792e1c8',1,'poll_gpio_input_timeout(const struct gpio_pin pin, enum gpio_type type, uint8_t timeout):&#160;gpio.c']]],

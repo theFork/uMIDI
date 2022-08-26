@@ -1,2 +1,5 @@
-<map id="/home/haggl/repositories/uMIDI/software/src/lib/adc.h" name="/home/haggl/repositories/uMIDI/software/src/lib/adc.h">
+<map id="/mnt/c/repositories/stuff/uMIDI/software/src/lib/adc.h" name="/mnt/c/repositories/stuff/uMIDI/software/src/lib/adc.h">
+<area shape="rect" id="node4" href="$math_8h.html" title="API for a small collection of mathematical functions. " alt="" coords="50,109,118,136"/>
+<area shape="rect" id="node6" href="$midi_8h.html" title="MIDI message transceiver. " alt="" coords="154,184,217,211"/>
+<area shape="rect" id="node7" href="$gpio_8h.html" title="GPIO configuration and service functions. " alt="" coords="223,259,286,285"/>
 </map>

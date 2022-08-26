@@ -1,4 +1,5 @@
-<map id="/home/haggl/repositories/uMIDI/software/src/lib/usb.h" name="/home/haggl/repositories/uMIDI/software/src/lib/usb.h">
-<area shape="rect" id="node2" href="$serial__communication_8c.html" title="Implementation of the serial communication module. " alt="" coords="5,95,169,151"/>
-<area shape="rect" id="node3" href="$usb_8c.html" title="USB CDC device driver implementation. " alt="" coords="193,102,384,143"/>
+<map id="/mnt/c/repositories/stuff/uMIDI/software/src/lib/usb.h" name="/mnt/c/repositories/stuff/uMIDI/software/src/lib/usb.h">
+<area shape="rect" id="node2" href="$adc_8c.html" title="ADC configuration and service functions. " alt="" coords="5,109,163,165"/>
+<area shape="rect" id="node3" href="$serial__communication_8c.html" title="Implementation of the serial communication module. " alt="" coords="187,109,411,165"/>
+<area shape="rect" id="node4" href="$usb_8c.html" title="USB CDC device driver implementation. " alt="" coords="435,109,592,165"/>
 </map>

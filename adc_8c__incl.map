@@ -1,6 +1,8 @@
-<map id="/home/haggl/repositories/uMIDI/software/src/lib/adc.c" name="/home/haggl/repositories/uMIDI/software/src/lib/adc.c">
-<area shape="rect" id="node5" href="$adc_8h.html" title="ADC configuration and service functions. " alt="" coords="269,169,323,196"/>
-<area shape="rect" id="node8" href="$midi_8h.html" title="MIDI message transceiver. " alt="" coords="417,95,474,121"/>
-<area shape="rect" id="node11" href="$leds_8h.html" title="Handling of the on&#45;board LEDs. " alt="" coords="550,95,607,121"/>
-<area shape="rect" id="node10" href="$gpio_8h.html" title="GPIO configuration and service functions. " alt="" coords="450,169,507,196"/>
+<map id="/mnt/c/repositories/stuff/uMIDI/software/src/lib/adc.c" name="/mnt/c/repositories/stuff/uMIDI/software/src/lib/adc.c">
+<area shape="rect" id="node5" href="$adc_8h.html" title="ADC configuration and service functions. " alt="" coords="105,109,162,136"/>
+<area shape="rect" id="node8" href="$math_8h.html" title="API for a small collection of mathematical functions. " alt="" coords="99,191,167,218"/>
+<area shape="rect" id="node10" href="$midi_8h.html" title="MIDI message transceiver. " alt="" coords="201,273,263,300"/>
+<area shape="rect" id="node12" href="$leds_8h.html" title="Handling of the on&#45;board LEDs. " alt="" coords="321,273,383,300"/>
+<area shape="rect" id="node13" href="$usb_8h.html" title="USB CDC device API. " alt="" coords="609,109,666,136"/>
+<area shape="rect" id="node11" href="$gpio_8h.html" title="GPIO configuration and service functions. " alt="" coords="251,348,314,375"/>
 </map>

@@ -1,5 +1,5 @@
-<map id="/home/haggl/repositories/uMIDI/software/src/lib/wave.h" name="/home/haggl/repositories/uMIDI/software/src/lib/wave.h">
-<area shape="rect" id="node2" href="$sequencer_8h.html" title="Sequencer module API. " alt="" coords="5,95,169,151"/>
-<area shape="rect" id="node3" href="$sequencer_8c.html" title="Sequencer module implementation. " alt="" coords="65,199,229,255"/>
-<area shape="rect" id="node4" href="$wave_8c.html" title="Waveform function generator. " alt="" coords="245,102,447,143"/>
+<map id="/mnt/c/repositories/stuff/uMIDI/software/src/lib/wave.h" name="/mnt/c/repositories/stuff/uMIDI/software/src/lib/wave.h">
+<area shape="rect" id="node2" href="$sequencer_8h.html" title="Sequencer module API. " alt="" coords="5,109,163,165"/>
+<area shape="rect" id="node3" href="$sequencer_8c.html" title="Sequencer module implementation. " alt="" coords="63,213,220,269"/>
+<area shape="rect" id="node4" href="$wave_8c.html" title="Waveform function generator. " alt="" coords="237,109,395,165"/>
 </map>

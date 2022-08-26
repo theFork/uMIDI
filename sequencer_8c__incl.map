@@ -1,7 +1,7 @@
-<map id="/home/haggl/repositories/uMIDI/software/src/lib/sequencer.c" name="/home/haggl/repositories/uMIDI/software/src/lib/sequencer.c">
-<area shape="rect" id="node8" href="$gpio_8h.html" title="GPIO configuration and service functions. " alt="" coords="246,408,303,435"/>
-<area shape="rect" id="node11" href="$math_8h.html" title="API for a small collection of mathematical functions. " alt="" coords="398,259,461,285"/>
-<area shape="rect" id="node12" href="$midi_8h.html" title="MIDI message transceiver. " alt="" coords="297,333,354,360"/>
-<area shape="rect" id="node13" href="$sequencer_8h.html" title="Sequencer module API. " alt="" coords="305,109,399,136"/>
-<area shape="rect" id="node14" href="$wave_8h.html" title="Waveform function generator. " alt="" coords="397,184,461,211"/>
+<map id="/mnt/c/repositories/stuff/uMIDI/software/src/lib/sequencer.c" name="/mnt/c/repositories/stuff/uMIDI/software/src/lib/sequencer.c">
+<area shape="rect" id="node8" href="$gpio_8h.html" title="GPIO configuration and service functions. " alt="" coords="246,408,309,435"/>
+<area shape="rect" id="node11" href="$math_8h.html" title="API for a small collection of mathematical functions. " alt="" coords="398,259,466,285"/>
+<area shape="rect" id="node12" href="$midi_8h.html" title="MIDI message transceiver. " alt="" coords="297,333,359,360"/>
+<area shape="rect" id="node13" href="$sequencer_8h.html" title="Sequencer module API. " alt="" coords="302,109,402,136"/>
+<area shape="rect" id="node14" href="$wave_8h.html" title="Waveform function generator. " alt="" coords="397,184,467,211"/>
 </map>

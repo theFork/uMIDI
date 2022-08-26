@@ -1,7 +1,7 @@
-<map id="/home/haggl/repositories/uMIDI/software/src/lib/usb.c" name="/home/haggl/repositories/uMIDI/software/src/lib/usb.c">
-<area shape="rect" id="node6" href="$leds_8h.html" title="Handling of the on&#45;board LEDs. " alt="" coords="167,95,225,121"/>
-<area shape="rect" id="node11" href="$usb_8h.html" title="USB CDC device API. " alt="" coords="387,95,442,121"/>
-<area shape="rect" id="node13" href="$usb__descriptors_8h.html" title="USB CDC device descriptors. " alt="" coords="521,95,647,121"/>
-<area shape="rect" id="node15" href="$system_8h.html" title="System configuration procedures. " alt="" coords="671,95,747,121"/>
-<area shape="rect" id="node9" href="$gpio_8h.html" title="GPIO configuration and service functions. " alt="" coords="101,177,158,203"/>
+<map id="/mnt/c/repositories/stuff/uMIDI/software/src/lib/usb.c" name="/mnt/c/repositories/stuff/uMIDI/software/src/lib/usb.c">
+<area shape="rect" id="node6" href="$leds_8h.html" title="Handling of the on&#45;board LEDs. " alt="" coords="563,109,624,136"/>
+<area shape="rect" id="node11" href="$usb_8h.html" title="USB CDC device API. " alt="" coords="406,109,463,136"/>
+<area shape="rect" id="node14" href="$usb__descriptors_8h.html" title="USB CDC device descriptors. " alt="" coords="245,109,381,136"/>
+<area shape="rect" id="node15" href="$system_8h.html" title="System configuration procedures. " alt="" coords="739,109,821,136"/>
+<area shape="rect" id="node9" href="$gpio_8h.html" title="GPIO configuration and service functions. " alt="" coords="685,191,747,218"/>
 </map>

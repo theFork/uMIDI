@@ -1,25 +1,26 @@
-<map id="/home/haggl/repositories/uMIDI/software/src/lib/gpio.h" name="/home/haggl/repositories/uMIDI/software/src/lib/gpio.h">
-<area shape="rect" id="node2" href="$midi_8h.html" title="MIDI message transceiver. " alt="" coords="676,102,871,143"/>
-<area shape="rect" id="node6" href="$pwm_8c.html" title="PWM configuration and service functions. " alt="" coords="26,303,225,344"/>
-<area shape="rect" id="node7" href="$sequencer_8c.html" title="Sequencer module implementation. " alt="" coords="553,496,717,552"/>
-<area shape="rect" id="node8" href="$sequencer_8h.html" title="Sequencer module API. " alt="" coords="433,392,597,448"/>
-<area shape="rect" id="node11" href="$midi_8c.html" title="MIDI message transceiver. " alt="" coords="861,206,1056,247"/>
-<area shape="rect" id="node12" href="$tests_8c.html" title="/home/haggl/repositories\l/uMIDI/software/src/lib\l/tests.c" alt="" coords="1295,199,1459,255"/>
-<area shape="rect" id="node13" href="$leds_8h.html" title="Handling of the on&#45;board LEDs. " alt="" coords="1468,102,1663,143"/>
-<area shape="rect" id="node14" href="$leds_8c.html" title="Handling of the on&#45;board LEDs. " alt="" coords="1939,206,2133,247"/>
-<area shape="rect" id="node17" href="$encoder_8h.html" title="Interface for rotary encoders. " alt="" coords="2199,95,2363,151"/>
-<area shape="rect" id="node18" href="$encoder_8c.html" title="Implementation of a 3&#45; or 4&#45;phase rotary encoder with (optional) momentary switch. " alt="" coords="2209,199,2373,255"/>
-<area shape="rect" id="node19" href="$hmi_8c.html" title="Implementation of the uMIDI&#45;HMI module. " alt="" coords="2397,206,2587,247"/>
-<area shape="rect" id="node20" href="$gpio_8c.html" title="GPIO configuration and service functions. " alt="" coords="2655,102,2849,143"/>
-<area shape="rect" id="node21" href="$hmi_8h.html" title="API of the uMIDI&#45;HMI module. " alt="" coords="2439,102,2630,143"/>
-<area shape="rect" id="node22" href="$program_8c.html" title="Program storage module implementation. " alt="" coords="2874,95,3038,151"/>
-<area shape="rect" id="node23" href="$spi_8c.html" title="SPI emulation module. " alt="" coords="3048,206,3235,247"/>
-<area shape="rect" id="node24" href="$spi_8h.html" title="SPI emulation module. " alt="" coords="3113,102,3300,143"/>
-<area shape="rect" id="node3" href="$adc_8c.html" title="ADC configuration and service functions. " alt="" coords="1081,206,1271,247"/>
-<area shape="rect" id="node4" href="$math_8h.html" title="API for a small collection of mathematical functions. " alt="" coords="234,206,433,247"/>
-<area shape="rect" id="node5" href="$math_8c.html" title="Implementation of mathematical functions. " alt="" coords="349,303,547,344"/>
-<area shape="rect" id="node9" href="$wave_8h.html" title="Waveform function generator. " alt="" coords="622,303,823,344"/>
-<area shape="rect" id="node10" href="$wave_8c.html" title="Waveform function generator. " alt="" coords="673,399,874,441"/>
-<area shape="rect" id="node15" href="$system_8c.html" title="System configuration procedures. " alt="" coords="1535,199,1699,255"/>
-<area shape="rect" id="node16" href="$usb_8c.html" title="USB CDC device driver implementation. " alt="" coords="1723,206,1914,247"/>
+<map id="/mnt/c/repositories/stuff/uMIDI/software/src/lib/gpio.h" name="/mnt/c/repositories/stuff/uMIDI/software/src/lib/gpio.h">
+<area shape="rect" id="node2" href="$midi_8h.html" title="MIDI message transceiver. " alt="" coords="593,109,751,165"/>
+<area shape="rect" id="node7" href="$pwm_8c.html" title="PWM configuration and service functions. " alt="" coords="891,317,1048,373"/>
+<area shape="rect" id="node8" href="$sequencer_8c.html" title="Sequencer module implementation. " alt="" coords="195,525,352,581"/>
+<area shape="rect" id="node9" href="$sequencer_8h.html" title="Sequencer module API. " alt="" coords="79,421,236,477"/>
+<area shape="rect" id="node12" href="$midi_8c.html" title="MIDI message transceiver. " alt="" coords="927,213,1084,269"/>
+<area shape="rect" id="node13" href="$tests_8c.html" title="/mnt/c/repositories\l/stuff/uMIDI/software\l/src/lib/tests.c" alt="" coords="1108,213,1265,269"/>
+<area shape="rect" id="node14" href="$leds_8h.html" title="Handling of the on&#45;board LEDs. " alt="" coords="1275,109,1432,165"/>
+<area shape="rect" id="node15" href="$leds_8c.html" title="Handling of the on&#45;board LEDs. " alt="" coords="1753,213,1911,269"/>
+<area shape="rect" id="node18" href="$encoder_8h.html" title="Interface for rotary encoders. " alt="" coords="1557,109,1715,165"/>
+<area shape="rect" id="node19" href="$encoder_8c.html" title="Implementation of a 3&#45; or 4&#45;phase rotary encoder with (optional) momentary switch. " alt="" coords="1935,213,2092,269"/>
+<area shape="rect" id="node20" href="$hmi_8c.html" title="Implementation of the uMIDI&#45;HMI module. " alt="" coords="2116,213,2273,269"/>
+<area shape="rect" id="node21" href="$gpio_8c.html" title="GPIO configuration and service functions. " alt="" coords="1971,109,2128,165"/>
+<area shape="rect" id="node22" href="$hmi_8h.html" title="API of the uMIDI&#45;HMI module. " alt="" coords="1789,109,1947,165"/>
+<area shape="rect" id="node23" href="$program_8c.html" title="Program storage module implementation. " alt="" coords="2152,109,2309,165"/>
+<area shape="rect" id="node24" href="$spi_8c.html" title="SPI emulation module. " alt="" coords="2340,213,2497,269"/>
+<area shape="rect" id="node25" href="$spi_8h.html" title="SPI emulation module. " alt="" coords="2384,109,2541,165"/>
+<area shape="rect" id="node3" href="$math_8h.html" title="API for a small collection of mathematical functions. " alt="" coords="543,213,700,269"/>
+<area shape="rect" id="node5" href="$adc_8c.html" title="ADC configuration and service functions. " alt="" coords="851,421,1008,477"/>
+<area shape="rect" id="node6" href="$math_8c.html" title="Implementation of mathematical functions. " alt="" coords="427,317,584,373"/>
+<area shape="rect" id="node10" href="$wave_8h.html" title="Waveform function generator. " alt="" coords="195,317,352,373"/>
+<area shape="rect" id="node11" href="$wave_8c.html" title="Waveform function generator. " alt="" coords="311,421,468,477"/>
+<area shape="rect" id="node4" href="$adc_8h.html" title="ADC configuration and service functions. " alt="" coords="709,317,867,373"/>
+<area shape="rect" id="node16" href="$system_8c.html" title="System configuration procedures. " alt="" coords="1391,213,1548,269"/>
+<area shape="rect" id="node17" href="$usb_8c.html" title="USB CDC device driver implementation. " alt="" coords="1572,213,1729,269"/>
 </map>

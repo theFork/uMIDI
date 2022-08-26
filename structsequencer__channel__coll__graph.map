@@ -1,5 +1,5 @@
 <map id="sequencer_channel" name="sequencer_channel">
-<area shape="rect" id="node2" href="$structwave.html" title="The settings and internal state of a wave. " alt="" coords="103,189,156,267"/>
-<area shape="rect" id="node3" href="$structwave__settings.html" title="Wave configuration. " alt="" coords="5,5,112,127"/>
-<area shape="rect" id="node4" href="$structwave__state.html" title="Internal state of a wave. " alt="" coords="137,5,266,127"/>
+<area shape="rect" id="node2" href="$structwave.html" title="The settings and internal state of a wave. " alt="" coords="111,189,168,267"/>
+<area shape="rect" id="node3" href="$structwave__settings.html" title="Wave configuration. " alt="" coords="5,5,121,127"/>
+<area shape="rect" id="node4" href="$structwave__state.html" title="Internal state of a wave. " alt="" coords="145,5,288,127"/>
 </map>

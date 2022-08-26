@@ -1,9 +1,9 @@
-<map id="/home/haggl/repositories/uMIDI/software/src/lib/leds.h" name="/home/haggl/repositories/uMIDI/software/src/lib/leds.h">
-<area shape="rect" id="node2" href="$adc_8c.html" title="ADC configuration and service functions. " alt="" coords="5,102,196,143"/>
-<area shape="rect" id="node3" href="$leds_8c.html" title="Handling of the on&#45;board LEDs. " alt="" coords="221,102,415,143"/>
-<area shape="rect" id="node4" href="$midi_8c.html" title="MIDI message transceiver. " alt="" coords="439,102,634,143"/>
-<area shape="rect" id="node5" href="$system_8c.html" title="System configuration procedures. " alt="" coords="659,95,823,151"/>
-<area shape="rect" id="node6" href="$tests_8c.html" title="/home/haggl/repositories\l/uMIDI/software/src/lib\l/tests.c" alt="" coords="847,95,1011,151"/>
-<area shape="rect" id="node7" href="$usb_8c.html" title="USB CDC device driver implementation. " alt="" coords="1035,102,1225,143"/>
-<area shape="rect" id="node8" href="$wave_8c.html" title="Waveform function generator. " alt="" coords="1249,102,1451,143"/>
+<map id="/mnt/c/repositories/stuff/uMIDI/software/src/lib/leds.h" name="/mnt/c/repositories/stuff/uMIDI/software/src/lib/leds.h">
+<area shape="rect" id="node2" href="$adc_8c.html" title="ADC configuration and service functions. " alt="" coords="5,109,163,165"/>
+<area shape="rect" id="node3" href="$leds_8c.html" title="Handling of the on&#45;board LEDs. " alt="" coords="187,109,344,165"/>
+<area shape="rect" id="node4" href="$midi_8c.html" title="MIDI message transceiver. " alt="" coords="368,109,525,165"/>
+<area shape="rect" id="node5" href="$system_8c.html" title="System configuration procedures. " alt="" coords="549,109,707,165"/>
+<area shape="rect" id="node6" href="$tests_8c.html" title="/mnt/c/repositories\l/stuff/uMIDI/software\l/src/lib/tests.c" alt="" coords="731,109,888,165"/>
+<area shape="rect" id="node7" href="$usb_8c.html" title="USB CDC device driver implementation. " alt="" coords="912,109,1069,165"/>
+<area shape="rect" id="node8" href="$wave_8c.html" title="Waveform function generator. " alt="" coords="1093,109,1251,165"/>
 </map>

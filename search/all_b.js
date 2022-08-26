@@ -1,14 +1,9 @@
 var searchData=
 [
   ['main',['main',['../expression_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe',1,'main(void):&#160;main.c'],['../switcher_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe',1,'main(void):&#160;main.c'],['../template-nousb_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe',1,'main(void):&#160;main.c'],['../template-usb_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe',1,'main(void):&#160;main.c'],['../wah_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe',1,'main(void):&#160;main.c'],['../whammy_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe',1,'main(void):&#160;main.c']]],
-  ['main_2ec',['main.c',['../expression_2main_8c.html',1,'']]],
-  ['main_2ec',['main.c',['../template-usb_2main_8c.html',1,'']]],
-  ['main_2ec',['main.c',['../wah_2main_8c.html',1,'']]],
-  ['main_2ec',['main.c',['../whammy_2main_8c.html',1,'']]],
-  ['main_2ec',['main.c',['../switcher_2main_8c.html',1,'']]],
-  ['main_2ec',['main.c',['../template-nousb_2main_8c.html',1,'']]],
+  ['main_2ec',['main.c',['../expression_2main_8c.html',1,'(Global Namespace)'],['../switcher_2main_8c.html',1,'(Global Namespace)'],['../template-nousb_2main_8c.html',1,'(Global Namespace)'],['../template-usb_2main_8c.html',1,'(Global Namespace)'],['../wah_2main_8c.html',1,'(Global Namespace)'],['../whammy_2main_8c.html',1,'(Global Namespace)']]],
   ['mainpage_2edox',['mainpage.dox',['../mainpage_8dox.html',1,'']]],
-  ['manufacturerstring',['ManufacturerString',['../usb__descriptors_8c.html#a84557c5ab5d188d8d7cfdbfe6de20f02',1,'usb_descriptors.c']]],
+  ['manufacturerstring',['ManufacturerString',['../usb__descriptors_8c.html#a7d6ed4ecd8df8a89c81f4dafdea2a044',1,'usb_descriptors.c']]],
   ['math_2ec',['math.c',['../math_8c.html',1,'']]],
   ['math_2eh',['math.h',['../math_8h.html',1,'']]],
   ['max_5fpage_5fnum',['MAX_PAGE_NUM',['../serial__communication_8h.html#a248074c83f00028aaec3bddbae793efc',1,'serial_communication.h']]],
@@ -60,5 +55,6 @@ var searchData=
   ['miso_5fpin',['miso_pin',['../structspi__config.html#a77cd9fee0cd83074e310d1459be764e8',1,'spi_config']]],
   ['mode',['mode',['../structadc__config.html#abd8e53d9c7b4bba88136980470bb6d0d',1,'adc_config::mode()'],['../structled__state.html#a53b506b29a6245147541d6a4790341e7',1,'led_state::mode()'],['../structsequencer__channel.html#a3e6ed2f4a2c67c5aa2ccda449d918b60',1,'sequencer_channel::mode()']]],
   ['mosi_5fpin',['mosi_pin',['../structspi__config.html#a38f4f567f3ce29cca9d73f2f15d7d486',1,'spi_config']]],
+  ['mute_5fenabled',['mute_enabled',['../expression_8c.html#a4f531a68fa8b3887bd9a2e077ef87211',1,'expression.c']]],
   ['mux_5fregister',['mux_register',['../structadc__channel__regs.html#adc802a44d3b91a3f7e61c05960b91100',1,'adc_channel_regs']]]
 ];

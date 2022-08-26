@@ -1,5 +1,5 @@
-<map id="/home/haggl/repositories/uMIDI/software/src/lib/system.c" name="/home/haggl/repositories/uMIDI/software/src/lib/system.c">
-<area shape="rect" id="node6" href="$system_8h.html" title="System configuration procedures. " alt="" coords="424,109,500,136"/>
-<area shape="rect" id="node7" href="$leds_8h.html" title="Handling of the on&#45;board LEDs. " alt="" coords="132,109,189,136"/>
-<area shape="rect" id="node9" href="$gpio_8h.html" title="GPIO configuration and service functions. " alt="" coords="172,184,229,211"/>
+<map id="/mnt/c/repositories/stuff/uMIDI/software/src/lib/system.c" name="/mnt/c/repositories/stuff/uMIDI/software/src/lib/system.c">
+<area shape="rect" id="node6" href="$system_8h.html" title="System configuration procedures. " alt="" coords="453,109,536,136"/>
+<area shape="rect" id="node7" href="$leds_8h.html" title="Handling of the on&#45;board LEDs. " alt="" coords="144,109,205,136"/>
+<area shape="rect" id="node9" href="$gpio_8h.html" title="GPIO configuration and service functions. " alt="" coords="182,184,245,211"/>
 </map>

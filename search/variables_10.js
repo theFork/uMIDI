@@ -1,13 +1,13 @@
 var searchData=
 [
-  ['sample_5fbuffer',['sample_buffer',['../adc_8c.html#a2fbc710d23c598d991139c3aba5a887d',1,'adc.c']]],
+  ['sample_5fbuffer',['sample_buffer',['../adc_8c.html#a1f18736fae780a39d1046fddbc770330',1,'adc.c']]],
   ['save_5fled',['save_led',['../switcher_2config_8c.html#a60f76ae5e65274ff95b25ceccde43385',1,'save_led():&#160;config.c'],['../switcher_2config_8h.html#a60f76ae5e65274ff95b25ceccde43385',1,'save_led():&#160;config.h']]],
   ['sequencer',['sequencer',['../whammy_8c.html#ab992c11b8aad9f1489157c7020df7054',1,'whammy.c']]],
   ['serial_5fcommands',['serial_commands',['../expression_2config_8c.html#aa437cfa836cc1a7a60adf661b0a76344',1,'serial_commands():&#160;config.c'],['../expression_2config_8h.html#aa437cfa836cc1a7a60adf661b0a76344',1,'serial_commands():&#160;config.c'],['../switcher_2config_8c.html#aa437cfa836cc1a7a60adf661b0a76344',1,'serial_commands():&#160;config.c'],['../switcher_2config_8h.html#aa437cfa836cc1a7a60adf661b0a76344',1,'serial_commands():&#160;config.c'],['../template-usb_2config_8c.html#aa437cfa836cc1a7a60adf661b0a76344',1,'serial_commands():&#160;config.c'],['../template-usb_2config_8h.html#aa437cfa836cc1a7a60adf661b0a76344',1,'serial_commands():&#160;config.c'],['../wah_2config_8c.html#aa437cfa836cc1a7a60adf661b0a76344',1,'serial_commands():&#160;config.c'],['../wah_2config_8h.html#aa437cfa836cc1a7a60adf661b0a76344',1,'serial_commands():&#160;config.c'],['../whammy_2config_8c.html#aa437cfa836cc1a7a60adf661b0a76344',1,'serial_commands():&#160;config.c'],['../whammy_2config_8h.html#aa437cfa836cc1a7a60adf661b0a76344',1,'serial_commands():&#160;config.c']]],
   ['serial_5fcommands_5fsize',['serial_commands_size',['../expression_2config_8c.html#a6fe59b02acadfc36edd467d5a8b4f3cb',1,'serial_commands_size():&#160;config.c'],['../expression_2config_8h.html#a6fe59b02acadfc36edd467d5a8b4f3cb',1,'serial_commands_size():&#160;config.c'],['../switcher_2config_8c.html#a6fe59b02acadfc36edd467d5a8b4f3cb',1,'serial_commands_size():&#160;config.c'],['../switcher_2config_8h.html#a6fe59b02acadfc36edd467d5a8b4f3cb',1,'serial_commands_size():&#160;config.c'],['../template-usb_2config_8c.html#a6fe59b02acadfc36edd467d5a8b4f3cb',1,'serial_commands_size():&#160;config.c'],['../template-usb_2config_8h.html#a6fe59b02acadfc36edd467d5a8b4f3cb',1,'serial_commands_size():&#160;config.c'],['../wah_2config_8c.html#a6fe59b02acadfc36edd467d5a8b4f3cb',1,'serial_commands_size():&#160;config.c'],['../wah_2config_8h.html#a6fe59b02acadfc36edd467d5a8b4f3cb',1,'serial_commands_size():&#160;config.c'],['../whammy_2config_8c.html#a6fe59b02acadfc36edd467d5a8b4f3cb',1,'serial_commands_size():&#160;config.c'],['../whammy_2config_8h.html#a6fe59b02acadfc36edd467d5a8b4f3cb',1,'serial_commands_size():&#160;config.c']]],
   ['settings',['settings',['../structwave.html#a3c55b66190d5d709a31f1c75ea1291ed',1,'wave']]],
   ['signal_5frx',['signal_rx',['../structmidi__config.html#add6e50537aa2937a5d8de08546a30bbb',1,'midi_config::signal_rx()'],['../midi_8c.html#a83220cea5b8b4e8453d7dbadeec6865a',1,'signal_rx():&#160;midi.c']]],
-  ['sine_5ftable',['sine_table',['../lookup__tables_8c.html#ae6e5f1da3fe28147fe94108e59d3583a',1,'sine_table():&#160;lookup_tables.c'],['../lookup__tables_8h.html#ae6e5f1da3fe28147fe94108e59d3583a',1,'sine_table():&#160;lookup_tables.c']]],
+  ['sine_5ftable',['sine_table',['../lookup__tables_8h.html#ae6e5f1da3fe28147fe94108e59d3583a',1,'lookup_tables.h']]],
   ['slope',['slope',['../structlinear__range.html#a5b129e79d9550fda95649901378c3dc5',1,'linear_range']]],
   ['speed',['speed',['../structsequencer__channel.html#a26fcf4191f3bca30c93d8cfe5b0826b6',1,'sequencer_channel']]],
   ['speed_5fcounter',['speed_counter',['../structwave__state.html#a20e8c4c233677f7c2d2e88ff33baab71',1,'wave_state']]],
@@ -18,7 +18,7 @@ var searchData=
   ['step_5fcounter',['step_counter',['../structwave__state.html#ad87363248bf922d16b7d7f4b33571969',1,'wave_state']]],
   ['step_5fdirection',['step_direction',['../structwave__state.html#a7f91ea8ad755129914e401464e190fc0',1,'wave_state']]],
   ['step_5findex',['step_index',['../structsequencer__channel.html#ad39f4228a9c10329195744095fb1c0a0',1,'sequencer_channel']]],
-  ['steps',['steps',['../structsequencer__pattern.html#aa27d16a0565e2bf916a3abdfd5baaab7',1,'sequencer_pattern']]],
+  ['steps',['steps',['../structsequencer__pattern.html#abca4570446875501418ec8da57feff85',1,'sequencer_pattern']]],
   ['switch1',['switch1',['../unionprogram__data.html#a076aa3523a2286c8c7f2b89d6dcf6345',1,'program_data']]],
   ['switch2',['switch2',['../unionprogram__data.html#a572a3abb7a60d0f3859b870014f3a093',1,'program_data']]],
   ['switch_5fstate',['switch_state',['../expression_8c.html#aa4dfc0ef0e4414b4135656752e06b8ec',1,'expression.c']]]

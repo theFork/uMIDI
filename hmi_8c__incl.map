@@ -1,5 +1,5 @@
-<map id="/home/haggl/repositories/uMIDI/software/src/lib/hmi.c" name="/home/haggl/repositories/uMIDI/software/src/lib/hmi.c">
-<area shape="rect" id="node3" href="$encoder_8h.html" title="Interface for rotary encoders. " alt="" coords="99,95,178,121"/>
-<area shape="rect" id="node5" href="$gpio_8h.html" title="GPIO configuration and service functions. " alt="" coords="214,169,271,196"/>
-<area shape="rect" id="node8" href="$hmi_8h.html" title="API of the uMIDI&#45;HMI module. " alt="" coords="202,95,257,121"/>
+<map id="/mnt/c/repositories/stuff/uMIDI/software/src/lib/hmi.c" name="/mnt/c/repositories/stuff/uMIDI/software/src/lib/hmi.c">
+<area shape="rect" id="node3" href="$encoder_8h.html" title="Interface for rotary encoders. " alt="" coords="104,109,189,136"/>
+<area shape="rect" id="node5" href="$gpio_8h.html" title="GPIO configuration and service functions. " alt="" coords="223,184,286,211"/>
+<area shape="rect" id="node8" href="$hmi_8h.html" title="API of the uMIDI&#45;HMI module. " alt="" coords="213,109,272,136"/>
 </map>

@@ -1,8 +1,10 @@
-<map id="/home/haggl/repositories/uMIDI/software/src/lib/math.h" name="/home/haggl/repositories/uMIDI/software/src/lib/math.h">
-<area shape="rect" id="node2" href="$math_8c.html" title="Implementation of mathematical functions. " alt="" coords="5,95,204,136"/>
-<area shape="rect" id="node3" href="$pwm_8c.html" title="PWM configuration and service functions. " alt="" coords="228,95,427,136"/>
-<area shape="rect" id="node4" href="$sequencer_8c.html" title="Sequencer module implementation. " alt="" coords="501,288,665,344"/>
-<area shape="rect" id="node5" href="$sequencer_8h.html" title="Sequencer module API. " alt="" coords="501,184,665,240"/>
-<area shape="rect" id="node6" href="$wave_8h.html" title="Waveform function generator. " alt="" coords="591,95,792,136"/>
-<area shape="rect" id="node7" href="$wave_8c.html" title="Waveform function generator. " alt="" coords="741,191,943,233"/>
+<map id="/mnt/c/repositories/stuff/uMIDI/software/src/lib/math.h" name="/mnt/c/repositories/stuff/uMIDI/software/src/lib/math.h">
+<area shape="rect" id="node2" href="$adc_8h.html" title="ADC configuration and service functions. " alt="" coords="5,109,163,165"/>
+<area shape="rect" id="node3" href="$adc_8c.html" title="ADC configuration and service functions. " alt="" coords="63,213,220,269"/>
+<area shape="rect" id="node4" href="$math_8c.html" title="Implementation of mathematical functions. " alt="" coords="237,109,395,165"/>
+<area shape="rect" id="node5" href="$pwm_8c.html" title="PWM configuration and service functions. " alt="" coords="419,109,576,165"/>
+<area shape="rect" id="node6" href="$sequencer_8c.html" title="Sequencer module implementation. " alt="" coords="651,317,808,373"/>
+<area shape="rect" id="node7" href="$sequencer_8h.html" title="Sequencer module API. " alt="" coords="651,213,808,269"/>
+<area shape="rect" id="node8" href="$wave_8h.html" title="Waveform function generator. " alt="" coords="751,109,908,165"/>
+<area shape="rect" id="node9" href="$wave_8c.html" title="Waveform function generator. " alt="" coords="883,213,1040,269"/>
 </map>

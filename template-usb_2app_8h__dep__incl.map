@@ -1,5 +1,5 @@
-<map id="/home/haggl/repositories/uMIDI/software/src/template&#45;usb/app.h" name="/home/haggl/repositories/uMIDI/software/src/template&#45;usb/app.h">
-<area shape="rect" id="node2" href="$template-usb_2app_8c.html" title="Implementation of an application specific module. " alt="" coords="5,109,197,165"/>
-<area shape="rect" id="node3" href="$template-usb_2config_8c.html" title="Device configuration. " alt="" coords="221,109,413,165"/>
-<area shape="rect" id="node4" href="$template-usb_2main_8c.html" title="Entry point and main loop of the uMIDI firmware. " alt="" coords="437,109,629,165"/>
+<map id="/mnt/c/repositories/stuff/uMIDI/software/src/template&#45;usb/app.h" name="/mnt/c/repositories/stuff/uMIDI/software/src/template&#45;usb/app.h">
+<area shape="rect" id="node2" href="$template-usb_2app_8c.html" title="Implementation of an application specific module. " alt="" coords="5,109,180,165"/>
+<area shape="rect" id="node3" href="$template-usb_2config_8c.html" title="Device configuration. " alt="" coords="204,109,395,165"/>
+<area shape="rect" id="node4" href="$template-usb_2main_8c.html" title="Entry point and main loop of the uMIDI firmware. " alt="" coords="419,109,603,165"/>
 </map>
