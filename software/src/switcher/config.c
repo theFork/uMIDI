@@ -147,7 +147,7 @@ struct serial_command serial_commands[] = {
         .help_string = "<i> <b>\n"
                        "Configures a toggle output for the current program:\n"
                        "<i> : Toggle output id [0-3]\n"
-                       "      '0'  = Tune/Mute\n"
+                       "      '0' = Tune/Mute\n"
                        "      '1' = Switch 1\n"
                        "      '2' = Switch 2\n"
                        "      '3' = Reserved...\n"

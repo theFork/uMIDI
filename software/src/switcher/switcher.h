@@ -62,7 +62,7 @@ void handle_program_change(uint8_t program);
 void handle_note_on(midi_value_t note, midi_value_t velocity);
 
 ///< \brief     Callback for note off
-void handle_note_off(midi_value_t note);
+void handle_note_off(midi_value_t note, midi_value_t velocity);
 
 ///< \brief     Callback for unimplemented midi messages
 void unknown_midi_message_handler(void);

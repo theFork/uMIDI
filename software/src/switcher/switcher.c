@@ -74,7 +74,6 @@ union program_data
         bool reserved3_5        : 1;
         bool reserved3_6        : 1;
         bool reserved3_7        : 1;
-
     } bit;
 };
 
@@ -104,7 +103,6 @@ void execute_program(uint32_t program_data)
     gpio_set(GPIO_OUT_LOOP5, current_program.bit.loop5);
     gpio_set(GPIO_OUT_SWITCH1, current_program.bit.switch1);
     gpio_set(GPIO_OUT_SWITCH2, current_program.bit.switch2);
-
 }
 
 bool exec_backup(const char* command)
@@ -319,7 +317,7 @@ void handle_note_on(midi_value_t note, midi_value_t velocity)
 {
     // Call note off handler in case velocity is zero
     if (velocity == 0) {
-        handle_note_off(note);
+        handle_note_off(note, velocity);
         return;
     }
 
@@ -339,7 +337,7 @@ void handle_note_on(midi_value_t note, midi_value_t velocity)
     usb_printf("Note on" USB_NEWLINE);
 }
 
-void handle_note_off(midi_value_t note)
+void handle_note_off(midi_value_t note, midi_value_t velocity)
 {
     // Restore current program (will turn off all toggle outputs)
     execute_program(current_program.dword);
