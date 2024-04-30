@@ -164,11 +164,11 @@ enum gpio_input_event poll_gpio_input_timeout(const struct gpio_pin pin, const e
     // Wait for timeout
     uint8_t timeout_counter = 0;
     while (gpio_get(pin) ^ type_mask) {
+        wdt_reset();
         if (timeout != 0 && timeout_counter == timeout) {
             return GPIO_INPUT_EVENT_LONG;
         }
 
-        wdt_reset();
         _delay_ms(100);
         ++timeout_counter;
     }
