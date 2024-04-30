@@ -64,6 +64,7 @@ uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background
 
 background_task_t low_frequency_tasks[] = {
     &handle_enable_switch,
+    &handle_mode_select_switch,
     &update_leds,
 };
 uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);
@@ -110,6 +111,7 @@ struct gpio_mapping gpio_mappings[] = {
     { .pin = &POWER_LED_PIN, .type = GPIO_OUTPUT },             // Power LED
     { .pin = &STATUS_LED_PIN, .type = GPIO_OUTPUT },            // Status LED
     { .pin = &ENABLE_SWITCH_PIN, .type = GPIO_INPUT_PULLUP },   // Enable switch
+    { .pin = &MODE_SELECT_PIN, .type = GPIO_INPUT_PULLUP },     // Mode select switch
 };
 uint8_t gpio_mappings_size = sizeof(gpio_mappings)/sizeof(struct gpio_mapping);
 

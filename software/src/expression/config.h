@@ -38,7 +38,10 @@
 /// \brief  The GPIO pin connected to the enable switch
 #define ENABLE_SWITCH_PIN   gpio.header3.pin7
 
-/// \brief  The GPIO pin connected to the power led
+/// \brief  The GPIO pin connected to the (momentary) mode selector switch on the side
+#define MODE_SELECT_PIN   gpio.header3.pin9
+
+/// \brief  The GPIO pin connected to the power led (for now, this led is used for indicating the mode)
 #define POWER_LED_PIN       gpio.header3.pin5
 
 /// \brief  The GPIO pin connected to the status led

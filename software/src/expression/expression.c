@@ -42,6 +42,10 @@
 /// \brief      The latest known expression value
 static uint8_t current_expression_value = 0;
 
+/// \brief      The current pedal mode
+//  \see        expression_modes
+static enum expression_modes current_mode = MODE_CC_EXPRESSION;
+
 /// \brief      Status variable for expression value console echo
 static bool echo = false;
 
@@ -232,6 +236,28 @@ void handle_enable_switch(void)
 
         // Use LED state to remember current status
         send_enable_message(status_led.state.active);
+    }
+}
+
+void handle_mode_select_switch(void)
+{
+    if (poll_gpio_input(MODE_SELECT_PIN, GPIO_INPUT_PULLUP)) {
+
+        // Wah mode
+        if (MODE_CC_EXPRESSION == current_mode) {
+            // Visualize mode change
+            usb_puts(PSTR("Entered mode: MODE_WAH" USB_NEWLINE));
+            set_led(&power_led, true);
+            current_mode = MODE_WAH;
+        }
+
+        // CC-Expression mode
+        else if (MODE_WAH == current_mode) {
+            // Visualize mode change. TODO need more LEDs!!!11
+            usb_puts(PSTR("Entered mode: MODE_CC_EXPRESSION" USB_NEWLINE));
+            set_led(&power_led, false);
+            current_mode = MODE_CC_EXPRESSION;
+        }
     }
 }
 

@@ -35,6 +35,13 @@
 
 //---------------- data types ----------------//
 
+/// \brief      Step counter direction
+enum expression_modes
+{
+    MODE_CC_EXPRESSION,     ///< When enabled, the pedal sends MIDI CC messages.
+    MODE_WAH,               ///< When enabled/disabled, first a NOTE ON or OFF message is sent.
+                            ///< Then the pedal also transmits CC messages.
+};
 
 //---------------- functions and procedures ----------------//
 
@@ -51,10 +58,15 @@ bool exec_echo(const char* command);
 bool exec_mute(const char* command);
 
 /// \brief      A background task that handles the enable switch
-/// \details    This task polls the enable switch input. If the input changed, a MIDI note on / off
-///             message is transmitted.
-/// \see        MIDI_NOTE_ENABLE_WAH
+/// \details    This task polls the input that comes from the enable switch below the pedal. The
+//              action performed when pressed depends on the selected mode.
 void handle_enable_switch(void);
+
+/// \brief      A background task that handles the mode selector switch
+/// \details    This task polls the input that comes from the mode selector switch on the side of
+//              the pedal.
+/// \see        expression_modes
+void handle_mode_select_switch(void);
 
 /// \brief      Initializes the expression module
 /// \details    Reads calibration values from EEPROM.
