@@ -64,7 +64,7 @@ This line indicates the socket type and MUST either be IN, OUT or THRU.
 SHOULD be either SRC, SNK or FWD. SRC is the label for power source sockets, SNK indicates a power sink socket. The FWD label stands for "Forward". FWD is meant for sockets which passively forward power from a sink socket build into the same enclosure.
 
 3. Current<br>
-For source devices: Maximum current available
-For sink devices: Maximum current consumption
+For source devices: Maximum current available<br>
+For sink devices: Maximum current consumption<br>
 For forward devices: Maximum current consumption of the device, followed by a plus sign
 */
