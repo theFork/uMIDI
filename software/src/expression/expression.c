@@ -172,11 +172,19 @@ bool exec_ctrl(const char* command)
     else if (!strncmp(command+5, "wah", 3)) {
         mode = MODE_WAH;
     }
+
+    // Get all (get without mode given)
+    else if (!strncmp(command+5, "get", 3) && strlen(command) == 8) {
+        usb_printf(PSTR("MIDI control numbers:" USB_NEWLINE));
+        usb_printf(PSTR("Exp mode: %2u" USB_NEWLINE), midi_controller_exp);
+        usb_printf(PSTR("Wah mode: %2u" USB_NEWLINE), midi_controller_wah);
+        return true;
+    }
     else {
         goto ctrl_fail;
     }
 
-    // Get
+    // Get one
     if (!strncmp(command+9, "get", 3)) {
         if (MODE_CC_EXPRESSION == mode) {
             usb_printf(PSTR("MIDI control number for expression mode: %2u" USB_NEWLINE), midi_controller_exp);
