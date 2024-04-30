@@ -57,8 +57,10 @@ uint16_t adc_offset_eemem EEMEM;
 uint16_t from_eemem EEMEM;
 uint16_t to_eemem EEMEM;
 
-static uint8_t control;
-uint8_t control_eemem EEMEM;
+static uint8_t midi_controller_exp;
+uint8_t midi_controller_exp_eemem EEMEM;
+static uint8_t midi_controller_wah;
+uint8_t midi_controller_wah_eemem EEMEM;
 
 static uint8_t mute_enabled;
 uint8_t mute_enabled_eemem EEMEM;
@@ -157,17 +159,46 @@ echo_fail:
 
 bool exec_ctrl(const char* command)
 {
-    if (strlen(command) < 8 || strlen(command) > 11) {
+    // Length check
+    if (strlen(command) < 8 || strlen(command) > 15) {
         goto ctrl_fail;
     }
 
-    if (!strncmp(command+5, "get", 3)) {
-        usb_printf(PSTR("MIDI control number: %2u" USB_NEWLINE), control);
+    // Mode
+    uint8_t mode;
+    if (!strncmp(command+5, "exp", 3)) {
+        mode = MODE_CC_EXPRESSION;
     }
-    else if (!strncmp(command+5, "set", 3)) {
-        control = atoi(command+9);
-        eeprom_write_byte(&control_eemem, true);
-        usb_printf(PSTR("Switching to MIDI control number %2u" USB_NEWLINE), control);
+    else if (!strncmp(command+5, "wah", 3)) {
+        mode = MODE_WAH;
+    }
+    else {
+        goto ctrl_fail;
+    }
+
+    // Get
+    if (!strncmp(command+9, "get", 3)) {
+        if (MODE_CC_EXPRESSION == mode) {
+            usb_printf(PSTR("MIDI control number for expression mode: %2u" USB_NEWLINE), midi_controller_exp);
+        }
+        else {
+            usb_printf(PSTR("MIDI control number for wah mode: %2u" USB_NEWLINE), midi_controller_wah);
+        }
+    }
+
+    // Set
+    else if (!strncmp(command+9, "set", 3)) {
+        uint8_t midi_controller = atoi(command+13);
+        if (MODE_CC_EXPRESSION == mode) {
+            midi_controller_exp = midi_controller;
+            eeprom_write_byte(&midi_controller_exp_eemem, true);
+            usb_printf(PSTR("Saved MIDI control number %2u for expression mode" USB_NEWLINE), midi_controller);
+        }
+        else {
+            midi_controller_wah = midi_controller;
+            eeprom_write_byte(&midi_controller_wah_eemem, true);
+            usb_printf(PSTR("Saved MIDI control number %2u for wah mode" USB_NEWLINE), midi_controller);
+        }
     }
     else {
         goto ctrl_fail;
@@ -233,9 +264,12 @@ void handle_enable_switch(void)
         // ... toggle status LED
         status_led.state.active = !status_led.state.active;
         gpio_set(STATUS_LED_PIN, status_led.state.active);
-
         // Use LED state to remember current status
-        send_enable_message(status_led.state.active);
+
+        // Send NOTE message in wah mode only
+        if (MODE_WAH == current_mode) {
+            send_enable_message(status_led.state.active);
+        }
     }
 }
 
@@ -279,7 +313,8 @@ void init_expression_module(void)
     enable_adc_interrupt(expression_conversion.channel);
 
     // Read MIDI control setting from EEPROM
-    control = eeprom_read_byte(&control_eemem);
+    midi_controller_exp = eeprom_read_byte(&midi_controller_exp_eemem);
+    midi_controller_wah = eeprom_read_byte(&midi_controller_wah_eemem);
 
     // Read mute setting from EEPROM
     mute_enabled = eeprom_read_byte(&mute_enabled_eemem);
@@ -297,7 +332,8 @@ void update_expression_value(uint16_t adc_value) {
 
         // If muting enabled only transmit if status LED is on
         if ((mute_enabled && status_led.state.active) || !mute_enabled) {
-            send_control_change(control, current_expression_value);
+            uint8_t ctrl = (MODE_CC_EXPRESSION == current_mode) ? midi_controller_exp : midi_controller_wah;
+            send_control_change(ctrl, current_expression_value);
             flash_led(LED_RED);
         }
 

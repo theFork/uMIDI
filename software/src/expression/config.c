@@ -79,8 +79,9 @@ static const char help_string_cal[] PROGMEM = "<m>\n"
     "      \"dmp\" dumps currently active values\n"
     "      \"sav\" saves active values to EEPROM\n";
 static const char cmd_string_ctrl[] PROGMEM = "ctrl";
-static const char help_string_ctrl[] PROGMEM = "<a> [<n>]\n"
-    "Read or set the MIDI control number:\n"
+static const char help_string_ctrl[] PROGMEM = "<a> <m> [n]\n"
+    "Read or set the MIDI CC number:\n"
+    "<m> : \"exp\" or \"wah\" to select mode\n"
     "<a> : \"get\" returns the configured control number\n"
     "      \"set\" sets the control number <n>\n"
     "<n> : the control number [1..16]\n";
