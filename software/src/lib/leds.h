@@ -1,5 +1,5 @@
 /// \file
-/// \brief  Handling of the on-board LEDs
+/// \brief  Handling of the on-board LEDs and any gpio that controls an LED
 
 /*
  * Copyright 2015 Sebastian Neuser
