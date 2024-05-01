@@ -48,11 +48,11 @@ static uint8_t current_expression_value = 0;
 /// \brief      Status variable for expression value console echo
 static bool echo = false;
 
-static bool enable_switch_state = false;
-
 /// \brief      The current pedal mode
-//  \see        expression_modes
-static enum expression_modes current_mode = MODE_CC_ONLY;
+//  \see        expression_mode
+static enum expression_mode current_mode;
+static enum expression_mode default_mode;
+uint8_t default_mode_eemem EEMEM;
 
 uint16_t adc_offset_eemem EEMEM;
 uint16_t from_eemem EEMEM;
@@ -68,6 +68,8 @@ uint8_t midi_note_enable_eemem EEMEM;
 static uint8_t mute_enabled;
 uint8_t mute_enabled_eemem EEMEM;
 
+
+
 ////////////////////////////////////////////////////////////////
 //         P R I V A T E   I M P L E M E N T A T I O N        //
 ////////////////////////////////////////////////////////////////
@@ -82,6 +84,29 @@ static void send_enable_message(bool enable)
     }
     else {
         send_note_off(midi_note_enable, MIDI_MAX_VALUE);
+    }
+}
+
+/// \brief      Enter expression mode
+/// \param      mode
+///                 the mode to enter
+static void enter_mode(enum expression_mode mode)
+{
+    switch (mode) {
+        case MODE_CC_ONLY:
+            current_mode = MODE_CC_ONLY;
+            // TODO: need more LEDs!!!11
+            set_led(&power_led, false);
+            usb_puts(PSTR("Entered CC-only mode"));
+            break;
+        case MODE_NOTE_AND_CC:
+            current_mode = MODE_NOTE_AND_CC;
+            // TODO: need more LEDs!!!11
+            set_led(&power_led, true);
+            usb_puts(PSTR("Entered NOTE-and-CC mode"));
+            break;
+        default:
+            usb_puts(PSTR("Unknown mode"));
     }
 }
 
@@ -157,7 +182,7 @@ bool exec_echo(const char* command)
     return true;
 
 echo_fail:
-    usb_puts(PSTR("Malformed command" USB_NEWLINE));
+    usb_puts(PSTR("Malformed command"));
     return false;
 }
 
@@ -205,7 +230,52 @@ bool exec_ctrl(const char* command)
     return true;
 
 ctrl_fail:
-    usb_puts(PSTR("Malformed command" USB_NEWLINE));
+    usb_puts(PSTR("Malformed command"));
+    return false;
+}
+
+bool exec_mode(const char* command)
+{
+    // Length check
+    if (strlen(command) < 8 || strlen(command) > 12) {
+        goto ctrl_fail;
+    }
+
+    // Get
+    if (!strncmp(command+5, "get", 3)) {
+        if (current_mode == MODE_CC_ONLY) {
+            usb_puts(PSTR("Current mode: CC-only"));
+        }
+        else {
+            usb_puts(PSTR("Current mode: NOTE-and-CC"));
+        }
+        usb_printf(PSTR("Default mode: %s" USB_NEWLINE), default_mode == MODE_CC_ONLY ? "CC-only" : "NOTE-and-CC");
+        return true;
+    }
+    // Save
+    else if (!strncmp(command+5, "sav", 3)) {
+        eeprom_write_byte(&default_mode_eemem, current_mode);
+        usb_puts(PSTR("Saved current mode as default"));
+        return true;
+    }
+    else if (strncmp(command+5, "set", 3) || strlen(command) != 12) {
+        goto ctrl_fail;
+    }
+
+    // Set
+    if (!strncmp(command+9, "cco", 3)) {
+        enter_mode(MODE_CC_ONLY);
+    }
+    else if (!strncmp(command+9, "ncc", 3)) {
+        enter_mode(MODE_NOTE_AND_CC);
+    }
+    else {
+        goto ctrl_fail;
+    }
+    return true;
+
+ctrl_fail:
+    usb_puts(PSTR("Malformed command"));
     return false;
 }
 
@@ -218,18 +288,18 @@ bool exec_mute(const char* command)
     if (!strncmp(command+5, "on", 2)) {
         eeprom_write_byte(&mute_enabled_eemem, true);
         mute_enabled = true;
-        usb_puts(PSTR("Muting enabled, setting stored." USB_NEWLINE));
+        usb_puts(PSTR("Muting enabled, setting stored."));
     }
     else if (!strncmp(command+5, "off", 2)) {
         eeprom_write_byte(&mute_enabled_eemem, false);
         mute_enabled = false;
-        usb_puts(PSTR("Muting disabled, setting stored." USB_NEWLINE));
+        usb_puts(PSTR("Muting disabled, setting stored."));
     }
     else if (!strncmp(command+5, "stat", 2)) {
         if (mute_enabled) {
-            usb_puts(PSTR("Muting currently enabled." USB_NEWLINE));
+            usb_puts(PSTR("Muting currently enabled."));
         } else {
-            usb_puts(PSTR("Muting currently disabled." USB_NEWLINE));
+            usb_puts(PSTR("Muting currently disabled."));
         }
     }
     else {
@@ -238,48 +308,15 @@ bool exec_mute(const char* command)
     return true;
 
 mute_fail:
-    usb_puts(PSTR("Malformed command" USB_NEWLINE));
-    return false;
-}
-
-bool exec_note(const char* command)
-{
-    if (strlen(command) < 7 || strlen(command) > 9) {
-        goto mute_fail;
-    }
-
-    if (!strncmp(command+5, "on", 2)) {
-        eeprom_write_byte(&mute_enabled_eemem, true);
-        mute_enabled = true;
-        usb_puts(PSTR("Muting enabled, setting stored." USB_NEWLINE));
-    }
-    else if (!strncmp(command+5, "off", 2)) {
-        eeprom_write_byte(&mute_enabled_eemem, false);
-        mute_enabled = false;
-        usb_puts(PSTR("Muting disabled, setting stored." USB_NEWLINE));
-    }
-    else if (!strncmp(command+5, "stat", 2)) {
-        if (mute_enabled) {
-            usb_puts(PSTR("Muting currently enabled." USB_NEWLINE));
-        } else {
-            usb_puts(PSTR("Muting currently disabled." USB_NEWLINE));
-        }
-    }
-    else {
-        goto mute_fail;
-    }
-    return true;
-
-mute_fail:
-    usb_puts(PSTR("Malformed command" USB_NEWLINE));
+    usb_puts(PSTR("Malformed command"));
     return false;
 }
 
 void handle_enable_switch(void)
 {
     // Poll switch
+    static bool enable_switch_state = false;
     bool current_enable_switch_state = gpio_get(ENABLE_SWITCH_PIN);
-
     // If switch has changed
     if (enable_switch_state != current_enable_switch_state) {
         enable_switch_state = current_enable_switch_state;
@@ -290,10 +327,9 @@ void handle_enable_switch(void)
         // Use LED state to remember current toggle status
         status_led.state.active = !status_led.state.active;
         gpio_set(STATUS_LED_PIN, status_led.state.active);
-        // Use LED state to remember current status
 
         // Send NOTE message in wah mode only
-        if (MODE_NOTE_AND_CC == current_mode) {
+        if (current_mode == MODE_NOTE_AND_CC) {
             send_enable_message(status_led.state.active);
         }
     }
@@ -302,24 +338,7 @@ void handle_enable_switch(void)
 void handle_mode_select_switch(void)
 {
     if (poll_gpio_input(MODE_SELECT_PIN, GPIO_INPUT_PULLUP)) {
-
-        // Wah mode
-        if (current_mode == MODE_CC_ONLY) {
-            // Visualize mode change
-            usb_puts(PSTR("Entered mode: MODE_NOTE_AND_CC" USB_NEWLINE));
-            // TODO: need more LEDs!!!11
-            set_led(&power_led, true);
-            current_mode = MODE_NOTE_AND_CC;
-        }
-
-        // CC-only mode
-        else if (current_mode == MODE_NOTE_AND_CC) {
-            // Visualize mode change.
-            usb_puts(PSTR("Entered mode: MODE_CC_ONLY" USB_NEWLINE));
-            // TODO: need more LEDs!!!11
-            set_led(&power_led, false);
-            current_mode = MODE_CC_ONLY;
-        }
+        enter_mode(current_mode == MODE_CC_ONLY ? MODE_NOTE_AND_CC : MODE_CC_ONLY);
     }
 }
 
@@ -347,6 +366,10 @@ void init_expression_module(void)
 
     // Read mute setting from EEPROM
     mute_enabled = eeprom_read_byte(&mute_enabled_eemem);
+
+    // Read and enter default mode
+    default_mode = eeprom_read_byte(&default_mode_eemem);
+    enter_mode(default_mode);
 }
 
 void trigger_expression_conversion(void)

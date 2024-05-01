@@ -74,16 +74,16 @@ uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background
 static const char cmd_string_cal[] PROGMEM = "cal";
 static const char help_string_cal[] PROGMEM = "<m>\n"
     "Calibrate the pedal (in the following order):\n"
-    "<m> : \"adc\" calibrates the ADC offset (pedal to min position!)\n"
-    "      \"min\" sets the minimum registered ADC value\n"
-    "      \"max\" sets the maximum registered ADC value\n"
-    "      \"dmp\" dumps currently active values\n"
-    "      \"sav\" saves active values to EEPROM\n";
+    "<m> : \"adc\" calibrate the ADC offset (pedal to min position!)\n"
+    "      \"min\" set the minimum registered ADC value\n"
+    "      \"max\" set the maximum registered ADC value\n"
+    "      \"dmp\" dump currently active values\n"
+    "      \"sav\" save active values to EEPROM\n";
 static const char cmd_string_ctrl[] PROGMEM = "ctrl";
 static const char help_string_ctrl[] PROGMEM = "<a> [m] [n]\n"
     "Read or set the MIDI CC number:\n"
-    "<a> : \"get\" returns the configured control/note numbers\n"
-    "      \"set\" sets the control/note number <m> to <n>\n"
+    "<a> : \"get\" return the configured control/note numbers\n"
+    "      \"set\" set the control/note number <m> to <n>\n"
     "<m> : \"ccc\" CC-only mode CC number\n"
     "      \"ncc\" NOTE-and-CC mode CC number\n"
     "      \"ncn\" NOTE-and-CC mode NOTE number\n"
@@ -92,6 +92,14 @@ static const char cmd_string_echo[] PROGMEM = "echo";
 static const char help_string_echo[] PROGMEM = "<v>\n"
     "Switch expression value console output on / off\n"
     "<v> : \"on\" or \"off\"\n";
+static const char cmd_string_mode[] PROGMEM = "mode";
+static const char help_string_mode[] PROGMEM = "<a> [m]\n"
+    "Read or set mode:\n"
+    "<a> : \"get\" read current mode\n"
+    "      \"set\" enter mode (requires <m>)\n"
+    "      \"sav\" save current mode as default\n"
+    "<m> : \"cco\" CC-only mode\n"
+    "      \"ncc\" NOTE-and-CC mode\n";
 static const char cmd_string_mute[] PROGMEM = "mute";
 static const char help_string_mute[] PROGMEM = "<v>\n"
     "Mute CC message transmission when status LED is off.\n"
@@ -105,6 +113,7 @@ struct serial_command serial_commands[] = {
     { .cmd_string = cmd_string_cal,  .help_string = help_string_cal,  .handler = &exec_cal  },
     { .cmd_string = cmd_string_ctrl, .help_string = help_string_ctrl, .handler = &exec_ctrl },
     { .cmd_string = cmd_string_echo, .help_string = help_string_echo, .handler = &exec_echo },
+    { .cmd_string = cmd_string_mode, .help_string = help_string_mode, .handler = &exec_mode },
     { .cmd_string = cmd_string_mute, .help_string = help_string_mute, .handler = &exec_mute },
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);

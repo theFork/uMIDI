@@ -34,7 +34,7 @@
 //---------------- data types ----------------//
 
 /// \brief      Step counter direction
-enum expression_modes
+enum expression_mode
 {
     MODE_CC_ONLY,       ///< When enabled, the pedal sends MIDI CC messages.
     MODE_NOTE_AND_CC,   ///< When enabled/disabled, first a NOTE ON or NOTE OFF message is sent.
@@ -54,6 +54,9 @@ bool exec_echo(const char* command);
 
 /// \brief      Handler for the serial command 'mute'
 bool exec_mute(const char* command);
+
+/// \brief      Handler for the serial command 'mode'
+bool exec_mode(const char* command);
 
 /// \brief      A background task that handles the enable switch
 /// \details    This task polls the input that comes from the enable switch below the pedal. The
