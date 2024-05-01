@@ -228,14 +228,13 @@ enum gpio_input_event poll_gpio_input_timeout(const struct gpio_pin pin, const e
 
     // De-bounce
     _delay_ms(10);
-    wdt_reset();
 
     // Wait for timeout
     static bool returning_from_long_press = false;
     uint8_t timeout_counter = 0;
     while (gpio_get(pin) ^ type_mask) {
-        if (timeout == 0) {
-            wdt_reset();
+        wdt_reset();
+        if (timeout == 0 || returning_from_long_press) {
             continue;
         }
 
@@ -245,9 +244,9 @@ enum gpio_input_event poll_gpio_input_timeout(const struct gpio_pin pin, const e
         }
 
         _delay_ms(100);
-        wdt_reset();
         ++timeout_counter;
     }
+    wdt_reset();
 
     if (returning_from_long_press) {
         returning_from_long_press = false;
