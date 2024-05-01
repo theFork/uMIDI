@@ -2,7 +2,7 @@
 /// \brief  PWM configuration and service functions
 
 /*
- * Copyright 2012-2015 Sebastian Neuser
+ * Copyright 2012-2018 Sebastian Neuser
  *
  * This file is part of the uMIDI firmware.
  *
@@ -36,32 +36,47 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
+static struct {
+    struct TC1_struct * const tcc;
+    const uint8_t             ccen_mask;
+    register16_t * const      cmp;
+    register16_t * const      cmpbuf;
+    uint16_t (*cmp_from_midi)(midi_value_t value);
+} PWMS[] = {
+    { .tcc =         &TCC1, .ccen_mask = TC1_CCAEN_bm, .cmp = &TCC1.CCA, .cmpbuf = &TCC1.CCABUF, },
+    { .tcc =         &TCC1, .ccen_mask = TC1_CCBEN_bm, .cmp = &TCC1.CCB, .cmpbuf = &TCC1.CCBBUF, },
+    { .tcc = (void*) &TCD0, .ccen_mask = TC0_CCAEN_bm, .cmp = &TCD0.CCA, .cmpbuf = &TCD0.CCABUF, },
+    { .tcc = (void*) &TCD0, .ccen_mask = TC0_CCBEN_bm, .cmp = &TCD0.CCB, .cmpbuf = &TCD0.CCBBUF, },
+    { .tcc = (void*) &TCD0, .ccen_mask = TC0_CCCEN_bm, .cmp = &TCD0.CCC, .cmpbuf = &TCD0.CCCBUF, },
+    { .tcc = (void*) &TCD0, .ccen_mask = TC0_CCDEN_bm, .cmp = &TCD0.CCD, .cmpbuf = &TCD0.CCDBUF, },
+};
 
-static uint16_t (*convert_pwm_range)(midi_value_t value);
+
 
 ////////////////////////////////////////////////////////////////
 //      F U N C T I O N S   A N D   P R O C E D U R E S       //
 ////////////////////////////////////////////////////////////////
 
-void init_pwm_module(uint16_t (* const conversion_function)(midi_value_t value))
+void init_pwm(const enum pwm pwm, uint16_t (* const conversion_function)(midi_value_t value))
 {
     // Store conversion function pointer
-    convert_pwm_range = conversion_function;
+    PWMS[pwm].cmp_from_midi = conversion_function;
 
     // Do not prescale the system clock (=> 32 MHz)
-    TCC1.CTRLA = TC_CLKSEL_DIV1_gc;
+    PWMS[pwm].tcc->CTRLA = TC_CLKSEL_DIV1_gc;
 
-    // Select dual slope PWM mode and enable OC1A output
-    TCC1.CTRLB = TC_WGMODE_DSBOTH_gc | TC1_CCAEN_bm;
+    // Select dual slope PWM mode and enable OC output
+    PWMS[pwm].tcc->CTRLB |= TC_WGMODE_DSBOTH_gc | PWMS[pwm].ccen_mask;
 
     // Set TOP value
-    TCC1.PER = (1<<lookup_table_resolution) - 1;
+    PWMS[pwm].tcc->PER = PWM_MAX_DUTY;
 
     // Set initial compare value to TOP
-    TCC1.CCA = TCC1.PER;
+    *PWMS[pwm].cmp    = PWM_MAX_DUTY;
+    *PWMS[pwm].cmpbuf = PWM_MAX_DUTY;
 }
 
-void set_pwm_duty_cycle(midi_value_t duty)
+void set_pwm_duty_cycle(const enum pwm pwm, const midi_value_t duty)
 {
-    TCC1.CCABUF = convert_pwm_range(duty);
+    *PWMS[pwm].cmpbuf = PWMS[pwm].cmp_from_midi(duty);
 }

@@ -71,4 +71,3 @@ extern uint8_t serial_commands_size;
 
 //---------------- EOF ----------------//
 #endif // _CONFIG_H
-

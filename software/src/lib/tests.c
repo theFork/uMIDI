@@ -153,5 +153,5 @@ void send_program_change_test(void)
 //---------------- PWM tests ----------------//
 void apply_duty_cycle_test(void *duty)
 {
-    set_pwm_duty_cycle(*((uint8_t *)duty));
+    set_pwm_duty_cycle(PWM_PIN2, *((uint8_t *)duty));
 }

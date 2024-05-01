@@ -32,6 +32,7 @@
 
 #include "config.h"
 #include "expression.h"
+#include "midi_handlers.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -73,18 +74,20 @@ uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background
 static const char cmd_string_cal[] PROGMEM = "cal";
 static const char help_string_cal[] PROGMEM = "<m>\n"
     "Calibrate the pedal (in the following order):\n"
-    "<m> : \"adc\" calibrates the ADC offset\n"
+    "<m> : \"adc\" calibrates the ADC offset (pedal to min position!)\n"
     "      \"min\" sets the minimum registered ADC value\n"
     "      \"max\" sets the maximum registered ADC value\n"
     "      \"dmp\" dumps currently active values\n"
     "      \"sav\" saves active values to EEPROM\n";
 static const char cmd_string_ctrl[] PROGMEM = "ctrl";
-static const char help_string_ctrl[] PROGMEM = "<a> <m> [n]\n"
+static const char help_string_ctrl[] PROGMEM = "<a> [m] [n]\n"
     "Read or set the MIDI CC number:\n"
-    "<m> : \"exp\" or \"wah\" to select mode\n"
-    "<a> : \"get\" returns the configured control number\n"
-    "      \"set\" sets the control number <n>\n"
-    "<n> : the control number [1..16]\n";
+    "<a> : \"get\" returns the configured control/note numbers\n"
+    "      \"set\" sets the control/note number <m> to <n>\n"
+    "<m> : \"ccc\" CC-only mode CC number\n"
+    "      \"ncc\" NOTE-and-CC mode CC number\n"
+    "      \"ncn\" NOTE-and-CC mode NOTE number\n"
+    "<n> : the control/note number [0..127]\n";
 static const char cmd_string_echo[] PROGMEM = "echo";
 static const char help_string_echo[] PROGMEM = "<v>\n"
     "Switch expression value console output on / off\n"
@@ -128,10 +131,10 @@ struct led status_led = {
 //---------------- MIDI ----------------//
 struct midi_config midi_config = {
     .event_handlers = {
-        .control_change = NULL,
-        .note_off       = NULL,
-        .note_on        = NULL,
-        .program_change = NULL
+        .control_change = handle_midi_control_change,
+        .note_off       = handle_midi_note_off,
+        .note_on        = handle_midi_note_on,
+        .program_change = handle_midi_program_change,
     },
     .omni_mode  = false,
     .rx_channel = MIDI_CHANNEL_01,

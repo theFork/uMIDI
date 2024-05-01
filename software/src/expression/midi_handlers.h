@@ -1,8 +1,8 @@
 /// \file
-/// \brief      Wah-wah module API
+/// \brief      Header for MIDI handling routines
 
 /*
- * Copyright 2015 Sebastian Neuser
+ * Copyright 2018 Sebastian Neuser
  *
  * This file is part of the uMIDI firmware.
  *
@@ -20,8 +20,8 @@
  * along with the uMIDI firmware.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _WAH_H
-#define _WAH_H
+#ifndef _MIDI_HANDLERS_H
+#define _MIDI_HANDLERS_H
 
 
 //---------------- includes ----------------//
@@ -29,31 +29,18 @@
 
 
 //---------------- constants ----------------//
-/// \brief      The MIDI note that represents uMIDI wah's enable / bypass state
-#define MIDI_NOTE_ENABLE_WAH            42
-
-/// \brief      The PWM output used for the Wah LED
-#define WAH_PWM                         PWM_PIN8
-
 
 
 //---------------- data types ----------------//
 
 
 //---------------- functions and procedures ----------------//
-void enable_wah(bool enable);
-bool exec_enable(const char* command);
-bool exec_speed(const char* command);
-bool exec_tap(const char* command);
-bool exec_waveform(const char* command);
-void handle_midi_cc(midi_value_t controller, midi_value_t value);
-void handle_midi_note_off(midi_value_t value, midi_value_t velocity);
-void handle_midi_note_on(midi_value_t value, midi_value_t velocity);
-void handle_switch(void);
-void init_wah_module(void);
-void update_wah_pwm(void);
+void handle_midi_control_change(midi_value_t controller, midi_value_t value);
+void handle_midi_note_off(midi_value_t note, midi_value_t velocity);
+void handle_midi_note_on(midi_value_t note, midi_value_t velocity);
+void handle_midi_program_change(midi_value_t program);
 
 
 //---------------- EOF ----------------//
-#endif // _WAH_H
+#endif // _MIDI_HANDLERS_H
 

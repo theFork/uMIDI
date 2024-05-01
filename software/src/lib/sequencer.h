@@ -119,7 +119,7 @@ struct sequencer_channel
     uint8_t                         step_index;     ///< This counter points to the next sequencer step in the channel's pattern
     struct wave                     wave;           ///< An internal waveform used as a clock source for the sequencer channel
     bool                            clock_state;    ///< Last known state of the channel's clock
-    void (*tick_callback)(void);                   ///< An event handler for sequencer clock ticks or `NULL`
+    void (*tick_callback)(void);                    ///< An event handler for sequencer clock ticks or `NULL`
 };
 
 
@@ -198,6 +198,11 @@ void import_pattern(enum sequencer_pattern_number number, const char* data);
 /// \param      number_of_patterns
 ///                 number of "factory" patterns
 void init_sequencer_patterns(const struct sequencer_pattern* factory_patterns, uint8_t number_of_patterns);
+
+/// \brief      Advances to the next sequencer step
+/// \details    Moves the sequencer one step ahead in the pattern and sends a MIDI message with the new value
+/// \returns    the value of the next sequencer step
+void next_sequencer_step(struct sequencer_channel* channel);
 
 /// \brief      Stores a given pattern at the specified location
 /// \details    Overwrites stored data! Checks if the data actually changed before writing to save EEPROM write cycles.

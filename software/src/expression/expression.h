@@ -29,8 +29,6 @@
 
 
 //---------------- constants ----------------//
-/// \brief      The MIDI note that represents uMIDI wah's enable / bypass state
-#define MIDI_NOTE_ENABLE_WAH            42
 
 
 //---------------- data types ----------------//
@@ -38,9 +36,9 @@
 /// \brief      Step counter direction
 enum expression_modes
 {
-    MODE_CC_EXPRESSION,     ///< When enabled, the pedal sends MIDI CC messages.
-    MODE_WAH,               ///< When enabled/disabled, first a NOTE ON or OFF message is sent.
-                            ///< Then the pedal also transmits CC messages.
+    MODE_CC_ONLY,       ///< When enabled, the pedal sends MIDI CC messages.
+    MODE_NOTE_AND_CC,   ///< When enabled/disabled, first a NOTE ON or NOTE OFF message is sent.
+                        ///< Then the pedal also transmits CC messages.
 };
 
 //---------------- functions and procedures ----------------//

@@ -1,0 +1,16 @@
+# vim: et sw=2 ts=2
+---
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+image: alpine
+
+before_script:
+  - apk update
+  - apk add avr-libc doxygen make perl --no-cache
+
+build:
+  stage: build
+  script:
+    - cd software
+    - make

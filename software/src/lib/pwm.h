@@ -2,7 +2,7 @@
 /// \brief  PWM configuration and service functions
 
 /*
- * Copyright 2012-2015 Sebastian Neuser
+ * Copyright 2012-2018 Sebastian Neuser
  *
  * This file is part of the uMIDI firmware.
  *
@@ -31,6 +31,15 @@
 
 
 //---------------- data types ----------------//
+///\brief   Available PWM outputs
+enum pwm {
+    PWM_PIN2,   ///\brief PWM at GPIO header 3 pin 2
+    PWM_PIN3,   ///\brief PWM at GPIO header 3 pin 3
+    PWM_PIN6,   ///\brief PWM at GPIO header 3 pin 6
+    PWM_PIN7,   ///\brief PWM at GPIO header 3 pin 7
+    PWM_PIN8,   ///\brief PWM at GPIO header 3 pin 8
+    PWM_PIN9,   ///\brief PWM at GPIO header 3 pin 9
+};
 
 
 //---------------- constants ----------------//
@@ -41,21 +50,25 @@
 //---------------- functions and procedures ----------------//
 
 /// \brief      Initializes the PWM
-/// \details    CPU timer 1 is clocked with the system clock (32 MHz) and the compare output A
+/// \details    The CPU timer is clocked with the system clock (32 MHz) and the compare output
 ///             is set up to output a dual slope PWM. Additionally, a conversion function which is
 ///             used in set_pwm_duty_cycle() to compute the duty cycle compare values is registered.
+/// \param      pwm
+///                 the PWM to initialize
 /// \param      conversion_function
 ///                 pointer to a function converting midi values to pwm compare register values
 /// \see        wave
-void init_pwm_module(uint16_t (*conversion_function)(midi_value_t value));
+void init_pwm(enum pwm pwm, uint16_t (*conversion_function)(midi_value_t value));
 
 
 /// \brief      Updates the PWM duty cycle
 /// \details    Computes a suitable duty cycle compare value and writes the PWM counter compare
 ///             register. This procedure can be used to manually control the modulation.
+/// \param      pwm
+///                 the PWM to modify
 /// \param      duty
 ///                 the desired duty cycle [0..MIDI_MAX_VALUE]
-void set_pwm_duty_cycle(midi_value_t duty);
+void set_pwm_duty_cycle(enum pwm pwm, midi_value_t duty);
 
 
 //---------------- EOF ----------------//

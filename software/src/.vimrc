@@ -1,3 +1,3 @@
 let g:syntastic_c_compiler = 'avr-gcc'
 let g:syntastic_c_check_header = 1
-let g:syntastic_c_compiler_options = '-mmcu=atxmega128a4u -Os -DF_CPU=32000000UL -DARCH=ARCH_XMEGA -DF_USB=48000000UL'
+let g:syntastic_c_compiler_options = '-mmcu=atxmega128a4u -Os -D F_CPU=32000000UL -D ARCH=ARCH_XMEGA -D BOARD=NONE -D F_USB=48000000UL -D USB_DEVICE_ONLY -D FIXED_CONTROL_ENDPOINT_SIZE=8 -D FIXED_NUM_CONFIGURATIONS=1 -D USE_FLASH_DESCRIPTORS -D USE_STATIC_OPTIONS="(USB_DEVICE_OPT_FULLSPEED | USB_OPT_BUSEVENT_PRILOW | USB_OPT_PLLCLKSRC)" -I lib/lufa'

@@ -192,8 +192,8 @@ static const uint8_t characters[36][LED_MATRIX_CHAR_BITMAP_HEIGHT] = {
     {0b111,
      0b101,
      0b101,
-     0b010,
-     0b110},
+     0b110,
+     0b011},
 
     {0b111,
      0b101,
@@ -273,19 +273,13 @@ void init_led_matrix_module(struct led_matrix * const matrix)
     i2c_stop();
 
     // Initialize frame buffer
-    memset(matrix->buffer.green, 0, sizeof(matrix->buffer.green));
-    memset(matrix->buffer.red,   0, sizeof(matrix->buffer.red));
+    led_matrix_clear(matrix);
 }
 
-void led_matrix_flush(const struct led_matrix * const matrix)
+void led_matrix_clear(struct led_matrix * const matrix)
 {
-    i2c_start(matrix->config.address, false);
-    i2c_write_byte(0x0); // Start address: 0
-    for (uint8_t i=0; i<sizeof(matrix->buffer.green); ++i) {
-        i2c_write_byte(matrix->buffer.green[i]);
-        i2c_write_byte(matrix->buffer.red[i]);
-    }
-    i2c_stop();
+    memset(matrix->buffer.green, 0, sizeof(matrix->buffer.green));
+    memset(matrix->buffer.red,   0, sizeof(matrix->buffer.red));
 }
 
 void led_matrix_clear_area(struct led_matrix * const matrix,
@@ -296,6 +290,29 @@ void led_matrix_clear_area(struct led_matrix * const matrix,
                               ADAFRUIT_DISPLAY_COLOR_BLACK);
 }
 
+void led_matrix_flush(const struct led_matrix * const matrix)
+{
+    bool green_changed = memcmp(&matrix->last_buffer.green,
+                                &matrix->buffer.green,
+                                sizeof(matrix->buffer.green));
+    bool red_changed = memcmp(&matrix->last_buffer.red,
+                              &matrix->buffer.red,
+                              sizeof(matrix->buffer.red));
+    if (!green_changed && !red_changed) {
+        return;
+    }
+
+    i2c_start(matrix->config.address, false);
+    i2c_write_byte(0x0); // Start address: 0
+    for (uint8_t i=0; i<sizeof(matrix->buffer.green); ++i) {
+        i2c_write_byte(matrix->buffer.green[i]);
+        i2c_write_byte(matrix->buffer.red[i]);
+    }
+    i2c_stop();
+    memcpy((void*) &matrix->last_buffer.green, &matrix->buffer.green, sizeof(matrix->buffer.green));
+    memcpy((void*) &matrix->last_buffer.red, &matrix->buffer.red, sizeof(matrix->buffer.red));
+}
+
 void led_matrix_draw_rectangle(struct led_matrix* matrix, uint8_t x_top_left, uint8_t y_top_left,
                                                           uint8_t x_bot_right, uint8_t y_bot_right,
                                                           enum adafruit_display_color color)
@@ -304,6 +321,41 @@ void led_matrix_draw_rectangle(struct led_matrix* matrix, uint8_t x_top_left, ui
     uint8_t width = x_bot_right - x_top_left + 1;
     uint8_t height = y_bot_right - y_top_left + 1;
     led_matrix_show_bitmap(matrix, fill_pattern, x_top_left, y_top_left, width, height, color);
+}
+
+void led_matrix_set_pixel(struct led_matrix * const matrix,
+                          const uint8_t row, uint8_t column,
+                          const enum adafruit_display_color color)
+{
+    // Abort if an invalid column index was given
+    if (column >= LED_MATRIX_RESOLUTION) {
+        return;
+    }
+
+    // Compute array index
+    column = 7-column;
+
+    // Write color
+    switch (color) {
+    case ADAFRUIT_DISPLAY_COLOR_BLACK:
+        matrix->buffer.green[column] &=~ _BV(row);
+        matrix->buffer.red[column]   &=~ _BV(row);
+        break;
+    case ADAFRUIT_DISPLAY_COLOR_GREEN:
+        matrix->buffer.green[column] |=  _BV(row);
+        matrix->buffer.red[column]   &=~ _BV(row);
+        break;
+    case ADAFRUIT_DISPLAY_COLOR_ORANGE:
+        matrix->buffer.green[column] |= _BV(row);
+        matrix->buffer.red[column]   |= _BV(row);
+        break;
+    case ADAFRUIT_DISPLAY_COLOR_RED:
+        matrix->buffer.green[column] &=~ _BV(row);
+        matrix->buffer.red[column]   |=  _BV(row);
+        break;
+    default:
+        break;
+    }
 }
 
 void led_matrix_show_bitmap(struct led_matrix * const matrix, const uint8_t * const bitmap,
@@ -355,37 +407,4 @@ void led_matrix_show_character(struct led_matrix * const matrix, const char char
     const uint8_t* const bitmap = characters[index];
     led_matrix_show_bitmap(matrix, bitmap, x_offs, y_offs,
                            LED_MATRIX_CHAR_BITMAP_WIDTH, LED_MATRIX_CHAR_BITMAP_HEIGHT, color);
-}
-
-void led_matrix_set_pixel(struct led_matrix * const matrix,
-                          const uint8_t row, uint8_t column,
-                          const enum adafruit_display_color color)
-{
-    // Abort if an invalid column index was given
-    if (column >= LED_MATRIX_RESOLUTION) {
-        return;
-    }
-
-    // Compute array index
-    column = 7-column;
-
-    // Write color
-    switch (color) {
-    case ADAFRUIT_DISPLAY_COLOR_BLACK:
-        matrix->buffer.green[column] &=~ _BV(row);
-        matrix->buffer.red[column]   &=~ _BV(row);
-        break;
-    case ADAFRUIT_DISPLAY_COLOR_GREEN:
-        matrix->buffer.green[column] |=  _BV(row);
-        matrix->buffer.red[column]   &=~ _BV(row);
-        break;
-    case ADAFRUIT_DISPLAY_COLOR_ORANGE:
-        matrix->buffer.green[column] |= _BV(row);
-        matrix->buffer.red[column]   |= _BV(row);
-        break;
-    case ADAFRUIT_DISPLAY_COLOR_RED:
-        matrix->buffer.green[column] &=~ _BV(row);
-        matrix->buffer.red[column]   |=  _BV(row);
-        break;
-    }
 }
