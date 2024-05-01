@@ -39,9 +39,6 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-/// \brief      ADC calibration offset
-uint16_t adc_offset = 0;
-
 /// \brief      The latest known expression value
 static uint8_t current_expression_value = 0;
 
@@ -54,10 +51,15 @@ static enum expression_mode current_mode;
 static enum expression_mode default_mode;
 uint8_t default_mode_eemem EEMEM;
 
+/// \brief      ADC offset calibration
+uint16_t adc_offset = 0;
 uint16_t adc_offset_eemem EEMEM;
+
+// Calibration settings
 uint16_t from_eemem EEMEM;
 uint16_t to_eemem EEMEM;
 
+// Control settings
 static uint8_t midi_controller_cc_only;
 uint8_t midi_controller_cc_only_eemem EEMEM;
 static uint8_t midi_controller_note_and_cc;
@@ -65,8 +67,10 @@ uint8_t midi_controller_note_and_cc_eemem EEMEM;
 static uint8_t midi_note_enable;
 uint8_t midi_note_enable_eemem EEMEM;
 
-static uint8_t mute_enabled;
+static bool mute_enabled;
 uint8_t mute_enabled_eemem EEMEM;
+static bool enable_switch_momentary;
+uint8_t enable_switch_momentary_eemem EEMEM;
 
 
 
@@ -128,7 +132,7 @@ bool exec_cal(const char* command)
         adc_offset = calibrate_adc_offset(expression_conversion.channel);
         usb_puts(PSTR("done."));
     }
-    else if (!strncmp(command+4, "dmp", 3)) {
+    else if (!strncmp(command+4, "get", 3)) {
         usb_printf(PSTR("Offset: %u" USB_NEWLINE), adc_offset);
         usb_printf(PSTR("Min: %u" USB_NEWLINE), adc_config.input_range.from);
         usb_printf(PSTR("Max: %u" USB_NEWLINE), adc_config.input_range.to);
@@ -237,37 +241,23 @@ ctrl_fail:
 bool exec_mode(const char* command)
 {
     // Length check
-    if (strlen(command) < 8 || strlen(command) > 12) {
+    if (strlen(command) != 8) {
         goto ctrl_fail;
     }
 
-    // Get
-    if (!strncmp(command+5, "get", 3)) {
-        if (current_mode == MODE_CC_ONLY) {
-            usb_puts(PSTR("Current mode: CC-only"));
-        }
-        else {
-            usb_puts(PSTR("Current mode: NOTE-and-CC"));
-        }
-        usb_printf(PSTR("Default mode: %s" USB_NEWLINE), default_mode == MODE_CC_ONLY ? "CC-only" : "NOTE-and-CC");
-        return true;
+    if (!strncmp(command+5, "cco", 3)) {
+        enter_mode(MODE_CC_ONLY);
     }
-    // Save
+    else if (!strncmp(command+5, "ncc", 3)) {
+        enter_mode(MODE_NOTE_AND_CC);
+    }
+    else if (!strncmp(command+5, "get", 3)) {
+        usb_printf(PSTR("Current mode: %s" USB_NEWLINE), current_mode == MODE_CC_ONLY ? "CC-only" : "NOTE-and-CC");
+        usb_printf(PSTR("Default mode: %s" USB_NEWLINE), default_mode == MODE_CC_ONLY ? "CC-only" : "NOTE-and-CC");
+    }
     else if (!strncmp(command+5, "sav", 3)) {
         eeprom_write_byte(&default_mode_eemem, current_mode);
         usb_puts(PSTR("Saved current mode as default"));
-        return true;
-    }
-    else if (strncmp(command+5, "set", 3) || strlen(command) != 12) {
-        goto ctrl_fail;
-    }
-
-    // Set
-    if (!strncmp(command+9, "cco", 3)) {
-        enter_mode(MODE_CC_ONLY);
-    }
-    else if (!strncmp(command+9, "ncc", 3)) {
-        enter_mode(MODE_NOTE_AND_CC);
     }
     else {
         goto ctrl_fail;
@@ -290,12 +280,12 @@ bool exec_mute(const char* command)
         mute_enabled = true;
         usb_puts(PSTR("Muting enabled, setting stored."));
     }
-    else if (!strncmp(command+5, "off", 2)) {
+    else if (!strncmp(command+5, "off", 3)) {
         eeprom_write_byte(&mute_enabled_eemem, false);
         mute_enabled = false;
         usb_puts(PSTR("Muting disabled, setting stored."));
     }
-    else if (!strncmp(command+5, "stat", 2)) {
+    else if (!strncmp(command+5, "get", 3)) {
         if (mute_enabled) {
             usb_puts(PSTR("Muting currently enabled."));
         } else {
@@ -312,21 +302,51 @@ mute_fail:
     return false;
 }
 
+bool exec_sw(const char* command)
+{
+    if (strlen(command) != 6) {
+        goto sw_fail;
+    }
+
+    if (!strncmp(command+3, "lat", 3)) {
+        enable_switch_momentary = false;
+        eeprom_write_byte(&enable_switch_momentary_eemem, enable_switch_momentary);
+        usb_puts(PSTR("Enable switch type: latching"));
+        return true;
+    }
+    if (!strncmp(command+3, "mom", 3)) {
+        enable_switch_momentary = true;
+        eeprom_write_byte(&enable_switch_momentary_eemem, enable_switch_momentary);
+        usb_puts(PSTR("Enable switch type: momentary"));
+        return true;
+    }
+    if (!strncmp(command+3, "get", 3)) {
+        usb_printf(PSTR("Enable switch type: %s" USB_NEWLINE), enable_switch_momentary ? "momentary" : "latching");
+        return true;
+    }
+
+sw_fail:
+    usb_puts(PSTR("Malformed command"));
+    return false;
+}
+
 void handle_enable_switch(void)
 {
     // Poll switch
     static bool enable_switch_state = false;
     bool current_enable_switch_state = gpio_get(ENABLE_SWITCH_PIN);
+
     // If switch has changed
     if (enable_switch_state != current_enable_switch_state) {
         enable_switch_state = current_enable_switch_state;
-        if (!enable_switch_state) {
+        if (enable_switch_momentary && !enable_switch_state) {
             return;
         }
 
         // Use LED state to remember current toggle status
         status_led.state.active = !status_led.state.active;
         gpio_set(STATUS_LED_PIN, status_led.state.active);
+        usb_printf(PSTR("Expression pedal %sactivated" USB_NEWLINE), status_led.state.active ? "" : "de");
 
         // Send NOTE message in wah mode only
         if (current_mode == MODE_NOTE_AND_CC) {
@@ -359,6 +379,9 @@ void init_expression_module(void)
     init_adc_conversion(&expression_conversion);
     enable_adc_interrupt(expression_conversion.channel);
 
+    // Read enable switch mode
+    enable_switch_momentary = eeprom_read_byte(&enable_switch_momentary_eemem);
+
     // Read MIDI control setting from EEPROM
     midi_controller_cc_only = eeprom_read_byte(&midi_controller_cc_only_eemem);
     midi_controller_note_and_cc = eeprom_read_byte(&midi_controller_note_and_cc_eemem);
@@ -384,15 +407,15 @@ void update_expression_value(uint16_t adc_value)
         current_expression_value = adc_value;
 
         // If muting enabled only transmit if status LED is on
-        if ((mute_enabled && status_led.state.active) || !mute_enabled) {
-            uint8_t ctrl = (MODE_CC_ONLY == current_mode) ? midi_controller_cc_only : midi_controller_note_and_cc;
+        if (!mute_enabled || status_led.state.active) {
+            uint8_t ctrl = current_mode == MODE_CC_ONLY ? midi_controller_cc_only : midi_controller_note_and_cc;
             send_control_change(ctrl, current_expression_value);
             flash_led(LED_RED);
-        }
 
-        // If echo enabled, always print
-        if (echo) {
-            usb_printf(PSTR("Expression value: %3u" USB_NEWLINE), current_expression_value);
+            // If echo enabled
+            if (echo) {
+                usb_printf(PSTR("Expression value: %3u" USB_NEWLINE), current_expression_value);
+            }
         }
     }
 }

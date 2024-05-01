@@ -58,6 +58,9 @@ bool exec_mute(const char* command);
 /// \brief      Handler for the serial command 'mode'
 bool exec_mode(const char* command);
 
+/// \brief      Handler for the serial command 'sw'
+bool exec_sw(const char* command);
+
 /// \brief      A background task that handles the enable switch
 /// \details    This task polls the input that comes from the enable switch below the pedal. The
 //              action performed when pressed depends on the selected mode.

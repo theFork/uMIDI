@@ -77,12 +77,12 @@ static const char help_string_cal[] PROGMEM = "<m>\n"
     "<m> : \"adc\" calibrate the ADC offset (pedal to min position!)\n"
     "      \"min\" set the minimum registered ADC value\n"
     "      \"max\" set the maximum registered ADC value\n"
-    "      \"dmp\" dump currently active values\n"
+    "      \"get\" show currently active values\n"
     "      \"sav\" save active values to EEPROM\n";
 static const char cmd_string_ctrl[] PROGMEM = "ctrl";
 static const char help_string_ctrl[] PROGMEM = "<a> [m] [n]\n"
     "Read or set the MIDI CC number:\n"
-    "<a> : \"get\" return the configured control/note numbers\n"
+    "<a> : \"get\" show configured control/note numbers\n"
     "      \"set\" set the control/note number <m> to <n>\n"
     "<m> : \"ccc\" CC-only mode CC number\n"
     "      \"ncc\" NOTE-and-CC mode CC number\n"
@@ -95,7 +95,7 @@ static const char help_string_echo[] PROGMEM = "<v>\n"
 static const char cmd_string_mode[] PROGMEM = "mode";
 static const char help_string_mode[] PROGMEM = "<a> [m]\n"
     "Read or set mode:\n"
-    "<a> : \"get\" read current mode\n"
+    "<a> : \"get\" show current mode\n"
     "      \"set\" enter mode (requires <m>)\n"
     "      \"sav\" save current mode as default\n"
     "<m> : \"cco\" CC-only mode\n"
@@ -105,9 +105,15 @@ static const char help_string_mute[] PROGMEM = "<v>\n"
     "Mute CC message transmission when status LED is off.\n"
     "Should only be enabled if there is an enable switch.\n"
     "This setting is immediately stored to EEPROM.\n"
-    "<m> : \"on\" mute if not enabled\n"
+    "<m> : \"on\"  mute if not enabled\n"
     "      \"off\" always transmit\n"
-    "      \"stat\" show current setting\n";
+    "      \"get\" show current setting\n";
+static const char cmd_string_sw[] PROGMEM = "sw";
+static const char help_string_sw[] PROGMEM = "<t>\n"
+    "Configure enable switch type\n"
+    "<t> : \"lat\" latching\n"
+    "      \"mom\" momentary\n"
+    "      \"get\" show current setting\n";
 
 struct serial_command serial_commands[] = {
     { .cmd_string = cmd_string_cal,  .help_string = help_string_cal,  .handler = &exec_cal  },
@@ -115,6 +121,7 @@ struct serial_command serial_commands[] = {
     { .cmd_string = cmd_string_echo, .help_string = help_string_echo, .handler = &exec_echo },
     { .cmd_string = cmd_string_mode, .help_string = help_string_mode, .handler = &exec_mode },
     { .cmd_string = cmd_string_mute, .help_string = help_string_mute, .handler = &exec_mute },
+    { .cmd_string = cmd_string_sw,   .help_string = help_string_sw,   .handler = &exec_sw },
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);
 
