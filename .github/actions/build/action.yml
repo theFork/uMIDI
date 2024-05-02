@@ -1,0 +1,20 @@
+name: 'avr-gcc make'
+description: 'Runs make with the avr-gcc toolchain'
+inputs:
+  directory:
+    description: 'Directory to run make in'
+    required: true
+    default: 'software'
+  target:
+    description: 'Target to make'
+    required: false
+    default: ''
+#outputs:
+#  time: # id of output
+#    description: 'The time we greeted you'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.directory }}
+    - ${{ inputs.target }}

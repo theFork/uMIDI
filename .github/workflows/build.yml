@@ -21,22 +21,7 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Install gcc 13
-        run: |
-          sudo add-apt-repository ppa:ubuntu-toolchain-r/test
-          sudo apt update
-          sudo apt install gcc-13 g++-13
-          update-alternatives --display gcc
-          sudo update-alternatives --remove-all gcc
-          sudo update-alternatives --remove-all g++
-          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 10 --slave /usr/bin/g++ g++ /usr/bin/g++-13
-
-      - name: Install dependencies
-        run: sudo apt-get install -y avr-libc doxygen
-
-      - name: Print avr-gcc version
-        run: avr-gcc --version
-        
       - name: Build apps
-        run: make
-        working-directory: software
+        uses: ./.github/actions/build
+        with:
+          directory: software
