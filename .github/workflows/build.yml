@@ -1,18 +1,22 @@
-name: Makefile CI
+name: Compile apps and documentation
 
 on:
   push:
-    branches: 
-      - "main"
-      - "develop"
+    branches:
+      - "*"
+    paths:
+      - "doc"
+      - "software"
+
   pull_request:
-    branches: 
-      - "main"
-      - "develop"
+    branches:
+      - "*"
+    paths:
+      - "doc"
+      - "software"
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
