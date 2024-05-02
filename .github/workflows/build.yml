@@ -1,0 +1,34 @@
+name: Makefile CI
+
+on:
+  push:
+    branches: 
+      - "main"
+      - "develop"
+  pull_request:
+    branches: 
+      - "main"
+      - "develop"
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository and submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Compile apps
+        uses: ./.github/actions/build
+        with:
+          directory: software
+          target: compile
+
+      - name: Compile documentation
+        uses: ./.github/actions/build
+        with:
+          directory: software
+          target: doc
