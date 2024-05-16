@@ -48,8 +48,8 @@ static const char help_string_dump[] PROGMEM = "t\n"
     "Shows information about the selected pattern or program\n"
     "<t> : 'P' for pattern or 'p' for program\n";
 
-static const char cmd_string_reset[] PROGMEM = "reset";
-static const char help_string_reset[] PROGMEM = "Restores all patterns to factory settings";
+static const char cmd_string_restore[] PROGMEM = "restore";
+static const char help_string_restore[] PROGMEM = "Restores all patterns to factory settings";
 
 static const char cmd_string_mode[] PROGMEM = "mode";
 static const char help_string_mode[] PROGMEM = "p\n"
@@ -129,7 +129,7 @@ bool exec_ampl(const char* command);
 bool exec_backup(const char* command);
 bool exec_cpy(const char* command);
 bool exec_dump(const char* command);
-bool exec_reset(const char* command);
+bool exec_restore(const char* command);
 bool exec_mode(const char* command);
 bool exec_patlen(const char* command);
 bool exec_patmod(const char* command);

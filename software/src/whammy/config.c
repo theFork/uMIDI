@@ -53,21 +53,21 @@
 
 //---------------- Commands ----------------//
 struct serial_command serial_commands[] = {
-    { .cmd_string = cmd_string_ampl,    .help_string = help_string_ampl,    .handler = &exec_ampl   },
-    { .cmd_string = cmd_string_backup,  .help_string = help_string_backup,  .handler = &exec_backup },
-    { .cmd_string = cmd_string_cpy,     .help_string = help_string_cpy,     .handler = &exec_cpy    },
-    { .cmd_string = cmd_string_dump,    .help_string = help_string_dump,    .handler = &exec_dump   },
-    { .cmd_string = cmd_string_mode,    .help_string = help_string_mode,    .handler = &exec_mode   },
-    { .cmd_string = cmd_string_patlen,  .help_string = help_string_patlen,  .handler = &exec_patlen },
-    { .cmd_string = cmd_string_patmod,  .help_string = help_string_patmod,  .handler = &exec_patmod },
-    { .cmd_string = cmd_string_pgm,     .help_string = help_string_pgm,     .handler = &exec_pgm    },
-    { .cmd_string = cmd_string_reset,   .help_string = help_string_reset,   .handler = &exec_reset  },
-    { .cmd_string = cmd_string_speed,   .help_string = help_string_speed,   .handler = &exec_speed  },
-    { .cmd_string = cmd_string_store,   .help_string = help_string_store,   .handler = &exec_store  },
-    { .cmd_string = cmd_string_wahfrq,  .help_string = help_string_wahfrq,  .handler = &exec_wahfrq },
-    { .cmd_string = cmd_string_wahon,   .help_string = help_string_wahon,   .handler = &exec_wahon  },
-    { .cmd_string = cmd_string_wipe,    .help_string = help_string_wipe,    .handler = &exec_wipe   },
-    { .cmd_string = cmd_string_wham,    .help_string = help_string_wham,    .handler = &exec_wham   },
+    { .cmd_string = cmd_string_ampl,    .help_string = help_string_ampl,    .handler = &exec_ampl    },
+    { .cmd_string = cmd_string_backup,  .help_string = help_string_backup,  .handler = &exec_backup  },
+    { .cmd_string = cmd_string_cpy,     .help_string = help_string_cpy,     .handler = &exec_cpy     },
+    { .cmd_string = cmd_string_dump,    .help_string = help_string_dump,    .handler = &exec_dump    },
+    { .cmd_string = cmd_string_mode,    .help_string = help_string_mode,    .handler = &exec_mode    },
+    { .cmd_string = cmd_string_patlen,  .help_string = help_string_patlen,  .handler = &exec_patlen  },
+    { .cmd_string = cmd_string_patmod,  .help_string = help_string_patmod,  .handler = &exec_patmod  },
+    { .cmd_string = cmd_string_pgm,     .help_string = help_string_pgm,     .handler = &exec_pgm     },
+    { .cmd_string = cmd_string_restore, .help_string = help_string_restore, .handler = &exec_restore },
+    { .cmd_string = cmd_string_speed,   .help_string = help_string_speed,   .handler = &exec_speed   },
+    { .cmd_string = cmd_string_store,   .help_string = help_string_store,   .handler = &exec_store   },
+    { .cmd_string = cmd_string_wahfrq,  .help_string = help_string_wahfrq,  .handler = &exec_wahfrq  },
+    { .cmd_string = cmd_string_wahon,   .help_string = help_string_wahon,   .handler = &exec_wahon   },
+    { .cmd_string = cmd_string_wipe,    .help_string = help_string_wipe,    .handler = &exec_wipe    },
+    { .cmd_string = cmd_string_wham,    .help_string = help_string_wham,    .handler = &exec_wham    },
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);
 

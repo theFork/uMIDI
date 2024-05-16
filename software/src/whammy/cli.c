@@ -156,10 +156,10 @@ bool exec_dump(const char* command)
     return true;
 }
 
-bool exec_reset(const char* command)
+bool exec_restore(const char* command)
 {
     // Abort if the command is malformed
-    if (strlen(command) != 5) {
+    if (strlen(command) != 7) {
         usb_puts(PSTR("Malformed command"));
         return false;
     }
