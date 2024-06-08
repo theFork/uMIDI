@@ -41,9 +41,10 @@
 
 //---------------- GPIO ----------------//
 struct gpio_mapping gpio_mappings[] = {
+    { .pin = &TOGGLE_PIN,        .type = GPIO_INPUT        },   // Toggle input
     { .pin = &ENABLE_PIN,        .type = GPIO_OUTPUT       },   // Enable output
-    { .pin = &DISABLE_PIN,       .type = GPIO_OUTPUT       },   // Disable output
-    { .pin = &gpio.header3.pin8, .type = GPIO_OUTPUT       },   // Wah LED
+    { .pin = &STATUS_PIN,        .type = GPIO_OUTPUT       },   // Status LED output
+    { .pin = &gpio.header3.pin2, .type = GPIO_OUTPUT       },   // Wah LED output
 };
 uint8_t gpio_mappings_size = sizeof(gpio_mappings)/sizeof(struct gpio_mapping);
 
@@ -73,6 +74,7 @@ background_task_t mid_frequency_tasks[] = {
 uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background_task_t);
 
 background_task_t low_frequency_tasks[] = {
+    &poll_toogle_input,
     &update_leds,
 };
 uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);

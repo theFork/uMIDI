@@ -109,3 +109,7 @@ bool exec_led(const char* command)
 
     return true;
 }
+
+void poll_toogle_input(void) {
+    enable_wah(poll_gpio_input_timeout(TOGGLE_PIN, GPIO_INPUT_PULLUP, GPIO_INPUT_EVENT_LONG));
+}

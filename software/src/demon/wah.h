@@ -32,14 +32,17 @@
 
 
 //---------------- constants ----------------//
-/// \brief      The PWM output used to enable the device
-#define ENABLE_PIN                      gpio.header3.pin2
+/// \brief      The GPIO input used for the toggle switch
+#define TOGGLE_PIN                      gpio.header3.pin6
 
-/// \brief      The PWM output used to disable the device
-#define DISABLE_PIN                     gpio.header3.pin3
+/// \brief      The GPIO output used to enable the device
+#define ENABLE_PIN                      gpio.header3.pin4
+
+/// \brief      The GPIO output used for the status LED
+#define STATUS_PIN                      gpio.header3.pin8
 
 /// \brief      The PWM output used for the Wah LED
-#define WAH_PWM                         PWM_PIN8
+#define WAH_PWM                         PWM_PIN2
 
 
 
