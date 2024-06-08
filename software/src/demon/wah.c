@@ -34,8 +34,6 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
-static bool enable_state = false;
-
 static struct linear_range pwm_range;
 
 
@@ -51,19 +49,13 @@ static inline uint16_t linear_function(uint8_t midi_value)
 
 void enable_wah(bool enable)
 {
+    static bool enable_state = false;
     if (enable_state == enable) {
         return;
     }
 
-    if (enable) {
-        gpio_set(ENABLE_PIN, true);
-        _delay_ms(4);
-        gpio_set(ENABLE_PIN, false);
-    } else {
-        gpio_set(DISABLE_PIN, true);
-        _delay_ms(4);
-        gpio_set(DISABLE_PIN, false);
-    }
+    gpio_set(ENABLE_PIN, enable);
+    gpio_set(STATUS_PIN, enable);
     enable_state = enable;
 }
 
