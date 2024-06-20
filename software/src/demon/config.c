@@ -74,6 +74,7 @@ background_task_t mid_frequency_tasks[] = {
 uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background_task_t);
 
 background_task_t low_frequency_tasks[] = {
+    &autowah_task,
     &poll_toogle_input,
     &update_leds,
 };
@@ -94,7 +95,8 @@ static const char help_string_led[] PROGMEM = "<l> <a>\n"
 static const char cmd_string_duty[] PROGMEM = "duty";
 static const char help_string_duty[] PROGMEM = "<d>\n"
     "Sets the PWM duty cycle:\n"
-    "<d> : Duty cycle as MIDI value {0, 1, 127}";
+    "<d> : Duty cycle as MIDI value {0..127, a}\n"
+    "      'a' enables auto wah";
 
 static const char cmd_string_enable[] PROGMEM = "enable";
 static const char help_string_enable[] PROGMEM = "<d>\n"

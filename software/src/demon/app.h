@@ -39,6 +39,7 @@ bool exec_duty(const char* command);
 bool exec_enable(const char* command);
 bool exec_led(const char* command);
 void poll_toogle_input(void);
+void autowah_task(void);
 
 
 //---------------- EOF ----------------//

@@ -36,6 +36,8 @@
 //                     V A R I A B L E S                      //
 ////////////////////////////////////////////////////////////////
 
+bool autowah_enabled = false;
+
 
 
 ////////////////////////////////////////////////////////////////
@@ -45,6 +47,11 @@
 /// \brief      Handler for the `duty` command
 bool exec_duty(const char* command)
 {
+    if (command[5] == 'a') {
+        autowah_enabled = true;
+        return true;
+    }
+    autowah_enabled = false;
     midi_value_t duty = atoi(command+5);
     duty %= MIDI_MAX_VALUE + 1;
     set_wah_frequency(duty);
@@ -115,8 +122,10 @@ void poll_toogle_input(void) {
     if (poll_gpio_input_timeout(TOGGLE_PIN, GPIO_INPUT_PULLUP, GPIO_INPUT_EVENT_LONG) != GPIO_INPUT_EVENT_LONG) {
         return;
     }
+
     enabled = !enabled;
     enable_wah(enabled);
+
     if (enabled) {
         set_led(LED_GREEN, false);
     }
@@ -124,4 +133,35 @@ void poll_toogle_input(void) {
         set_led(LED_GREEN, true);
         blink_led(LED_GREEN, F_TASK_SLOW);
     }
+}
+
+void autowah_task(void)
+{
+    if (!autowah_enabled) {
+        return;
+    }
+
+    // Prescale background task frequency
+    // 10 => 10.0 Hz
+    // 20 =>  5.0 Hz
+    // 40 =>  2.5 Hz
+    static const uint8_t prescaler_initializer = 2;
+    static uint8_t prescaler_counter = 1;
+    prescaler_counter--;
+    if (prescaler_counter > 0) {
+        return;
+    }
+    prescaler_counter = prescaler_initializer;
+
+    // Output triangle wave
+    static uint8_t value = 1;
+    static int8_t step = -1;
+    value += step;
+    if (value == 0) {
+        step = 1;
+    }
+    if (value >= 63) {
+        step = -1;
+    }
+    set_wah_frequency(value + 63);
 }
