@@ -61,7 +61,8 @@ void enable_wah(bool enable)
 
 void handle_midi_cc(midi_value_t controller, midi_value_t value)
 {
-    set_wah_frequency(value);
+    value = value / 2;
+    set_wah_frequency(63 + value);
 }
 
 void init_wah_module(void)
