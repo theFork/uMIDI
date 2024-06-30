@@ -61,15 +61,14 @@ void enable_wah(bool enable)
 
 void handle_midi_cc(midi_value_t controller, midi_value_t value)
 {
-    value = value / 2;
-    set_wah_frequency(63 + value);
+    set_wah_frequency(value);
 }
 
 void init_wah_module(void)
 {
     // Setup linear conversion function
-    pwm_range.from = 0;
-    pwm_range.to = PWM_MAX_DUTY;
+    pwm_range.from = 500;
+    pwm_range.to = PWM_MAX_DUTY - 44;
     init_linear_from_midi(&pwm_range);
     
     // Initialize wah PWM

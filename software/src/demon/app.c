@@ -160,8 +160,8 @@ void autowah_task(void)
     if (value == 0) {
         step = 1;
     }
-    if (value >= 63) {
+    if (value >= MIDI_MAX_VALUE) {
         step = -1;
     }
-    set_wah_frequency(value + 63);
+    set_wah_frequency(value);
 }
