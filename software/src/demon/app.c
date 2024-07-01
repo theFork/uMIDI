@@ -119,19 +119,26 @@ bool exec_led(const char* command)
 
 void poll_toogle_input(void) {
     static bool enabled = false;
-    if (poll_gpio_input_timeout(TOGGLE_PIN, GPIO_INPUT_PULLUP, GPIO_INPUT_EVENT_LONG) != GPIO_INPUT_EVENT_LONG) {
-        return;
-    }
+    switch (poll_gpio_input_timeout(TOGGLE_PIN, GPIO_INPUT_PULLUP, GPIO_INPUT_EVENT_LONG)) {
+        case GPIO_INPUT_EVENT_LONG:
+            autowah_enabled = !autowah_enabled;
+            break;
 
-    enabled = !enabled;
-    enable_wah(enabled);
+        case GPIO_INPUT_EVENT_SHORT:
+            enabled = !enabled;
+            enable_wah(enabled);
 
-    if (enabled) {
-        set_led(LED_GREEN, false);
-    }
-    else {
-        set_led(LED_GREEN, true);
-        blink_led(LED_GREEN, F_TASK_SLOW);
+            if (enabled) {
+                set_led(LED_GREEN, false);
+            }
+            else {
+                set_led(LED_GREEN, true);
+                blink_led(LED_GREEN, F_TASK_SLOW);
+            }
+            break;
+
+        default:
+            return;
     }
 }
 
