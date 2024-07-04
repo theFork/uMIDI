@@ -36,6 +36,8 @@
 
 static struct linear_range pwm_range;
 
+static uint16_t pwm_max_attenuation = 76;
+
 
 
 ////////////////////////////////////////////////////////////////
@@ -68,12 +70,24 @@ void init_wah_module(void)
 {
     // Setup linear conversion function
     pwm_range.from = 500;
-    pwm_range.to = PWM_MAX_DUTY - 44;
+    pwm_range.to = PWM_MAX_DUTY - pwm_max_attenuation;
     init_linear_from_midi(&pwm_range);
     
     // Initialize wah PWM
     init_pwm(WAH_PWM, &linear_function);
     set_pwm_duty_cycle(WAH_PWM, pwm_range.to);
+}
+
+void set_wah_max_attenuation(uint16_t value)
+{
+    pwm_max_attenuation = value;
+    pwm_range.to = PWM_MAX_DUTY - pwm_max_attenuation;
+    init_linear_from_midi(&pwm_range);
+}
+
+uint16_t get_wah_max_attenuation()
+{
+    return pwm_max_attenuation;
 }
 
 void set_wah_frequency(midi_value_t value)

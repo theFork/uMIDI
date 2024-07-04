@@ -92,6 +92,11 @@ static const char help_string_led[] PROGMEM = "<l> <a>\n"
     "      'f' = flash\n"
     "      't' = toggle";
 
+static const char cmd_string_cap[] PROGMEM = "cap";
+static const char help_string_cap[] PROGMEM = "<d>\n"
+    "Sets PWM max duty attenuation:\n"
+    "<d> : Duty attenuation\n";
+
 static const char cmd_string_duty[] PROGMEM = "duty";
 static const char help_string_duty[] PROGMEM = "<d>\n"
     "Sets the PWM duty cycle:\n"
@@ -105,6 +110,7 @@ static const char help_string_enable[] PROGMEM = "<d>\n"
 
 struct serial_command serial_commands[] = {
     { .cmd_string = cmd_string_led,    .help_string = help_string_led,    .handler = &exec_led  },
+    { .cmd_string = cmd_string_cap,    .help_string = help_string_cap,    .handler = &exec_cap  },
     { .cmd_string = cmd_string_duty,   .help_string = help_string_duty,   .handler = &exec_duty },
     { .cmd_string = cmd_string_enable, .help_string = help_string_enable, .handler = &exec_enable },
 };

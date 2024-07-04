@@ -35,6 +35,7 @@
 
 
 //---------------- functions and procedures ----------------//
+bool exec_cap(const char* command);
 bool exec_duty(const char* command);
 bool exec_enable(const char* command);
 bool exec_led(const char* command);

@@ -45,6 +45,18 @@ bool autowah_enabled = false;
 ////////////////////////////////////////////////////////////////
 
 /// \brief      Handler for the `duty` command
+bool exec_cap(const char* command)
+{
+    if (strlen(command) < 5) {
+        usb_printf(PSTR("PWM max attenuation: %i" USB_NEWLINE), get_wah_max_attenuation());
+        return true;
+    }
+    uint16_t value = atoi(command+4);
+    set_wah_max_attenuation(value);
+    return true;
+}
+
+/// \brief      Handler for the `duty` command
 bool exec_duty(const char* command)
 {
     if (command[5] == 'a') {
