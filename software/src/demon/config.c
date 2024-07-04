@@ -58,7 +58,7 @@ struct midi_config midi_config = {
     },
     .omni_mode  = true,
     .rx_channel = MIDI_CHANNEL_01,
-    .signal_rx  = true,
+    .signal_rx  = false,
     .tx_channel = MIDI_CHANNEL_01,
 };
 
