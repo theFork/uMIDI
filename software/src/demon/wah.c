@@ -21,8 +21,10 @@
  */
 #include <stdbool.h>
 #include <util/delay.h>
+#include <avr/eeprom.h>
 
 #include "lib/gpio.h"
+#include "lib/leds.h"
 #include "lib/math.h"
 #include "lib/midi.h"
 
@@ -37,6 +39,9 @@
 static struct linear_range pwm_range;
 
 static uint16_t pwm_max_attenuation = 76;
+
+static midi_value_t enable_note;
+uint8_t enable_note_eemem EEMEM;
 
 
 
@@ -56,14 +61,38 @@ void enable_wah(bool enable)
         return;
     }
 
+    if (enable) {
+        set_led(LED_GREEN, false);
+    }
+
     gpio_set(ENABLE_PIN, enable);
     gpio_set(STATUS_PIN, enable);
+
+    if (!enable) {
+        set_led(LED_GREEN, true);
+        blink_led(LED_GREEN, F_TASK_SLOW);
+    }
+
     enable_state = enable;
 }
 
 void handle_midi_cc(midi_value_t controller, midi_value_t value)
 {
     set_wah_frequency(value);
+}
+
+void handle_midi_note_off(midi_value_t note, midi_value_t velocity)
+{
+    if (note == enable_note) {
+        enable_wah(false);
+    }
+}
+
+void handle_midi_note_on(midi_value_t note, midi_value_t velocity)
+{
+    if (note == enable_note) {
+        enable_wah(true);
+    }
 }
 
 void init_wah_module(void)
@@ -76,6 +105,8 @@ void init_wah_module(void)
     // Initialize wah PWM
     init_pwm(WAH_PWM, &linear_function);
     set_pwm_duty_cycle(WAH_PWM, pwm_range.to);
+
+    enable_note = get_wah_enable_note();
 }
 
 void set_wah_max_attenuation(uint16_t value)
@@ -88,6 +119,17 @@ void set_wah_max_attenuation(uint16_t value)
 uint16_t get_wah_max_attenuation()
 {
     return pwm_max_attenuation;
+}
+
+void set_wah_enable_note(midi_value_t value)
+{
+    enable_note = value;
+    eeprom_write_byte(&enable_note_eemem, value);
+}
+
+midi_value_t get_wah_enable_note()
+{
+    return eeprom_read_byte(&enable_note_eemem);
 }
 
 void set_wah_frequency(midi_value_t value)

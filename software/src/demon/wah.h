@@ -52,9 +52,13 @@
 //---------------- functions and procedures ----------------//
 void enable_wah(bool enable);
 uint16_t get_wah_max_attenuation(void);
+midi_value_t get_wah_enable_note(void);
 void handle_midi_cc(midi_value_t controller, midi_value_t value);
+void handle_midi_note_off(midi_value_t note, midi_value_t velocity);
+void handle_midi_note_on(midi_value_t note, midi_value_t velocity);
 void set_wah_max_attenuation(uint16_t value);
 void set_wah_frequency(midi_value_t value);
+void set_wah_enable_note(midi_value_t value);
 void init_wah_module(void);
 
 

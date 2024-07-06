@@ -73,12 +73,22 @@ bool exec_duty(const char* command)
 /// \brief      Handler for the `enable` command
 bool exec_enable(const char* command)
 {
-    if (strlen(command) != 8) {
+    if (strlen(command) < 11) {
         usb_puts(PSTR("Malformed command" USB_NEWLINE));
         return false;
     }
 
-    enable_wah(command[7] == 't');
+    if (!strncmp(command+7, "set", 3)) {
+        enable_wah(command[11] == 't');
+    }
+    else if (!strncmp(command + 7, "note", 4)) {
+        if (strlen(command) < 13) {
+            usb_printf(PSTR("Enable note: %u" USB_NEWLINE), get_wah_enable_note());
+        }
+        else {
+            set_wah_enable_note(atoi(command+12));
+        }
+    }
     return true;
 }
 
@@ -139,14 +149,6 @@ void poll_toogle_input(void) {
         case GPIO_INPUT_EVENT_SHORT:
             enabled = !enabled;
             enable_wah(enabled);
-
-            if (enabled) {
-                set_led(LED_GREEN, false);
-            }
-            else {
-                set_led(LED_GREEN, true);
-                blink_led(LED_GREEN, F_TASK_SLOW);
-            }
             break;
 
         default:

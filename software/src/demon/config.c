@@ -52,8 +52,8 @@ uint8_t gpio_mappings_size = sizeof(gpio_mappings)/sizeof(struct gpio_mapping);
 struct midi_config midi_config = {
     .event_handlers = {
         .control_change = handle_midi_cc,
-        .note_off       = NULL,
-        .note_on        = NULL,
+        .note_off       = handle_midi_note_off,
+        .note_on        = handle_midi_note_on,
         .program_change = NULL
     },
     .omni_mode  = true,
@@ -104,9 +104,15 @@ static const char help_string_duty[] PROGMEM = "<d>\n"
     "      'a' enables auto wah";
 
 static const char cmd_string_enable[] PROGMEM = "enable";
-static const char help_string_enable[] PROGMEM = "<d>\n"
-    "Enables the device:\n"
-    "<d> : Boolean {'t', 'f'}";
+static const char help_string_enable[] PROGMEM = "<a> <d>\n"
+    "En-/Disables the device or reads/sets enable note:\n"
+    "<a> : action\n"
+    "      'set' = Enable or disable\n"
+    "      'note' = Read or set MIDI note\n"
+    "<d> : Value to set\n"
+    "      't' = enable wah\n"
+    "      'f' = disable wah\n"
+    "      {0..127} = set MIDI note (leave out to read)";
 
 struct serial_command serial_commands[] = {
     { .cmd_string = cmd_string_led,    .help_string = help_string_led,    .handler = &exec_led  },
