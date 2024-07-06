@@ -94,8 +94,8 @@ static const char help_string_led[] PROGMEM = "<l> <a>\n"
 
 static const char cmd_string_cap[] PROGMEM = "cap";
 static const char help_string_cap[] PROGMEM = "<d>\n"
-    "Sets PWM max duty attenuation:\n"
-    "<d> : Duty attenuation\n";
+    "Gets or sets PWM max duty attenuation:\n"
+    "<d> : Duty attenuation (leave out to read)";
 
 static const char cmd_string_duty[] PROGMEM = "duty";
 static const char help_string_duty[] PROGMEM = "<d>\n"

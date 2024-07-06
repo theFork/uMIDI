@@ -38,7 +38,7 @@
 
 static struct linear_range pwm_range;
 
-static uint16_t pwm_max_attenuation = 76;
+uint16_t pwm_max_attenuation EEMEM;
 
 static midi_value_t enable_note;
 uint8_t enable_note_eemem EEMEM;
@@ -98,27 +98,27 @@ void handle_midi_note_on(midi_value_t note, midi_value_t velocity)
 void init_wah_module(void)
 {
     // Setup linear conversion function
-    pwm_range.from = 500;
-    pwm_range.to = PWM_MAX_DUTY - pwm_max_attenuation;
+    pwm_range.from = 490;
+    pwm_range.to = PWM_MAX_DUTY - get_wah_max_attenuation();
     init_linear_from_midi(&pwm_range);
     
     // Initialize wah PWM
     init_pwm(WAH_PWM, &linear_function);
-    set_pwm_duty_cycle(WAH_PWM, pwm_range.to);
+    set_pwm_duty_cycle(WAH_PWM, pwm_range.from);
 
     enable_note = get_wah_enable_note();
 }
 
 void set_wah_max_attenuation(uint16_t value)
 {
-    pwm_max_attenuation = value;
-    pwm_range.to = PWM_MAX_DUTY - pwm_max_attenuation;
+    pwm_range.to = PWM_MAX_DUTY - value;
     init_linear_from_midi(&pwm_range);
+    eeprom_write_word(&pwm_max_attenuation, value);
 }
 
 uint16_t get_wah_max_attenuation()
 {
-    return pwm_max_attenuation;
+    return eeprom_read_word(&pwm_max_attenuation);
 }
 
 void set_wah_enable_note(midi_value_t value)
