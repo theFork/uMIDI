@@ -85,6 +85,10 @@ static uint16_t offset;
 /// \see        ISR(ADCA_CH0_vect)
 static uint16_t sample_buffer[ADC_SAMPLE_BUFFER_SIZE];
 
+/// \brief      Input range for ADC conversion results of channel 0
+/// \see        ISR(ADCA_CH0_vect)
+static struct linear_range* adc_input_range;
+
 /// \brief      Conversion callbacks for signed values
 /// \details    Used in the interrupt service routines
 static void (*callbacks_signed[sizeof(adc_regs)/sizeof(struct adc_channel_regs)])(int16_t);
@@ -92,10 +96,6 @@ static void (*callbacks_signed[sizeof(adc_regs)/sizeof(struct adc_channel_regs)]
 /// \brief      Conversion callbacks for unsigned values
 /// \details    Used in the interrupt service routines
 static void (*callbacks_unsigned[sizeof(adc_regs)/sizeof(struct adc_channel_regs)])(uint16_t);
-
-/// \brief      Conversion callbacks for unsigned values
-/// \details    Used in the interrupt service routines
-static struct linear_range* adc_input_range;
 
 
 
@@ -234,8 +234,7 @@ ISR(ADCA_CH0_vect)
 
     // Compute mean value
     adc_accumulator accumulator = 0;
-    uint8_t i;
-    for (i=0; i < ADC_SAMPLE_BUFFER_SIZE; ++i) {
+    for (uint8_t i = 0; i < ADC_SAMPLE_BUFFER_SIZE; ++i) {
         accumulator += sample_buffer[i];
     }
     accumulator /= ADC_SAMPLE_BUFFER_SIZE;
