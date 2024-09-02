@@ -1,4 +1,4 @@
-/// \file
+    /// \file
 /// \brief      MIDI handling routines
 
 /*
@@ -29,7 +29,6 @@
 #include "config.h"
 #include "user_interface.h"
 #include "whammy_controller.h"
-#include "wah.h"
 
 
 ////////////////////////////////////////////////////////////////
@@ -71,12 +70,6 @@ void handle_midi_control_change(const midi_value_t controller, const midi_value_
     usb_printf(PSTR("Received MIDI control change num: %u, val: %u" USB_NEWLINE), controller, value);
     signal_midi_rx();
 
-    // Wah
-    if (controller == WAH_MIDI_CONTROLLER) {
-        set_wah_frequency(value);
-        return;
-    }
-
     // Whammy
     uint16_t accu = value;
     switch (get_active_program().field.ctrl_mode) {
@@ -95,21 +88,12 @@ void handle_midi_note_off(midi_value_t note, midi_value_t velocity)
 {
     usb_printf(PSTR("Received MIDI note off num: %u, vel: %u" USB_NEWLINE), note, velocity);
     signal_midi_rx();
-
-    if (note == WAH_MIDI_NOTE) {
-        enable_wah(false);
-    }
 }
 
 void handle_midi_note_on(midi_value_t note, midi_value_t velocity)
 {
     usb_printf(PSTR("Received MIDI note on num: %u, vel: %u" USB_NEWLINE), note, velocity);
     signal_midi_rx();
-
-    // Wah
-    if (note == WAH_MIDI_NOTE) {
-        enable_wah(true);
-    }
 
     // Whammy
     if (get_active_program().field.ctrl_mode == WHAMMY_CTRL_MODE_PATTERN) {
