@@ -96,10 +96,9 @@ static const char cmd_string_mode[] PROGMEM = "mode";
 static const char help_string_mode[] PROGMEM = "<a> [m]\n"
     "Read or set mode:\n"
     "<a> : \"get\" show current mode\n"
-    "      \"set\" enter mode (requires <m>)\n"
     "      \"sav\" save current mode as default\n"
-    "<m> : \"cco\" CC-only mode\n"
-    "      \"ncc\" NOTE-and-CC mode\n";
+    "      \"cco\" enter CC-only mode\n"
+    "      \"ncc\" enter NOTE-and-CC mode\n";
 static const char cmd_string_mute[] PROGMEM = "mute";
 static const char help_string_mute[] PROGMEM = "<v>\n"
     "Mute CC message transmission when status LED is off.\n"

@@ -256,7 +256,8 @@ bool exec_mode(const char* command)
         usb_printf(PSTR("Default mode: %s" USB_NEWLINE), default_mode == MODE_CC_ONLY ? "CC-only" : "NOTE-and-CC");
     }
     else if (!strncmp(command+5, "sav", 3)) {
-        eeprom_write_byte(&default_mode_eemem, current_mode);
+        default_mode = current_mode;
+        eeprom_write_byte(&default_mode_eemem, default_mode);
         usb_puts(PSTR("Saved current mode as default"));
     }
     else {
