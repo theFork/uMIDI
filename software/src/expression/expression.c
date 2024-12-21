@@ -399,7 +399,7 @@ void init_expression_module(void)
 
     // Read and enter default mode
     default_mode = eeprom_read_byte(&default_mode_eemem);
-    enter_mode(default_mode);
+    enter_mode(default_mode == MODE_CC_ONLY ? MODE_CC_ONLY : MODE_NOTE_AND_CC);
 }
 
 void trigger_expression_conversion(void)
