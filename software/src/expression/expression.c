@@ -333,9 +333,15 @@ sw_fail:
 
 void handle_enable_switch(void)
 {
-    // Poll switch
+    static bool first_run = true;
     static bool enable_switch_state = false;
+
+    // Poll switch
     bool current_enable_switch_state = gpio_get(ENABLE_SWITCH_PIN);
+    if (first_run) {
+        first_run = false;
+        enable_switch_state = current_enable_switch_state;
+    }
 
     // If switch has changed
     if (enable_switch_state != current_enable_switch_state) {
