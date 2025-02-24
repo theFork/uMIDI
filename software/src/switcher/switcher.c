@@ -114,9 +114,9 @@ bool exec_backup(const char* command)
 
     // Draw ruler
     for (uint8_t i=0; i < PROGRAMS_PER_BANK; ++i) {
-        usb_printf("|-------");
+        usb_printf(PSTR("|-------"));
     }
-    usb_printf(USB_NEWLINE);
+    usb_printf(PSTR(USB_NEWLINE));
 
     // Export all programs, one bank per line
     for (uint8_t i=0; i < PROGRAM_BANK_COUNT; ++i) {
@@ -235,7 +235,7 @@ bool exec_restore(const char* command)
         digit_count = 2;
     }
     else {
-        usb_puts("Malformed command (PC number digit count check)" USB_NEWLINE);
+        usb_puts(PSTR("Malformed command (PC number digit count check)" USB_NEWLINE));
         return false;
     }
 
@@ -266,14 +266,14 @@ bool exec_toggle(const char* command)
 
     // Abort if the command is malformed
     if (strlen(command) != 10 || command[6] != ' ' || command[8] != ' ') {
-        usb_puts("Malformed command" USB_NEWLINE);
+        usb_puts(PSTR("Malformed command" USB_NEWLINE));
         return false;
     }
 
     // Check id range
     uint8_t toggle_output_id = strtol(&command[7], NULL, 10);
     if (toggle_output_id > 3) {
-        usb_puts("Inappropriate id [0-3]" USB_NEWLINE);
+        usb_puts(PSTR("Inappropriate id [0-3]" USB_NEWLINE));
         return false;
     }
 
@@ -287,14 +287,14 @@ bool exec_toggle(const char* command)
         effective_program.dword |= 0x01000000 << toggle_output_id;
     }
     else {
-        usb_puts("Unrecognized behaviour!" USB_NEWLINE);
+        usb_puts(PSTR("Unrecognized behaviour!" USB_NEWLINE));
         return false;
     }
 
     // Save
     current_program.dword = effective_program.dword;
     update_current_program(effective_program.dword);
-    usb_puts("Successfully modified toggle output behaviour" USB_NEWLINE);
+    usb_puts(PSTR("Successfully modified toggle output behaviour" USB_NEWLINE));
     return true;
 }
 
@@ -334,7 +334,7 @@ void handle_note_on(midi_value_t note, midi_value_t velocity)
 
     // Flash LED and log
     flash_led_multiple(&save_led, 1);
-    usb_printf("Note on" USB_NEWLINE);
+    usb_printf(PSTR("Note on" USB_NEWLINE));
 }
 
 void handle_note_off(midi_value_t note, midi_value_t velocity)
@@ -344,7 +344,7 @@ void handle_note_off(midi_value_t note, midi_value_t velocity)
 
     // Flash LED and log
     flash_led_multiple(&save_led, 1);
-    usb_printf("Note off" USB_NEWLINE);
+    usb_printf(PSTR("Note off" USB_NEWLINE));
 }
 
 void unknown_midi_message_handler(void)
