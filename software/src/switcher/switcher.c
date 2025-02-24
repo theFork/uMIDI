@@ -45,10 +45,11 @@
 union program_data
 {
     // Either raw data in the memory ...
-    uint16_t dword;
+    uint32_t dword;
 
     // ... or named bits
     struct {
+        // Byte #0 - Output switches and loops
         bool tuner      : 1;
         bool loop1      : 1;
         bool loop2      : 1;
@@ -57,6 +58,22 @@ union program_data
         bool loop5      : 1;
         bool switch1    : 1;
         bool switch2    : 1;
+
+        // Byte #1 - Reserved for further outputs
+        uint8_t reserved1      : 8;
+
+        // Byte #2 - Reserved
+        uint8_t reserved2      : 8;
+
+        // Byte #3 - Toggle outputs configuration
+        bool toggle_tune_mute   : 1;
+        bool toggle_switch1     : 1;
+        bool toggle_switch2     : 1;
+        bool toggle_reserved    : 1;
+        bool reserved3_4        : 1;
+        bool reserved3_5        : 1;
+        bool reserved3_6        : 1;
+        bool reserved3_7        : 1;
     } bit;
 };
 
@@ -86,7 +103,6 @@ void execute_program(uint32_t program_data)
     gpio_set(GPIO_OUT_LOOP5, current_program.bit.loop5);
     gpio_set(GPIO_OUT_SWITCH1, current_program.bit.switch1);
     gpio_set(GPIO_OUT_SWITCH2, current_program.bit.switch2);
-
 }
 
 bool exec_backup(const char* command)
@@ -95,6 +111,12 @@ bool exec_backup(const char* command)
         usb_puts(PSTR("Malformed command" USB_NEWLINE));
         return false;
     }
+
+    // Draw ruler
+    for (uint8_t i=0; i < PROGRAMS_PER_BANK; ++i) {
+        usb_printf("|-------");
+    }
+    usb_printf(USB_NEWLINE);
 
     // Export all programs, one bank per line
     for (uint8_t i=0; i < PROGRAM_BANK_COUNT; ++i) {
@@ -197,8 +219,23 @@ bool exec_relay(const char* command)
 
 bool exec_restore(const char* command)
 {
-    if (strlen(command) < 91 || command[7] != ' ' || command[10] != ' ') {
+    // Command sanity check
+    size_t command_length = strlen(command);
+    if (command_length < 90 || command[7] != ' ') {
         usb_puts(PSTR("Malformed command" USB_NEWLINE));
+        return false;
+    }
+
+    // Check program number digit count
+    uint8_t digit_count = 0;
+    if (command[9] == ' ' && command_length == 90) {
+        digit_count = 1;
+    }
+    else if (command[10] == ' ' && command_length == 91) {
+        digit_count = 2;
+    }
+    else {
+        usb_puts("Malformed command (PC number digit count check)" USB_NEWLINE);
         return false;
     }
 
@@ -207,7 +244,7 @@ bool exec_restore(const char* command)
     usb_printf(PSTR("Restoring bank number #%u" USB_NEWLINE), number);
 
     // Import and store bank
-    return import_bank(number, &command[11]);
+    return import_bank(number, &command[9+digit_count]);
 }
 
 
@@ -220,6 +257,44 @@ bool exec_save(const char* command)
     }
 
     update_current_program(effective_program.dword);
+    return true;
+}
+
+bool exec_toggle(const char* command)
+{
+    // Command 'toggle <i> <b>' with i and b one character
+
+    // Abort if the command is malformed
+    if (strlen(command) != 10 || command[6] != ' ' || command[8] != ' ') {
+        usb_puts("Malformed command" USB_NEWLINE);
+        return false;
+    }
+
+    // Check id range
+    uint8_t toggle_output_id = strtol(&command[7], NULL, 10);
+    if (toggle_output_id > 3) {
+        usb_puts("Inappropriate id [0-3]" USB_NEWLINE);
+        return false;
+    }
+
+    // Modify effective program
+    if (command[9] == 'd') {
+        // Deactivate selected toggle output
+        effective_program.dword &= ~(0x01000000 << toggle_output_id);
+    }
+    else if (command[9] == 'a') {
+        // Activate selected toggle output
+        effective_program.dword |= 0x01000000 << toggle_output_id;
+    }
+    else {
+        usb_puts("Unrecognized behaviour!" USB_NEWLINE);
+        return false;
+    }
+
+    // Save
+    current_program.dword = effective_program.dword;
+    update_current_program(effective_program.dword);
+    usb_puts("Successfully modified toggle output behaviour" USB_NEWLINE);
     return true;
 }
 
@@ -236,6 +311,40 @@ void handle_program_change(uint8_t program)
 
     flash_led_multiple(&save_led, 1);
     usb_printf(PSTR("Entering program %u" USB_NEWLINE), program);
+}
+
+void handle_note_on(midi_value_t note, midi_value_t velocity)
+{
+    // Call note off handler in case velocity is zero
+    if (velocity == 0) {
+        handle_note_off(note, velocity);
+        return;
+    }
+
+    // Turn on configured toggle outputs
+    if (current_program.bit.toggle_tune_mute) {
+        gpio_set(GPIO_OUT_TUNE_MUTE, true);
+    }
+    if (current_program.bit.toggle_switch1) {
+        gpio_set(GPIO_OUT_SWITCH1, true);
+    }
+    if (current_program.bit.toggle_switch2) {
+        gpio_set(GPIO_OUT_SWITCH2, true);
+    }
+
+    // Flash LED and log
+    flash_led_multiple(&save_led, 1);
+    usb_printf("Note on" USB_NEWLINE);
+}
+
+void handle_note_off(midi_value_t note, midi_value_t velocity)
+{
+    // Restore current program (will turn off all toggle outputs)
+    execute_program(current_program.dword);
+
+    // Flash LED and log
+    flash_led_multiple(&save_led, 1);
+    usb_printf("Note off" USB_NEWLINE);
 }
 
 void unknown_midi_message_handler(void)

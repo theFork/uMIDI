@@ -13,7 +13,7 @@
 # Control panel
 There are nine illuminated momentary switches on the control panel:
 
-- 1x Mute/Tune (red)
+- 1x Tune/Mute (red)
 - 5x Looper (green)
 - 2x Switch (blue, small)
 - 1x Save (red, small)
@@ -28,11 +28,36 @@ There are two modes, the
     - macro mode in which the switcher enters programs according to received program change packets and the
     - micro mode which allows controlling the separate relays using control change packets.
 
+## Program storage
+The library offers 4 bytes per program. These will be used as follows.
+
+### Byte 0 : Switch configuration
+Bits | Function
+-----|----------------
+0    | Tune/Mute
+1:5  | Looper 1-5
+6:7  | Switch 1 and 2
+
+###Byte 1 : Reserved
+May be used for further switches
+
+###Byte 2 : Reserved
+
+###Byte 3 : Toggle configuration
+Bits | Function
+-----|------------------------------------
+0    | Toggle Tune/Mute
+1:2  | Toggle Switch 1-2
+3    | Reserved for a fourth toggle output
+4:7  | Reserved
+
 ## Macro mode
 ### Event: MIDI packet received
 - If it is a program change:
     - Load corresponding program
     - Flash save LED once
+- If it is a note on/off:
+    - See toggle outputs
 - Else:
     - Flash save LED twice
 
@@ -57,9 +82,36 @@ In micro mode the save LED is constanty on.
 See macro mode? Use to cycle through programs? Or send some MIDI packets?
 
 ### Event: MIDI packet received
-TODO
+- If it is a control change:
+    - TODO
+- If it is a note on/off:
+    - See toggle outputs
+- Else:
+    - Flash save LED twice
 
 ### Event: Save Switch pressed
 - Enter macro mode
 - Keep current configuration (i.e. the save LED blinks due to a modified program)
+
+## Toggle outputs
+The following procedure is conducted when receiving a note on/off packet:
+- Select outputs from the toggle output configuration nibble of the current program
+- If it is a note on
+    - Drive corresponding toggle outputs high
+- If it is a note off
+    - Set corresponding toggle outputs low
+
+Due to the lack of an appropriate human-switcher hardware interface, the toggle outputs can only be configured using the serial console.
+
+## Serial console
+The serial console should implement the following features:
+
+### Backup and restore
+- Backup/Dump entire configuration
+- Backup/Dump a single bank
+- Restore entire configuration
+- Restore a single bank
+
+### Toggle configuration
+For each program the user should be able to configure the four toggle configuration bits mentioned above.
 */

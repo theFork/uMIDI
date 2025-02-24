@@ -73,9 +73,9 @@ struct led save_led = {
 struct midi_config midi_config = {
     .event_handlers = {
         .program_change = handle_program_change,
-        .control_change = (void*) unknown_midi_message_handler,
-        .note_on = (void*) unknown_midi_message_handler,
-        .note_off = (void*) unknown_midi_message_handler,
+        .control_change = NULL,
+        .note_on = handle_note_on,
+        .note_off = handle_note_off,
     },
     .omni_mode  = false,
     .rx_channel = MIDI_CHANNEL_01,
@@ -126,10 +126,21 @@ static const char cmd_string_restore[] PROGMEM = "restore";
 static const char help_string_restore[] PROGMEM = "<n> <d>\n"
     "Restores a bank given as a hex-string to EEPROM:\n"
     "<n> : Number of the bank to restore,\n"
-    "      padded with 0 if smaller than 10\n"
     "<d> : Program bank data";
 static const char cmd_string_save[] PROGMEM = "save";
 static const char help_string_save[] PROGMEM = "Saves the current program configuration";
+
+static const char cmd_string_toggle[] PROGMEM = "toggle";
+static const char help_string_toggle[] PROGMEM = "<i> <b>\n"
+    "Configures a toggle output for the current program:\n"
+    "<i> : Toggle output id [0-3]\n"
+    "      '0' = Tune/Mute\n"
+    "      '1' = Switch 1\n"
+    "      '2' = Switch 2\n"
+    "      '3' = Reserved...\n"
+    "<b> : Output behaviour\n"
+    "      'a' = activate output\n"
+    "      'd' = deactivate output";
 
 struct serial_command serial_commands[] = {
     { .cmd_string = cmd_string_backup , .help_string = help_string_backup,  .handler = &exec_backup  },
@@ -137,5 +148,6 @@ struct serial_command serial_commands[] = {
     { .cmd_string = cmd_string_relay,   .help_string = help_string_relay,   .handler = &exec_relay   },
     { .cmd_string = cmd_string_restore, .help_string = help_string_restore, .handler = &exec_restore },
     { .cmd_string = cmd_string_save,    .help_string = help_string_save,    .handler = &exec_save    },
+    { .cmd_string = cmd_string_toggle,  .help_string = help_string_toggle,  .handler = &exec_toggle  },
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);
