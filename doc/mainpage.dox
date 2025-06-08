@@ -212,6 +212,6 @@ We also accept bugreports and feature requests on github. Should you find a bug 
 feel free to file an issue.
 
 \subsection hardware_contribution Hardware
-The board was originally created using the open-source EDA tool KiCad (BZR 5122) and updated to also work with BZR 6188. Other versions of KiCad *might* work as well.
+The board was originally created using the open-source EDA tool KiCad (4.x / BZR 5122) and updated to also work with KiCAD 9. Other versions of KiCad *might* work as well.
 
 */

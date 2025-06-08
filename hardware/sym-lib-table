@@ -1,0 +1,6 @@
+(sym_lib_table
+  (version 0)
+  (lib (name "uMidi-rescue")(type "Legacy")(uri "${KIPRJMOD}/uMidi-rescue.lib")(options "")(descr ""))
+  (lib (name "regul")(type "Legacy")(uri "${KIPRJMOD}/symbols/regul.lib")(options "")(descr ""))
+  (lib (name "atmel")(type "Legacy")(uri "${KIPRJMOD}/symbols/atmel.lib")(options "")(descr ""))
+)
