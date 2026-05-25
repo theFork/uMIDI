@@ -63,7 +63,7 @@ int main( void )
     init_serial_communication(serial_commands, serial_commands_size);
 
     // set watchdog for 128ms
-    wdt_enable(WDT_PER_128CLK_gc);
+    wdt_reenable();
 
     // enable interrupts
     PMIC.CTRL = PMIC_LOLVLEN_bm;

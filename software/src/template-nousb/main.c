@@ -58,7 +58,7 @@ int main( void )
                           low_frequency_tasks, low_frequency_tasks_size);
 
     // set watchdog for 128ms
-    wdt_enable(WDT_PER_128CLK_gc);
+    wdt_reenable();
 
     // enable interrupts
     PMIC.CTRL = PMIC_LOLVLEN_bm;
