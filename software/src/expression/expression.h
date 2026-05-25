@@ -29,12 +29,17 @@
 
 
 //---------------- constants ----------------//
-/// \brief      The MIDI note that represents uMIDI wah's enable / bypass state
-#define MIDI_NOTE_ENABLE_WAH            42
 
 
 //---------------- data types ----------------//
 
+/// \brief      Step counter direction
+enum expression_mode
+{
+    MODE_CC_ONLY,       ///< When enabled, the pedal sends MIDI CC messages.
+    MODE_NOTE_AND_CC,   ///< When enabled/disabled, first a NOTE ON or NOTE OFF message is sent.
+                        ///< Then the pedal also transmits CC messages.
+};
 
 //---------------- functions and procedures ----------------//
 
@@ -50,11 +55,22 @@ bool exec_echo(const char* command);
 /// \brief      Handler for the serial command 'mute'
 bool exec_mute(const char* command);
 
+/// \brief      Handler for the serial command 'mode'
+bool exec_mode(const char* command);
+
+/// \brief      Handler for the serial command 'sw'
+bool exec_sw(const char* command);
+
 /// \brief      A background task that handles the enable switch
-/// \details    This task polls the enable switch input. If the input changed, a MIDI note on / off
-///             message is transmitted.
-/// \see        MIDI_NOTE_ENABLE_WAH
+/// \details    This task polls the input that comes from the enable switch below the pedal. The
+//              action performed when pressed depends on the selected mode.
 void handle_enable_switch(void);
+
+/// \brief      A background task that handles the mode selector switch
+/// \details    This task polls the input that comes from the mode selector switch on the side of
+//              the pedal.
+/// \see        expression_modes
+void handle_mode_select_switch(void);
 
 /// \brief      Initializes the expression module
 /// \details    Reads calibration values from EEPROM.

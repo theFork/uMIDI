@@ -65,6 +65,7 @@ uint8_t mid_frequency_tasks_size = sizeof(mid_frequency_tasks)/sizeof(background
 
 background_task_t low_frequency_tasks[] = {
     &handle_enable_switch,
+    &handle_mode_select_switch,
     &update_leds,
 };
 uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);
@@ -73,35 +74,53 @@ uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background
 static const char cmd_string_cal[] PROGMEM = "cal";
 static const char help_string_cal[] PROGMEM = "<m>\n"
     "Calibrate the pedal (in the following order):\n"
-    "<m> : \"adc\" calibrates the ADC offset\n"
-    "      \"min\" sets the minimum registered ADC value\n"
-    "      \"max\" sets the maximum registered ADC value\n"
-    "      \"dmp\" dumps currently active values\n"
-    "      \"sav\" saves active values to EEPROM\n";
+    "<m> : \"adc\" calibrate the ADC offset (pedal to min position!)\n"
+    "      \"min\" set the minimum registered ADC value\n"
+    "      \"max\" set the maximum registered ADC value\n"
+    "      \"get\" show currently active values\n"
+    "      \"sav\" save active values to EEPROM\n";
 static const char cmd_string_ctrl[] PROGMEM = "ctrl";
-static const char help_string_ctrl[] PROGMEM = "<a> [<n>]\n"
-    "Read or set the MIDI control number:\n"
-    "<a> : \"get\" returns the configured control number\n"
-    "      \"set\" sets the control number <n>\n"
-    "<n> : the control number [1..16]\n";
+static const char help_string_ctrl[] PROGMEM = "<a> [m] [n]\n"
+    "Read or set the MIDI CC number:\n"
+    "<a> : \"get\" show configured control/note numbers\n"
+    "      \"set\" set the control/note number <m> to <n>\n"
+    "<m> : \"ccc\" CC-only mode CC number\n"
+    "      \"ncc\" NOTE-and-CC mode CC number\n"
+    "      \"ncn\" NOTE-and-CC mode NOTE number\n"
+    "<n> : the control/note number [0..127]\n";
 static const char cmd_string_echo[] PROGMEM = "echo";
 static const char help_string_echo[] PROGMEM = "<v>\n"
     "Switch expression value console output on / off\n"
     "<v> : \"on\" or \"off\"\n";
+static const char cmd_string_mode[] PROGMEM = "mode";
+static const char help_string_mode[] PROGMEM = "<a> [m]\n"
+    "Read or set mode:\n"
+    "<a> : \"get\" show current mode\n"
+    "      \"sav\" save current mode as default\n"
+    "      \"cco\" enter CC-only mode\n"
+    "      \"ncc\" enter NOTE-and-CC mode\n";
 static const char cmd_string_mute[] PROGMEM = "mute";
 static const char help_string_mute[] PROGMEM = "<v>\n"
     "Mute CC message transmission when status LED is off.\n"
     "Should only be enabled if there is an enable switch.\n"
     "This setting is immediately stored to EEPROM.\n"
-    "<m> : \"on\" mute if not enabled\n"
+    "<m> : \"on\"  mute if not enabled\n"
     "      \"off\" always transmit\n"
-    "      \"stat\" show current setting\n";
+    "      \"get\" show current setting\n";
+static const char cmd_string_sw[] PROGMEM = "sw";
+static const char help_string_sw[] PROGMEM = "<t>\n"
+    "Configure enable switch type\n"
+    "<t> : \"lat\" latching\n"
+    "      \"mom\" momentary\n"
+    "      \"get\" show current setting\n";
 
 struct serial_command serial_commands[] = {
     { .cmd_string = cmd_string_cal,  .help_string = help_string_cal,  .handler = &exec_cal  },
     { .cmd_string = cmd_string_ctrl, .help_string = help_string_ctrl, .handler = &exec_ctrl },
     { .cmd_string = cmd_string_echo, .help_string = help_string_echo, .handler = &exec_echo },
+    { .cmd_string = cmd_string_mode, .help_string = help_string_mode, .handler = &exec_mode },
     { .cmd_string = cmd_string_mute, .help_string = help_string_mute, .handler = &exec_mute },
+    { .cmd_string = cmd_string_sw,   .help_string = help_string_sw,   .handler = &exec_sw },
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);
 
@@ -111,6 +130,7 @@ struct gpio_mapping gpio_mappings[] = {
     { .pin = &POWER_LED_PIN, .type = GPIO_OUTPUT },             // Power LED
     { .pin = &STATUS_LED_PIN, .type = GPIO_OUTPUT },            // Status LED
     { .pin = &ENABLE_SWITCH_PIN, .type = GPIO_INPUT_PULLUP },   // Enable switch
+    { .pin = &MODE_SELECT_PIN, .type = GPIO_INPUT_PULLUP },     // Mode select switch
 };
 uint8_t gpio_mappings_size = sizeof(gpio_mappings)/sizeof(struct gpio_mapping);
 
