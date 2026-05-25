@@ -423,11 +423,11 @@ static inline void process_update_data(void)
 
     // When a page is full, write it to the temporary application flash
     if (page_buffer_index == SPM_PAGESIZE) {
-        // TODO: For unknown reasons, the following call prints 0 for the total number of pages:
-        /*
-        usb_printf(PSTR("Writing temporary application page [%3u/%3u]..." USB_NEWLINE),
+        /* For unknown reasons, the following call prints 0 for num_pages:
+        usb_printf(PSTR("Writing temporary application page [%3u/%3u/%3u]..." USB_NEWLINE),
                    temp_app_addr / SPM_PAGESIZE + 1,
-                   num_pages);
+                   num_pages,
+                   MAX_PAGE_NUM);
         */
         usb_printf(PSTR("Writing temporary application page [%3u"), temp_app_addr / SPM_PAGESIZE + 1);
         usb_printf(PSTR("/%3u/%3u]..." USB_NEWLINE), num_pages, MAX_PAGE_NUM);
