@@ -81,22 +81,6 @@ background_task_t low_frequency_tasks[] = {
 uint8_t low_frequency_tasks_size = sizeof(low_frequency_tasks)/sizeof(background_task_t);
 
 //---------------- Custom commands ----------------//
-static const char cmd_string_led[] PROGMEM = "led";
-static const char help_string_led[] PROGMEM = "<l> <a>\n"
-    "Manipulates the two on-board LEDs:\n"
-    "<l> : LED to manipulate\n"
-    "      'g' = green LED\n"
-    "      'r' = red LED\n"
-    "<a> : LED mode / action\n"
-    "      'b' = blink\n"
-    "      'f' = flash\n"
-    "      't' = toggle";
-
-static const char cmd_string_cap[] PROGMEM = "cap";
-static const char help_string_cap[] PROGMEM = "<d>\n"
-    "Gets or sets PWM max duty attenuation:\n"
-    "<d> : Duty attenuation (leave out to read)";
-
 static const char cmd_string_duty[] PROGMEM = "duty";
 static const char help_string_duty[] PROGMEM = "<d>\n"
     "Sets the PWM duty cycle:\n"
@@ -114,10 +98,32 @@ static const char help_string_enable[] PROGMEM = "<a> <d>\n"
     "      'f' = disable wah\n"
     "      {0..127} = set MIDI note (leave out to read)";
 
+static const char cmd_string_led[] PROGMEM = "led";
+static const char help_string_led[] PROGMEM = "<l> <a>\n"
+    "Manipulates the two on-board LEDs:\n"
+    "<l> : LED to manipulate\n"
+    "      'g' = green LED\n"
+    "      'r' = red LED\n"
+    "<a> : LED mode / action\n"
+    "      'b' = blink\n"
+    "      'f' = flash\n"
+    "      't' = toggle";
+
+static const char cmd_string_max[] PROGMEM = "max";
+static const char help_string_max[] PROGMEM = "<d>\n"
+    "Gets or sets PWM max duty attenuation:\n"
+    "<d> : Duty attenuation (leave out to read)";
+
+static const char cmd_string_min[] PROGMEM = "min";
+static const char help_string_min[] PROGMEM = "<d>\n"
+    "Gets or sets PWM min duty attenuation:\n"
+    "<d> : Duty attenuation (leave out to read)";
+
 struct serial_command serial_commands[] = {
-    { .cmd_string = cmd_string_led,    .help_string = help_string_led,    .handler = &exec_led  },
-    { .cmd_string = cmd_string_cap,    .help_string = help_string_cap,    .handler = &exec_cap  },
     { .cmd_string = cmd_string_duty,   .help_string = help_string_duty,   .handler = &exec_duty },
     { .cmd_string = cmd_string_enable, .help_string = help_string_enable, .handler = &exec_enable },
+    { .cmd_string = cmd_string_led,    .help_string = help_string_led,    .handler = &exec_led  },
+    { .cmd_string = cmd_string_max,    .help_string = help_string_max,    .handler = &exec_max  },
+    { .cmd_string = cmd_string_min,    .help_string = help_string_min,    .handler = &exec_min  },
 };
 uint8_t serial_commands_size = sizeof(serial_commands) / sizeof(struct serial_command);

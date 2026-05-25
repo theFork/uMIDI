@@ -24,6 +24,8 @@
 #ifndef _APP_H
 #define _APP_H
 
+#include <stdbool.h>
+
 
 //---------------- includes ----------------//
 
@@ -35,10 +37,11 @@
 
 
 //---------------- functions and procedures ----------------//
-bool exec_cap(const char* command);
 bool exec_duty(const char* command);
 bool exec_enable(const char* command);
 bool exec_led(const char* command);
+bool exec_max(const char* command);
+bool exec_min(const char* command);
 void poll_toogle_input(void);
 void autowah_task(void);
 
