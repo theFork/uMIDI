@@ -151,7 +151,7 @@ bool exec_min(const char* command)
     return true;
 }
 
-void poll_toogle_input(void) {
+void poll_toggle_input(void) {
     static bool enabled = false;
     switch (poll_gpio_input_timeout(TOGGLE_PIN, GPIO_INPUT_PULLUP, GPIO_INPUT_EVENT_LONG)) {
         case GPIO_INPUT_EVENT_LONG:

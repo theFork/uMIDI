@@ -42,7 +42,7 @@ bool exec_enable(const char* command);
 bool exec_led(const char* command);
 bool exec_max(const char* command);
 bool exec_min(const char* command);
-void poll_toogle_input(void);
+void poll_toggle_input(void);
 void autowah_task(void);
 
 
